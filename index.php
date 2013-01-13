@@ -2,10 +2,11 @@
 define("ROOT_PATH", __DIR__);
 
 require_once ROOT_PATH . "/includes/config.inc.php";
-require_once ROOT_PATH . "/includes/database.php";
 require_once ROOT_PATH . "/includes/Constants.class.php";
+require_once ROOT_PATH . "/includes/database.php";
 require_once ROOT_PATH . "/includes/functions.php";
 require_once ROOT_PATH . "/includes/MenuBuilder.class.php";
+require_once ROOT_PATH . "/includes/AccountManager.class.php";
 
 session_start();
 
@@ -19,6 +20,8 @@ foreach (Constants::$pagePath as $index => $page)
 	}
 }
 
+Constants::$accountManager = new AccountManager();
+
 Constants::$getPageTitle = true;
 $fullPageTitle = array("Musikverein Reichental");
 
@@ -26,6 +29,8 @@ if (empty(Constants::$pagePath))
 {
 	Constants::$pagePath[] = "home";
 }
+
+require_once ROOT_PATH . "/includes/nonhtml.php";
 
 foreach (Constants::$pagePath as $index => $page)
 {

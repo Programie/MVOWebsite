@@ -1,6 +1,23 @@
+#footer
+{
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	background: rgba(255, 255, 255, 0.7);
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+#footercontent
+{
+	padding: 10px;
+	text-align: center;
+}
+
 #footerlinks a
 {
 	color: #000;
+	background-color: transparent;
 	text-decoration: none;
 	padding: 0px 10px;
 }

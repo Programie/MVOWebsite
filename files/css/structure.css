@@ -1,3 +1,19 @@
+a
+{
+	color: #a00000;
+}
+
+a:hover
+{
+	color: #fff;
+	background-color: #a00000;
+}
+
+h3
+{
+	margin-top: 30px;
+}
+
 html,body
 {
 	height: 100%;
@@ -11,10 +27,14 @@ body
 	font-size: 14px;
 }
 
+.center
+{
+	text-align: center;
+}
+
 #background
 {
 	width: 100%;
-	/*background-attachment: fixed;*/
 }
 
 #backgroundimage
@@ -55,6 +75,7 @@ body
 	padding: 10px;
 	background: rgba(255, 255, 255, 0.7);
 	border-radius: 10px;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 #container
@@ -64,24 +85,4 @@ body
 	width: 1200px;
 	height: auto !important;
 	min-height: 100%;
-}
-
-#footer
-{
-	position: absolute;
-	bottom: 0px;
-	width: 100%;
-	background: rgba(255, 255, 255, 0.7);
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
-}
-
-#footercontent
-{
-	padding: 10px;
-	text-align: center;
-}
-
-#header
-{
 }

@@ -1,0 +1,8 @@
+#home_picture
+{
+	margin: 0px auto;
+	width: 650px;
+	height: 650px;
+	background-image: url(/files/images/home.png);
+	background-repeat: no-repeat;
+}
