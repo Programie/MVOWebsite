@@ -27,7 +27,7 @@ $fullPageTitle = array("Musikverein Reichental");
 
 if (empty(Constants::$pagePath))
 {
-	Constants::$pagePath[] = "home";
+	Constants::$pagePath = array("home");
 }
 
 require_once ROOT_PATH . "/includes/nonhtml.php";
