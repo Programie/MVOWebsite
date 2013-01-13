@@ -1,0 +1,87 @@
+html,body
+{
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+body
+{
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 14px;
+}
+
+#background
+{
+	width: 100%;
+	/*background-attachment: fixed;*/
+}
+
+#backgroundimage
+{
+	width: 100%;
+}
+
+#backgroundoverlay
+{
+	position: absolute;
+	width: 100%;
+	height: 500px;
+	background: -moz-linear-gradient(top, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0)), color-stop(100%,rgba(255,255,255,1)));
+	background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+	background: -o-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(top, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+	background: linear-gradient(to bottom, rgba(255,255,255,0) 0%,rgba(255,255,255,1) 100%);
+}
+
+#backgroundwrapper
+{
+	position: absolute;
+	left: 0px;
+	right:0px;
+	top: 0px;
+	bottom: 0px;
+	overflow: hidden;
+}
+
+#body
+{
+	padding-bottom: 110px;
+}
+
+#bodycontent
+{
+	padding: 10px;
+	background: rgba(255, 255, 255, 0.7);
+	border-radius: 10px;
+}
+
+#container
+{
+	position: relative;
+	margin: 0 auto;
+	width: 1200px;
+	height: auto !important;
+	min-height: 100%;
+}
+
+#footer
+{
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	background: rgba(255, 255, 255, 0.7);
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+#footercontent
+{
+	padding: 10px;
+	text-align: center;
+}
+
+#header
+{
+}

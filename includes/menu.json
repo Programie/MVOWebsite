@@ -1,0 +1,108 @@
+[
+	{
+		"path" : "/home",
+		"title" : "Home",
+		"items" :
+		[
+			{
+				"path" : "/contact",
+				"title" : "Kontakt"
+			},
+			{
+				"path" : "/links",
+				"title" : "Links"
+			}
+		]
+	},
+	{
+		"path" : "/vorstand",
+		"title" : "Verein",
+		"items" :
+		[
+			{
+				"path" : "#",
+				"title" : "Chronik",
+				"items" :
+				[
+					{
+						"path" : "/history/short",
+						"title" : "Kurz"
+					},
+					{
+						"path" : "/history/long",
+						"title" : "Ausf&uuml;hrlich"
+					}
+				]
+			},
+			{
+				"path" : "/bisherige_erste_vorsitzende",
+				"title" : "Bisherige erste Vorsitzende"
+			},
+			{
+				"path" : "/bisherige_dirigenten",
+				"title" : "Bisherige Dirigenten"
+			},
+			{
+				"path" : "/vorstand",
+				"title" : "Vorstand"
+			},
+			{
+				"path" : "/newmember",
+				"title" : "Beitreten"
+			},
+			{
+				"path" : "/musiker",
+				"title" : "Musiker"
+			}
+		]
+	},
+	{
+		"path" : "/jugendausbildung",
+		"title" : "Jugendausbildung",
+		"items" :
+		[
+			{
+				"path" : "/jugendausbildung/groups",
+				"title" : "Ausbildungsgruppen"
+			},
+			{
+				"path" : "/jugendausbildung/agreement",
+				"title" : "Ausbildungsvereinbarung"
+			}
+		]
+	},
+	{
+		"path" : "/foerderverein",
+		"title" : "F&ouml;rderverein",
+		"items" :
+		[
+			{
+				"path" : "/foerderverein/home",
+				"title" : "Warum F&ouml;rderverein"
+			},
+			{
+				"path" : "/foerderverein/vorstand",
+				"title" : "Vorstand"
+			},
+			{
+				"path" : "/foerderverein/contact",
+				"title" : "Kontakt"
+			}
+		]
+	},
+	{
+		"path" : "/events",
+		"title" : "Termine",
+		"items" : "events_years"
+	},
+	{
+		"path" : "/pictures",
+		"title" : "Fotogalerie",
+		"items" : "pictures_years"
+	},
+	{
+		"path" : "/internarea",
+		"title" : "Interner Bereich",
+		"items" : "internarea"
+	}
+]
