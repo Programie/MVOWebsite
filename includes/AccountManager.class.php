@@ -44,6 +44,28 @@ class AccountManager
 		return true;
 	}
 	
+	private function encrypt($userId, $password)
+	{
+		return hash("sha512", $userId . "_" . $password);
+	}
+	
+	public function getPermissions()
+	{
+		$this->permissions = array();
+		
+		$query = Constants::$pdo->prepare("SELECT `permission` FROM `permissions` WHERE `userId` = :userId");
+		$query->execute(array
+		(
+			":userId" => $this->userId
+		));
+		while ($row = $query->fetch())
+		{
+			$this->permissions[$row->permission] = true;
+		}
+		
+		return $this->permissions;
+	}
+	
 	public function getUserId()
 	{
 		return $this->userId;
@@ -54,9 +76,17 @@ class AccountManager
 		return $this->username;
 	}
 	
-	private function encrypt($userId, $password)
+	public function hasPermission($permission)
 	{
-		return hash("sha512", $userId . "_" . $password);
+		$permissionParts = explode(".", $permission);
+		foreach ($permissionParts as $index => $permission)
+		{
+			if ($this->permissions[implode(".", array_slice($permissionParts, 0, $index + 1))])
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public function login($username, $password)
@@ -79,6 +109,7 @@ class AccountManager
 		$this->userId = $row->id;
 		$this->username = $row->username;
 		$_SESSION["userId"] = $row->id;
+		$this->getPermissions();
 		return true;
 	}
 	
@@ -98,6 +129,7 @@ class AccountManager
 		$this->userId = $userId;
 		$this->username = $row->username;
 		$_SESSION["userId"] = $row->id;
+		$this->getPermissions();
 		return true;
 	}
 	
@@ -106,5 +138,6 @@ class AccountManager
 		$this->userId = null;
 		$this->username = null;
 		unset($_SESSION["userId"]);
+		$this->permissions = array();
 	}
 }

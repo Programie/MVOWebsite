@@ -101,6 +101,10 @@ nav ul ul li a, nav ul ul li span
 {
 	padding: 15px 40px;
 	color: #fff;
+	max-width: 250px;
+	overflow: hidden; 
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 nav ul ul ul

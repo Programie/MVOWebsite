@@ -20,7 +20,7 @@
 		"items" :
 		[
 			{
-				"path" : "#",
+				"path" : "/history",
 				"title" : "Chronik",
 				"items" :
 				[
@@ -62,6 +62,10 @@
 		"items" :
 		[
 			{
+				"path" : "/jugendausbildung/verein",
+				"title" : "Ausbildung im Verein"
+			},
+			{
 				"path" : "/jugendausbildung/groups",
 				"title" : "Ausbildungsgruppen"
 			},
@@ -91,14 +95,14 @@
 		]
 	},
 	{
-		"path" : "/events",
+		"path" : "/dates",
 		"title" : "Termine",
-		"items" : "events_years"
+		"items" : "dates"
 	},
 	{
 		"path" : "/pictures",
 		"title" : "Fotogalerie",
-		"items" : "pictures_years"
+		"items" : "pictures"
 	},
 	{
 		"path" : "/internarea",
