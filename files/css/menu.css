@@ -3,6 +3,11 @@ nav
 	text-align: center;
 }
 
+nav *
+{
+	z-index: 100;
+}
+
 nav ul ul
 {
 	display: none;

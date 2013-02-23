@@ -32,6 +32,11 @@ body
 	text-align: center;
 }
 
+.clear
+{
+	clear: both;
+}
+
 #background
 {
 	width: 100%;
