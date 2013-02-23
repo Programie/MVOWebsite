@@ -1,20 +1,21 @@
 $(function()
 {
+	$(window).load(function()
+	{
+		updateBackToTop();
+	});
+	
 	$(window).scroll(function()
 	{
-		if ($(this).scrollTop() != 0)
-		{
-			$('#backtotop').fadeIn();
-		}
-		else
-		{
-			$('#backtotop').fadeOut();
-		}
+		updateBackToTop();
 	});
- 
-	$('#backtotop').click(function()
+	
+	$("#backtotop").click(function()
 	{
-		$('body,html').animate({scrollTop:0},800);
+		$("body,html").animate(
+		{
+			scrollTop : 0
+		},800);
 	});
 });
 
@@ -24,6 +25,19 @@ $(window).resize(function()
 });
 
 window.onload = fixSize;
+
+function updateBackToTop(direct)
+{
+	var div = $("#backtotop");
+	if ($(window).scrollTop() > 0)
+	{
+		div.fadeIn();
+	}
+	else
+	{
+		div.fadeOut();
+	}
+}
 
 function fixSize()
 {

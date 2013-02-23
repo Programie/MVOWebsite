@@ -4,7 +4,6 @@
 		<p id="footerlinks">
 			<a href="/home">Home</a>
 			<a href="/imprint">Impressum</a>
-			<a href="#" id="backtotop">Nach oben</a>
 		</p>
 	</div>
 </div>

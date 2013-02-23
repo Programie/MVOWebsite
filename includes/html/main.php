@@ -52,5 +52,6 @@
 			<?php require_once "body.php";?>
 			<?php require_once "footer.php";?>
 		</div>
+		<div id="backtotop">Nach oben</div>
 	</body>
 </html>
