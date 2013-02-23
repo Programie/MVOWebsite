@@ -1,4 +1,4 @@
-/*!
+﻿/*!
 	photobox v1.6.6
 	(c) 2012 Yair Even Or <http://dropthebit.com>
 	
