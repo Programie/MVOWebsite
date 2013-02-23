@@ -14,7 +14,7 @@
 		}
 		?>
 		<script type="text/javascript" src="/files/scripts/jquery.min.js"></script>
-		<script type="text/javascript" src="/files/scripts/photobox.min.js"></script>
+		<script type="text/javascript" src="/files/scripts/photobox.js"></script>
 		<script type="text/javascript" src="/files/scripts/general.js"></script>
 	</head>
 	<body>

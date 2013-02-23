@@ -29,7 +29,7 @@ if (Constants::$pagePath[1])// Year
 				echo "
 					<li>
 						<a href='/" . $path . "/img" . $data->file . ".jpg' caption='" . $data->text . "'>
-							<img src='/" . $path . "/small" . $data->file . ".jpg' alt='" . $data->text . "'/>
+							<img src='/" . $path . "/small" . $data->file . ".jpg' alt='" . ($data->text ? $data->text : " ") . "'/>
 						</a>
 					</li>
 				";
