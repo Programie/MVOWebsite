@@ -36,7 +36,7 @@ ul.polaroids img
 
 ul.polaroids a:after
 {
-	content: attr(title);
+	content: attr(caption);
 }
 
 ul.polaroids li:nth-child(3n) a

@@ -28,8 +28,8 @@ if (Constants::$pagePath[1])// Year
 			{
 				echo "
 					<li>
-						<a href='/" . $path . "/img" . $data->file . ".jpg' title='" . $data->text . "'>
-							<img src='/" . $path . "/small" . $data->file . ".jpg' title='" . $data->text . "'/>
+						<a href='/" . $path . "/img" . $data->file . ".jpg' caption='" . $data->text . "'>
+							<img src='/" . $path . "/small" . $data->file . ".jpg' alt='" . $data->text . "'/>
 						</a>
 					</li>
 				";
@@ -57,8 +57,8 @@ if (Constants::$pagePath[1])// Year
 			{
 				echo "
 					<li>
-						<a href='/pictures/" . Constants::$pagePath[1] . "/" . $data->name . "' title='" . $data->title . "'>
-							<img src='/files/pictures/" . Constants::$pagePath[1] . "/" . $data->name . "/small" . str_pad($data->coverPicture, 3, "0", STR_PAD_LEFT) . ".jpg' title='" . $data->title . "'/>
+						<a href='/pictures/" . Constants::$pagePath[1] . "/" . $data->name . "' caption='" . $data->title . "'>
+							<img src='/files/pictures/" . Constants::$pagePath[1] . "/" . $data->name . "/small" . str_pad($data->coverPicture, 3, "0", STR_PAD_LEFT) . ".jpg'/>
 						</a>
 					</li>
 				";
@@ -74,22 +74,35 @@ if (!$yearFound)
 	echo "<h1>Fotogalerie</h1>";
 	
 	$years = Pictures::getYears();
-	rsort($years, SORT_NUMERIC);
+	krsort($years, SORT_NUMERIC);
 	
-	$query = Constants::$pdo->prepare("SELECT `name`, `coverPicture` FROM `picturealbums` WHERE YEAR(`date`) = :year ORDER BY `id` ASC LIMIT 1");
+	$queryId = Constants::$pdo->prepare("SELECT `name`, `coverPicture` FROM `picturealbums` WHERE `id` = :id");
+	$queryYear = Constants::$pdo->prepare("SELECT `name`, `coverPicture` FROM `picturealbums` WHERE YEAR(`date`) = :year ORDER BY `id` ASC LIMIT 1");
 	
 	echo "<ul class='polaroids'>";
-	foreach ($years as $year)
+	foreach ($years as $year => $data)
 	{
-		$query->execute(array
+		$queryId->execute(array
 		(
-			":year" => $year
+			":id" => $data->coverAlbumId
 		));
+		if ($queryId->rowCount())
+		{
+			$query = $queryId;
+		}
+		else
+		{
+			$queryYear->execute(array
+			(
+				":year" => $year
+			));
+			$query = $queryYear;
+		}
 		$albumRow = $query->fetch();
 		echo "
 			<li>
-				<a href='/pictures/" . $year . "' title='" . $year . "'>
-					<img src='/files/pictures/" . $year . "/" . $albumRow->name . "/small" . str_pad($albumRow->coverPicture, 3, "0", STR_PAD_LEFT) . ".jpg' title='" . $year . "'/>
+				<a href='/pictures/" . $year . "' caption='" . $year . "'>
+					<img src='/files/pictures/" . $year . "/" . $albumRow->name . "/small" . str_pad($albumRow->coverPicture, 3, "0", STR_PAD_LEFT) . ".jpg'/>
 				</a>
 			</li>
 		";

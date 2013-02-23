@@ -52,8 +52,8 @@ class MenuBuilder
 				$instance = new Pictures;
 				
 				$years = $instance->getYears();
-				rsort($years, SORT_NUMERIC);
-				foreach ($years as $year)
+				krsort($years, SORT_NUMERIC);
+				foreach ($years as $year => $data)
 				{
 					// BUG: Too many albums result in scrolling page
 					/*$albumItems = array();

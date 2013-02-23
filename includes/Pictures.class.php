@@ -78,7 +78,7 @@ class Pictures
 	
 	public static function getYears()
 	{
-		$query = Constants::$pdo->query("SELECT YEAR(`date`) AS `year` FROM `picturealbums` GROUP BY `year`");
+		$query = Constants::$pdo->query("SELECT `picturealbums`.`year`, `pictureyears`.`coverAlbumId` FROM (SELECT YEAR(`date`) AS `year` FROM `picturealbums` GROUP BY `year`) AS `picturealbums` LEFT JOIN `pictureyears` ON `pictureyears`.`year` = `picturealbums`.`year`");
 		
 		if (!$query->rowCount())
 		{
@@ -89,7 +89,7 @@ class Pictures
 		
 		while ($row = $query->fetch())
 		{
-			$years[] = $row->year;
+			$years[$row->year] = $row;
 		}
 		
 		return $years;
