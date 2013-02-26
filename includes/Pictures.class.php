@@ -18,6 +18,11 @@ class Pictures
 		
 		while ($row = $query->fetch())
 		{
+			if (!Constants::$accountManager->hasPermission($row->permission))
+			{
+				continue;
+			}
+			
 			$albums[] = $row;
 		}
 		
@@ -26,7 +31,7 @@ class Pictures
 	
 	public static function getPictures($year, $album)
 	{
-		$query = Constants::$pdo->prepare("SELECT `id`, `date`, `name`, `title` FROM `picturealbums` WHERE YEAR(`date`) = :year AND `name` = :name");
+		$query = Constants::$pdo->prepare("SELECT `id`, `date`, `permission`, `name`, `title` FROM `picturealbums` WHERE YEAR(`date`) = :year AND `name` = :name");
 		$query->execute(array
 		(
 			":year" => $year,
@@ -39,6 +44,11 @@ class Pictures
 		}
 		
 		$albumRow = $query->fetch();
+		
+		if (!Constants::$accountManager->hasPermission($albumRow->permission))
+		{
+			return null;
+		}
 		
 		$pictures = array();
 		$path = "files/pictures/" . basename($year) . "/" . basename($albumRow->name);

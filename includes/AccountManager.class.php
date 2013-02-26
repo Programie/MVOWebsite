@@ -1,6 +1,7 @@
 <?php
 class AccountManager
 {
+	private $permissions;
 	private $userId;
 	private $username;
 	
@@ -78,6 +79,25 @@ class AccountManager
 	
 	public function hasPermission($permission)
 	{
+		// Check if a permission is required
+		if (!$permission)
+		{
+			return true;
+		}
+		
+		// Check if the user is logged in and has a permissions array
+		if (!$this->userId or !$this->permissions or !is_array($this->permissions))
+		{
+			return false;
+		}
+		
+		// Check if the user has all permissions (*)
+		if ($this->permissions["*"])
+		{
+			return true;
+		}
+		
+		// Check if the user has at least the required permission node
 		$permissionParts = explode(".", $permission);
 		foreach ($permissionParts as $index => $permission)
 		{
@@ -86,6 +106,8 @@ class AccountManager
 				return true;
 			}
 		}
+		
+		// Permission node not found
 		return false;
 	}
 	
