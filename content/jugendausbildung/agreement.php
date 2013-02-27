@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title = "Vereinbarung";
-	return;
-}
-?>
 <h1>Ausbildungsvereinbarung</h1>
 
 <p>Stand November 2009</p>

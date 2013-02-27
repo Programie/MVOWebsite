@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title = "Warum?";
-	return;
-}
-?>
 <h1>Warum F&ouml;rderverein?</h1>
 Sicherlich stellen auch Sie sich die Frage: Warum braucht ein Musikverein einen F&ouml;rderverein?<br />
 <br />

@@ -1,10 +1,4 @@
 <?php
-if (Constants::$getPageTitle)
-{
-	$title = "Musiker";
-	return;
-}
-
 $groups = array();
 $users = array();
 

@@ -2,7 +2,7 @@
 class Constants
 {
 	public static $accountManager;
-	public static $getPageTitle;
+	public static $pageManager;
 	public static $pagePath;
 	public static $pdo;
 }

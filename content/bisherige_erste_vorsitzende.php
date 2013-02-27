@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Bisherige erste Vorsitzende";
-	return;
-}
-?>
 <h1 class="center">Bisherige erste Vorsitzende</h1>
 
 <table border="1" cellpadding="5" align="center">

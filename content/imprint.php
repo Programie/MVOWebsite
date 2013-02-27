@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title = "Impressum";
-	return;
-}
-?>
 <h1>Impressum</h1>
 <p>
 	Diese Seiten wurden erstellt vom Musikverein "Orgelfels" Reichental e.V.<br />

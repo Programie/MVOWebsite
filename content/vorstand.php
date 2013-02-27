@@ -1,13 +1,4 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Vorstand";
-	return;
-}
-?>
-<div class="center_container">
-	<h1>Der Vorstand</h1>
-</div>
+<h1 class="center">Der Vorstand</h1>
 <table border="0" align="center" cellspacing="10">
 	<tbody>
 		<tr>

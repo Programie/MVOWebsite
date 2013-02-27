@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title = "Vorstand";
-	return;
-}
-?>
 <h1>Der Vorstand des F&ouml;rdervereins</h1>
 <table border="0" align="center" cellspacing="10">
 	<tr>

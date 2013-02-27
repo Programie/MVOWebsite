@@ -1,11 +1,4 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Bisherige Dirigenten";
-	return;
-}
-?>
-<h2 class="center">Bisherige Dirigenten</h2>
+<h1 class="center">Bisherige Dirigenten</h1>
 <table border="1" cellpadding="5" align="center">
 	<tr>
 		<td>1891-1910</td>

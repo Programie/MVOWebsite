@@ -1,10 +1,4 @@
 <?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Fotogalerie";
-	return;
-}
-
 $yearFound = false;
 if (Constants::$pagePath[1])// Year
 {

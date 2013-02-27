@@ -1,0 +1,103 @@
+{
+	"home" :
+	{
+		"title" : "Home"
+	},
+	"contact" :
+	{
+		"title" : "Kontakt"
+	},
+	"links" :
+	{
+		"title" : "Links"
+	},
+	"vorstand" :
+	{
+		"title" : "Vorstand"
+	},
+	"history" :
+	{
+		"title" : "Chronik",
+		"subpages" :
+		{
+			"short" :
+			{
+				"title" : "Kurz"
+			},
+			"long" :
+			{
+				"title" : "Ausf&uuml;hrlich"
+			}
+		}
+	},
+	"bisherige_erste_vorsitzende" :
+	{
+		"title" : "Bisherige erste Vorsitzende"
+	},
+	"bisherige_dirigenten" :
+	{
+		"title" : "Bisherige Dirigenten"
+	},
+	"beitreten" :
+	{
+		"title" : "Beitreten"
+	},
+	"musiker" :
+	{
+		"title" : "Musiker"
+	},
+	"jugendausbildung" :
+	{
+		"title" : "Jugendausbildung",
+		"subpages" :
+		{
+			"verein" :
+			{
+				"title" : "Ausbildung im Verein"
+			},
+			"groups" :
+			{
+				"title" : "Gruppen"
+			},
+			"agreement" :
+			{
+				"title" : "Vereinbarung"
+			}
+		}
+	},
+	"foerderverein" :
+	{
+		"title" : "F&ouml;rderverein",
+		"subpages" :
+		{
+			"why" :
+			{
+				"title" : "Warum?"
+			},
+			"vorstand" :
+			{
+				"title" : "Vorstand"
+			},
+			"contact" :
+			{
+				"title" : "Kontakt"
+			}
+		}
+	},
+	"dates" :
+	{
+		"title" : "Termine"
+	},
+	"pictures" :
+	{
+		"title" : "Fotogalerie"
+	},
+	"internarea" :
+	{
+		"title" : "Interner Bereich"
+	},
+	"imprint" :
+	{
+		"title" : "Impressum"
+	}
+}

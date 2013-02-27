@@ -1,9 +1,4 @@
 <?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Chronik";
-	return;
-}
 if (Constants::$pagePath[1])
 {
 	include getValidContentFile(Constants::$pagePath[0] . "/" . Constants::$pagePath[1], false);

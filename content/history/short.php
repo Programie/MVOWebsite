@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Kurz";
-	return;
-}
-?>
 <h1>Die wichtigsten Zahlen aus der Vereinsgeschichte</h1>
 <ul>
 	<li>1891: Gr&uuml;ndung der Musikkapelle Reichental</li>

@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Ausf&uuml;hrlich";
-	return;
-}
-?>
 <h1>Chronik</h1>
 
 <h2>Die Gr&#252ndung der Musikkapelle</h2>

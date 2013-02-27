@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title = "Gruppen";
-	return;
-}
-?>
 <h1>Ausbildungsgruppen</h1>
 
 <p>Stand: 01.10.2012</p>

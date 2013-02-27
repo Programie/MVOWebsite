@@ -1,10 +1,3 @@
-<?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Beitreten";
-	return;
-}
-?>
 <h1>Beitrtittserkl&auml;rung</h1>
 <p>Wenn Sie uns unterst&uuml;tzen m&ouml;chten, dann werden Sie doch Mitglied bei uns.</p>
 <p>Laden Sie das angeh&auml;ngte PDF Dokument herunter und f&uuml;llen Sie es aus.</p>

@@ -1,10 +1,4 @@
 <?php
-if (Constants::$getPageTitle)
-{
-	$title =  "Termine";
-	return;
-}
-
 $year = Constants::$pagePath[1];
 $month = Constants::$pagePath[2];
 

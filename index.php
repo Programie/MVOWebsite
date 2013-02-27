@@ -5,6 +5,7 @@ require_once ROOT_PATH . "/includes/config.inc.php";
 require_once ROOT_PATH . "/includes/Constants.class.php";
 require_once ROOT_PATH . "/includes/database.php";
 require_once ROOT_PATH . "/includes/functions.php";
+require_once ROOT_PATH . "/includes/PageManager.class.php";
 require_once ROOT_PATH . "/includes/Dates.class.php";
 require_once ROOT_PATH . "/includes/Pictures.class.php";
 require_once ROOT_PATH . "/includes/MenuBuilder.class.php";
@@ -22,9 +23,9 @@ foreach (Constants::$pagePath as $index => $page)
 	}
 }
 
+Constants::$pageManager = new PageManager(json_decode(file_get_contents(ROOT_PATH . "/includes/pages.json")));
 Constants::$accountManager = new AccountManager();
 
-Constants::$getPageTitle = true;
 $fullPageTitle = array("Musikverein Reichental");
 
 if (empty(Constants::$pagePath))
@@ -34,22 +35,11 @@ if (empty(Constants::$pagePath))
 
 require_once ROOT_PATH . "/includes/nonhtml.php";
 
-foreach (Constants::$pagePath as $index => $page)
+$pageData = Constants::$pageManager->getPageData(Constants::$pagePath);
+foreach ($pageData as $data)
 {
-	$title = "";
-	$file = getValidContentFile(array_slice(Constants::$pagePath, 0, $index + 1), true);
-	if (!$file)
-	{
-		break;
-	}
-	include $file;
-	if ($title)
-	{
-		$fullPageTitle[] = $title;
-	}
+	$fullPageTitle[] = $data->title;
 }
-
-Constants::$getPageTitle = false;
 
 require_once "includes/html/main.php";
 ?>

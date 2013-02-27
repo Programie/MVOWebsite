@@ -1,16 +1,12 @@
 <?php
-if (Constants::$getPageTitle)
-{
-	$title = "Links";
-	return;
-}
-
 $links = array();
 $query = Constants::$pdo->query("SELECT * FROM `links` ORDER BY `letter` ASC, `title` ASC");
 while ($row = $query->fetch())
 {
 	$links[$row->letter][$row->url] = $row->title;
 }
+
+echo "<h1>Links</h1>";
 
 echo "<ul>";
 foreach ($links as $letter => $urls)
