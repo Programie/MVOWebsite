@@ -109,11 +109,20 @@ if ($dates)
 			$rowAttributes[] = "class='" . implode(" ", $rowClasses) . "'";
 		}
 		
+		if ($date->location->latitude and $date->location->longitude)
+		{
+			$location = "<a href='http://maps.google.com/maps/api/staticmap?center=" . $date->location->latitude . "," . $date->location->longitude . "&size=640x640&sensor=false&maptype=roadmap&zoom=17&markers=color:red|label:A|" . $date->location->latitude . "," . $date->location->longitude . "' rel='lightbox' title='" . $date->location->name . "'>" . $date->location->name . "</a>";
+		}
+		else
+		{
+			$location = $date->location->name;
+		}
+		
 		echo "
 			<tr " . implode(" ", $rowAttributes) . ">
 				<td timestamp='" . $date->startDate . "' class='nowrap'>" . implode(" bis ", $startEndDateTime) . "</td>
 				<td>" . $date->title . "</td>
-				<td>" . $date->location . "</td>
+				<td>" . $location . "</td>
 			</tr>
 		";
 	}

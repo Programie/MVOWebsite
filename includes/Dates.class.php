@@ -3,7 +3,7 @@ class Dates
 {
 	public static function getDates($year = null, $month = null)
 	{
-		$query = Constants::$pdo->prepare("SELECT `startDate`, `endDate`, `permission`, `title`, `locations`.`name` AS `location` FROM `dates` LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId` WHERE (:year IS NULL OR YEAR(`startDate`) = :year OR YEAR(`endDate`) = :year) AND (:month IS NULL OR MONTH(`startDate`) = :month OR MONTH(`endDate`) = :month) ORDER BY `startDate` ASC");
+		$query = Constants::$pdo->prepare("SELECT `startDate`, `endDate`, `permission`, `title`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates` LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId` WHERE (:year IS NULL OR YEAR(`startDate`) = :year OR YEAR(`endDate`) = :year) AND (:month IS NULL OR MONTH(`startDate`) = :month OR MONTH(`endDate`) = :month) ORDER BY `startDate` ASC");
 		$query->execute(array
 		(
 			":year" => $year,
@@ -26,6 +26,17 @@ class Dates
 				continue;
 			}
 			
+			$locationData = new StdClass;
+			$locationData->latitude = $row->locationLatitude;
+			$locationData->longitude = $row->locationLongitude;
+			$locationData->name = $row->locationName;
+			
+			$row->location = $locationData;
+			
+			unset($row->locationLatitude);
+			unset($row->locationLongitude);
+			unset($row->locationName);
+			
 			$row->startDate = strtotime($row->startDate);
 			$row->endDate = strtotime($row->endDate);
 			
@@ -43,6 +54,8 @@ class Dates
 				$row->nextEvent = true;
 				$nextEventFound = true;
 			}
+			
+			
 			$dates[] = $row;
 		}
 		

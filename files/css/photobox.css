@@ -20,7 +20,7 @@
 	pointer-events:none;
 }
 #pbOverlay.msie{ background-color:rgba(0,0,0,.6); }
-#pbOverlay.msie.pbLoading .imageWrap{ background:url('../images/loading.gif') no-repeat center; width:80px; }
+#pbOverlay.msie.pbLoading .imageWrap{ background:url('/files/images/loading.gif') no-repeat center; width:80px; }
 
 @keyframes pbLoaderFrames{ 50%{ height:5px; } }
 @-webkit-keyframes pbLoaderFrames{ 50%{ height:5px; } }
