@@ -15,13 +15,27 @@ $(function()
 		$("body,html").animate(
 		{
 			scrollTop : 0
-		},800);
+		}, 800);
 	});
 });
 
 $(window).resize(function()
 {
 	fixSize();
+});
+
+$.tablesorter.addParser(
+{
+	id : "date",
+	is : function(string)
+	{
+		return false;
+	},
+	format : function(string, table, cell, cellIndex)
+	{
+		return $(cell).attr("timestamp");
+	},
+	type : "numeric"
 });
 
 window.onload = fixSize;

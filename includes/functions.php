@@ -33,6 +33,27 @@ function getCurrentSeason()
 	}
 }
 
+function getMonthName($month)
+{
+	$months = array
+	(
+		"Januar",
+		"Februar",
+		"M&auml;rz",
+		"April",
+		"Mai",
+		"Juni",
+		"Juli",
+		"August",
+		"September",
+		"Oktober",
+		"November",
+		"Dezember"
+	);
+	
+	return $months[$month - 1];
+}
+
 function getValidContentFile($path, $emptyNotFound)
 {
 	if (is_array($path))
@@ -59,5 +80,21 @@ function getValidContentFile($path, $emptyNotFound)
 	{
 		return ROOT_PATH . "/includes/html/errorpage.php";
 	}
+}
+
+function getWeekdayName($weekday)
+{
+	$weekdays = array
+	(
+		"Montag",
+		"Dienstag",
+		"Mittwoch",
+		"Donnerstag",
+		"Freitag",
+		"Samstag",
+		"Sonntag"
+	);
+	
+	return $weekdays[$weekday - 1];
 }
 ?>

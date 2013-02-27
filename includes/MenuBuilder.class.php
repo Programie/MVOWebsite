@@ -43,32 +43,31 @@ class MenuBuilder
 		switch ($name)
 		{
 			case "dates":
-				break;
+				$items = array();
+				
+				$years = Dates::getYears();
+				krsort($years, SORT_NUMERIC);
+				foreach ($years as $year => $data)
+				{
+					$yearItem = new StdClass;
+					$yearItem->path = "/dates/" . $year;
+					$yearItem->title = $year;
+					$items[] = $yearItem;
+				}
+				
+				return $items;
 			case "internarea":
 				break;
 			case "pictures":
 				$items = array();
 				
-				$instance = new Pictures;
-				
-				$years = $instance->getYears();
+				$years = Pictures::getYears();
 				krsort($years, SORT_NUMERIC);
 				foreach ($years as $year => $data)
 				{
-					// BUG: Too many albums result in scrolling page
-					/*$albumItems = array();
-					$albums = $instance->getAlbums($year);
-					foreach ($albums as $album)
-					{
-						$albumItem = new StdClass;
-						$albumItem->path = "/pictures/" . $year . "/" . $album->name;
-						$albumItem->title = $album->title;
-						$albumItems[] = $albumItem;
-					}*/
 					$yearItem = new StdClass;
 					$yearItem->path = "/pictures/" . $year;
 					$yearItem->title = $year;
-					//$yearItem->items = $albumItems;
 					$items[] = $yearItem;
 				}
 				

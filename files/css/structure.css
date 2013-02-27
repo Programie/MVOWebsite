@@ -37,6 +37,11 @@ body
 	clear: both;
 }
 
+.nowrap
+{
+	white-space: nowrap;
+}
+
 #background
 {
 	width: 100%;

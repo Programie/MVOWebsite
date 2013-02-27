@@ -5,6 +5,7 @@ require_once ROOT_PATH . "/includes/config.inc.php";
 require_once ROOT_PATH . "/includes/Constants.class.php";
 require_once ROOT_PATH . "/includes/database.php";
 require_once ROOT_PATH . "/includes/functions.php";
+require_once ROOT_PATH . "/includes/Dates.class.php";
 require_once ROOT_PATH . "/includes/Pictures.class.php";
 require_once ROOT_PATH . "/includes/MenuBuilder.class.php";
 require_once ROOT_PATH . "/includes/AccountManager.class.php";
