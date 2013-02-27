@@ -72,12 +72,12 @@ table.table thead tr .headerSortDown, table.table thead tr .headerSortUp
 
 table.table thead tr .headerSortDown:after
 {
-	content: " ⇩"
+	content: " ⇧"
 }
 
 table.table thead tr .headerSortUp:after
 {
-	content: " ⇧"
+	content: " ⇩"
 }
 
 .table_highlight
@@ -91,4 +91,16 @@ table.table thead tr .headerSortUp:after
 	background: linear-gradient(to bottom, #a90329 0%, #8f0222 44%, #6d0019 100%) !important;
 	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0) !important;
 	color: #fff !important;
+}
+
+.table_highlight td:first-child
+{
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.table_highlight td:last-child
+{
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
 }
