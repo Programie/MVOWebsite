@@ -58,8 +58,21 @@ function getValidContentFile($path, $emptyNotFound)
 {
 	if (is_array($path))
 	{
-		$path = implode($path, "/");
+		$path = implode("/", $path);
 	}
+	
+	$pageData = Constants::$pageManager->getPageData(explode("/", $path));
+	foreach ($pageData as $data)
+	{
+		if (!$data->hasPermission)
+		{
+			if (!$emptyNotFound)
+			{
+				return ROOT_PATH . "/includes/html/forbidden.php";
+			}
+		}
+	}
+	
 	$path = ROOT_PATH . "/content/" . $path;
 	
 	// home.php or subpage/mypage.php

@@ -1,0 +1,14 @@
+.error
+{
+	padding: 10px;
+	padding-left: 45px;
+	border: 2px solid #444;
+	background-color: #a00000;
+	background-image: url(../images/alerts/error.png);
+	background-repeat: no-repeat;
+	background-position: 5px center;
+	border-radius: 5px;
+	box-shadow: 1px 1px 15px #444;
+	color: #fff;
+	font-size: 18px;
+}

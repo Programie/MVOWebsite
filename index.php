@@ -38,6 +38,10 @@ require_once ROOT_PATH . "/includes/nonhtml.php";
 $pageData = Constants::$pageManager->getPageData(Constants::$pagePath);
 foreach ($pageData as $data)
 {
+	if (!$data->hasPermission)
+	{
+		break;
+	}
 	$fullPageTitle[] = $data->title;
 }
 

@@ -1,6 +1,7 @@
 <?php
 class AccountManager
 {
+	private $loginFailed;
 	private $permissions;
 	private $userId;
 	private $username;
@@ -77,6 +78,11 @@ class AccountManager
 		return $this->username;
 	}
 	
+	public function hasLoginFailed()
+	{
+		return $this->loginFailed;
+	}
+	
 	public function hasPermission($permission)
 	{
 		// Check if a permission is required
@@ -113,6 +119,7 @@ class AccountManager
 	
 	public function login($username, $password)
 	{
+		$this->loginFailed = false;
 		$this->logout();
 		$query = Constants::$pdo->prepare("SELECT `id`, `username`, `password` FROM `users` WHERE `username` = :username");
 		$query->execute(array
@@ -121,11 +128,13 @@ class AccountManager
 		));
 		if (!$query->rowCount())
 		{
+			$this->loginFailed = true;
 			return false;
 		}
 		$row = $query->fetch();
 		if ($row->password != $this->encrypt($row->id, $password))
 		{
+			$this->loginFailed = true;
 			return false;
 		}
 		$this->userId = $row->id;

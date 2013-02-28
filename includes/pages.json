@@ -94,7 +94,23 @@
 	},
 	"internarea" :
 	{
-		"title" : "Interner Bereich"
+		"title" : "Interner Bereich",
+		"subpages" :
+		{
+			"home" :
+			{
+				"title" : "Home",
+				"permissions" : "internarea"
+			},
+			"login" :
+			{
+				"title" : "Login"
+			},
+			"resetpassword" :
+			{
+				"title" : "Passwort zur&uuml;cksetzen"
+			}
+		}
 	},
 	"imprint" :
 	{

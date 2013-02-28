@@ -25,6 +25,33 @@ class PageManager
 			$newItem = clone $item;
 			unset($newItem->subpages);
 			
+			if ($item->permissions)
+			{
+				if (is_array($item->permissions))
+				{
+					foreach ($item->permissions as $permission)
+					{
+						if (Constants::$accountManager->hasPermission($permission))
+						{
+							$newItem->hasPermission = true;
+							break;
+						}
+					}
+				}
+				else
+				{
+					if (Constants::$accountManager->hasPermission($item->permissions))
+					{
+						$newItem->hasPermission = true;
+						break;
+					}
+				}
+			}
+			else
+			{
+				$newItem->hasPermission = true;
+			}
+			
 			$pages[] = $newItem;
 			
 			$structure = @$item->subpages;
