@@ -14,11 +14,11 @@ else
 	}
 	echo "
 		<form action='/internarea/login' method='post'>
-			<input class='login' type='text' id='loginform_username' name='username' placeholder='Benutzername' required/>
-			<input class='login' type='password' id='loginform_password' name='password' placeholder='Passwort' required/>
+			<input type='text' id='loginform_username' name='username' placeholder='Benutzername' required/>
+			<input type='password' name='password' placeholder='Passwort' required/>
 			
 			<div>
-				<input class='login' type='submit' value='Login'/>
+				<input type='submit' value='Login'/>
 				<a href='/internarea/resetpassword'>Passwort vergessen?</a>
 			</div>
 		</form>

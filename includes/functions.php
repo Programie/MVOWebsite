@@ -1,4 +1,9 @@
 <?php
+function convertLinebreaks($string)
+{
+	return str_replace(array("\r\n", "\r", "\n"), "\n", $string);
+}
+
 function getCurrentSeason()
 {
 	$day = date("z");

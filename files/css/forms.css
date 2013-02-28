@@ -1,0 +1,26 @@
+input[type="password"], input[type="text"]
+{
+	display: block;
+	padding: 10px;
+	padding-left: 30px;
+	font-size: 16px;
+	border-radius: 5px;
+	background-color: #eee;
+	border: 1px solid #ccc;
+	margin: 15px;
+	width: 250px;
+	box-shadow: 0 0 5px #888;
+}
+
+input[type="password"]
+{
+	background-image: url(../images/lock.png);
+	background-repeat: no-repeat;
+	background-position: 5px center;
+}
+
+input[type="submit"]
+{
+	padding: 10px;
+	font-size: 16px;
+}

@@ -1,14 +1,38 @@
-.error
+.error, .info, .ok, .warning
 {
-	padding: 10px;
-	padding-left: 45px;
-	border: 2px solid #444;
-	background-color: #a00000;
-	background-image: url(../images/alerts/error.png);
+	margin: 10px;
+	padding: 15px 10px 15px 50px;
+	border: 1px solid;
 	background-repeat: no-repeat;
-	background-position: 5px center;
+	background-position: 10px center;
 	border-radius: 5px;
 	box-shadow: 1px 1px 15px #444;
-	color: #fff;
-	font-size: 18px;
+}
+
+.error
+{
+	background-color: #ffbaba;
+	background-image: url(../images/alerts/error.png);
+	color: #d8000c;
+}
+
+.info
+{
+	background-color: #bde5f8;
+	background-image: url(../images/alerts/info.png);
+	color: #00529b;
+}
+
+.ok
+{
+	background-color: #dff2bf;
+	background-image: url(../images/alerts/ok.png);
+	color: #4f8a10;
+}
+
+.warning
+{
+	background-color: #feefb3;
+	background-image: url(../images/alerts/warning.png);
+	color: #9f6000;
 }

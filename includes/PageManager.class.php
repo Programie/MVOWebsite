@@ -16,6 +16,11 @@ class PageManager
 		
 		foreach ($pagePathArray as $pagePathPart)
 		{
+			if (!$pagePathPart)
+			{
+				continue;
+			}
+			
 			$item = @$structure->{$pagePathPart};
 			if (!$item)
 			{
@@ -25,31 +30,20 @@ class PageManager
 			$newItem = clone $item;
 			unset($newItem->subpages);
 			
-			if ($item->permissions)
+			if ($item->permissions == null)
 			{
-				if (is_array($item->permissions))
-				{
-					foreach ($item->permissions as $permission)
-					{
-						if (Constants::$accountManager->hasPermission($permission))
-						{
-							$newItem->hasPermission = true;
-							break;
-						}
-					}
-				}
-				else
-				{
-					if (Constants::$accountManager->hasPermission($item->permissions))
-					{
-						$newItem->hasPermission = true;
-						break;
-					}
-				}
+				$newItem->hasPermission = true;
 			}
 			else
 			{
-				$newItem->hasPermission = true;
+				if (is_array($item->permissions))
+				{
+					$newItem->hasPermission = Constants::$accountManager->hasPermissionInArray($item->permissions);
+				}
+				else
+				{
+					$newItem->hasPermission = Constants::$accountManager->hasPermission($item->permissions);
+				}
 			}
 			
 			$pages[] = $newItem;

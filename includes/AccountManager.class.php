@@ -21,28 +21,33 @@ class AccountManager
 		}
 	}
 	
-	public function changePassword($oldPassword, $newPassword)
+	public function changePassword($newPassword, $oldPassword = null)
 	{
-		$query = Constants::$pdo->prepare("SELECT `password` FROM `users` WHERE `id` = :id");
-		$query->execute(array
-		(
-			":id" => $this->userId
-		));
-		if (!$query->rowCount())
+		if ($oldPassword)
 		{
-			return false;
+			$query = Constants::$pdo->prepare("SELECT `password` FROM `users` WHERE `id` = :id");
+			$query->execute(array
+			(
+				":id" => $this->userId
+			));
+			if (!$query->rowCount())
+			{
+				return false;
+			}
+			$row = $query->fetch();
+			if ($row->password != $this->encrypt($this->userId, $oldPassword))
+			{
+				return false;
+			}
 		}
-		$row = $query->fetch();
-		if ($row->password != $this->encrypt($this->userId, $oldPassword))
-		{
-			return false;
-		}
-		$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password WHERE `id` = :id");
+		
+		$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password, `resetPasswordDate` = NULL WHERE `id` = :id");
 		$query->execute(array
 		(
 			":id" => $this->userId,
 			":password" => $this->encrypt($this->userId, $newPassword)
 		));
+		
 		return true;
 	}
 	
@@ -83,18 +88,18 @@ class AccountManager
 		return $this->loginFailed;
 	}
 	
-	public function hasPermission($permission)
+	public function hasPermission($permission, $checkChildren = true)
 	{
-		// Check if a permission is required
-		if (!$permission)
-		{
-			return true;
-		}
-		
 		// Check if the user is logged in and has a permissions array
 		if (!$this->userId or !$this->permissions or !is_array($this->permissions))
 		{
 			return false;
+		}
+		
+		// Check if only a login without any permissions is required
+		if ($permission == "" or $permission == "1")
+		{
+			return true;
 		}
 		
 		// Check if the user has all permissions (*)
@@ -103,17 +108,58 @@ class AccountManager
 			return true;
 		}
 		
-		// Check if the user has at least the required permission node
-		$permissionParts = explode(".", $permission);
-		foreach ($permissionParts as $index => $permission)
+		if ($checkChildren)
 		{
-			if ($this->permissions[implode(".", array_slice($permissionParts, 0, $index + 1))])
+			// Check if the user has at least the required permission node (Exact node or one of the child nodes)
+			$permissionParts = explode(".", $permission);
+			foreach ($permissionParts as $index => $permission)
+			{
+				if ($this->permissions[implode(".", array_slice($permissionParts, 0, $index + 1))])
+				{
+					return true;
+				}
+			}
+		}
+		else
+		{
+			// Check if the user has a permission node which is a child node of the required permission node (Exact node or one of the parent nodes)
+			foreach ($this->permissions as $permissionString => $dummy)
+			{
+				$permissionParts = explode(".", $permissionString);
+				foreach ($permissionParts as $index => $permissionString)
+				{
+					if ($permission == implode(".", array_slice($permissionParts, 0, $index +1)))
+					{
+						return true;
+					}
+				}
+			}
+		}
+		
+		// Permission node not found
+		return false;
+	}
+	
+	public function hasPermissionInArray($permissionArray, $prefix = "")
+	{
+		if ($perfix and $this->hasPermission($prefix))
+		{
+			return true;
+		}
+		
+		foreach ($permissionArray as $permission)
+		{
+			if (!$permission)
+			{
+				continue;
+			}
+			
+			if ($this->hasPermission(($prefix ? ($prefix . ".") : "") . $permission))
 			{
 				return true;
 			}
 		}
 		
-		// Permission node not found
 		return false;
 	}
 	
@@ -159,7 +205,7 @@ class AccountManager
 		$row = $query->fetch();
 		$this->userId = $userId;
 		$this->username = $row->username;
-		$_SESSION["userId"] = $row->id;
+		$_SESSION["userId"] = $userId;
 		$this->getPermissions();
 		return true;
 	}

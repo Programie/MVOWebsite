@@ -1,0 +1,31 @@
+.messages_container
+{
+	margin-top: 20px;
+	border: 1px solid #000;
+	border-radius: 10px;
+}
+
+.messages_container:hover
+{
+	background-color: rgba(255, 255, 255, 0.5);
+	box-shadow: 1px 1px 20px #000;
+}
+
+a.messages_header
+{
+	text-decoration: none;
+}
+
+div.messages_header
+{
+	padding: 10px;
+	border-bottom: 1px solid #000;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	color: #000;
+}
+
+.messages_text
+{
+	padding: 10px;
+}

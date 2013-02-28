@@ -15,6 +15,32 @@ class MenuBuilder
 			echo "<ul>";
 			foreach ($items as $item)
 			{
+				if ($item->path[0] == "/")
+				{
+					$hasPermission = true;
+					
+					$pages = Constants::$pageManager->getPageData(explode("/", $item->path));
+					foreach ($pages as $pageData)
+					{
+						if (!$pageData->hasPermission)
+						{
+							$hasPermission = false;
+							break;
+						}
+					}
+					
+					if (!$hasPermission)
+					{
+						continue;
+					}
+				}
+				
+				if ($item->type == "separator")
+				{
+					echo "<li class='menu_separator'></li>";
+					continue;
+				}
+				
 				echo "<li>";
 				if ($item->path)
 				{
@@ -56,8 +82,6 @@ class MenuBuilder
 				}
 				
 				return $items;
-			case "internarea":
-				break;
 			case "pictures":
 				$items = array();
 				

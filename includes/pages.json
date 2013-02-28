@@ -97,14 +97,29 @@
 		"title" : "Interner Bereich",
 		"subpages" :
 		{
+			"editprofile" :
+			{
+				"title" : "Benutzerprofil bearbeiten",
+				"permissions" : true
+			},
 			"home" :
 			{
 				"title" : "Home",
-				"permissions" : "internarea"
+				"permissions" : true
 			},
 			"login" :
 			{
 				"title" : "Login"
+			},
+			"logout" :
+			{
+				"title" : "Logout",
+				"permissions" : true
+			},
+			"messages" :
+			{
+				"title" : "Nachrichten",
+				"permissions" : "messages.view"
 			},
 			"resetpassword" :
 			{

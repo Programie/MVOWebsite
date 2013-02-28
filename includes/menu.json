@@ -107,6 +107,23 @@
 	{
 		"path" : "/internarea",
 		"title" : "Interner Bereich",
-		"items" : "internarea"
+		"items" :
+		[
+			{
+				"path" : "/internarea/editprofile",
+				"title" : "Benutzerprofil bearbeiten"
+			},
+			{
+				"path" : "/internarea/messages",
+				"title" : "Alle Nachrichten anzeigen"
+			},
+			{
+				"type" : "separator"
+			},
+			{
+				"path" : "/internarea/logout",
+				"title" : "Logout"
+			}
+		]
 	}
 ]

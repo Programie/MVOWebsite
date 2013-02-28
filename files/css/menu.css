@@ -118,3 +118,8 @@ nav ul ul ul
 	left: 100%;
 	top: 0;
 }
+
+.menu_separator
+{
+	margin-top: 10px;
+}
