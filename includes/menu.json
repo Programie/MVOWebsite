@@ -1,16 +1,13 @@
 [
 	{
 		"path" : "/home",
-		"title" : "Home",
 		"items" :
 		[
 			{
-				"path" : "/contact",
-				"title" : "Kontakt"
+				"path" : "/contact"
 			},
 			{
-				"path" : "/links",
-				"title" : "Links"
+				"path" : "/links"
 			}
 		]
 	},
@@ -21,108 +18,112 @@
 		[
 			{
 				"path" : "/history",
-				"title" : "Chronik",
 				"items" :
 				[
 					{
-						"path" : "/history/short",
-						"title" : "Kurz"
+						"path" : "/history/short"
 					},
 					{
-						"path" : "/history/long",
-						"title" : "Ausf&uuml;hrlich"
+						"path" : "/history/long"
 					}
 				]
 			},
 			{
-				"path" : "/bisherige_erste_vorsitzende",
-				"title" : "Bisherige erste Vorsitzende"
+				"path" : "/bisherige_erste_vorsitzende"
 			},
 			{
-				"path" : "/bisherige_dirigenten",
-				"title" : "Bisherige Dirigenten"
+				"path" : "/bisherige_dirigenten"
 			},
 			{
-				"path" : "/vorstand",
-				"title" : "Vorstand"
+				"path" : "/vorstand"
 			},
 			{
-				"path" : "/newmember",
-				"title" : "Beitreten"
+				"path" : "/newmember"
 			},
 			{
-				"path" : "/musiker",
-				"title" : "Musiker"
+				"path" : "/musiker"
 			}
 		]
 	},
 	{
 		"path" : "/jugendausbildung",
-		"title" : "Jugendausbildung",
 		"items" :
 		[
 			{
-				"path" : "/jugendausbildung/verein",
-				"title" : "Ausbildung im Verein"
+				"path" : "/jugendausbildung/verein"
 			},
 			{
-				"path" : "/jugendausbildung/groups",
-				"title" : "Ausbildungsgruppen"
+				"path" : "/jugendausbildung/groups"
 			},
 			{
-				"path" : "/jugendausbildung/agreement",
-				"title" : "Ausbildungsvereinbarung"
+				"path" : "/jugendausbildung/agreement"
 			}
 		]
 	},
 	{
 		"path" : "/foerderverein",
-		"title" : "F&ouml;rderverein",
 		"items" :
 		[
 			{
-				"path" : "/foerderverein/why",
-				"title" : "Warum F&ouml;rderverein"
+				"path" : "/foerderverein/why"
 			},
 			{
-				"path" : "/foerderverein/vorstand",
-				"title" : "Vorstand"
+				"path" : "/foerderverein/vorstand"
 			},
 			{
-				"path" : "/foerderverein/contact",
-				"title" : "Kontakt"
+				"path" : "/foerderverein/contact"
 			}
 		]
 	},
 	{
 		"path" : "/dates",
-		"title" : "Termine",
 		"items" : "dates"
 	},
 	{
 		"path" : "/pictures",
-		"title" : "Fotogalerie",
 		"items" : "pictures"
 	},
 	{
 		"path" : "/internarea",
-		"title" : "Interner Bereich",
 		"items" :
 		[
 			{
-				"path" : "/internarea/editprofile",
-				"title" : "Benutzerprofil bearbeiten"
+				"path" : "/internarea/editprofile"
 			},
 			{
-				"path" : "/internarea/messages",
-				"title" : "Alle Nachrichten anzeigen"
+				"type" : "separator",
+				"permissions" : "1"
 			},
 			{
-				"type" : "separator"
+				"path" : "/internarea/addresslist"
 			},
 			{
-				"path" : "/internarea/logout",
-				"title" : "Logout"
+				"path" : "/internarea/availablelist"
+			},
+			{
+				"path" : "/internarea/forms"
+			},
+			{
+				"path" : "/internarea/birthdays"
+			},
+			{
+				"path" : "/internarea/messages"
+			},
+			{
+				"path" : "/internarea/writemessage"
+			},
+			{
+				"path" : "/internarea/protocols"
+			},
+			{
+				"path" : "/internarea/events"
+			},
+			{
+				"type" : "separator",
+				"permissions" : "1"
+			},
+			{
+				"path" : "/internarea/logout"
 			}
 		]
 	}

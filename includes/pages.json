@@ -38,7 +38,7 @@
 	{
 		"title" : "Bisherige Dirigenten"
 	},
-	"beitreten" :
+	"newmember" :
 	{
 		"title" : "Beitreten"
 	},
@@ -57,11 +57,11 @@
 			},
 			"groups" :
 			{
-				"title" : "Gruppen"
+				"title" : "Ausbildungsgruppen"
 			},
 			"agreement" :
 			{
-				"title" : "Vereinbarung"
+				"title" : "Ausbildungsvereinbarung"
 			}
 		}
 	},
@@ -72,7 +72,7 @@
 		{
 			"why" :
 			{
-				"title" : "Warum?"
+				"title" : "Warum F&ouml;rderverein?"
 			},
 			"vorstand" :
 			{
@@ -97,10 +97,35 @@
 		"title" : "Interner Bereich",
 		"subpages" :
 		{
+			"addresslist" :
+			{
+				"title" : "Adressenliste",
+				"permissions" : "addresslist"
+			},
+			"availablelist" :
+			{
+				"title" : "Anwensenheitsliste",
+				"permissions" : "availablelist"
+			},
+			"birthdays" :
+			{
+				"title" : "Geburtstage",
+				"permissions" : "birthdays"
+			},
 			"editprofile" :
 			{
 				"title" : "Benutzerprofil bearbeiten",
 				"permissions" : true
+			},
+			"events" :
+			{
+				"title" : "Veranstaltungen",
+				"permissions" : "events"
+			},
+			"forms" :
+			{
+				"title" : "Formulare",
+				"permissions" : "forms"
 			},
 			"home" :
 			{
@@ -121,9 +146,19 @@
 				"title" : "Nachrichten",
 				"permissions" : "messages.view"
 			},
+			"protocols" :
+			{
+				"title" : "Protokolle",
+				"permissions" : "protocols"
+			},
 			"resetpassword" :
 			{
 				"title" : "Passwort zur&uuml;cksetzen"
+			},
+			"writemessage" :
+			{
+				"title" : "Nachricht verfassen",
+				"permissions" : "messages.write"
 			}
 		}
 	},

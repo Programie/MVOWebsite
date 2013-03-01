@@ -12,15 +12,16 @@ class MenuBuilder
 	{
 		if (is_array($items))
 		{
-			echo "<ul>";
+			$firstItem = true;
 			foreach ($items as $item)
 			{
+				$pagesData = null;
 				if ($item->path[0] == "/")
 				{
 					$hasPermission = true;
 					
-					$pages = Constants::$pageManager->getPageData(explode("/", $item->path));
-					foreach ($pages as $pageData)
+					$pagesData = Constants::$pageManager->getPageData(explode("/", $item->path));
+					foreach ($pagesData as $pageData)
 					{
 						if (!$pageData->hasPermission)
 						{
@@ -35,20 +36,40 @@ class MenuBuilder
 					}
 				}
 				
+				if ($item->permissions)
+				{
+					if (!Constants::$accountManager->hasPermission($item->permissions))
+					{
+						continue;
+					}
+				}
+				
+				if ($firstItem)
+				{
+					$firstItem = false;
+					echo "<ul>";
+				}
+				
 				if ($item->type == "separator")
 				{
 					echo "<li class='menu_separator'></li>";
 					continue;
 				}
 				
+				$title = $item->title;
+				if (!$title and is_array($pagesData))
+				{
+					$title = $pagesData[count($pagesData) - 1]->title;
+				}
+				
 				echo "<li>";
 				if ($item->path)
 				{
-					echo "<a href=\"" . $item->path . "\">" . $item->title . "</a>";
+					echo "<a href=\"" . $item->path . "\">" . $title . "</a>";
 				}
 				else
 				{
-					echo "<span>" . $item->title . "</span>";
+					echo "<span>" . $title . "</span>";
 				}
 				if ($item->items)
 				{
@@ -60,7 +81,10 @@ class MenuBuilder
 				}
 				echo "</li>";
 			}
-			echo "</ul>";
+			if (!$firstItem)
+			{
+				echo "</ul>";
+			}
 		}
 	}
 	

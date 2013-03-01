@@ -88,18 +88,18 @@ class AccountManager
 		return $this->loginFailed;
 	}
 	
-	public function hasPermission($permission, $checkChildren = true)
+	public function hasPermission($permission)
 	{
+		// Check if a permission is required
+		if (!$permission)
+		{
+			return true;
+		}
+		
 		// Check if the user is logged in and has a permissions array
 		if (!$this->userId or !$this->permissions or !is_array($this->permissions))
 		{
 			return false;
-		}
-		
-		// Check if only a login without any permissions is required
-		if ($permission == "" or $permission == "1")
-		{
-			return true;
 		}
 		
 		// Check if the user has all permissions (*)
@@ -108,21 +108,41 @@ class AccountManager
 			return true;
 		}
 		
-		if ($checkChildren)
+		if (!is_array($permission))
 		{
-			// Check if the user has at least the required permission node (Exact node or one of the child nodes)
+			$permission = array($permission);
+		}
+		
+		$permissionArray = $permission;
+		foreach ($permissionArray as $permission)
+		{
+			// Check if only a login without any permissions is required
+			if (!$permission or $permission == "1")
+			{
+				return true;
+			}
+			
+			// Check if the required permission node is the same as one of the user's permission nodes or a (sub-)child of it
+			// Example:
+			// Requested: 'a.b.c'
+			// User has permission 'a.b' -> 'c' is a child node of it -> Has permission
+			// User has permission 'a.b.c' -> Exact match -> Has permission
+			// User has permission 'a.b.c.d' -> a.b.c is a parent node -> Has no permission
 			$permissionParts = explode(".", $permission);
-			foreach ($permissionParts as $index => $permission)
+			foreach ($permissionParts as $index => $part)
 			{
 				if ($this->permissions[implode(".", array_slice($permissionParts, 0, $index + 1))])
 				{
 					return true;
 				}
 			}
-		}
-		else
-		{
-			// Check if the user has a permission node which is a child node of the required permission node (Exact node or one of the parent nodes)
+			
+			// Check if the required permission node is the same as one of the user's permission nodes or a parent of it
+			// Example:
+			// Requested: 'a.b.c'
+			// User has permission 'a.b' -> 'c' is a child node of it -> Has no permission
+			// User has permission 'a.b.c' -> Exact match -> Has permission
+			// User has permission 'a.b.c.d' -> 'a.b.c' is part of the path -> Has permission
 			foreach ($this->permissions as $permissionString => $dummy)
 			{
 				$permissionParts = explode(".", $permissionString);

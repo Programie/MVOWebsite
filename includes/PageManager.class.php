@@ -36,14 +36,7 @@ class PageManager
 			}
 			else
 			{
-				if (is_array($item->permissions))
-				{
-					$newItem->hasPermission = Constants::$accountManager->hasPermissionInArray($item->permissions);
-				}
-				else
-				{
-					$newItem->hasPermission = Constants::$accountManager->hasPermission($item->permissions);
-				}
+				$newItem->hasPermission = Constants::$accountManager->hasPermission($item->permissions);
 			}
 			
 			$pages[] = $newItem;
