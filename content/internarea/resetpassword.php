@@ -38,7 +38,7 @@ else
 								
 								$showChangeForm = false;
 								
-								echo "<div class='ok'>Das passwort wurde erfolgreich ge&auml;ndert.</div>";
+								echo "<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert. Sie sind nun angemeldet.</div>";
 							}
 							else
 							{

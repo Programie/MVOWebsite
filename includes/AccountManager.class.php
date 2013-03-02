@@ -97,7 +97,7 @@ class AccountManager
 		}
 		
 		// Check if the user is logged in and has a permissions array
-		if (!$this->userId or !$this->permissions or !is_array($this->permissions))
+		if (!$this->userId or !is_array($this->permissions))
 		{
 			return false;
 		}
