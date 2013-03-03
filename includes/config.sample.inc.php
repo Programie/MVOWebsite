@@ -13,6 +13,8 @@ define("SMTP_PASSWORD", "mailpassword");// Password to authenticate at the SMTP 
 define("SMTP_FROM_ADDRESS", "webmaster@example.com");// Sender address
 define("SMTP_FROM_NAME", "Example Webmaster");// Sender name
 
+define("WEBMASTER_EMAIL", SMTP_FROM_ADDRESS);// Email-Address of the webmaster
+
 define("PAGE_TITLE_SEPARATOR", " - ");// String which should be used to separate title parts in page title
 
 define("TIMEOUT_CONFIRMLINK", 60 * 60 * 24);// Validity in seconds for confirmation links (e.g. reset password or change email)
