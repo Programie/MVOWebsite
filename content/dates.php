@@ -114,7 +114,7 @@ if ($dates)
 		
 		echo "
 			<tr " . implode(" ", $rowAttributes) . ">
-				<td timestamp='" . $date->startDate . "' class='nowrap'>" . implode(" bis ", $startEndDateTime) . "</td>
+				<td number='" . $date->startDate . "' class='nowrap'>" . implode(" bis ", $startEndDateTime) . "</td>
 				<td>" . $date->title . "</td>
 				<td>" . $location . "</td>
 			</tr>
@@ -131,7 +131,7 @@ if ($dates)
 				{
 					0 :
 					{
-						sorter : 'date'
+						sorter : 'number-attribute'
 					}
 				},
 				sortList : [[0, 0]]

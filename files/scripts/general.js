@@ -26,14 +26,14 @@ $(window).resize(function()
 
 $.tablesorter.addParser(
 {
-	id : "date",
+	id : "number-attribute",
 	is : function(string)
 	{
 		return false;
 	},
 	format : function(string, table, cell, cellIndex)
 	{
-		return $(cell).attr("timestamp");
+		return $(cell).attr("number");
 	},
 	type : "numeric"
 });
