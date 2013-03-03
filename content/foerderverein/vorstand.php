@@ -1,4 +1,5 @@
-<h1>Der Vorstand des F&ouml;rdervereins</h1>
+<h1 class="center">Der Vorstand des F&ouml;rdervereins</h1>
+
 <table border="0" align="center" cellspacing="10">
 	<tr>
 		<td>Vorstand (Gleichberechtigt)</td>

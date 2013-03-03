@@ -25,17 +25,7 @@ class AccountManager
 	{
 		if ($oldPassword)
 		{
-			$query = Constants::$pdo->prepare("SELECT `password` FROM `users` WHERE `id` = :id");
-			$query->execute(array
-			(
-				":id" => $this->userId
-			));
-			if (!$query->rowCount())
-			{
-				return false;
-			}
-			$row = $query->fetch();
-			if ($row->password != $this->encrypt($this->userId, $oldPassword))
+			if (!$this->checkPassword($oldPassword))
 			{
 				return false;
 			}
@@ -46,6 +36,64 @@ class AccountManager
 		(
 			":id" => $this->userId,
 			":password" => $this->encrypt($this->userId, $newPassword)
+		));
+		
+		$userData = $this->getUserData();
+		
+		$replacements = array
+		(
+			"%FIRSTNAME%" => $userData->firstName
+		);
+		$mail = new Mail("Passwort geändert", $replacements);
+		$mail->send($userData->email, "password-changed");
+		
+		return true;
+	}
+	
+	public function checkPassword($password)
+	{
+		$query = Constants::$pdo->prepare("SELECT `password` FROM `users` WHERE `id` = :id");
+		$query->execute(array
+		(
+			":id" => $this->userId
+		));
+		
+		if (!$query->rowCount())
+		{
+			return false;
+		}
+		
+		$row = $query->fetch();
+		if ($row->password != $this->encrypt($this->userId, $password))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public function changeUsername($newUsername)
+	{
+		$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `username` = :username");
+		$query->execute(array
+		(
+			":username" => $newUsername
+		));
+		
+		if ($query->rowCount())
+		{
+			$row = $query->fetch();
+			if ($row->id != $this->getUserId())
+			{
+				return false;
+			}
+		}
+		
+		$query = Constants::$pdo->prepare("UPDATE `users` SET `username` = :username WHERE `id` = :id");
+		$query->execute(array
+		(
+			":username" => $newUsername,
+			":id" => $this->getUserId()
 		));
 		
 		return true;
@@ -71,6 +119,22 @@ class AccountManager
 		}
 		
 		return $this->permissions;
+	}
+	
+	public function getUserData($userId = null)
+	{
+		if (!$userId)
+		{
+			$userId = $this->userId;
+		}
+		
+		$query = Constants::$pdo->prepare("SELECT * FROM `users` WHERE `id` = :id");
+		$query->execute(array
+		(
+			":id" => $userId
+		));
+		
+		return $query->fetch();
 	}
 	
 	public function getUserId()

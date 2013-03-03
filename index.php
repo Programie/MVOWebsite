@@ -48,5 +48,19 @@ foreach ($pageData as $data)
 	$fullPageTitle[] = $data->title;
 }
 
+if (!empty($pageData))
+{
+	$redirect = $pageData[count($pageData) - 1]->redirect;
+	if ($redirect)
+	{
+		if ($redirect[0] == "/")
+		{
+			$redirect = BASE_URL . $redirect;
+		}
+		header("Location: " . $redirect);
+		exit;
+	}
+}
+
 require_once "includes/html/main.php";
 ?>

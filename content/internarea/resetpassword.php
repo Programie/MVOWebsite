@@ -3,7 +3,7 @@
 <?php
 if (Constants::$accountManager->getUserId())
 {
-	echo "<p>Sie sind derzeit angemeldet! Bitte verwenden Sie die Seite <a href='/internarea/editprofile'>Benutzerprofil</a> um das Passwort zu &auml;ndern.</p>";
+	echo "<p>Du bist derzeit angemeldet! Bitte verwende die Seite <a href='/internarea/editprofile#editprofile_changepassword'>Benutzerprofil</a> um das Passwort zu &auml;ndern.</p>";
 }
 else
 {
@@ -119,7 +119,7 @@ else
 				);
 				
 				$mail = new Mail("Passwort zurücksetzen", $replacements);
-				if ($mail->send($row->email, file_get_contents(ROOT_PATH . "/includes/mails/resetpassword.html")))
+				if ($mail->send($row->email, "resetpassword"))
 				{
 					echo "<div class='info'>Es wurde eine Email mit dem Link zum Zur&uuml;cksetzen des Passworts an die im Benutzeraccount hinterlegte Email-Adresse gesendet.</div>";
 				}

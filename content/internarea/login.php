@@ -3,11 +3,11 @@
 <?php
 if (Constants::$accountManager->getUserId())
 {
-	echo "<p>Sie sind bereits angemeldet!</p>";
+	echo "<p>Du bist bereits angemeldet!</p>";
 }
 else
 {
-	echo "<p>Melden Sie sich im internen Bereich mit ihren Benutzerdaten an um auf weitere Bereiche zugreifen zu k&ouml;nnen.</p>";
+	echo "<p>Melde dich im internen Bereich mit deinem Benutzername und Passwort an um auf weitere Bereiche zugreifen zu k&ouml;nnen.</p>";
 	if (Constants::$accountManager->hasLoginFailed())
 	{
 		echo "<div class='error'>Login fehlgeschlagen: Benutzername oder Passwort falsch!</div>";

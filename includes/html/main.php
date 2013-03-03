@@ -14,6 +14,7 @@
 		}
 		?>
 		<script type="text/javascript" src="/files/scripts/jquery.js"></script>
+		<script type="text/javascript" src="/files/scripts/jquery-ui.js"></script>
 		<script type="text/javascript" src="/files/scripts/photobox.js"></script>
 		<script type="text/javascript" src="/files/scripts/slimbox.js"></script>
 		<script type="text/javascript" src="/files/scripts/tablesorter.js"></script>

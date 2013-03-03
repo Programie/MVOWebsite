@@ -3,7 +3,7 @@ $links = array();
 $query = Constants::$pdo->query("SELECT * FROM `links` ORDER BY `letter` ASC, `title` ASC");
 while ($row = $query->fetch())
 {
-	$links[$row->letter][$row->url] = $row->title;
+	$links[$row->letter][] = $row;
 }
 
 echo "<h1>Links</h1>";
@@ -14,9 +14,9 @@ foreach ($links as $letter => $urls)
 	echo "<li>";
 	echo "<b>" . strtoupper($letter) . "</b>";
 	echo "<ul>";
-	foreach ($urls as $url => $title)
+	foreach ($urls as $row)
 	{
-		echo "<li><a href=\"/links/" . $url . "\" target=\"_blank\">" . $title . "</a></li>";
+		echo "<li><a href='/links/" . $row->id . "' target='_blank'>" . $row->title . "</a></li>";
 	}
 	echo "</ul>";
 	echo "</li>";

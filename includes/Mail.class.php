@@ -33,11 +33,25 @@ class Mail
 	
 	public function setReplacements($replacements)
 	{
-		$this->replacements = $replacements;
+		// Default replacements
+		$this->replacements = array
+		(
+			"%BASE_URL%" => BASE_URL,
+			"%WEBMASTER_EMAIL%" => WEBMASTER_EMAIL
+		);
+		
+		$this->replacements = array_merge($this->replacements, $replacements);
 	}
 	
-	public function send($to, $body)
+	public function send($to, $templateName)
 	{
+		$body = @file_get_contents(ROOT_PATH . "/includes/mails/" . $templateName . ".html");
+		
+		if (!$body)
+		{
+			return false;
+		}
+		
 		if ($this->replacements)
 		{
 			foreach ($this->replacements as $search => $replace)

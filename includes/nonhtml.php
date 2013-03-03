@@ -7,23 +7,45 @@ switch (Constants::$pagePath[0])
 			header("Location: " . BASE_URL . "/internarea");
 			exit;
 		}
-		switch (Constants::$pagePath[1])
+		if (Constants::$pagePath[1])
 		{
-			case "logout":
-				Constants::$accountManager->logout();
-				header("Location: " . BASE_URL . "/internarea");
-				exit;
+			switch (Constants::$pagePath[1])
+			{
+				case "logout":
+					Constants::$accountManager->logout();
+					header("Location: " . BASE_URL . "/internarea");
+					exit;
+			}
+		}
+		else
+		{
+			if (Constants::$accountManager->getUserId())
+			{
+				Constants::$pagePath[1] = "home";
+			}
+			else
+			{
+				Constants::$pagePath[1] = "login";
+			}
 		}
 		break;
 	case "links":
-		$url = Constants::$pagePath[1];
-		if ($url)
+		if (Constants::$pagePath[1])
 		{
-			$query = Constants::$pdo->prepare("UPDATE `links` SET `clicks` = `clicks` + 1 WHERE `url` = :url");
+			$query = Constants::$pdo->prepare("SELECT `url` FROM `links` WHERE `id` = :id");
 			$query->execute(array
 			(
-				":url" => $url
+				":id" => Constants::$pagePath[1]
 			));
+			$row = $query->fetch();
+			$url = $row->url;
+			
+			$query = Constants::$pdo->prepare("UPDATE `links` SET `clicks` = `clicks` + 1 WHERE `id` = :id");
+			$query->execute(array
+			(
+				":id" => Constants::$pagePath[1]
+			));
+			
 			header("Location: http://" . $url);
 			exit;
 		}

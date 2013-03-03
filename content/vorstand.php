@@ -1,4 +1,5 @@
 <h1 class="center">Der Vorstand</h1>
+
 <table border="0" align="center" cellspacing="10">
 	<tbody>
 		<tr>

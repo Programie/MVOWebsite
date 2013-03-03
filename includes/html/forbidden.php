@@ -4,7 +4,7 @@
 	<?php
 	if (Constants::$accountManager->getUserId())
 	{
-		echo "Sie besitzen nicht die notwendigen Rechte um auf die gew&uuml;nschte Seite <b>" . implode(Constants::$pagePath, "/") . "</b> zuzugreifen!";
+		echo "Du hast nicht die notwendigen Rechte um auf die gew&uuml;nschte Seite <b>" . implode(Constants::$pagePath, "/") . "</b> zuzugreifen!";
 	}
 	else
 	{

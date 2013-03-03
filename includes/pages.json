@@ -49,6 +49,7 @@
 	"jugendausbildung" :
 	{
 		"title" : "Jugendausbildung",
+		"index" : "verein",
 		"subpages" :
 		{
 			"verein" :
@@ -68,6 +69,7 @@
 	"foerderverein" :
 	{
 		"title" : "F&ouml;rderverein",
+		"index" : "why",
 		"subpages" :
 		{
 			"why" :
@@ -112,6 +114,11 @@
 				"title" : "Geburtstage",
 				"permissions" : "birthdays"
 			},
+			"confirmemail" :
+			{
+				"title" : "Email-Adresse best&auml;tigen",
+				"permissions" : true
+			},
 			"editprofile" :
 			{
 				"title" : "Benutzerprofil bearbeiten",
@@ -121,6 +128,11 @@
 			{
 				"title" : "Veranstaltungen",
 				"permissions" : "events"
+			},
+			"fastnachtsfilme" :
+			{
+				"title" : "Fastnachtsfilme",
+				"permissions" : true
 			},
 			"forms" :
 			{

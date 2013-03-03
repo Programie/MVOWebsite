@@ -1,7 +1,7 @@
 <?php
 if (Constants::$pagePath[1])
 {
-	include getValidContentFile(Constants::$pagePath[0] . "/" . Constants::$pagePath[1], false);
+	Constants::$pageManager->includePage(1);
 	return;
 }
 ?>

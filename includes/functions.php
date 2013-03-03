@@ -59,47 +59,6 @@ function getMonthName($month)
 	return $months[$month - 1];
 }
 
-function getValidContentFile($path, $emptyNotFound)
-{
-	if (is_array($path))
-	{
-		$path = implode("/", $path);
-	}
-	
-	$pageData = Constants::$pageManager->getPageData(explode("/", $path));
-	foreach ($pageData as $data)
-	{
-		if (!$data->hasPermission)
-		{
-			if (!$emptyNotFound)
-			{
-				return ROOT_PATH . "/includes/html/forbidden.php";
-			}
-		}
-	}
-	
-	$path = ROOT_PATH . "/content/" . $path;
-	
-	// home.php or subpage/mypage.php
-	$fullPath = $path . ".php";
-	if (file_exists($fullPath))
-	{
-		return $fullPath;
-	}
-	
-	// home/index.php or subpage/mypage/index.php
-	$fullPath = $path . "/index.php";
-	if (file_exists($fullPath))
-	{
-		return $fullPath;
-	}
-	
-	if (!$emptyNotFound)
-	{
-		return ROOT_PATH . "/includes/html/errorpage.php";
-	}
-}
-
 function getWeekdayName($weekday)
 {
 	$weekdays = array
