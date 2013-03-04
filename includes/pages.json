@@ -129,11 +129,6 @@
 				"title" : "Veranstaltungen",
 				"permissions" : "events"
 			},
-			"fastnachtsfilme" :
-			{
-				"title" : "Fastnachtsfilme",
-				"permissions" : true
-			},
 			"forms" :
 			{
 				"title" : "Formulare",
@@ -157,6 +152,11 @@
 			{
 				"title" : "Nachrichten",
 				"permissions" : "messages.view"
+			},
+			"movies" :
+			{
+				"title" : "Fastnachtsfilme",
+				"permissions" : true
 			},
 			"protocols" :
 			{
