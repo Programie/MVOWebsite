@@ -1,45 +1,6 @@
 <?php
 class MessageManager
 {
-	public function formatText($text)
-	{
-		$text = htmlentities($text);
-		
-		$find = array
-		(
-			"@\n@",
-			"@[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]@is",
-			"@[^<>\\\/[:space:]]+\@[^<>\\\/[:space:]]+@is",
-			"/\[b\](.+?)\[\/b\]/is",
-			"/\[i\](.+?)\[\/i\]/is",
-			"/\[u\](.+?)\[\/u\]/is"
-		);
-		
-		$replace = array
-		(
-			"<br />",
-			"<a href='\\0' target='_blank'>\\0</a>",
-			"<a href='mailto:\\0' target='_blank'>\\0</a>",
-			"<b>$1</b>",
-			"<i>$1</i>",
-			"<u>$1</u>",
-			"<em>$1</em>"
-		);
-		
-		$text = preg_replace($find, $replace, $text);
-		
-		return $text;
-	}
-	
-	public function parseBBCode($text)
-	{
-		$text = preg_replace("/\[b\](.*?)\[\/b\]/", "<b>$1</b>", $text);
-		$text = preg_replace("/\[i\](.*?)\[\/i\]/", "<i>$1</i>", $text);
-		$text = preg_replace("/\[u\](.*?)\[\/u\]/", "<u>$1</u>", $text);
-		
-		return $text;
-	}
-	
 	public function showMessage($id)
 	{
 		$userGroupsQuery = Constants::$pdo->prepare("SELECT `title` FROM `usergroups` WHERE `name` = :name");
@@ -89,7 +50,7 @@ class MessageManager
 							<div class='messages_header_target'><b>Gesendet an:</b> " . implode(", ", $targets) . "</div>
 						</div>
 					</a>
-					<div class='messages_text'>" . $this->formatText($row->text) . "</div>
+					<div class='messages_text'>" . formatText($row->text) . "</div>
 				</div>
 			";
 			

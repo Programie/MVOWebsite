@@ -29,7 +29,7 @@ if (Constants::$pagePath[2])
 				"%NEWEMAILADDRESS%" => $userData->email
 			);
 			$mail = new Mail("Email-Adresse geändert", $replacements);
-			$mail->send($row->oldEmail, "email-changed");
+			$mail->send("email-changed", $row->oldEmail);
 			
 			echo "<div class='info'>Die Email-Adresse wurde erfolgreich auf <b>" . $row->newEmail . "</b> ge&auml;ndert.</div>";
 		}

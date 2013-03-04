@@ -119,7 +119,7 @@ else
 				);
 				
 				$mail = new Mail("Passwort zurücksetzen", $replacements);
-				if ($mail->send($row->email, "resetpassword"))
+				if ($mail->send("resetpassword", $row->email))
 				{
 					echo "<div class='info'>Es wurde eine Email mit dem Link zum Zur&uuml;cksetzen des Passworts an die im Benutzeraccount hinterlegte Email-Adresse gesendet.</div>";
 				}

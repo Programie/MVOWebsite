@@ -55,10 +55,10 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			$mail = new Mail(null, $replacements);
 			
 			$mail->newMessage("Deine Filmstornierung");
-			$mail->send($userData->email, "movie-order-cancel");
+			$mail->send("movie-order-cancel", $userData->email);
 			
 			$mail->newMessage("Filmstornierung");
-			$mail->send(WEBMASTER_EMAIL, "webmaster-movie-order-cancel");
+			$mail->send("webmaster-movie-order-cancel", WEBMASTER_EMAIL);
 			
 			echo "
 				<div class='ok'>

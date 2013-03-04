@@ -9,6 +9,16 @@ label
 	cursor: pointer;
 }
 
+legend
+{
+	font-weight: bold;
+}
+
+input[type="checkbox"]
+{
+	cursor: pointer;
+}
+
 input[type="password"], input[type="text"]
 {
 	display: block;

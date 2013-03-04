@@ -43,7 +43,7 @@ class Mail
 		$this->replacements = array_merge($this->replacements, $replacements);
 	}
 	
-	public function send($to, $templateName)
+	public function send($templateName, $to, $cc = null, $bcc = null)
 	{
 		$body = @file_get_contents(ROOT_PATH . "/includes/mails/" . $templateName . ".html");
 		
@@ -62,6 +62,14 @@ class Mail
 		
 		$this->message->setFrom(array(SMTP_FROM_ADDRESS => SMTP_FROM_NAME));
 		$this->message->setTo($to);
+		if ($cc)
+		{
+			$this->message->setCc($cc);
+		}
+		if ($bcc)
+		{
+			$this->message->setBcc($bcc);
+		}
 		$this->message->setBody($body, "text/html");
 		
 		return $this->mailer->send($this->message);

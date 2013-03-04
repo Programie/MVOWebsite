@@ -121,6 +121,20 @@ class AccountManager
 		return $this->permissions;
 	}
 	
+	public function getSendToken()
+	{
+		$sendToken = md5(rand());
+		
+		$query = Constants::$pdo->prepare("UPDATE `users` SET `sendToken` = :sendToken WHERE `id` = :id");
+		$query->execute(array
+		(
+			":sendToken" => $sendToken,
+			":id" => $this->userId
+		));
+		
+		return $sendToken;
+	}
+	
 	public function getUserData($userId = null)
 	{
 		if (!$userId)

@@ -54,7 +54,7 @@ $userData = Constants::$accountManager->getUserData();
 									"%NEWUSERNAME%" => $userData->username
 								);
 								$mail = new Mail("Benutzername geändert", $replacements);
-								$mail->send($userData->email, "username-changed");
+								$mail->send("username-changed", $userData->email);
 							}
 							
 							echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
@@ -180,7 +180,7 @@ $userData = Constants::$accountManager->getUserData();
 									"%TIMEOUT%" => date("d.m.Y H:i:s", strtotime($userData->newEmailChangeDate) + TIMEOUT_CONFIRMLINK)
 								);
 								$mail = new Mail("Neue Email-Adresse bestätigen", $replacements);
-								if ($mail->send($userData->newEmail, "confirm-email"))
+								if ($mail->send("confirm-email", $userData->newEmail))
 								{
 									echo "<div class='info'>Es wurde eine Email mit dem Link zum Best&auml;tigen der Email-Adresse an die neue Email-Adresse gesendet.</div>";
 								}
