@@ -65,9 +65,9 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 					"%CONTENT%" => formatText($_POST["addresslist_sendmessage_text"])
 				);
 				$mail = new Mail("Nachricht vom Internen Bereich", $replacements);
-				if ($mail->send("addresslist-sendmessage", $mailRecipients, $ccMail))
+				if ($mail->send("addresslist-sendmessage", $mailRecipients, $ccMail, null, array($userData->email => $userData->firstName . " " . $userData->lastName)))
 				{
-					echo "<div class='ok'>Die Nachricht wurde erfolgreich gesendet.</div>";
+					echo "<div class='ok'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</div>";
 					$showError = false;
 				}
 			}
@@ -219,7 +219,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 			if (cells.eq(0).find("input:checkbox").is(":checked"))
 			{
 				recipients.push($(this).attr("userid"));
-				$("#addresslist_sendmessage_confirm_recipients").append("<li>" + cells.eq(1).html() + " " + cells.eq(2).html());
+				$("#addresslist_sendmessage_confirm_recipients").append("<li>" + cells.eq(1).html() + " " + cells.eq(2).html() + "</li>");
 			}
 		});
 		

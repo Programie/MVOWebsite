@@ -43,7 +43,7 @@ class Mail
 		$this->replacements = array_merge($this->replacements, $replacements);
 	}
 	
-	public function send($templateName, $to, $cc = null, $bcc = null)
+	public function send($templateName, $to, $cc = null, $bcc = null, $replyTo = null)
 	{
 		$body = @file_get_contents(ROOT_PATH . "/includes/mails/" . $templateName . ".html");
 		
@@ -69,6 +69,10 @@ class Mail
 		if ($bcc)
 		{
 			$this->message->setBcc($bcc);
+		}
+		if ($replyTo)
+		{
+			$this->message->setReplyTo($replyTo);
 		}
 		$this->message->setBody($body, "text/html");
 		
