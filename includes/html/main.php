@@ -2,17 +2,7 @@
 <html>
 	<head>
 		<title><?php echo implode(PAGE_TITLE_SEPARATOR, $fullPageTitle);?></title>
-		<?php
-		$dir = scandir(ROOT_PATH . "/files/css");
-		foreach ($dir as $file)
-		{
-			$fileInfo = pathinfo($file);
-			if ($file[0] != "." and $fileInfo["extension"] == "css")
-			{
-				echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"/files/css/" . $file . "\"/>";
-			}
-		}
-		?>
+		<link rel="stylesheet" type="text/css" href="/files/style.css"/>
 		<script type="text/javascript" src="/files/scripts/jquery.js"></script>
 		<script type="text/javascript" src="/files/scripts/jquery-ui.js"></script>
 		<script type="text/javascript" src="/files/scripts/photobox.js"></script>
