@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<title><?php echo implode(PAGE_TITLE_SEPARATOR, $fullPageTitle);?></title>
 		<link rel="stylesheet" type="text/css" href="/files/style.css"/>
 		<script type="text/javascript" src="/files/scripts/jquery.js"></script>
@@ -36,7 +37,7 @@
 					$_SESSION["backgroundFile"] = $backgroundFile;
 				}
 				?>
-				<img id="backgroundimage" src="/files/backgrounds/<?php echo $backgroundType;?>/<?php echo $backgroundFile;?>"/>
+				<img id="backgroundimage" src="/files/backgrounds/<?php echo $backgroundType;?>/<?php echo $backgroundFile;?>" alt="Hintergrund"/>
 				<div id="backgroundoverlay"></div>
 			</div>
 		</div>
