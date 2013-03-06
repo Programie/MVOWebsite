@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 		<title><?php echo implode(PAGE_TITLE_SEPARATOR, $fullPageTitle);?></title>
 		<link rel="stylesheet" type="text/css" href="/files/style.css"/>
 		<script type="text/javascript" src="/files/scripts/jquery.js"></script>
