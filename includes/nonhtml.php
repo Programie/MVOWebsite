@@ -23,11 +23,11 @@ switch (Constants::$pagePath[0])
 			$calendar->setDownloadOutput();
 			$calendar->start();
 			
-			$event = new iCalEvent;
-			
 			$dates = Dates::getDates();
 			foreach ($dates as $date)
 			{
+				$event = new iCalEvent;
+				
 				if (date("H:i:s", $date->startDate) == "00:00:00")
 				{
 					$useStartTime = false;
@@ -36,7 +36,7 @@ switch (Constants::$pagePath[0])
 				{
 					$useStartTime = true;
 				}
-				$event->setStart(date("Y", $date->startDate), date("m", $date->startDate), date("d", $date->startDate), false, true, "", $useStartTime, date("H", $date->startDate), date("i", $date->startDate), date("s", $date->startDate));
+				$event->setStart(date("Y", $date->startDate), date("m", $date->startDate), date("d", $date->startDate), false, true, "Europe/Berlin", $useStartTime, date("H", $date->startDate), date("i", $date->startDate), date("s", $date->startDate));
 				
 				if (date("Y-m-d", $date->endDate) == "1970-01-01")
 				{
@@ -52,12 +52,15 @@ switch (Constants::$pagePath[0])
 				{
 					$useEndTime = true;
 				}
-				$event->setEnd(date("Y", $date->endDate), date("m", $date->endDate), date("d", $date->endDate), false, true, "", $useEndTime, date("H", $date->endDate), date("i", $date->endDate), date("s", $date->endDate));
+				$event->setEnd(date("Y", $date->endDate), date("m", $date->endDate), date("d", $date->endDate), false, true, "Europe/Berlin", $useEndTime, date("H", $date->endDate), date("i", $date->endDate), date("s", $date->endDate));
 				$event->setShortDescription($date->title);
-				$event->setLocation($date->locationName);
+				$event->setLocation($date->location->name);
+				if ($date->location->latitude and $date->location->longitude)
+				{
+					$event->setGeo($date->location->latitude, $date->location->longitude);
+				}
 				$event->setUID($row->id . "-" . $date->startDate . "@dates." . $_SERVER["SERVER_NAME"]);
 				$calendar->add($event);
-				$event->clear();
 			}
 			
 			$calendar->end();
