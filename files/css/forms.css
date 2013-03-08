@@ -35,7 +35,7 @@ input[type="password"], input[type="text"]
 
 input[type="password"]
 {
-	background-image: url(../images/lock.png);
+	background-image: url(/files/images/lock.png);
 	background-repeat: no-repeat;
 	background-position: 5px center;
 }

@@ -1,4 +1,4 @@
-﻿/* PICBOX */
+/* PICBOX */
 #pbOverlay.show{ opacity:1; pointer-events:auto; }
 #pbOverlay{
 	opacity:0;

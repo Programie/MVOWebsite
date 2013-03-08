@@ -12,27 +12,27 @@
 .error
 {
 	background-color: #ffbaba;
-	background-image: url(../images/alerts/error.png);
+	background-image: url(/files/images/alerts/error.png);
 	color: #d8000c;
 }
 
 .info
 {
 	background-color: #bde5f8;
-	background-image: url(../images/alerts/info.png);
+	background-image: url(/files/images/alerts/info.png);
 	color: #00529b;
 }
 
 .ok
 {
 	background-color: #dff2bf;
-	background-image: url(../images/alerts/ok.png);
+	background-image: url(/files/images/alerts/ok.png);
 	color: #4f8a10;
 }
 
 .warning
 {
 	background-color: #feefb3;
-	background-image: url(../images/alerts/warning.png);
+	background-image: url(/files/images/alerts/warning.png);
 	color: #9f6000;
 }

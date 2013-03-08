@@ -12,6 +12,10 @@ class AccountManager
 		{
 			$this->login($_POST["username"], $_POST["password"]);
 		}
+		elseif (isset($_SERVER["PHP_AUTH_USER"]) and isset($_SERVER["PHP_AUTH_PW"]))
+		{
+			$this->login($_SERVER["PHP_AUTH_USER"], $_SERVER["PHP_AUTH_PW"]);
+		}
 		else
 		{
 			if ($_SESSION["userId"])
