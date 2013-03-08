@@ -38,22 +38,24 @@ switch (Constants::$pagePath[0])
 				}
 				$event->setStart(date("Y", $date->startDate), date("m", $date->startDate), date("d", $date->startDate), false, true, "", $useStartTime, date("H", $date->startDate), date("i", $date->startDate), date("s", $date->startDate));
 				
-				if (date("Y-m-d", $date-$date->endDate) != "1970-01-01")
+				if (date("Y-m-d", $date->endDate) == "1970-01-01")
 				{
-					if (date("H:i:s", $date->endDate) == "00:00:00")
-					{
-						$date->endDate += 60 * 60 * 24;// End date specifies the non-inclusive end of the event
-						$useEndTime = false;
-					}
-					else
-					{
-						$useEndTime = true;
-					}
-					$event->setEnd(date("Y", $date->endDate), date("m", $date->endDate), date("d", $date->endDate), false, true, "", $useEndTime, date("H", $date->endDate), date("i", $date->endDate), date("s", $date->endDate));
+					$date->endDate = $date->startDate;
 				}
+				
+				if (date("H:i:s", $date->endDate) == "00:00:00")
+				{
+					$date->endDate += 60 * 60 * 24;// End date specifies the non-inclusive end of the event
+					$useEndTime = false;
+				}
+				else
+				{
+					$useEndTime = true;
+				}
+				$event->setEnd(date("Y", $date->endDate), date("m", $date->endDate), date("d", $date->endDate), false, true, "", $useEndTime, date("H", $date->endDate), date("i", $date->endDate), date("s", $date->endDate));
 				$event->setShortDescription($date->title);
 				$event->setLocation($date->locationName);
-				$event->setUID($row->id . "-" . $date->startDate . "@public.dates." . $_SERVER["SERVER_NAME"]);
+				$event->setUID($row->id . "-" . $date->startDate . "@dates." . $_SERVER["SERVER_NAME"]);
 				$calendar->add($event);
 				$event->clear();
 			}
