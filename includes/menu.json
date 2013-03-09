@@ -84,49 +84,49 @@
 		"items" : "pictures"
 	},
 	{
-		"path" : "/internarea",
+		"path" : "/internalarea",
 		"items" :
 		[
 			{
-				"path" : "/internarea/editprofile"
+				"path" : "/internalarea/editprofile"
 			},
 			{
 				"type" : "separator",
 				"permissions" : "1"
 			},
 			{
-				"path" : "/internarea/addresslist"
+				"path" : "/internalarea/addresslist"
 			},
 			{
-				"path" : "/internarea/availablelist"
+				"path" : "/internalarea/availablelist"
 			},
 			{
-				"path" : "/internarea/movies"
+				"path" : "/internalarea/movies"
 			},
 			{
-				"path" : "/internarea/forms"
+				"path" : "/internalarea/forms"
 			},
 			{
-				"path" : "/internarea/birthdays"
+				"path" : "/internalarea/birthdays"
 			},
 			{
-				"path" : "/internarea/messages"
+				"path" : "/internalarea/messages"
 			},
 			{
-				"path" : "/internarea/writemessage"
+				"path" : "/internalarea/writemessage"
 			},
 			{
-				"path" : "/internarea/protocols"
+				"path" : "/internalarea/protocols"
 			},
 			{
-				"path" : "/internarea/events"
+				"path" : "/internalarea/events"
 			},
 			{
 				"type" : "separator",
 				"permissions" : "1"
 			},
 			{
-				"path" : "/internarea/logout"
+				"path" : "/internalarea/logout"
 			}
 		]
 	}

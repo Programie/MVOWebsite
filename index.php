@@ -16,13 +16,14 @@ require_once ROOT_PATH . "/includes/MessageManager.class.php";
 
 session_start();
 
-Constants::$pagePath = explode("/", $_GET["path"]);
+Constants::$pagePath = array();
 
-foreach (Constants::$pagePath as $index => $page)
+$pagePath = explode("/", $_GET["path"]);
+foreach ($pagePath as $page)
 {
-	if (!$page or $page[0] == ".")
+	if ($page and $page[0] != ".")
 	{
-		unset(Constants::$pagePath[$index]);
+		Constants::$pagePath[] = $page;
 	}
 }
 
@@ -36,7 +37,11 @@ if (empty(Constants::$pagePath))
 	Constants::$pagePath = array("home");
 }
 
-require_once ROOT_PATH . "/includes/nonhtml.php";
+$preHtmlFile = ROOT_PATH . "/includes/prehtml/" . Constants::$pagePath[0]. ".php";
+if (file_exists($preHtmlFile))
+{
+	require_once $preHtmlFile;
+}
 
 $pageData = Constants::$pageManager->getPageData(Constants::$pagePath);
 foreach ($pageData as $data)

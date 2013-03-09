@@ -13,13 +13,13 @@ else
 		echo "<div class='error'>Login fehlgeschlagen: Benutzername oder Passwort falsch!</div>";
 	}
 	echo "
-		<form action='/internarea/login' method='post'>
+		<form action='/internalarea/login' method='post'>
 			<input type='text' id='loginform_username' name='username' placeholder='Benutzername' required/>
 			<input type='password' name='password' placeholder='Passwort' required/>
 			
 			<div>
 				<input type='submit' value='Login'/>
-				<a href='/internarea/resetpassword'>Passwort vergessen?</a>
+				<a href='/internalarea/resetpassword'>Passwort vergessen?</a>
 			</div>
 		</form>
 	";

@@ -49,12 +49,14 @@ $userData = Constants::$accountManager->getUserData();
 							{
 								$replacements = array
 								(
-									"%FIRSTNAME%" => $userData->firstName,
-									"%OLDUSERNAME%" => $oldUserData->username,
-									"%NEWUSERNAME%" => $userData->username
+									"FIRSTNAME" => $userData->firstName,
+									"OLDUSERNAME" => $oldUserData->username,
+									"NEWUSERNAME" => $userData->username
 								);
 								$mail = new Mail("Benutzername geändert", $replacements);
-								$mail->send("username-changed", $userData->email);
+								$mail->setTemplate("username-changed");
+								$mail->setTo($userData->email);
+								$mail->send();
 							}
 							
 							echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
@@ -81,7 +83,7 @@ $userData = Constants::$accountManager->getUserData();
 		}
 		?>
 		
-		<form action="/internarea/editprofile#editprofile_account" method="post">
+		<form action="/internalarea/editprofile#editprofile_account" method="post">
 			<input type="hidden" name="editprofile_tab" value="account"/>
 			
 			<label for="editprofile_account_username">Benutzername:</label>
@@ -133,7 +135,7 @@ $userData = Constants::$accountManager->getUserData();
 		}
 		?>
 		
-		<form action="/internarea/editprofile#editprofile_changepassword" method="post">
+		<form action="/internalarea/editprofile#editprofile_changepassword" method="post">
 			<input type="hidden" name="editprofile_tab" value="password"/>
 			
 			<label for="editprofile_changepassword_current">Aktuelles Passwort:</label>
@@ -174,13 +176,15 @@ $userData = Constants::$accountManager->getUserData();
 								
 								$replacements = array
 								(
-									"%FIRSTNAME%" => $userData->firstName,
-									"%NEWEMAILADDRESS%" => $userData->newEmail,
-									"%URL%" => BASE_URL . "/internarea/confirmemail/" . strtotime($userData->newEmailChangeDate),
-									"%TIMEOUT%" => date("d.m.Y H:i:s", strtotime($userData->newEmailChangeDate) + TIMEOUT_CONFIRMLINK)
+									"FIRSTNAME" => $userData->firstName,
+									"NEWEMAILADDRESS" => $userData->newEmail,
+									"URL" => BASE_URL . "/internalarea/confirmemail/" . strtotime($userData->newEmailChangeDate),
+									"TIMEOUT" => date("d.m.Y H:i:s", strtotime($userData->newEmailChangeDate) + TIMEOUT_CONFIRMLINK)
 								);
 								$mail = new Mail("Neue Email-Adresse bestätigen", $replacements);
-								if ($mail->send("confirm-email", $userData->newEmail))
+								$mail->setTemplate("confirm-email");
+								$mail->setTo($userData->newEmail);
+								if ($mail->send())
 								{
 									echo "<div class='info'>Es wurde eine Email mit dem Link zum Best&auml;tigen der Email-Adresse an die neue Email-Adresse gesendet.</div>";
 								}
@@ -220,7 +224,7 @@ $userData = Constants::$accountManager->getUserData();
 			}
 		}
 		?>
-		<form action="/internarea/editprofile#editprofile_changeemail" method="post">
+		<form action="/internalarea/editprofile#editprofile_changeemail" method="post">
 			<input type="hidden" name="editprofile_tab" value="email"/>
 			
 			<label for="editprofile_changeemail_currentpassword">Aktuelles Passwort:</label>
@@ -258,7 +262,7 @@ $userData = Constants::$accountManager->getUserData();
 			echo "<div class='ok'>Deine &Auml;nderungen wurden gespeichert.</div>";
 		}
 		?>
-		<form action="/internarea/editprofile#editprofile_contact" method="post">
+		<form action="/internalarea/editprofile#editprofile_contact" method="post">
 			<input type="hidden" name="editprofile_tab" value="contact"/>
 			
 			<label for="editprofile_contact_phone_private">Telefon (Privat):</label>

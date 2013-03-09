@@ -43,7 +43,7 @@ class MessageManager
 			
 			echo "
 				<div class='messages_container'>
-					<a href='/internarea/messages/" . $row->id . "' class='messages_header' title='Klicken um nur diese Nachricht anzuzeigen'>
+					<a href='/internalarea/messages/" . $row->id . "' class='messages_header' title='Klicken um nur diese Nachricht anzuzeigen'>
 						<div class='messages_header'>
 							<div class='messages_header_sender'><b>Erstellt von:</b> " . $row->firstName . " " . $row->lastName . "</div>
 							<div class='messages_header_date'><b>Datum:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>

@@ -8,7 +8,7 @@
 	}
 	else
 	{
-		echo "Die Seite <b>" . implode(Constants::$pagePath, "/") . "</b> ist nur zug&auml;nglich wenn Sie im internen Bereich angemeldet sind. Bitte melden Sie sich <a href='/internarea'>hier</a> an und versuchen Sie es erneut.";
+		echo "Die Seite <b>" . implode(Constants::$pagePath, "/") . "</b> ist nur zug&auml;nglich wenn Sie im internen Bereich angemeldet sind. Bitte melden Sie sich <a href='/internalarea'>hier</a> an und versuchen Sie es erneut.";
 	}
 	?>
 </p>

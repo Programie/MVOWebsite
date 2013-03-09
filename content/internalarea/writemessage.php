@@ -4,7 +4,7 @@
 if (isset($_POST["writemessage_confirmed"]))
 {
 	$showError = true;
-	if ($_POST["writemessage_confirmed"] and $_POST["writemessage_confirm_text"])
+	if ($_POST["writemessage_confirmed"] and $_POST["writemessage_text"])
 	{
 		$userData = Constants::$accountManager->getUserData();
 		if ($_POST["writemessage_sendtoken"] == $userData->sendToken)
@@ -60,13 +60,17 @@ if (isset($_POST["writemessage_confirmed"]))
 				
 				$replacements = array
 				(
-					"%FIRSTNAME%" => $userData->firstName,
-					"%LASTNAME%" => $userData->lastName,
-					"%CONTENT%" => formatText($text),
-					"%URL%" => BASE_URL . "/internarea/messages/" . $messageId
+					"FIRSTNAME" => $userData->firstName,
+					"LASTNAME" => $userData->lastName,
+					"CONTENT" => formatText($text),
+					"URL" => BASE_URL . "/internalarea/messages/" . $messageId
 				);
 				$mail = new Mail("Neue Nachricht im Internen Bereich", $replacements);
-				if ($mail->send("writemessage", $mailRecipients, $ccMail, null, array($userData->email => $userData->firstName . " " . $userData->lastName)))
+				$mail->setTemplate("writemessage");
+				$mail->setTo($mailRecipients);
+				$mail->setCc($ccMail);
+				$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
+				if ($mail->send())
 				{
 					echo "<div class='ok'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</div>";
 					$showError = false;
@@ -86,7 +90,7 @@ if (isset($_POST["writemessage_confirmed"]))
 }
 ?>
 
-<form id="writemessage_form" action="/internarea/writemessage" method="post" onsubmit="writeMessage_confirm(); return false;">
+<form id="writemessage_form" action="/internalarea/writemessage" method="post" onsubmit="writeMessage_confirm(); return false;">
 	<fieldset id="writemessage_groups">
 		<legend>Gruppen</legend>
 		<?php

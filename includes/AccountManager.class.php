@@ -44,12 +44,11 @@ class AccountManager
 		
 		$userData = $this->getUserData();
 		
-		$replacements = array
-		(
-			"%FIRSTNAME%" => $userData->firstName
-		);
-		$mail = new Mail("Passwort geändert", $replacements);
-		$mail->send($userData->email, "password-changed");
+		$mail = new Mail("Passwort geändert");
+		$mail->setTemplate("password-changed");
+		$mail->addReplacement("FIRSTNAME", $userData->firstName);
+		$mail->setTo($userData->email);
+		$mail->send();
 		
 		return true;
 	}

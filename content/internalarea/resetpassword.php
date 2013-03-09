@@ -3,7 +3,7 @@
 <?php
 if (Constants::$accountManager->getUserId())
 {
-	echo "<p>Du bist derzeit angemeldet! Bitte verwende die Seite <a href='/internarea/editprofile#editprofile_changepassword'>Benutzerprofil</a> um das Passwort zu &auml;ndern.</p>";
+	echo "<p>Du bist derzeit angemeldet! Bitte verwende die Seite <a href='/internalarea/editprofile#editprofile_changepassword'>Benutzerprofil</a> um das Passwort zu &auml;ndern.</p>";
 }
 else
 {
@@ -56,7 +56,7 @@ else
 						echo "
 							<p>Geben Sie ein neues Passwort ein.</p>
 							
-							<form action='/internarea/resetpassword/" . Constants::$pagePath[2] . "' method='post'>
+							<form action='/internalarea/resetpassword/" . Constants::$pagePath[2] . "' method='post'>
 								<input type='password' name='resetpassword_password1' placeholder='Neues Passwort' required/>
 								<input type='password' name='resetpassword_password2' placeholder='Passwort wiederholen' required/>
 								
@@ -111,15 +111,17 @@ else
 				
 				$replacements = array
 				(
-					"%FIRSTNAME%" => $row->firstName,
-					"%LASTNAME%" => $row->lastName,
-					"%URL%" => BASE_URL . "/internarea/resetpassword/" . $key,
-					"%KEY%" => $key,
-					"%TIMEOUT%" => date("d.m.Y H:i:s", $time + TIMEOUT_CONFIRMLINK)
+					"FIRSTNAME" => $row->firstName,
+					"LASTNAME" => $row->lastName,
+					"URL" => BASE_URL . "/internalarea/resetpassword/" . $key,
+					"KEY" => $key,
+					"TIMEOUT" => date("d.m.Y H:i:s", $time + TIMEOUT_CONFIRMLINK)
 				);
 				
 				$mail = new Mail("Passwort zurücksetzen", $replacements);
-				if ($mail->send("resetpassword", $row->email))
+				$mail->setTemplate("resetpassword");
+				$mail->setTo($row->email);
+				if ($mail->send())
 				{
 					echo "<div class='info'>Es wurde eine Email mit dem Link zum Zur&uuml;cksetzen des Passworts an die im Benutzeraccount hinterlegte Email-Adresse gesendet.</div>";
 				}
@@ -139,7 +141,7 @@ else
 			}
 		}
 		echo "
-			<form action='/internarea/resetpassword' method='post'>
+			<form action='/internalarea/resetpassword' method='post'>
 				<input type='text' id='resetpassword_username' name='resetpassword_username' placeholder='Benutzername' required/>
 				
 				<input type='submit' value='Senden'/>

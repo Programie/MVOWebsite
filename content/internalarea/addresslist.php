@@ -60,12 +60,13 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 					$ccMail = array($userData->email => $userData->firstName . " " . $userData->lastName);
 				}
 				
-				$replacements = array
-				(
-					"%CONTENT%" => formatText($_POST["addresslist_sendmessage_text"])
-				);
-				$mail = new Mail("Nachricht vom Internen Bereich", $replacements);
-				if ($mail->send("addresslist-sendmessage", $mailRecipients, $ccMail, null, array($userData->email => $userData->firstName . " " . $userData->lastName)))
+				$mail = new Mail("Nachricht vom Internen Bereich");
+				$mail->setTemplate("addresslist-sendmessage");
+				$mail->addReplacement("CONTENT", formatText($_POST["addresslist_sendmessage_text"]));
+				$mail->setTo($mailRecipients);
+				$mail->setCc($ccMail);
+				$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
+				if ($mail->send())
 				{
 					echo "<div class='ok'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</div>";
 					$showError = false;
@@ -95,7 +96,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 		{
 			$addStyle = "style='font-weight: bold;'";
 		}
-		echo "<a href='/internarea/addresslist/" . $name . "' " . $addStyle . "><button type='button'>" . $row->title . "</button></a>";
+		echo "<a href='/internalarea/addresslist/" . $name . "' " . $addStyle . "><button type='button'>" . $row->title . "</button></a>";
 	}
 	?>
 </fieldset>
@@ -155,7 +156,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 <fieldset id="addresslist_sendmessage">
 	<legend>Nachricht senden</legend>
 	
-	<form id="addresslist_sendmessage_form" action="/internarea/addresslist" method="post" onsubmit="addresslist_sendMessageConfirm(); return false;">
+	<form id="addresslist_sendmessage_form" action="/internalarea/addresslist" method="post" onsubmit="addresslist_sendMessageConfirm(); return false;">
 		<textarea id="addresslist_sendmessage_text" name="addresslist_sendmessage_text" rows="15" cols="15"></textarea>
 		<input type="hidden" id="addresslist_sendmessage_sendcopy" name="addresslist_sendmessage_sendcopy"/>
 		<input type="hidden" id="addresslist_sendmessage_confirmed" name="addresslist_sendmessage_confirmed"/>

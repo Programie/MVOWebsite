@@ -42,23 +42,27 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			
 			$replacements = array
 			(
-				"%USERNAME%" => $userData->username,
-				"%FIRSTNAME%" => $userData->firstName,
-				"%LASTNAME%" => $userData->lastName,
-				"%TITLE%" => $movieRow->title,
-				"%YEAR%" => $movieRow->eventYear,
-				"%MEDIA%" => $movieRow->discs . " " . $movieRow->discType . ($movieRow->discs == 1 ? "" : "s"),
-				"%ORDERTYPE%" => $row->buy ? "Kaufen" : "Ausleihen",
-				"%PRICE%" => $row->buy ? (number_format($movieRow->price, 2, ",", ".") . " &euro;") : "Kostenlos",
+				"USERNAME" => $userData->username,
+				"FIRSTNAME" => $userData->firstName,
+				"LASTNAME" => $userData->lastName,
+				"TITLE" => $movieRow->title,
+				"YEAR" => $movieRow->eventYear,
+				"MEDIA" => $movieRow->discs . " " . $movieRow->discType . ($movieRow->discs == 1 ? "" : "s"),
+				"ORDERTYPE" => $row->buy ? "Kaufen" : "Ausleihen",
+				"PRICE" => $row->buy ? (number_format($movieRow->price, 2, ",", ".") . " &euro;") : "Kostenlos",
 			);
 			
 			$mail = new Mail(null, $replacements);
 			
 			$mail->newMessage("Deine Filmstornierung");
-			$mail->send("movie-order-cancel", $userData->email);
+			$mail->setTemplate("movie-order-cancel");
+			$mail->setTo($userData->email);
+			$mail->send();
 			
 			$mail->newMessage("Filmstornierung");
-			$mail->send("webmaster-movie-order-cancel", WEBMASTER_EMAIL);
+			$mail->setTemplate("webmaster-movie-order-cancel");
+			$mail->setTo(WEBMASTER_EMAIL);
+			$mail->send();
 			
 			echo "
 				<div class='ok'>
@@ -94,7 +98,7 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 					echo "
 						<div class='error'>
 							Dieser Film ist derzeit ausgeliehen!<br />
-							M&ouml;chtest du ihn stattdessen f&uuml;r " . number_format($row->price, 2, ",", ".") . " &euro; <a href='/internarea/movies/buy/" . Constants::$pagePath[3] . "'>kaufen</a>?
+							M&ouml;chtest du ihn stattdessen f&uuml;r " . number_format($row->price, 2, ",", ".") . " &euro; <a href='/internalarea/movies/buy/" . Constants::$pagePath[3] . "'>kaufen</a>?
 						</div>
 					";
 				}
@@ -122,24 +126,28 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 				
 				$replacements = array
 				(
-					"%USERNAME%" => $userData->username,
-					"%FIRSTNAME%" => $userData->firstName,
-					"%LASTNAME%" => $userData->lastName,
-					"%TITLE%" => $row->title,
-					"%YEAR%" => $row->eventYear,
-					"%MEDIA%" => $row->discs . " " . $row->discType . ($row->discs == 1 ? "" : "s"),
-					"%ORDERTYPE%" => Constants::$pagePath[2] == "buy" ? "Kaufen" : "Ausleihen",
-					"%PRICE%" => Constants::$pagePath[2] == "buy" ? (number_format($row->price, 2, ",", ".") . " &euro;") : "Kostenlos",
-					"%CANCELURL%" => BASE_URL . "/internarea/movies/cancel/" . $orderId
+					"USERNAME" => $userData->username,
+					"FIRSTNAME" => $userData->firstName,
+					"LASTNAME" => $userData->lastName,
+					"TITLE" => $row->title,
+					"YEAR" => $row->eventYear,
+					"MEDIA" => $row->discs . " " . $row->discType . ($row->discs == 1 ? "" : "s"),
+					"ORDERTYPE" => Constants::$pagePath[2] == "buy" ? "Kaufen" : "Ausleihen",
+					"PRICE" => Constants::$pagePath[2] == "buy" ? (number_format($row->price, 2, ",", ".") . " &euro;") : "Kostenlos",
+					"CANCELURL" => BASE_URL . "/internalarea/movies/cancel/" . $orderId
 				);
 				
 				$mail = new Mail(null, $replacements);
 				
 				$mail->newMessage("Deine Filmbestellung");
-				$mail->send($userData->email, "movie-order");
+				$mail->setTemplate("movie-order");
+				$mail->setTo($userData->email);
+				$mail->send();
 				
 				$mail->newMessage("Filmbestellung");
-				$mail->send(WEBMASTER_EMAIL, "webmaster-movie-order");
+				$mail->setTemplate("webmaster-movie-order");
+				$mail->setTo(WEBMASTER_EMAIL);
+				$mail->send();
 				
 				echo "
 					<div class='ok'>
@@ -292,7 +300,7 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			{
 				"OK" : function()
 				{
-					document.location.href = "/internarea/movies/" + (buy ? "buy" : "borrow") + "/" + row.getAttribute("movieid");
+					document.location.href = "/internalarea/movies/" + (buy ? "buy" : "borrow") + "/" + row.getAttribute("movieid");
 				},
 				"Abbrechen" : function()
 				{
