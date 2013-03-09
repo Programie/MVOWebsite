@@ -1,25 +1,31 @@
-<?php
-$links = array();
-$query = Constants::$pdo->query("SELECT * FROM `links` ORDER BY `letter` ASC, `title` ASC");
-while ($row = $query->fetch())
-{
-	$links[$row->letter][] = $row;
-}
+<h1>Links</h1>
 
-echo "<h1>Links</h1>";
+<table id="links_table" class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+			<th>Ort</th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php
+		$query = Constants::$pdo->query("SELECT * FROM `links`");
+		while ($row = $query->fetch())
+		{
+			echo "
+				<tr>
+					<td><a href='/links/" . $row->id . "' target='_blank'>" . $row->title . "</a></td>
+					<td>" . $row->town . "</td>
+				</tr>
+			";
+		}
+		?>
+	</tbody>
+</table>
 
-echo "<ul>";
-foreach ($links as $letter => $urls)
-{
-	echo "<li>";
-	echo "<b>" . strtoupper($letter) . "</b>";
-	echo "<ul>";
-	foreach ($urls as $row)
+<script type="text/javascript">
+	$("#links_table").tablesorter(
 	{
-		echo "<li><a href='/links/" . $row->id . "' target='_blank'>" . $row->title . "</a></li>";
-	}
-	echo "</ul>";
-	echo "</li>";
-}
-echo "</ul>";
-?>
+		sortList : [[1, 0], [0, 0]]
+	});
+</script>
