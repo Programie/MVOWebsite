@@ -104,7 +104,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 <table id="addresslist_table" class="table">
 	<thead>
 		<tr>
-			<th></th>
+			<th class='no-print'></th>
 			<th>Vorname</th>
 			<th>Nachname</th>
 			<th>Email</th>
@@ -117,7 +117,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 	<tbody>
 		<?php
 		$permissionCheckQuery = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
-		$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email`, `phonePrivate`, `phoneWork`, `phoneMobile`, `fax` FROM `users`");
+		$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email`, `phonePrivate1`, `phonePrivate2`, `phoneWork`, `phoneMobile`, `fax` FROM `users`");
 		while ($row = $query->fetch())
 		{
 			if ($activeGroup == "all")
@@ -135,13 +135,22 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 			}
 			if ($show)
 			{
+				$phonePrivate = array();
+				if ($row->phonePrivate1)
+				{
+					$phonePrivate[] = $row->phonePrivate1;
+				}
+				if ($row->phonePrivate2)
+				{
+					$phonePrivate[] = $row->phonePrivate2;
+				}
 				echo "
 					<tr userid='" . $row->id . "'>
-						<td><input type='checkbox'/></td>
+						<td class='no-print'><input type='checkbox'/></td>
 						<td>" . $row->firstName . "</td>
 						<td>" . $row->lastName . "</td>
 						<td>" . $row->email . "</td>
-						<td>" . $row->phonePrivate . "</td>
+						<td>" . implode("<br />", $phonePrivate) . "</td>
 						<td>" . $row->phoneWork . "</td>
 						<td>" . $row->phoneMobile . "</td>
 						<td>" . $row->fax . "</td>

@@ -50,7 +50,8 @@ if ($dates)
 		<table id='dates_table' class='table'>
 			<thead>
 				<tr>
-					<th>Zeit</th>
+					<th>Von</th>
+					<th>Bis</th>
 					<th>Veranstaltung</th>
 					<th>Ort</th>
 				</tr>
@@ -59,8 +60,6 @@ if ($dates)
 	";
 	foreach ($dates as $date)
 	{
-		$startEndDateTime = array();
-		
 		// Start date/time
 		$weekday = date("N", $date->startDate);
 		$startDate = date("d.m.Y", $date->startDate);
@@ -70,24 +69,22 @@ if ($dates)
 		{
 			$startDateTime[] = $startTime . " Uhr";
 		}
-		$startEndDateTime[] = implode(" ", $startDateTime);
 		
 		// End date/time
-		$endDateTime = array();
+		$weekday = date("N", $date->endDate);
 		$endDate = date("d.m.Y", $date->endDate);
-		if ($endDate != $startDate and $endDate != "01.01.1970")
+		if ($endDate == "01.01.1970")
 		{
-			$weekday = date("N", $date->endDate);
-			$endDateTime[] = getWeekdayName($weekday) . ", " . $endDate;
+			$endDateTime = array();
 		}
-		$endTime = date("H:i", $date->endDate);
-		if ($endTime != "00:00")
+		else
 		{
-			$endDateTime[] = $endTime . " Uhr";
-		}
-		if (!empty($endDateTime))
-		{
-			$startEndDateTime[] = implode(" ", $endDateTime);
+			$endDateTime = array(getWeekdayName($weekday) . ", " . $endDate);
+			$endTime = date("H:i", $date->endDate);
+			if ($endTime != "00:00")
+			{
+				$endDateTime[] = $endTime . " Uhr";
+			}
 		}
 		
 		$rowClasses = array();
@@ -114,7 +111,8 @@ if ($dates)
 		
 		echo "
 			<tr " . implode(" ", $rowAttributes) . ">
-				<td number='" . $date->startDate . "' class='nowrap'>" . implode(" bis ", $startEndDateTime) . "</td>
+				<td number='" . $date->startDate . "' class='nowrap'>" . implode("<br />", $startDateTime) . "</td>
+				<td number='" . $date->endDate . "' class='nowrap'>" . implode("<br />", $endDateTime) . "</td>
 				<td>" . $date->title . "</td>
 				<td>" . $location . "</td>
 			</tr>

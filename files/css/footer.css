@@ -21,3 +21,11 @@
 	text-decoration: none;
 	padding: 0px 10px;
 }
+
+@media print
+{
+	#footer
+	{
+		display: none;
+	}
+}

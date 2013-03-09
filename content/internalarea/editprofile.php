@@ -247,10 +247,11 @@ $userData = Constants::$accountManager->getUserData();
 		<?php
 		if ($_POST["editprofile_tab"] == "contact")
 		{
-			$query = Constants::$pdo->prepare("UPDATE `users` SET `phonePrivate` = :phonePrivate, `phoneWork` = :phoneWork, `phoneMobile` = :phoneMobile, `fax` = :fax WHERE `id` = :id");
+			$query = Constants::$pdo->prepare("UPDATE `users` SET `phonePrivate1` = :phonePrivate1, `phonePrivate2` = :phonePrivate2, `phoneWork` = :phoneWork, `phoneMobile` = :phoneMobile, `fax` = :fax WHERE `id` = :id");
 			$query->execute(array
 			(
-				":phonePrivate" => $_POST["editprofile_contact_phone_private"],
+				":phonePrivate1" => $_POST["editprofile_contact_phone_private1"],
+				":phonePrivate2" => $_POST["editprofile_contact_phone_private2"],
 				":phoneWork" => $_POST["editprofile_contact_phone_work"],
 				":phoneMobile" => $_POST["editprofile_contact_phone_mobile"],
 				":fax" => $_POST["editprofile_contact_fax"],
@@ -265,8 +266,11 @@ $userData = Constants::$accountManager->getUserData();
 		<form action="/internalarea/editprofile#editprofile_contact" method="post">
 			<input type="hidden" name="editprofile_tab" value="contact"/>
 			
-			<label for="editprofile_contact_phone_private">Telefon (Privat):</label>
-			<input type="text" id="editprofile_contact_phone_private" name="editprofile_contact_phone_private" value="<?php echo $userData->phonePrivate;?>"/>
+			<label for="editprofile_contact_phone_private1">Telefon (Privat):</label>
+			<input type="text" id="editprofile_contact_phone_private1" name="editprofile_contact_phone_private1" value="<?php echo $userData->phonePrivate1;?>"/>
+			
+			<label for="editprofile_contact_phone_private2">Telefon (Privat):</label>
+			<input type="text" id="editprofile_contact_phone_private2" name="editprofile_contact_phone_private2" value="<?php echo $userData->phonePrivate2;?>"/>
 			
 			<label for="editprofile_contact_phone_work">Telefon (Gesch&auml;ftlich):</label>
 			<input type="text" id="editprofile_contact_phone_work" name="editprofile_contact_phone_work" value="<?php echo $userData->phoneWork;?>"/>
