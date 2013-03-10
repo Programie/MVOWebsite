@@ -116,6 +116,9 @@
 				"path" : "/internalarea/writemessage"
 			},
 			{
+				"path" : "/internalarea/notedirectory"
+			},
+			{
 				"path" : "/internalarea/protocols"
 			},
 			{

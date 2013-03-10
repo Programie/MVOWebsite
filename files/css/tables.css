@@ -9,6 +9,13 @@ table.table thead tr th, table.table tbody tr td, table.table tfoot tr th
 	padding: 5px;
 }
 
+table.table tbody tr th
+{
+	padding-top: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
 @media print
 {
 	table.table
@@ -16,24 +23,19 @@ table.table thead tr th, table.table tbody tr td, table.table tfoot tr th
 		border-spacing: 0px;
 	}
 	
-	table.table tbody tr td, table.table thead tr th
+	table.table tbody tr td, table.table tbody tr th
 	{
-		border-top: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
 	}
 	
-	table.table tbody tr td, table.table thead tr th
+	table.table tbody tr td
 	{
 		border-left: 1px solid #ccc;
 	}
 	
-	table.table tbody tr td:last-child, table.table thead tr th:last-child
+	table.table tbody tr td:last-child
 	{
 		border-right: 1px solid #ccc;
-	}
-	
-	table.table tbody tr:last-child td
-	{
-		border-bottom: 1px solid #ccc;
 	}
 }
 
@@ -47,22 +49,22 @@ table.table thead tr th, table.table tbody tr td, table.table tfoot tr th
 		box-shadow: 0px -1px 5px 2px #888;
 	}
 	
-	table.table thead tr th:first-child
+	table.table thead:first-child tr:first-child th:first-child
 	{
 		border-top-left-radius: 10px;
 	}
 	
-	table.table thead tr th:last-child
+	table.table thead:first-child tr:first-child th:last-child
 	{
 		border-top-right-radius: 10px;
 	}
 	
-	table.table tbody tr:last-child td:first-child
+	table.table tbody:last-child tr:last-child td:first-child
 	{
 		border-bottom-left-radius: 10px;
 	}
 	
-	table.table tbody tr:last-child td:last-child
+	table.table tbody:last-child tr:last-child td:last-child
 	{
 		border-bottom-right-radius: 10px;
 	}
@@ -92,7 +94,7 @@ table.table thead tr th, table.table tbody tr td, table.table tfoot tr th
 		background-color:#efefef;
 	}
 	
-	table.table thead tr .headerSortDown, table.table thead tr .headerSortUp
+	table.table thead tr .tablesorter-headerAsc, table.table thead tr .tablesorter-headerDesc
 	{
 		background: #a90329;
 		background: -moz-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%);
@@ -105,12 +107,12 @@ table.table thead tr th, table.table tbody tr td, table.table tfoot tr th
 		color: #fff;
 	}
 	
-	table.table thead tr .headerSortDown:after
+	table.table thead tr th.tablesorter-headerAsc > .tablesorter-header-inner:after
 	{
 		content: " ⇧"
 	}
 
-	table.table thead tr .headerSortUp:after
+	table.table thead tr th.tablesorter-headerDesc > .tablesorter-header-inner:after
 	{
 		content: " ⇩"
 	}

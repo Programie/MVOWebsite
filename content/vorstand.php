@@ -24,11 +24,11 @@
 		</tr>
 		<tr>
 			<td>Jugendvertreter</td>
-			<td>Rebecca Klumpp, Philipp Wieland</td>
+			<td>Andreas Wieland, Philipp Wieland</td>
 		</tr>
 		<tr>
 			<td>Aktive Beisitzer</td>
-			<td>Michael Klumpp, Martin Knapp, Wolfgang Störtzer</td>
+			<td>David Brasseur, Michael Klumpp, Florian Wieland</td>
 		</tr>
 		<tr>
 			<td>Passive Beisitzer</td>

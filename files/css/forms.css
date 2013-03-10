@@ -35,7 +35,7 @@ input[type="password"], input[type="text"]
 
 input[type="password"]
 {
-	background-image: url(/files/images/lock.png);
+	background-image: url(/files/images/formfields/lock.png);
 	background-repeat: no-repeat;
 	background-position: 5px center;
 }
@@ -45,4 +45,11 @@ input[type="submit"]
 	padding: 10px;
 	font-size: 16px;
 	cursor: pointer;
+}
+
+.input-search
+{
+	background-image: url(/files/images/formfields/search.png);
+	background-repeat: no-repeat;
+	background-position: 5px center;
 }

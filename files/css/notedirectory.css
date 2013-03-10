@@ -1,0 +1,22 @@
+#notedirectory_searchform_div1
+{
+	position: relative;
+}
+
+#notedirectory_searchform
+{
+	position: absolute;
+	right: 0px;
+	top: -75px;
+}
+
+#notedirectory_searchstring
+{
+	display: inline;
+}
+
+#notedirectory_selectionmenu
+{
+	width: 100px;
+	margin-bottom: 20px;
+}
