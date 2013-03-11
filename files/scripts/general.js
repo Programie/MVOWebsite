@@ -1,15 +1,20 @@
-$(function()
+$(document).ready(function()
 {
-	$(window).load(function()
+	// Colorbox
+	$(".colorbox-iframe").colorbox(
 	{
-		updateBackToTop();
+		iframe : true,
+		width : "80%",
+		height : "80%"
+	});
+	$("[rel='colorbox']").colorbox(
+	{
+		current : "",
+		picture : true
 	});
 	
-	$(window).scroll(function()
-	{
-		updateBackToTop();
-	});
-	
+	// "Back to top" link
+	$("#backtotop").css("display", "none");
 	$("#backtotop").click(function()
 	{
 		$("body,html").animate(
@@ -17,27 +22,33 @@ $(function()
 			scrollTop : 0
 		}, 800);
 	});
+	
+	// Menu
+	$(".menu").menu();
+	
+	// Tablesorter
+	$("table.table").tablesorter(
+	{
+		widgets : ["stickyHeaders"]
+	});
 });
 
-$(document).ready(function()
+$(window).scroll(function()
 {
-	$(".colorbox-iframe").colorbox(
+	var div = $("#backtotop");
+	if ($(window).scrollTop() > 0)
 	{
-		iframe : true,
-		width : "80%",
-		height : "80%"
-	});
-	
-	$("[rel='colorbox']").colorbox(
+		div.fadeIn();
+	}
+	else
 	{
-		current : "",
-		picture : true
-	});
+		div.fadeOut();
+	}
 });
 
 $(window).resize(function()
 {
-	fixSize();
+	//fixSize();
 });
 
 $.tablesorter.addParser(
@@ -54,25 +65,10 @@ $.tablesorter.addParser(
 	type : "numeric"
 });
 
-window.onload = fixSize;
-
-function updateBackToTop(direct)
-{
-	var div = $("#backtotop");
-	if ($(window).scrollTop() > 0)
-	{
-		div.fadeIn();
-	}
-	else
-	{
-		div.fadeOut();
-	}
-}
-
 function fixSize()
 {
-	document.getElementById("backgroundoverlay").style.top = (document.getElementById("backgroundimage").offsetHeight - 500) + "px";
-	document.getElementById("backgroundwrapper").style.height = document.getElementById("container").offsetHeight + "px";
+	$("#backgroundoverlay").css("top", (document.getElementById("backgroundimage").offsetHeight - 500) + "px");
+	$("#backgroundwrapper").css("height", document.getElementById("container").offsetHeight + "px");
 	if (document.getElementById("container").offsetHeight > document.getElementById("backgroundimage").offsetHeight)
 	{
 		document.getElementById("backgroundoverlay").style.display = "block";

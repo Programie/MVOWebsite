@@ -1,7 +1,6 @@
 img.movies_item_cover
 {
 	position: relative;
-	z-index: 3;
 	border-radius: 5px;
 	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
@@ -11,19 +10,16 @@ img.movies_item_disc
 	left: 10px;
 	position: absolute;
 	top: 50px;
-	z-index: 1;
 }
 
 img.movies_item_disc1
 {
 	top: 10px;
-	z-index: 2;
 }
 
 img.movies_item_disc2
 {
 	top: 80px;
-	z-index: 1;
 }
 
 img.movies_item_disc

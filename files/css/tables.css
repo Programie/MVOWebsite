@@ -94,6 +94,11 @@ table.table tbody tr th
 		background-color:#efefef;
 	}
 	
+	table.table thead.tablesorter-stickyHeader > tr th
+	{
+		border-radius: 0px !important;
+	}
+	
 	table.table thead tr .tablesorter-headerAsc, table.table thead tr .tablesorter-headerDesc
 	{
 		background: #a90329;

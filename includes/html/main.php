@@ -1,4 +1,28 @@
 <!DOCTYPE html>
+<?php
+$backgroundType = getCurrentSeason();
+$backgroundPath = ROOT_PATH . "/files/backgrounds/" . $backgroundType;
+$backgroundFile = $_SESSION["backgroundFile"];
+if (!$backgroundFile or !file_exists($backgroundPath . "/" . $backgroundFile))
+{
+	$dir = scandir($backgroundPath);
+	$files = array();
+	foreach ($dir as $index => $file)
+	{
+		if ($file[0] == ".")
+		{
+			unset($dir[$index]);
+		}
+		else
+		{
+			$files[] = $file;
+		}
+	}
+	$backgroundFile = $files[rand(0, count($dir) - 1)];
+	$_SESSION["backgroundFile"] = $backgroundFile;
+}
+$backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFile;
+?>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
@@ -17,7 +41,7 @@
 		?>
 		<link rel="stylesheet" type="text/css" href="/files/style.css?md5=<?php echo md5($md5);?>"/>
 		<?php
-		$jsList = array("errorreport", "jquery", "jquery-ui", "colorbox", "photobox", "tablesorter", "general");
+		$jsList = array("errorreport", "jquery", "jquery-ui", "metadata", "colorbox", "photobox", "tablesorter", "tablesorter-widgets", "general");
 		foreach ($jsList as $file)
 		{
 			$file = "/files/scripts/" . $file . ".js";
@@ -25,36 +49,7 @@
 		}
 		?>
 	</head>
-	<body>
-		<div id="backgroundwrapper">
-			<div id="background">
-				<?php
-				$backgroundType = getCurrentSeason();
-				$backgroundPath = ROOT_PATH . "/files/backgrounds/" . $backgroundType;
-				$backgroundFile = $_SESSION["backgroundFile"];
-				if (!$backgroundFile or !file_exists($backgroundPath . "/" . $backgroundFile))
-				{
-					$dir = scandir($backgroundPath);
-					$files = array();
-					foreach ($dir as $index => $file)
-					{
-						if ($file[0] == ".")
-						{
-							unset($dir[$index]);
-						}
-						else
-						{
-							$files[] = $file;
-						}
-					}
-					$backgroundFile = $files[rand(0, count($dir) - 1)];
-					$_SESSION["backgroundFile"] = $backgroundFile;
-				}
-				?>
-				<img id="backgroundimage" src="/files/backgrounds/<?php echo $backgroundType;?>/<?php echo $backgroundFile;?>" alt="Hintergrund"/>
-				<div id="backgroundoverlay"></div>
-			</div>
-		</div>
+	<body style="background-image: url(<?php echo $backgroundFile;?>);">
 		<div id="container">
 			<?php require_once "header.php";?>
 			<?php require_once "body.php";?>

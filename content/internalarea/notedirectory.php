@@ -1,6 +1,6 @@
 <h1>Notenverzeichnis</h1>
 
-<ul id="notedirectory_selectionmenu" class="no-print">
+<ul id="notedirectory_selectionmenu" class="menu no-print">
 	<li>
 		<a href="#">Auswahl</a>
 		<ul>
@@ -85,7 +85,7 @@ if ($_POST["notedirectory_searchstring"])
 	
 	echo "
 		<h2>Gefundene Titel</h2>
-		<table id='notedirectory_table_titles' class='table'>
+		<table id='notedirectory_table_titles' class='table {sortlist: [[0,0]]}'>
 			<thead>
 				<tr>
 					<th>Titel</th>
@@ -120,7 +120,7 @@ if ($_POST["notedirectory_searchstring"])
 		</table>
 		
 		<h2>Programme welche diese Titel beinhalten</h2>
-		<table id='notedirectory_table_programs' class='table'>
+		<table id='notedirectory_table_programs' class='table {sortlist: [[1,0][0,0]]}'>
 			<thead>
 				<tr>
 					<th>Typ</th>
@@ -179,7 +179,7 @@ else
 			array_shift($headers);
 		}
 		echo "
-			<table id='notedirectory_table_titles' class='table'>
+			<table id='notedirectory_table_titles' class='table {sortlist: [[0,0]]}'>
 				<thead>
 					<tr>
 		";
@@ -221,11 +221,3 @@ else
 	}
 }
 ?>
-
-<script type="text/javascript">
-	var selectionMenu = $("#notedirectory_selectionmenu").menu();
-	$("#notedirectory_table_titles").tablesorter(
-	{
-		sortList : [[0, 0]]
-	});
-</script>

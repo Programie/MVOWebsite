@@ -165,14 +165,14 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 }
 ?>
 
-<table id="movies_table" class="table">
+<table id="movies_table" class="table {sortlist: [[2,1],[1,0],[0,0]]}">
 	<thead>
 		<tr>
-			<th></th>
-			<th>Titel</th>
-			<th>Jahr</th>
-			<th>Kaufpreis</th>
-			<th>Ausleihen m&ouml;glich</th>
+			<th class="{sorter: 'number-attribute'}"></th>
+			<th class="{sorter: 'number-attribute'}">Titel</th>
+			<th class="{sorter: 'number-attribute'}">Jahr</th>
+			<th class="{sorter: 'number-attribute'}">Kaufpreis</th>
+			<th class="{sorter: 'number-attribute'}">Ausleihen m&ouml;glich</th>
 			<th>Kommentar</th>
 			<th></th>
 		</tr>
@@ -191,7 +191,6 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			echo "
 				<tr class='movies_item' movieid='" . $row->id . "'>
 					<td number='" . $row->discType . "' title='" . $row->discs . " " . $row->discTypeTitle . ($row->discs == 1 ? "" : "s") . "' class='movies_item'>
-						<img class='movies_item_cover' src='" . $coverImage . "'/>
 			";
 			if ($row->discs == 1)
 			{
@@ -200,11 +199,12 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			else
 			{
 				echo "
-					<img class='movies_item_disc movies_item_disc1' src='/files/images/movies/types/" . $row->discType . ".png'/>
 					<img class='movies_item_disc movies_item_disc2' src='/files/images/movies/types/" . $row->discType . ".png'/>
+					<img class='movies_item_disc movies_item_disc1' src='/files/images/movies/types/" . $row->discType . ".png'/>
 				";
 			}
 			echo "
+						<img class='movies_item_cover' src='" . $coverImage . "'/>
 					</td>
 					<td number='" . $row->categoryId . "'>" . $row->title . "</td>
 					<td number='" . $row->eventYear . "'>" . $row->eventYear . "</td>
@@ -230,34 +230,6 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 </div>
 
 <script type="text/javascript">
-	$("#movies_table").tablesorter(
-	{
-		headers :
-		{
-			0 :
-			{
-				sorter : "number-attribute"
-			},
-			1 :
-			{
-				sorter : "number-attribute"
-			},
-			2 :
-			{
-				sorter : "number-attribute"
-			},
-			3 :
-			{
-				sorter : "number-attribute"
-			},
-			4 :
-			{
-				sorter : "number-attribute"
-			}
-		},
-		sortList : [[2, 0], [1, 0], [0, 0]]
-	});
-	
 	function movies_confirm(button, buy)
 	{
 		var row = button.parentNode.parentNode;

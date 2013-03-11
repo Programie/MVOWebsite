@@ -33,12 +33,12 @@ while ($row = $query->fetch())
 }
 ?>
 
-<table id="birthdays_table" class="table">
+<table id="birthdays_table" class="table {sortlist: [[2,0]]}">
 	<thead>
 		<tr>
 			<th>Vorname</th>
 			<th>Nachname</th>
-			<th>Geburtstag</th>
+			<th class="{sorter: 'number-attribute'}">Geburtstag</th>
 			<th>Geburtsjahr</th>
 			<th>Alter</th>
 		</tr>
@@ -76,17 +76,3 @@ while ($row = $query->fetch())
 		?>
 	</tbody>
 </table>
-
-<script type="text/javascript">
-	$("#birthdays_table").tablesorter(
-	{
-		headers :
-		{
-			2 :
-			{
-				sorter : "number-attribute"
-			}
-		},
-		sortList : [[2, 0]]
-	});
-</script>

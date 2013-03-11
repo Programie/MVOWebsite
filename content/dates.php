@@ -47,10 +47,10 @@ echo "<h1>" . $title . "</h1>";
 if ($dates)
 {
 	echo "
-		<table id='dates_table' class='table'>
+		<table id='dates_table' class='table tablesorter {sortlist: [[0,0]]}'>
 			<thead>
 				<tr>
-					<th>Von</th>
+					<th class='{sorter: \"number-attribute\"}'>Von</th>
 					<th>Bis</th>
 					<th>Veranstaltung</th>
 					<th>Ort</th>
@@ -122,20 +122,6 @@ if ($dates)
 	echo "
 			</tbody>
 		</table>
-		
-		<script type='text/javascript'>
-			$('#dates_table').tablesorter(
-			{
-				headers :
-				{
-					0 :
-					{
-						sorter : 'number-attribute'
-					}
-				},
-				sortList : [[0, 0]]
-			});
-		</script>
 	";
 }
 else

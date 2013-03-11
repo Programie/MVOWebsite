@@ -1,6 +1,6 @@
 <h1>Links</h1>
 
-<table id="links_table" class="table">
+<table id="links_table" class="table tablesorter {sortlist: [[1,0],[0,0]]}">
 	<thead>
 		<tr>
 			<th>Name</th>
@@ -22,10 +22,3 @@
 		?>
 	</tbody>
 </table>
-
-<script type="text/javascript">
-	$("#links_table").tablesorter(
-	{
-		sortList : [[1, 0], [0, 0]]
-	});
-</script>

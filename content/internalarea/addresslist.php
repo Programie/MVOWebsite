@@ -101,10 +101,10 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 	?>
 </fieldset>
 
-<table id="addresslist_table" class="table">
+<table id="addresslist_table" class="table {sortlist: [[2,0],[1,0]]}">
 	<thead>
 		<tr>
-			<th class='no-print'></th>
+			<th class="no-print"></th>
 			<th>Vorname</th>
 			<th>Nachname</th>
 			<th>Email</th>
@@ -182,11 +182,6 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 </div>
 
 <script type="text/javascript">
-	$("#addresslist_table").tablesorter(
-	{
-		sortList : [[2, 0], [1, 0]]
-	});
-	
 	$("#addresslist_sendmessage_confirm").dialog(
 	{
 		resizable : false,
