@@ -89,18 +89,34 @@ function getMonthName($month)
 	return $months[$month - 1];
 }
 
-function getWeekdayName($weekday)
+function getWeekdayName($weekday, $long)
 {
-	$weekdays = array
-	(
-		"Montag",
-		"Dienstag",
-		"Mittwoch",
-		"Donnerstag",
-		"Freitag",
-		"Samstag",
-		"Sonntag"
-	);
+	if ($long)
+	{
+		$weekdays = array
+		(
+			"Montag",
+			"Dienstag",
+			"Mittwoch",
+			"Donnerstag",
+			"Freitag",
+			"Samstag",
+			"Sonntag"
+		);
+	}
+	else
+	{
+		$weekdays = array
+		(
+			"Mo",
+			"Di",
+			"Mi",
+			"Do",
+			"Fr",
+			"Sa",
+			"So"
+		);
+	}
 	
 	return $weekdays[$weekday - 1];
 }

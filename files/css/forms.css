@@ -5,7 +5,6 @@ button
 
 label
 {
-	font-weight: bold;
 	cursor: pointer;
 }
 
@@ -14,7 +13,7 @@ legend
 	font-weight: bold;
 }
 
-input[type="checkbox"]
+input[type="checkbox"], input[type="radio"]
 {
 	cursor: pointer;
 }
@@ -52,4 +51,9 @@ input[type="submit"]
 	background-image: url(/files/images/formfields/search.png);
 	background-repeat: no-repeat;
 	background-position: 5px center;
+}
+
+form label
+{
+	font-weight: bold;
 }

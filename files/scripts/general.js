@@ -65,6 +65,20 @@ $.tablesorter.addParser(
 	type : "numeric"
 });
 
+$.tablesorter.addParser(
+{
+	id : "text-attribute",
+	is : function(string)
+	{
+		return false;
+	},
+	format : function(string, table, cell, cellIndex)
+	{
+		return $(cell).attr("sorttext");
+	},
+	type : "text"
+});
+
 function fixSize()
 {
 	$("#backgroundoverlay").css("top", (document.getElementById("backgroundimage").offsetHeight - 500) + "px");

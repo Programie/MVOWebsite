@@ -104,10 +104,10 @@
 				"title" : "Adressenliste",
 				"permissions" : "addresslist"
 			},
-			"availablelist" :
+			"attendancelist" :
 			{
 				"title" : "Anwensenheitsliste",
-				"permissions" : "availablelist"
+				"permissions" : "attendancelist"
 			},
 			"birthdays" :
 			{

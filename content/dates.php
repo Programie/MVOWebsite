@@ -63,7 +63,7 @@ if ($dates)
 		// Start date/time
 		$weekday = date("N", $date->startDate);
 		$startDate = date("d.m.Y", $date->startDate);
-		$startDateTime = array(getWeekdayName($weekday) . ", " . $startDate);
+		$startDateTime = array(getWeekdayName($weekday, false) . " " . $startDate);
 		$startTime = date("H:i", $date->startDate);
 		if ($startTime != "00:00")
 		{
@@ -79,7 +79,7 @@ if ($dates)
 		}
 		else
 		{
-			$endDateTime = array(getWeekdayName($weekday) . ", " . $endDate);
+			$endDateTime = array(getWeekdayName($weekday, false) . " " . $endDate);
 			$endTime = date("H:i", $date->endDate);
 			if ($endTime != "00:00")
 			{
@@ -102,7 +102,6 @@ if ($dates)
 		
 		if ($date->location->latitude and $date->location->longitude)
 		{
-			//$location = "<a class='colorbox-iframe' href='http://maps.google.com/maps/api/staticmap?center=" . $date->location->latitude . "," . $date->location->longitude . "&size=640x640&sensor=false&maptype=roadmap&zoom=17&markers=color:red|" . $date->location->latitude . "," . $date->location->longitude . "&output=embed' title='" . $date->location->name . "'>" . $date->location->name . "</a>";
 			$location = "<a class='colorbox-iframe' href='http://maps.google.com/maps?f=q&amp;q=loc:" . $date->location->latitude . "," . $date->location->longitude . "&amp;z=17&amp;iwloc=near&amp;output=embed' title='" . $date->location->name . "'>" . $date->location->name . "</a>";
 		}
 		else

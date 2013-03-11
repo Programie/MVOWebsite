@@ -98,7 +98,7 @@
 				"path" : "/internalarea/addresslist"
 			},
 			{
-				"path" : "/internalarea/availablelist"
+				"path" : "/internalarea/attendancelist"
 			},
 			{
 				"path" : "/internalarea/movies"
