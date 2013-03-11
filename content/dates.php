@@ -102,7 +102,8 @@ if ($dates)
 		
 		if ($date->location->latitude and $date->location->longitude)
 		{
-			$location = "<a href='http://maps.google.com/maps/api/staticmap?center=" . $date->location->latitude . "," . $date->location->longitude . "&size=640x640&sensor=false&maptype=roadmap&zoom=17&markers=color:red|label:A|" . $date->location->latitude . "," . $date->location->longitude . "' rel='lightbox' title='" . $date->location->name . "'>" . $date->location->name . "</a>";
+			//$location = "<a class='colorbox-iframe' href='http://maps.google.com/maps/api/staticmap?center=" . $date->location->latitude . "," . $date->location->longitude . "&size=640x640&sensor=false&maptype=roadmap&zoom=17&markers=color:red|" . $date->location->latitude . "," . $date->location->longitude . "&output=embed' title='" . $date->location->name . "'>" . $date->location->name . "</a>";
+			$location = "<a class='colorbox-iframe' href='http://maps.google.com/maps?f=q&amp;q=loc:" . $date->location->latitude . "," . $date->location->longitude . "&amp;z=17&amp;iwloc=near&amp;output=embed' title='" . $date->location->name . "'>" . $date->location->name . "</a>";
 		}
 		else
 		{

@@ -11,5 +11,5 @@ window.onerror = function(message, file, line)
 	xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	xmlHttp.send(postData.join("&"));
 	
-	return true;
+	return false;
 };

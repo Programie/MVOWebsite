@@ -19,6 +19,22 @@ $(function()
 	});
 });
 
+$(document).ready(function()
+{
+	$(".colorbox-iframe").colorbox(
+	{
+		iframe : true,
+		width : "80%",
+		height : "80%"
+	});
+	
+	$("[rel='colorbox']").colorbox(
+	{
+		current : "",
+		picture : true
+	});
+});
+
 $(window).resize(function()
 {
 	fixSize();

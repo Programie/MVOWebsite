@@ -20,7 +20,7 @@ foreach ($groups as $groupName => $groupTitle)
 	{
 		echo "
 			<li>
-				<a href='/files/musiker/" . $user->userId . ".jpg' rel='lightbox' caption='" . $user->firstName . " " . $user->lastName . "'>
+				<a href='/files/musiker/" . $user->userId . ".jpg' rel='colorbox' caption='" . $user->firstName . " " . $user->lastName . "'>
 					<img src='/files/musiker/" . $user->userId . ".jpg'/>
 				</a>
 			</li>
