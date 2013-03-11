@@ -3,14 +3,27 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
 		<title><?php echo implode(PAGE_TITLE_SEPARATOR, $fullPageTitle);?></title>
-		<link rel="stylesheet" type="text/css" href="/files/style.css"/>
-		<script type="text/javascript" src="/files/scripts/errorreport.js"></script>
-		<script type="text/javascript" src="/files/scripts/jquery.js"></script>
-		<script type="text/javascript" src="/files/scripts/jquery-ui.js"></script>
-		<script type="text/javascript" src="/files/scripts/colorbox.js"></script>
-		<script type="text/javascript" src="/files/scripts/photobox.js"></script>
-		<script type="text/javascript" src="/files/scripts/tablesorter.js"></script>
-		<script type="text/javascript" src="/files/scripts/general.js"></script>
+		<?php
+		$path = ROOT_PATH . "/files/css";
+		$md5 = "";
+		$dir = scandir($path);
+		foreach ($dir as $file)
+		{
+			if ($file[0] != "." and is_file($path . "/" . $file))
+			{
+				$md5 .= md5_file($path . "/" . $file);
+			}
+		}
+		?>
+		<link rel="stylesheet" type="text/css" href="/files/style.css?md5=<?php echo md5($md5);?>"/>
+		<?php
+		$jsList = array("errorreport", "jquery", "jquery-ui", "colorbox", "photobox", "tablesorter", "general");
+		foreach ($jsList as $file)
+		{
+			$file = "/files/scripts/" . $file . ".js";
+			echo "<script type='text/javascript' src='" . $file . "?md5=" . md5_file(ROOT_PATH . $file) . "'></script>";
+		}
+		?>
 	</head>
 	<body>
 		<div id="backgroundwrapper">
