@@ -23,6 +23,21 @@ div.messages_header
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
 	color: #000;
+	height: 100px;
+}
+
+.messages_header_avatar
+{
+	height: 100px;
+	float: left;
+	border-radius: 5px;
+	box-shadow: 0px 0px 10px #000;
+}
+
+.messages_header_container
+{
+	position: relative;
+	left: 10px;
 }
 
 .messages_text

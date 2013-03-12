@@ -5,7 +5,7 @@ class MessageManager
 	{
 		$userGroupsQuery = Constants::$pdo->prepare("SELECT `title` FROM `usergroups` WHERE `name` = :name");
 		
-		$commonSql = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`targetGroups`, `messages`.`text`, `users`.`firstName`, `users`.`lastName` FROM `messages` LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
+		$commonSql = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`targetGroups`, `messages`.`text`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages` LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
 		if ($id == null or $id == -1)
 		{
 			$query = Constants::$pdo->query($commonSql . " ORDER BY `messages`.`id` DESC");
@@ -41,15 +41,26 @@ class MessageManager
 				$targets[] = $userGroupsRow->title ? $userGroupsRow->title : $groupName;
 			}
 			
+			echo "<div class='messages_container'>";
+			if ($id == null)// Only show link for single message in multi message view
+			{
+				echo "<a href='/internalarea/messages/" . $row->id . "' class='messages_header' title='Klicken um nur diese Nachricht anzuzeigen'>";
+			}
 			echo "
-				<div class='messages_container'>
-					<a href='/internalarea/messages/" . $row->id . "' class='messages_header' title='Klicken um nur diese Nachricht anzuzeigen'>
-						<div class='messages_header'>
-							<div class='messages_header_sender'><b>Erstellt von:</b> " . $row->firstName . " " . $row->lastName . "</div>
-							<div class='messages_header_date'><b>Datum:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>
-							<div class='messages_header_target'><b>Gesendet an:</b> " . implode(", ", $targets) . "</div>
-						</div>
-					</a>
+				<div class='messages_header'>
+					<img class='messages_header_avatar' src='/files/profilepictures/" . $row->userId . ".jpg'/>
+					<div class='messages_header_container'>
+						<div class='messages_header_sender'><b>Erstellt von:</b> " . $row->firstName . " " . $row->lastName . " [" . $row->email . "]</div>
+						<div class='messages_header_date'><b>Zeit:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>
+						<div class='messages_header_target'><b>Gesendet an:</b> " . implode(", ", $targets) . "</div>
+					</div>
+				</div>
+			";
+			if ($id == null)// Only show link for single message in multi message view
+			{
+				echo "</a>";
+			}
+			echo "
 					<div class='messages_text'>" . formatText($row->text) . "</div>
 				</div>
 			";
