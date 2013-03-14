@@ -7,6 +7,7 @@ $userData = Constants::$accountManager->getUserData();
 <div id="editprofile_tabs">
 	<ul>
 		<li><a href="#editprofile_account">Account</a></li>
+		<li><a href="#editprofile_profilepicture">Profilbild</a></li>
 		<li><a href="#editprofile_changepassword">Passwort &auml;ndern</a></li>
 		<li><a href="#editprofile_changeemail">Email-Adresse &auml;ndern</a></li>
 		<li><a href="#editprofile_contact">Kontakt</a></li>
@@ -97,6 +98,83 @@ $userData = Constants::$accountManager->getUserData();
 			
 			<input type="submit" value="Speichern"/>
 		</form>
+	</div>
+	
+	<div id="editprofile_profilepicture">
+		<?php
+		if ($_POST["editprofile_tab"] == "profilepicture")
+		{
+			$showError = true;
+			if ($_FILES)
+			{
+				$file = $_FILES["editprofile_profilepicture_file"];
+				if (!$file["error"])
+				{
+					if ($file["size"] > 1024 * 1024 * 10)
+					{
+						echo "<div class='error'>Die maximal erlaubte Dateigr&ouml;&szlig;e ist 10 MB!</div>";
+						$showError = false;
+					}
+					else
+					{
+						$originalWidth = $_POST["editprofile_profilepicture_originalwidth"];
+						$originalHeight = $_POST["editprofile_profilepicture_originalheight"];
+						$scaledWidth = $_POST["editprofile_profilepicture_scaledwidth"];
+						$scaledHeight = $_POST["editprofile_profilepicture_scaledheight"];
+						if ($originalWidth > 0 and $originalHeight > 0 and $scaledWidth > 0 and $scaledHeight > 0)
+						{
+							$sourceImage = imagecreatefromjpeg($file["tmp_name"]);
+							$resizedImage = imagecreatetruecolor($scaledWidth, $scaledHeight);
+							if (imagecopyresampled($resizedImage, $sourceImage, 0, 0, $_POST["editprofile_profilepicture_x"], $_POST["editprofile_profilepicture_y"], $scaledWidth, $scaledHeight, $originalWidth, $originalHeight))
+							{
+								if (imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userData->id . ".jpg"))
+								{
+									echo "<div class='ok'>Dein Profilbild wurde erfolgreich aktualisiert.</div>";
+									$showError = false;
+								}
+							}
+						}
+					}
+				}
+			}
+			if ($showError)
+			{
+				echo "<div class='error'>Beim Hochladen ist ein Fehler ausgetreten. Bitte versuche es erneut oder wende dich an den Webmaster.</div>";
+			}
+		}
+		
+		$file = "/files/profilepictures/" . $userData->id . ".jpg";
+		if (file_exists(ROOT_PATH . $file))
+		{
+			echo "
+				<fieldset>
+					<legend>Aktuelles Profilbild</legend>
+					<img class='profilepicture' src='" . $file . "?md5=" . md5_file(ROOT_PATH . $file) . "'/>
+				</fieldset>
+			";
+		}
+		?>
+		
+		<fieldset>
+			<legend>Neues Profilbild hochladen</legend>
+			<form action="/internalarea/editprofile#editprofile_profilepicture" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="editprofile_tab" value="profilepicture"/>
+				
+				<input type="hidden" id="editprofile_profilepicture_x" name="editprofile_profilepicture_x"/>
+				<input type="hidden" id="editprofile_profilepicture_y" name="editprofile_profilepicture_y"/>
+				<input type="hidden" id="editprofile_profilepicture_originalwidth" name="editprofile_profilepicture_originalwidth"/>
+				<input type="hidden" id="editprofile_profilepicture_originalheight" name="editprofile_profilepicture_originalheight"/>
+				<input type="hidden" id="editprofile_profilepicture_scaledwidth" name="editprofile_profilepicture_scaledwidth"/>
+				<input type="hidden" id="editprofile_profilepicture_scaledheight" name="editprofile_profilepicture_scaledheight"/>
+				
+				<input type="file" id="editprofile_profilepicture_file" name="editprofile_profilepicture_file" onchange="editprofile_profilePicture_FileSelectHandler();"/>
+				
+				<div id="editprofile_profilepicture_editarea">
+					<img id="editprofile_profilepicture_preview"/>
+					<input type="submit" value="Hochladen"/>
+				</div>
+			</form>
+		</fieldset>
 	</div>
 	
 	<div id="editprofile_changepassword">
@@ -288,4 +366,62 @@ $userData = Constants::$accountManager->getUserData();
 
 <script type="text/javascript">
 	$("#editprofile_tabs").tabs();
+	
+	function editprofile_profilePicture_FileSelectHandler()
+	{
+		var file = $("#editprofile_profilepicture_file")[0].files[0];
+		console.log(file);
+		
+		if (file.type != "image/jpeg")
+		{
+			alert(unescape("Das ausgew%E4hlte Bild hat einen ung%FCltigen Dateintyp!\n\nBitte ein Bild vom Typ 'JPEG' (.jpg oder .jpeg) ausw%E4hlen."));
+			return;
+		}
+		
+		if (file.size > 1024 * 1024 * 10)// 10 MB
+		{
+			alert(unescape("Die maximal erlaubte Dateigr%F6%DFe ist 10 MB!"));
+			return ;
+		}
+		
+		var previewImage = document.getElementById("editprofile_profilepicture_preview");
+		
+		var reader = new FileReader;
+		reader.onload = function(event)
+		{
+			previewImage.src = event.target.result;
+			previewImage.onload = function()
+			{
+				$("#editprofile_profilepicture_editarea").fadeIn(500);
+				
+				if (typeof(editprofile_profilePicture_jcrop) != "undefined")
+				{
+					editprofile_profilePicture_jcrop.destroy();
+				}
+				
+				$("#editprofile_profilepicture_preview").Jcrop(
+				{
+					aspectRatio : 3 / 4,
+					boxWidth : 480,
+					onChange : editprofile_profilePicture_updateCoords,
+					onSelect : editprofile_profilePicture_updateCoords
+				}, function()
+				{
+					editprofile_profilePicture_jcrop = this;
+				});
+			}
+		}
+		reader.readAsDataURL(file);
+	}
+	
+	function editprofile_profilePicture_updateCoords(originalCoords)
+	{
+		var scaledCoords = editprofile_profilePicture_jcrop.tellScaled();
+		document.getElementById("editprofile_profilepicture_x").value = originalCoords.x;
+		document.getElementById("editprofile_profilepicture_y").value = originalCoords.y;
+		document.getElementById("editprofile_profilepicture_originalwidth").value = originalCoords.w;
+		document.getElementById("editprofile_profilepicture_originalheight").value = originalCoords.h;
+		document.getElementById("editprofile_profilepicture_scaledwidth").value = scaledCoords.w;
+		document.getElementById("editprofile_profilepicture_scaledheight").value = scaledCoords.h;
+	}
 </script>

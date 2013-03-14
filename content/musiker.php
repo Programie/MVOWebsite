@@ -18,10 +18,11 @@ foreach ($groups as $groupName => $groupTitle)
 	echo "<ul class='polaroids'>";
 	foreach ($users[$groupName] as $user)
 	{
+		$file = "/files/profilepictures/" . $user->userId . ".jpg";
 		echo "
 			<li>
 				<a href='/files/profilepictures/" . $user->userId . ".jpg' rel='colorbox' caption='" . $user->firstName . " " . $user->lastName . "'>
-					<img src='/files/profilepictures/" . $user->userId . ".jpg'/>
+					<img class='profilepicture' src='" . $file . "?md5=" . @md5_file(ROOT_PATH . $file) . "'/>
 				</a>
 			</li>
 		";

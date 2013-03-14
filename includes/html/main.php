@@ -41,7 +41,7 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 		?>
 		<link rel="stylesheet" type="text/css" href="/files/style.css?md5=<?php echo md5($md5);?>"/>
 		<?php
-		$jsList = array("errorreport", "jquery", "jquery-ui", "metadata", "colorbox", "photobox", "tablesorter", "tablesorter-widgets", "general");
+		$jsList = array("errorreport", "jquery", "jquery-ui", "metadata", "jcrop", "colorbox", "photobox", "tablesorter", "tablesorter-widgets", "general");
 		foreach ($jsList as $file)
 		{
 			$file = "/files/scripts/" . $file . ".js";
