@@ -53,12 +53,17 @@ class AccountManager
 		return true;
 	}
 	
-	public function checkPassword($password)
+	public function checkPassword($password, $userId = null)
 	{
+		if (!$userId)
+		{
+			$userId = $this->userId;
+		}
+		
 		$query = Constants::$pdo->prepare("SELECT `password` FROM `users` WHERE `id` = :id");
 		$query->execute(array
 		(
-			":id" => $this->userId
+			":id" => $userId
 		));
 		
 		if (!$query->rowCount())
@@ -67,12 +72,29 @@ class AccountManager
 		}
 		
 		$row = $query->fetch();
-		if ($row->password != $this->encrypt($this->userId, $password))
+		if (substr($row->password, 0, 4) == "md5:")
 		{
-			return false;
+			if (substr($row->password, 4) == md5($password))
+			{
+				// Update password to latest encryption method
+				$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password WHERE `id` = :id");
+				$query->execute(array
+				(
+					":id" => $userId,
+					":password" => $this->encrypt($userId, $password)
+				));
+				return true;
+			}
+		}
+		else
+		{
+			if ($row->password == $this->encrypt($userId, $password))
+			{
+				return true;
+			}
 		}
 		
-		return true;
+		return false;
 	}
 	
 	public function changeUsername($newUsername)
@@ -279,15 +301,14 @@ class AccountManager
 			return false;
 		}
 		$row = $query->fetch();
-		if ($row->password != $this->encrypt($row->id, $password))
+		if (!$this->checkPassword($password, $row->id))
 		{
 			$this->loginFailed = true;
 			return false;
 		}
 		$this->userId = $row->id;
 		$this->username = $row->username;
-		$_SESSION["userId"] = $row->id;
-		$this->getPermissions();
+		$this->postLogin();
 		return true;
 	}
 	
@@ -306,8 +327,7 @@ class AccountManager
 		$row = $query->fetch();
 		$this->userId = $userId;
 		$this->username = $row->username;
-		$_SESSION["userId"] = $userId;
-		$this->getPermissions();
+		$this->postLogin();
 		return true;
 	}
 	
@@ -317,5 +337,17 @@ class AccountManager
 		$this->username = null;
 		unset($_SESSION["userId"]);
 		$this->permissions = array();
+	}
+	
+	private function postLogin()
+	{
+		$_SESSION["userId"] = $this->userId;
+		$this->getPermissions();
+		
+		$query = Constants::$pdo->prepare("UPDATE `users` SET `lastOnline` = NOW() WHERE `id` = :id");
+		$query->execute(array
+		(
+			":id" => $this->userId
+		));
 	}
 }
