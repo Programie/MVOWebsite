@@ -37,6 +37,11 @@ table.table tbody tr th
 	{
 		border-right: 1px solid #ccc;
 	}
+	
+	.tablesorter-stickyHeader
+	{
+		display: none;
+	}
 }
 
 @media screen
