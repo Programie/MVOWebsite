@@ -38,7 +38,7 @@ else
 								
 								$showChangeForm = false;
 								
-								echo "<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert. Sie sind nun angemeldet.</div>";
+								echo "<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert. Du bist nun angemeldet.</div>";
 							}
 							else
 							{
@@ -47,14 +47,14 @@ else
 						}
 						else
 						{
-							echo "<div class='error'>Bitte verwenden Sie ein Passwort mit mindestens " . PASSWORDS_MINLENGTH . " Zeichen!</div>";
+							echo "<div class='error'>Bitte verwende ein Passwort mit mindestens " . PASSWORDS_MINLENGTH . " Zeichen!</div>";
 						}
 					}
 					
 					if ($showChangeForm)
 					{
 						echo "
-							<p>Geben Sie ein neues Passwort ein.</p>
+							<p>Gebe ein neues Passwort ein.</p>
 							
 							<form action='/internalarea/resetpassword/" . Constants::$pagePath[2] . "' method='post'>
 								<input type='password' name='resetpassword_password1' placeholder='Neues Passwort' required/>
@@ -69,7 +69,7 @@ else
 				}
 				else
 				{
-					echo "<div class='error'>Die G&uuml;ltigkeit des Schl&uuml;ssels ist abgelaufen! Bitte versuchen Sie es erneut oder wenden Sie sich an den Webmaster.</div>";
+					echo "<div class='error'>Die G&uuml;ltigkeit des Schl&uuml;ssels ist abgelaufen! Bitte versuche es erneut oder wende dich an den Webmaster.</div>";
 				}
 			}
 			else
@@ -85,7 +85,7 @@ else
 	
 	if ($showResetForm)
 	{
-		echo "<p>Wenn Sie ihr Passwort vergessen haben, k&ouml;nnen Sie dieses auf dieser Seite zur&uuml;cksetzen.</p>";
+		echo "<p>Wenn du dein Passwort vergessen hast, kannst du dieses auf dieser Seite zur&uuml;cksetzen.</p>";
 		
 		if (isset($_POST["resetpassword_username"]))
 		{
@@ -130,7 +130,7 @@ else
 					echo "
 						<div class='error'>
 							<p>Beim Senden der Email ist ein Fehler aufgetreten!</p>
-							<p>Bitte versuchen Sie es sp&auml;ter erneut oder wenden Sie sich an den Webmaster.</p>
+							<p>Bitte versuche es sp&auml;ter erneut oder wende dich an den Webmaster.</p>
 						</div>
 					";
 				}
