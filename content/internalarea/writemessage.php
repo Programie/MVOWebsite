@@ -9,6 +9,8 @@ if (isset($_POST["writemessage_confirmed"]))
 		$userData = Constants::$accountManager->getUserData();
 		if ($_POST["writemessage_sendtoken"] == $userData->sendToken)
 		{
+			$send = true;
+			
 			$groups = array();
 			$mailRecipients = array();
 			
@@ -39,7 +41,39 @@ if (isset($_POST["writemessage_confirmed"]))
 				}
 			}
 			
-			if (!empty($mailRecipients))
+			$uploadedFiles = array();
+			foreach ($_FILES as $fileData)
+			{
+				$uploadError = false;
+				if ($fileData["error"] == UPLOAD_ERR_OK)
+				{
+					$fileName = md5_file($fileData["tmp_name"]);
+					if (move_uploaded_file($fileData["tmp_name"], UPLOAD_PATH . "/" . $fileName))
+					{
+						$uploadedFiles[$fileName] = $fileData["name"];
+					}
+					else
+					{
+						$uploadError = true;
+					}
+				}
+				else
+				{
+					if ($fileData["error"] != UPLOAD_ERR_NO_FILE)// One file field is always empty
+					{
+						$uploadError = true;
+					}
+				}
+				if ($uploadError)
+				{
+					echo "<div class='error'>Beim Hochladen der Datei <b>" . $fileData["name"] . "</b> ist ein Fehler aufgetreten!</div>";
+					$showError = false;
+					$send = false;
+					break;
+				}
+			}
+			
+			if (!empty($mailRecipients) and $send)
 			{
 				$ccMail = null;
 				if ($_POST["writemessage_sendcopy"])
@@ -49,20 +83,46 @@ if (isset($_POST["writemessage_confirmed"]))
 				
 				$text = $_POST["writemessage_text"];
 				
-				$query = Constants::$pdo->prepare("INSERT INTO `messages` (`date`, `targetGroups`, `userId`, `text`) VALUES(NOW(), :targetGroups, :userId, :text)");
+				$attachedFiles = array();
+				$addFileQuery = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
+				foreach ($uploadedFiles as $name => $title)
+				{
+					$addFileQuery->execute(array
+					(
+						":name" => $name,
+						":title" => $title
+					));
+					$attachedFiles[$name] = Constants::$pdo->lastInsertId();
+				}
+				
+				$query = Constants::$pdo->prepare("INSERT INTO `messages` (`date`, `targetGroups`, `userId`, `text`, `attachedFiles`) VALUES(NOW(), :targetGroups, :userId, :text, :attachedFiles)");
 				$query->execute(array
 				(
 					":targetGroups" => implode("\n", $groups),
 					":userId" => Constants::$accountManager->getUserId(),
-					":text" => $text
+					":text" => $text,
+					":attachedFiles" => implode("\n", $attachedFiles)
 				));
 				$messageId = Constants::$pdo->lastInsertId();
+				
+				$attachmentsText = array();
+				if (!empty($uploadedFiles))
+				{
+					$attachmentsText[] = "<p><b>Anh&auml;nge:</b></p>";
+					$attachmentsText[] = "<ul>";
+					foreach ($uploadedFiles as $name => $title)
+					{
+						$attachmentsText[] = "<li><a href='" . BASE_URL . "/uploads/" . $attachedFiles[$name] . "/" . $name . "'>" . $title . "</a></li>";
+					}
+					$attachmentsText[] = "</ul>";
+				}
 				
 				$replacements = array
 				(
 					"FIRSTNAME" => $userData->firstName,
 					"LASTNAME" => $userData->lastName,
 					"CONTENT" => formatText($text),
+					"ATTACHMENTS" => implode("\n", $attachmentsText),
 					"URL" => BASE_URL . "/internalarea/messages/" . $messageId
 				);
 				$mail = new Mail("Neue Nachricht im Internen Bereich", $replacements);
@@ -72,7 +132,12 @@ if (isset($_POST["writemessage_confirmed"]))
 				$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
 				if ($mail->send())
 				{
-					echo "<div class='ok'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</div>";
+					echo "
+						<div class='ok'>
+							<p>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</p>
+							" . implode("\n", $attachmentsText) . "
+						</div>
+					";
 					$showError = false;
 				}
 			}
@@ -90,7 +155,7 @@ if (isset($_POST["writemessage_confirmed"]))
 }
 ?>
 
-<form id="writemessage_form" action="/internalarea/writemessage" method="post" onsubmit="writeMessage_confirm(); return false;">
+<form id="writemessage_form" action="/internalarea/writemessage" method="post" enctype="multipart/form-data" onsubmit="writeMessage_confirm(); return false;">
 	<fieldset id="writemessage_groups">
 		<legend>Gruppen</legend>
 		<?php
@@ -104,6 +169,10 @@ if (isset($_POST["writemessage_confirmed"]))
 	
 	<textarea id="writemessage_text" name="writemessage_text" rows="15" cols="15"></textarea>
 	
+	<fieldset id="writemessage_attachments">
+		<legend>Anh&auml;nge</legend>
+	</fieldset>
+	
 	<input type="hidden" id="writemessage_sendcopy" name="writemessage_sendcopy"/>
 	<input type="hidden" id="writemessage_confirmed" name="writemessage_confirmed"/>
 	<input type="hidden" name="writemessage_sendtoken" value="<?php echo Constants::$accountManager->getSendToken();?>"/>
@@ -112,12 +181,17 @@ if (isset($_POST["writemessage_confirmed"]))
 </form>
 
 <div id="writemessage_confirm" title="Nachricht senden">
-	<p id="writemessage_confirm_text"></p>
+	<p id="writemessage_confirm_text1"></p>
 	<ul id="writemessage_confirm_groups"></ul>
+	<p id="writemessage_confirm_text2"><b>Anh&auml;nge:</b></p>
+	<ul id="writemessage_confirm_attachments"></ul>
 	<input id="writemessage_confirm_sendcopy" type="checkbox"/><label for="writemessage_confirm_sendcopy">Eine Kopie an mich senden</label>
 </div>
 
 <script type="text/javascript">
+	writemessage_attachments_file = 0;
+	writeMessage_addAttachmentFile();
+	
 	$("#writemessage_confirm").dialog(
 	{
 		resizable : false,
@@ -140,6 +214,32 @@ if (isset($_POST["writemessage_confirmed"]))
 		}
 	});
 	
+	function writeMessage_addAttachmentFile()
+	{
+		writemessage_attachments_file++;
+		$("#writemessage_attachments").append("<input type='file' class='writemessage_attachments_file' id='writemessage_attachments_file_" + writemessage_attachments_file+ "' name='writemessage_attachments_file_" + writemessage_attachments_file+ "' onchange='writeMessage_checkAttachmentFields();'/>");
+	}
+	
+	function writeMessage_checkAttachmentFields()
+	{
+		var addNew = true;
+		$(".writemessage_attachments_file").each(function()
+		{
+			if (!$(this)[0].files.length)
+			{
+				if (!addNew)// Another field is already empty -> Remove this one
+				{
+					$(this).remove();
+				}
+				addNew = false;
+			}
+		});
+		if (addNew)
+		{
+			writeMessage_addAttachmentFile();
+		}
+	}
+	
 	function writeMessage_confirm()
 	{
 		var groups = 0;
@@ -159,7 +259,20 @@ if (isset($_POST["writemessage_confirmed"]))
 		{
 			if (document.getElementById("writemessage_text").value)
 			{
-				$("#writemessage_confirm_text").html("Soll die Nachricht jetzt an die folgenden " + groups + " Gruppen gesendet werden?");
+				$("#writemessage_confirm_text1").html("Soll die Nachricht jetzt an die folgenden " + groups + " Gruppen gesendet werden?");
+				
+				var attachments = 0;
+				$("#writemessage_confirm_attachments").html("");
+				$(".writemessage_attachments_file").each(function()
+				{
+					if ($(this)[0].files.length)
+					{
+						attachments++;
+						$("#writemessage_confirm_attachments").append("<li>" + $(this)[0].files[0].name + "</li>");
+					}
+				});
+				attachments ? $("#writemessage_confirm_text2").show() : $("#writemessage_confirm_text2").hide();
+				
 				$("#writemessage_confirm").dialog("open");
 			}
 			else

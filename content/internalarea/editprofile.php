@@ -370,7 +370,6 @@ $userData = Constants::$accountManager->getUserData();
 	function editprofile_profilePicture_FileSelectHandler()
 	{
 		var file = $("#editprofile_profilepicture_file")[0].files[0];
-		console.log(file);
 		
 		if (file.type != "image/jpeg")
 		{

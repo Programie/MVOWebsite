@@ -1,3 +1,9 @@
+.messages_attachments
+{
+	padding: 10px;
+	border-top: 1px solid #000;
+}
+
 .messages_container
 {
 	margin-top: 20px;

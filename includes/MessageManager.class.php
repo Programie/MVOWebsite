@@ -3,9 +3,10 @@ class MessageManager
 {
 	public function showMessage($id)
 	{
+		$uploadedFileQuery = Constants::$pdo->prepare("SELECT `name`, `title` FROM `uploads` WHERE `id` = :id");
 		$userGroupsQuery = Constants::$pdo->prepare("SELECT `title` FROM `usergroups` WHERE `name` = :name");
 		
-		$commonSql = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`targetGroups`, `messages`.`text`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages` LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
+		$commonSql = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages` LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
 		if ($id == null or $id == -1)
 		{
 			$query = Constants::$pdo->query($commonSql . " ORDER BY `messages`.`id` DESC");
@@ -24,6 +25,7 @@ class MessageManager
 		while ($row = $query->fetch())
 		{
 			$targetGroups = explode("\n", convertLinebreaks($row->targetGroups));
+			$attachedFiles = explode("\n", convertLinebreaks($row->attachedFiles));
 			
 			if (!Constants::$accountManager->hasPermissionInArray($targetGroups, "messages.view"))
 			{
@@ -60,10 +62,40 @@ class MessageManager
 			{
 				echo "</a>";
 			}
-			echo "
-					<div class='messages_text'>" . formatText($row->text) . "</div>
-				</div>
-			";
+			echo "<div class='messages_text'>" . formatText($row->text) . "</div>";
+			$firstFile = true;
+			foreach ($attachedFiles as $file)
+			{
+				if ($file)
+				{
+					$uploadedFileQuery->execute(array
+					(
+						":id" => $file
+					));
+					$uploadedFileRow = $uploadedFileQuery->fetch();
+					if ($uploadedFileRow)
+					{
+						if ($firstFile)
+						{
+							$firstFile = false;
+							echo "
+								<div class='messages_attachments'>
+									<b>Anh&auml;nge:</b>
+									<ul>
+							";
+						}
+						echo "<li><a href='/uploads/" . $file . "/" . $uploadedFileRow->name . "'>" . $uploadedFileRow->title . "</a></li>";
+					}
+				}
+			}
+			if (!$firstFile)
+			{
+				echo "
+						</ul>
+					</div>
+				";
+			}
+			echo "</div>";
 			
 			$messageCount++;
 			

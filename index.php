@@ -1,5 +1,6 @@
 <?php
 define("ROOT_PATH", __DIR__);
+define("UPLOAD_PATH", ROOT_PATH . "/uploads");
 define("BASE_URL", ($_SERVER["HTTPS"] ? "https" : "http") . "://" . $_SERVER["SERVER_NAME"]);
 
 require_once ROOT_PATH . "/includes/config.inc.php";

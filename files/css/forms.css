@@ -13,7 +13,7 @@ legend
 	font-weight: bold;
 }
 
-input[type="checkbox"], input[type="radio"]
+input[type="checkbox"], input[type="file"], input[type="radio"]
 {
 	cursor: pointer;
 }

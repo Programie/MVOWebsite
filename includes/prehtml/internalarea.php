@@ -43,9 +43,10 @@ if (Constants::$pagePath[1])
 					{
 						$file = fopen($filename, "r");
 						{
-							header("Content-Description: Formular Herunterladen");
+							header("Content-Description: Formular herunterladen");
 							header("Content-Type: application/octet-stream");
-							header("Content-Disposition: attachment; filename=" . Constants::$pagePath[2]);
+							header("Content-Disposition: attachment; filename=\"" . Constants::$pagePath[2] . "\"");
+							header("Content-Length: " . filesize($filename));
 							header("Content-Transfer-Encoding: chunked");
 							header("Expires: 0");
 							header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
