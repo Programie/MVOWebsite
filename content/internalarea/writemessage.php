@@ -98,10 +98,10 @@ if (isset($_POST["writemessage_confirmed"]))
 				$query = Constants::$pdo->prepare("INSERT INTO `messages` (`date`, `targetGroups`, `userId`, `text`, `attachedFiles`) VALUES(NOW(), :targetGroups, :userId, :text, :attachedFiles)");
 				$query->execute(array
 				(
-					":targetGroups" => implode("\n", $groups),
+					":targetGroups" => implode(",", $groups),
 					":userId" => Constants::$accountManager->getUserId(),
 					":text" => $text,
-					":attachedFiles" => implode("\n", $attachedFiles)
+					":attachedFiles" => implode(",", $attachedFiles)
 				));
 				$messageId = Constants::$pdo->lastInsertId();
 				

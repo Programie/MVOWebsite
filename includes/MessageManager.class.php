@@ -24,8 +24,8 @@ class MessageManager
 		
 		while ($row = $query->fetch())
 		{
-			$targetGroups = explode("\n", convertLinebreaks($row->targetGroups));
-			$attachedFiles = explode("\n", convertLinebreaks($row->attachedFiles));
+			$targetGroups = explode(",", $row->targetGroups);
+			$attachedFiles = explode(",", $row->attachedFiles);
 			
 			if (!Constants::$accountManager->hasPermissionInArray($targetGroups, "messages.view"))
 			{
