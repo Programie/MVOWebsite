@@ -155,47 +155,63 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 		</fieldset>
 	";
 }
-?>
 
-<table class="table {sortlist: [[0,1]]}">
-	<thead>
-		<tr>
-			<th class="{sorter: 'number-attribute'}">Datum</th>
-			<th>Name</th>
-			<th>Berechtigungen</th>
-		</tr>
-	</thead>
-	<tbody>
-		<?php
-		$query = Constants::$pdo->query("SELECT `uploadId`, `groups`, `date`, `protocols`.`name`, `uploads`.`name` AS `uploadName` FROM `protocols` LEFT JOIN `uploads` ON `uploads`.`id` = `protocols`.`uploadId`");
-		while ($row = $query->fetch())
-		{
-			$groups = explode(",", $row->groups);
-			
-			if (!Constants::$accountManager->hasPermissionInArray($groups, "protocols.view"))
-			{
-				continue;
-			}
-			
-			$groupTitles = array();
-			foreach ($groups as $group)
-			{
-				$groupTitles[] = $userGroups[$group];
-			}
-			
-			$date = strtotime($row->date);
-			
-			echo "
-				<tr class='pointer' onclick='document.location=\"/uploads/" . $row->uploadId . "/" . $row->uploadName . "\";'>
-					<td number='" . $date . "'>" . date("d.m.Y", $date) . "</td>
-					<td>" . $row->name . "</td>
-					<td>" . implode(", ", $groupTitles) . "</td>
+$protocols = array();
+
+$query = Constants::$pdo->query("SELECT `uploadId`, `groups`, `date`, `protocols`.`name`, `uploads`.`name` AS `uploadName` FROM `protocols` LEFT JOIN `uploads` ON `uploads`.`id` = `protocols`.`uploadId`");
+while ($row = $query->fetch())
+{
+	$row->groups = explode(",", $row->groups);
+	
+	if (!Constants::$accountManager->hasPermissionInArray($row->groups, "protocols.view"))
+	{
+		continue;
+	}
+	
+	$protocols[] = $row;
+}
+
+if (empty($protocols))
+{
+	echo "<div class='error'>Keine Protokolle vorhanden!</div>";
+}
+else
+{
+	echo "
+		<table class='table {sortlist: [[0,1]]}'>
+			<thead>
+				<tr>
+					<th class='{sorter: \"number-attribute\"}'>Datum</th>
+					<th>Name</th>
+					<th>Berechtigungen</th>
 				</tr>
-			";
+			</thead>
+			<tbody>
+	";
+	foreach ($protocols as $row)
+	{
+		$groupTitles = array();
+		foreach ($row->groups as $group)
+		{
+			$groupTitles[] = $userGroups[$group];
 		}
-		?>
-	</tbody>
-</table>
+		
+		$date = strtotime($row->date);
+		
+		echo "
+			<tr class='pointer' onclick='document.location=\"/uploads/" . $row->uploadId . "/" . $row->uploadName . "\";'>
+				<td number='" . $date . "'>" . date("d.m.Y", $date) . "</td>
+				<td>" . $row->name . "</td>
+				<td>" . implode(", ", $groupTitles) . "</td>
+			</tr>
+		";
+	}
+	echo "
+			</tbody>
+		</table>
+	";
+}
+?>
 
 <div id="protocols_upload_confirm" title="Protokoll hochladen">
 	<p>Soll das ausgew&auml;hlte Protokoll jetzt hochgeladen werden?</p>
