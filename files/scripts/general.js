@@ -23,7 +23,16 @@ $(document).ready(function()
 		}, 800);
 	});
 	
-	// Menu
+	// jQuery UI
+	$(".date").datepicker(
+	{
+		changeMonth : true,
+		changeYear : true,
+		dateFormat : "dd.mm.yy",
+		dayNames : ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
+		dayNamesMin : ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+		firstDay : 1
+	});
 	$(".menu").menu();
 	
 	// Tablesorter

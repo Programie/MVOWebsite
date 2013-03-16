@@ -18,17 +18,20 @@ input[type="checkbox"], input[type="file"], input[type="radio"]
 	cursor: pointer;
 }
 
-input[type="password"], input[type="text"]
+input[type="file"], input[type="password"], input[type="text"]
 {
 	display: block;
+	margin: 15px;
+}
+
+input[type="password"], input[type="text"]
+{
 	padding: 10px;
 	padding-left: 30px;
 	font-size: 16px;
 	border-radius: 5px;
 	background-color: #eee;
 	border: 1px solid #ccc;
-	margin: 15px;
-	width: 250px;
 	box-shadow: 0 0 5px #888;
 }
 
@@ -44,6 +47,14 @@ input[type="submit"]
 	padding: 10px;
 	font-size: 16px;
 	cursor: pointer;
+}
+
+.date
+{
+	background-image: url(/files/images/formfields/date.png);
+	background-repeat: no-repeat;
+	background-position: 5px center;
+	width: 100px;
 }
 
 .input-search

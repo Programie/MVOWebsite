@@ -3,6 +3,12 @@
 	margin-bottom: 20px;
 }
 
+#writemessage_groups label
+{
+	margin-right: 10px;
+	font-weight: normal;
+}
+
 #writemessage_text
 {
 	width: 100%;
