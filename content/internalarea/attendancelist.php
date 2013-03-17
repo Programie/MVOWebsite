@@ -44,7 +44,12 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 				{
 					$startDateTime[] = $startTime . " Uhr";
 				}
-				echo "<th class='{sorter: \"number-attribute\"}'>" . $date->title . "<br /><div class='attendancelist_date'>" . implode(" ", $startDateTime) . "</div></th>";
+				echo "
+					<th class='{sorter: \"number-attribute\"}'>
+						<div class='attendancelist_title' title='" . $date->title . "'>" . $date->title . "</div>
+						<div class='attendancelist_date'>" . implode(" ", $startDateTime) . "</div>
+					</th>
+				";
 			}
 			?>
 		</tr>

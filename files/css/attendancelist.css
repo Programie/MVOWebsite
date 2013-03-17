@@ -3,3 +3,11 @@
 	font-size: 10px;
 	font-weight: normal;
 }
+
+.attendancelist_title
+{
+	width: 200px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
