@@ -18,7 +18,7 @@ input[type="checkbox"], input[type="file"], input[type="radio"]
 	cursor: pointer;
 }
 
-input[type="file"], input[type="password"], input[type="text"]
+input[type="file"], input[type="password"], input[type="text"], select
 {
 	display: block;
 	margin: 15px;

@@ -116,7 +116,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 		}
 		else
 		{
-			$error = "Es wurde versucht dasselbe Protokoll erneut hochzuladen!";
+			$error = "Es wurde versucht, das Formular erneut abzuschicken!";
 		}
 		if ($error)
 		{
@@ -253,9 +253,6 @@ else
 				$("#protocols_upload_confirm_groups").append("<li>" + $("label[for='" + $(this).attr("id") + "']").text()+ "</li>");
 			}
 		});
-		
-		console.log($("#protocols_upload_date").val());
-		console.log($("#protocols_upload_file").val());
 		
 		if ($("#protocols_upload_date").val())
 		{
