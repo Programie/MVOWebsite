@@ -274,7 +274,7 @@ class AccountManager
 		{
 			if (!$permission)
 			{
-				continue;
+				return true;
 			}
 			
 			if ($this->hasPermission(($prefix ? ($prefix . ".") : "") . $permission))

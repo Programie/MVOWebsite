@@ -1,0 +1,12 @@
+#dates_groups
+{
+	margin-bottom: 20px;
+}
+
+@media print
+{
+	#dates_groups
+	{
+		display: none;
+	}
+}

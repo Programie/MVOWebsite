@@ -91,12 +91,12 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 	<?php
 	foreach ($groups as $name => $row)
 	{
-		$addStyle = "";
+		$buttonStyle = "";
 		if ($row->active)
 		{
-			$addStyle = "style='font-weight: bold;'";
+			$buttonStyle = "style='font-weight: bold;'";
 		}
-		echo "<a href='/internalarea/addresslist/" . $name . "' " . $addStyle . "><button type='button'>" . $row->title . "</button></a>";
+		echo "<a href='/internalarea/addresslist/" . $name . "'><button type='button' " . $buttonStyle . ">" . $row->title . "</button></a>";
 	}
 	?>
 </fieldset>

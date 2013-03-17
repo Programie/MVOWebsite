@@ -1,9 +1,9 @@
 <?php
 class Dates
 {
-	public static function getDates($year = null, $month = null)
+	public static function getDates($year = null, $month = null, $group = null)
 	{
-		$query = Constants::$pdo->prepare("SELECT `dates`.`id`, `startDate`, `endDate`, `permission`, `title`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates` LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId` WHERE (:year IS NULL OR YEAR(`startDate`) = :year OR YEAR(`endDate`) = :year) AND (:month IS NULL OR MONTH(`startDate`) = :month OR MONTH(`endDate`) = :month) ORDER BY `startDate` ASC");
+		$query = Constants::$pdo->prepare("SELECT `dates`.`id`, `startDate`, `endDate`, `groups`, `title`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates` LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId` WHERE (:year IS NULL OR YEAR(`startDate`) = :year OR YEAR(`endDate`) = :year) AND (:month IS NULL OR MONTH(`startDate`) = :month OR MONTH(`endDate`) = :month) ORDER BY `startDate` ASC");
 		$query->execute(array
 		(
 			":year" => $year,
@@ -21,7 +21,36 @@ class Dates
 		
 		while ($row = $query->fetch())
 		{
-			if (!Constants::$accountManager->hasPermission($row->permission))
+			$row->groups = explode(",", $row->groups);
+			
+			if ($group)
+			{
+				if ($group == "public")
+				{
+					if ($row->groups[0])
+					{
+						continue;
+					}
+				}
+				else
+				{
+					$showGroup = false;
+					foreach ($row->groups as $groupName)
+					{
+						if ($groupName == $group)
+						{
+							$showGroup = true;
+							break;
+						}
+					}
+					if (!$showGroup)
+					{
+						continue;
+					}
+				}
+			}
+			
+			if (!Constants::$accountManager->hasPermissionInArray($row->groups, "dates"))
 			{
 				continue;
 			}

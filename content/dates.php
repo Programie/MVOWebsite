@@ -1,10 +1,16 @@
 <?php
 $year = Constants::$pagePath[1];
 $month = Constants::$pagePath[2];
+$group = Constants::$pagePath[3];
 
 if (!$year)
 {
 	$year = date("Y");
+}
+
+if ($group == "all")
+{
+	$group = null;
 }
 
 $year = intval($year);
@@ -21,7 +27,7 @@ if (!$month)
 
 $title = "Termine";
 
-$dates = Dates::getDates($year, $month);
+$dates = Dates::getDates($year, $month, $group);
 if ($dates)
 {
 	$additionalTitle = array();
@@ -43,6 +49,57 @@ if ($dates)
 }
 
 echo "<h1>" . $title . "</h1>";
+
+$userGroups = array();
+
+if (Constants::$accountManager->getUserId())
+{
+	$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups`");
+	while ($row = $query->fetch())
+	{
+		if (Constants::$accountManager->hasPermission("dates." . $row->name))
+		{
+			$userGroups[] = $row;
+		}
+	}
+}
+
+if (!empty($userGroups))
+{
+	$group1 = new StdClass;
+	$group1->name = "all";
+	$group1->title = "Alle";
+	
+	$group2 = new StdClass;
+	$group2->name = "public";
+	$group2->title = "&Ouml;ffentlich";
+	array_unshift($userGroups, $group1, $group2);
+	
+	$activeGroup = "all";
+	
+	foreach ($userGroups as $group)
+	{
+		if ($group->name == Constants::$pagePath[3])
+		{
+			$activeGroup = $group->name;
+		}
+	}
+	
+	echo "
+		<fieldset id='dates_groups'>
+			<legend>Gruppen</legend>
+	";
+	foreach ($userGroups as $group)
+	{
+		$buttonStyle = "";
+		if ($group->name == $activeGroup)
+		{
+			$buttonStyle = "style='font-weight: bold;'";
+		}
+		echo "<a href='/dates/" . $year . "/" . ($month ? $month : "all") . "/" . $group->name . "'><button type='button' " . $buttonStyle . ">" . $group->title . "</button></a>";
+	}
+	echo "</fieldset>";
+}
 
 if ($dates)
 {
@@ -79,7 +136,11 @@ if ($dates)
 		}
 		else
 		{
-			$endDateTime = array(getWeekdayName($weekday, false) . " " . $endDate);
+			$endDateTime = array();
+			if ($startDate != $endDate)
+			{
+				$endDateTime[] = getWeekdayName($weekday, false) . " " . $endDate;
+			}
 			$endTime = date("H:i", $date->endDate);
 			if ($endTime != "00:00")
 			{
@@ -125,6 +186,6 @@ if ($dates)
 }
 else
 {
-	echo "<p><b>Es wurden keine Termine in dem ausgew&auml;hlten Jahr und Monat gefunden!</b></p>";
+	echo "<div class='error'>Es wurden keine Termine in der ausgew&auml;hlten Gruppe und dem ausgew&auml;hlten Jahr sowie Monat gefunden!</div>";
 }
 ?>
