@@ -1,9 +1,10 @@
 <?php
 $dates = array();
-$query = Constants::$pdo->query("SELECT `id`, `startDate`, `permission`, `title` FROM `dates` WHERE `showInAttendanceList` AND `startDate` > NOW() ORDER BY `startDate` ASC");
+$query = Constants::$pdo->query("SELECT `id`, `startDate`, `groups`, `title` FROM `dates` WHERE `showInAttendanceList` AND `startDate` > NOW() ORDER BY `startDate` ASC");
 while ($row = $query->fetch())
 {
-	if (!Constants::$accountManager->hasPermission($row->permission))
+	$row->groups = explode(",", $row->groups);
+	if (!Constants::$accountManager->hasPermissionInArray($row->groups, "dates"))
 	{
 		continue;
 	}
