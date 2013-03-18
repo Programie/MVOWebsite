@@ -56,7 +56,7 @@ class Pictures
 		$dir = scandir(ROOT_PATH . "/" . $path);
 		foreach ($dir as $file)
 		{
-			if (is_file($path . "/" . $file) and preg_match("/^img([0-9]+)/", $file, $fileParts))
+			if (is_file($path . "/" . $file) and preg_match("/^large([0-9]+)/", $file, $fileParts))
 			{
 				$data = new StdClass;
 				$data->file = $fileParts[1];
