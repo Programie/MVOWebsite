@@ -13,6 +13,8 @@ define("SMTP_PASSWORD", "mailpassword");// Password to authenticate at the SMTP 
 define("SMTP_FROM_ADDRESS", "webmaster@example.com");// Sender address
 define("SMTP_FROM_NAME", "Example Webmaster");// Sender name
 
+define("MANAGER_PASSWORD", "change-me");// Password for Manager API (User "manager")
+
 define("WEBMASTER_EMAIL", SMTP_FROM_ADDRESS);// Email-Address of the webmaster
 
 define("PAGE_TITLE_SEPARATOR", " - ");// String which should be used to separate title parts in page title

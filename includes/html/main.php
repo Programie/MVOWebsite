@@ -25,7 +25,7 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 ?>
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<title><?php echo implode(PAGE_TITLE_SEPARATOR, $fullPageTitle);?></title>
 		<?php
 		$path = ROOT_PATH . "/files/css";

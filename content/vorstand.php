@@ -8,10 +8,10 @@
 		</tr>
 		<tr>
 			<td>Kassenverwalterin</td>
-			<td>Katrin Hörth</td>
+			<td>Katrin H&ouml;rth</td>
 		</tr>
 		<tr>
-			<td>Schriftführerin</td>
+			<td>Schriftf&uuml;hrerin</td>
 			<td>Heike Kast</td>
 		</tr>
 		<tr>

@@ -23,7 +23,7 @@
 
 	<h3>Kassenverwalterin <a href="mailto:kassier@musikverein-reichental.de">kassier@musikverein-reichental.de</a></h3>
 	<p>
-		Katrin Hörth
+		Katrin H&ouml;rth
 	</p>
 
 	<h3>Schriftf&uuml;hrerin <a href="mailto:schriftfuehrer@musikverein-reichental.de">schriftfuehrer@musikverein-reichental.de</a></h3>

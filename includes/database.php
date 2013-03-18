@@ -9,6 +9,7 @@ try
 		Constants::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	}
 	Constants::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+	Constants::$pdo->query("SET NAMES utf8");
 }
 catch (PDOException $exception)
 {
