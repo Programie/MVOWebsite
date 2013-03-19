@@ -26,7 +26,7 @@ class Remote_PictureManager
 			":name" => $params->name
 		));
 		$row = $query->fetch();
-		$albumId = $row->albumId;
+		$albumId = $row->id;
 		
 		$query = Constants::$pdo->prepare("
 			INSERT INTO
