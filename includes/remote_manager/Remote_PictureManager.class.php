@@ -19,7 +19,14 @@ class Remote_PictureManager
 			":title" => $params->title,
 			":text" => $params->text
 		));
-		$albumId = Constants::$pdo->lastInsertId();
+		$query = Constants::$pdo->prepare("SELECT `id` FROM `picturealbums` WHERE `date` = :date AND `name` = :name");
+		$query->execute(array
+		(
+			":date" => $params->date,
+			":name" => $params->name
+		));
+		$row = $query->fetch();
+		$albumId = $row->albumId;
 		
 		$query = Constants::$pdo->prepare("
 			INSERT INTO
