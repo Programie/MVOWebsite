@@ -6,7 +6,7 @@ function convertLinebreaks($string)
 
 function formatText($text)
 {
-	$text = htmlentities($text);
+	$text = htmlentities($text, ENT_COMPAT, "UTF-8");
 	
 	$find = array
 	(

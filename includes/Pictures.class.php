@@ -3,7 +3,7 @@ class Pictures
 {
 	public static function getAlbums($year)
 	{
-		$query = Constants::$pdo->prepare("SELECT * FROM `picturealbums` WHERE YEAR(`date`) = :year");
+		$query = Constants::$pdo->prepare("SELECT * FROM `picturealbums` WHERE YEAR(`date`) = :year ORDER BY `date` ASC");
 		$query->execute(array
 		(
 			":year" => $year
@@ -77,6 +77,8 @@ class Pictures
 				$pictures[$row->number] = $row;
 			}
 		}
+		
+		ksort($pictures);
 		
 		$data = new StdClass;
 		$data->date = $albumRow->date;
