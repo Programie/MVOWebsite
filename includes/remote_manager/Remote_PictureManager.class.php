@@ -38,9 +38,7 @@ class Remote_PictureManager
 			));
 		}
 		
-		return $params;
-		
-		return true;
+		return $albumId ? "ok" : "album_id_is_null";
 	}
 }
 ?>
