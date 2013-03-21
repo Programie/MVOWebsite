@@ -191,6 +191,7 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			echo "
 				<tr class='movies_item' movieid='" . $row->id . "'>
 					<td number='" . $row->discType . "' title='" . $row->discs . " " . $row->discTypeTitle . ($row->discs == 1 ? "" : "s") . "' class='movies_item'>
+						<div class='movies_item_container'>
 			";
 			if ($row->discs == 1)
 			{
@@ -205,7 +206,8 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			}
 			$price = $row->price == null ? "Auf Anfrage" : (number_format($row->price, 2, ",", ".") . " &euro;");
 			echo "
-						<img class='movies_item_cover' src='" . $coverImage . "'/>
+							<img class='movies_item_cover' src='" . $coverImage . "'/>
+						</div>
 					</td>
 					<td number='" . $row->categoryId . "'>" . $row->title . "</td>
 					<td number='" . $row->eventYear . "'>" . $row->eventYear . "</td>
