@@ -94,12 +94,19 @@ body
 		cursor: pointer;
 	}
 	
-	#bodycontent
+	#bodycontent_div1
 	{
 		padding: 10px;
-		background: rgba(255, 255, 255, 0.7);
+		background: rgba(255, 255, 255, 0.5);
 		border-radius: 10px;
 		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	}
+	
+	#bodycontent_div2
+	{
+		padding: 10px;
+		background: rgba(255, 255, 255, 0.9);
+		border-radius: 10px;
 	}
 	
 	#container
@@ -114,6 +121,11 @@ body
 
 @media print
 {
+	body
+	{
+		background-image: none !important;
+	}
+	
 	#backgroundwrapper, #backtotop, #header
 	{
 		display: none;

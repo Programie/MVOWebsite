@@ -17,6 +17,11 @@ if (Constants::$pagePath[1])// Year
 			echo "<h1>" . $albumData->title . "</h1>";
 			echo "<p>Datum: " . date("d.m.Y", strtotime($albumData->date)) . "</p>";
 			
+			if ($albumData->text)
+			{
+				echo "<p id='pictures_text'>" . formatText($albumData->text) . "</p>";
+			}
+			
 			echo "<ul id='gallery' class='polaroids'>";
 			foreach ($pictures as $number => $data)
 			{

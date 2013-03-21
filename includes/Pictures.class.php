@@ -31,7 +31,7 @@ class Pictures
 	
 	public static function getPictures($year, $album)
 	{
-		$query = Constants::$pdo->prepare("SELECT `id`, `date`, `permission`, `name`, `title` FROM `picturealbums` WHERE YEAR(`date`) = :year AND `name` = :name");
+		$query = Constants::$pdo->prepare("SELECT `id`, `date`, `permission`, `name`, `title`, `text` FROM `picturealbums` WHERE YEAR(`date`) = :year AND `name` = :name");
 		$query->execute(array
 		(
 			":year" => $year,
@@ -84,6 +84,7 @@ class Pictures
 		$data->date = $albumRow->date;
 		$data->pictures = $pictures;
 		$data->title = $albumRow->title;
+		$data->text = $albumRow->text;
 		
 		return $data;
 	}
