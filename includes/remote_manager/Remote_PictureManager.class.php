@@ -3,6 +3,14 @@ class Remote_PictureManager
 {
 	public function addAlbum($params)
 	{
+		if (!$params->coverPicture)
+		{
+			$params->coverPicture = 1;
+		}
+		if (!$params->text)
+		{
+			$params->text = "";
+		}
 		$query = Constants::$pdo->prepare("
 			INSERT INTO `picturealbums`
 			(`date`, `permission`, `coverPicture`, `name`, `title`, `text`)
