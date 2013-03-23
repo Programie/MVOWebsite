@@ -3,7 +3,7 @@ class Pictures
 {
 	public static function getAlbums($year)
 	{
-		$query = Constants::$pdo->prepare("SELECT * FROM `picturealbums` WHERE YEAR(`date`) = :year ORDER BY `date` ASC");
+		$query = Constants::$pdo->prepare("SELECT * FROM `picturealbums` WHERE YEAR(`date`) = :year ORDER BY `date` DESC");
 		$query->execute(array
 		(
 			":year" => $year
