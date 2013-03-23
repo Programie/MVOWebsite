@@ -1,5 +1,11 @@
 @media print
 {
+	a
+	{
+		color: #000 !important;
+		text-decoration: none;
+	}
+	
 	.no-print
 	{
 		display: none;

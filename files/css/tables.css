@@ -137,6 +137,10 @@ table.table tbody tr th
 		background: -ms-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%) !important;
 		background: linear-gradient(to bottom, #a90329 0%, #8f0222 44%, #6d0019 100%) !important;
 		filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0) !important;
+	}
+	
+	.table_highlight *
+	{
 		color: #fff !important;
 	}
 	
