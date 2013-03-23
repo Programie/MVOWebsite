@@ -3,6 +3,17 @@
 	margin-bottom: 20px;
 }
 
+#dates_info_ics
+{
+	margin-top: 20px;
+	margin-bottom: 10px;
+	background-image: url(/files/icons/ics.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+	height: 64px;
+	padding-left: 70px;
+}
+
 @media print
 {
 	#dates_groups

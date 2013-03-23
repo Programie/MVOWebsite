@@ -4,9 +4,9 @@ if ($calendar == "internal.ics" or $calendar == "public.ics")
 {
 	if ($calendar == "internal.ics")
 	{
-		if (!isset($_SERVER["PHP_AUTH_USER"]) or !isset($_SERVER["PHP_AUTH_PW"]))
+		if (!Constants::$accountManager->getUserId())
 		{
-			header("WWW-Authenticate: Basic realm='My Realm'");
+			header("WWW-Authenticate: Basic realm='Interner Bereich'");
 			header("HTTP/1.0 401 Unauthorized");
 			exit;
 		}

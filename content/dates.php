@@ -179,9 +179,22 @@ if ($dates)
 			</tr>
 		";
 	}
+	if (Constants::$accountManager->getUserId())
+	{
+		$iCalendarUrl = BASE_URL . "/dates/internal.ics";
+	}
+	else
+	{
+		$iCalendarUrl = BASE_URL . "/dates/public.ics";
+	}
 	echo "
 			</tbody>
 		</table>
+		<div class='no-print' id='dates_info_ics'>
+			Sie k&ouml;nnen diese Termine auch im iCalendar-Format abrufen um diese in einer Kalenderanwendung wie Microsoft Office Outlook oder einer Kalender-App anzuzeigen.<br />
+			F&uuml;gen Sie hierzu einfach den folgenden Link in ihrer Kalenderanwendung ein:<br />
+			<a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>
+		</div>
 	";
 }
 else
