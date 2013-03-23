@@ -5,12 +5,12 @@
 
 #dates_info_ics
 {
-	margin-top: 20px;
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 	background-image: url(/files/icons/ics.png);
 	background-repeat: no-repeat;
 	background-position: left center;
 	height: 64px;
+	padding-top: 15px;
 	padding-left: 70px;
 }
 

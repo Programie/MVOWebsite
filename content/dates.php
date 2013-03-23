@@ -103,7 +103,19 @@ if (!empty($userGroups))
 
 if ($dates)
 {
+	if (Constants::$accountManager->getUserId())
+	{
+		$iCalendarUrl = BASE_URL . "/dates/internal.ics";
+	}
+	else
+	{
+		$iCalendarUrl = BASE_URL . "/dates/public.ics";
+	}
 	echo "
+		<div class='no-print' id='dates_info_ics'>
+			Diese Termine k&ouml;nnen im iCalendar-Format abgerufen werden, um sie in einer Kalenderanwendung wie z.B. Outlook, Google Kalender oder einer Kalender-App auf dem Smartphone anzuzeigen.<br />
+			Einfach den folgenden Link in einer Kalenderanwendung einf&uuml;gen: <a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>
+		</div>
 		<table id='dates_table' class='table tablesorter {sortlist: [[0,0]]}'>
 			<thead>
 				<tr>
@@ -118,9 +130,8 @@ if ($dates)
 	foreach ($dates as $date)
 	{
 		// Start date/time
-		$weekday = date("N", $date->startDate);
 		$startDate = date("d.m.Y", $date->startDate);
-		$startDateTime = array(getWeekdayName($weekday, false) . " " . $startDate);
+		$startDateTime = array(getWeekdayName(date("N", $date->startDate), false) . " " . $startDate);
 		$startTime = date("H:i", $date->startDate);
 		if ($startTime != "00:00")
 		{
@@ -128,18 +139,13 @@ if ($dates)
 		}
 		
 		// End date/time
-		$weekday = date("N", $date->endDate);
-		$endDate = date("d.m.Y", $date->endDate);
-		if ($endDate == "01.01.1970")
+		$endDateTime = array();
+		if ($date->endDate)
 		{
-			$endDateTime = array();
-		}
-		else
-		{
-			$endDateTime = array();
+			$endDate = date("d.m.Y", $date->endDate);
 			if ($startDate != $endDate)
 			{
-				$endDateTime[] = getWeekdayName($weekday, false) . " " . $endDate;
+				$endDateTime[] = getWeekdayName(date("N", $date->endDate), false) . " " . $endDate;
 			}
 			$endTime = date("H:i", $date->endDate);
 			if ($endTime != "00:00")
@@ -179,22 +185,10 @@ if ($dates)
 			</tr>
 		";
 	}
-	if (Constants::$accountManager->getUserId())
-	{
-		$iCalendarUrl = BASE_URL . "/dates/internal.ics";
-	}
-	else
-	{
-		$iCalendarUrl = BASE_URL . "/dates/public.ics";
-	}
 	echo "
 			</tbody>
 		</table>
-		<div class='no-print' id='dates_info_ics'>
-			Sie k&ouml;nnen diese Termine auch im iCalendar-Format abrufen um diese in einer Kalenderanwendung wie Microsoft Office Outlook oder einer Kalender-App anzuzeigen.<br />
-			F&uuml;gen Sie hierzu einfach den folgenden Link in ihrer Kalenderanwendung ein:<br />
-			<a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>
-		</div>
+		
 	";
 }
 else
