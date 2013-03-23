@@ -36,6 +36,16 @@ class Remote_PictureManager
 		$row = $query->fetch();
 		$albumId = $row->id;
 		
+		if ($params->useAsYearCoverAlbum)
+		{
+			$query = Constants::$pdo->prepare("REPLACE INTO `pictureyears` (`year`, `coverAlbumId`) VALUES(YEAR(:date), :albumId)");
+			$query->execute(array
+			(
+				":date" => $params->date,
+				":albumId" => $albumId
+			));
+		}
+		
 		$query = Constants::$pdo->prepare("
 			INSERT INTO
 			`pictures` (`albumId`, `number`, `text`)
