@@ -35,7 +35,7 @@ if ($calendar == "internal.ics" or $calendar == "public.ics")
 		}
 		$event->setStart(date("Y", $date->startDate), date("m", $date->startDate), date("d", $date->startDate), false, true, "Europe/Berlin", $useStartTime, date("H", $date->startDate), date("i", $date->startDate), date("s", $date->startDate));
 		
-		if (date("Y-m-d", $date->endDate) == "1970-01-01")
+		if (!$date->endDate)
 		{
 			$date->endDate = $date->startDate;
 		}
