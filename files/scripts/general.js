@@ -13,7 +13,7 @@ $(document).ready(function()
 		picture : true
 	});
 	
-	// "Back to top" link
+	// "Back to top" button
 	$("#backtotop").css("display", "none");
 	$("#backtotop").click(function()
 	{
@@ -21,6 +21,12 @@ $(document).ready(function()
 		{
 			scrollTop : 0
 		}, 800);
+	});
+	
+	// Print button
+	$("#print").click(function()
+	{
+		window.print();
 	});
 	
 	// jQuery UI

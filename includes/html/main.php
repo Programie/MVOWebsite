@@ -55,6 +55,9 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 			<?php require_once "body.php";?>
 			<?php require_once "footer.php";?>
 		</div>
-		<div id="backtotop">Nach oben</div>
+		<div id="overlay_container">
+			<div id="backtotop" title="Nach oben"></div>
+			<div id="print" title="Drucken"></div>
+		</div>
 	</body>
 </html>

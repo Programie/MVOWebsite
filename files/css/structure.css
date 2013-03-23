@@ -84,14 +84,10 @@ body
 {
 	#backtotop
 	{
-		position: fixed;
-		right: 0px;
-		bottom: 0px;
-		padding: 10px;
-		color: #fff;
-		background-color: rgba(0, 0, 0, 0.6);
-		border-top-left-radius: 10px;
-		cursor: pointer;
+		background-image: url(/files/images/backtotop.png);
+		width: 32px;
+		height: 32px;
+		float: left;
 	}
 	
 	#bodycontent_div1
@@ -117,6 +113,36 @@ body
 		margin: 0 auto;
 		width: 1200px;
 	}
+	
+	#overlay_container
+	{
+		position: fixed;
+		right: 0px;
+		bottom: 0px;
+		padding: 10px;
+		color: #fff;
+		background-color: rgba(0, 0, 0, 0.6);
+		border-top-left-radius: 10px;
+	}
+	
+	#overlay_container div
+	{
+		margin-right: 10px;
+		cursor: pointer;
+	}
+	
+	#overlay_container div:last-child
+	{
+		margin-right: 0px;
+	}
+	
+	#print
+	{
+		background-image: url(/files/images/print.png);
+		width: 32px;
+		height: 32px;
+		float: left;
+	}
 }
 
 @media print
@@ -126,7 +152,7 @@ body
 		background-image: none !important;
 	}
 	
-	#backgroundwrapper, #backtotop, #header
+	#backgroundwrapper, #header, #overlay_container
 	{
 		display: none;
 	}
