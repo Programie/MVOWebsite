@@ -136,6 +136,21 @@ body
 		margin-right: 0px;
 	}
 	
+	#notification
+	{
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		margin: 0;
+		border-radius: 0;
+		border-bottom: 1px solid;
+		border: 0;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+		display: none;
+		z-index: 1000;
+	}
+	
 	#print
 	{
 		background-image: url(/files/images/print.png);
@@ -152,7 +167,7 @@ body
 		background-image: none !important;
 	}
 	
-	#backgroundwrapper, #header, #overlay_container
+	#backgroundwrapper, #header, #notification, #overlay_container
 	{
 		display: none;
 	}

@@ -127,6 +127,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 </table>
 
 <script type="text/javascript">
+	var attendancelist_notificationTimeout = null;
 	function attendancelist_changeState(element)
 	{
 		var status = null;
@@ -154,6 +155,40 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 				attendancelist_dateid : cell.attr("dateid"),
 				attendancelist_userid : row.attr("userid"),
 				attendancelist_status : status
+			},
+			error : function(jqXhr, textStatus, errorThrown)
+			{
+				$("#notification").attr("class", "error");
+				$("#notification").html("Fehler beim Speichern!");
+				
+				$("#notification").fadeIn();
+				window.setTimeout(function()
+				{
+					$("#notification").fadeOut();
+				}, 5000);
+			},
+			success : function(data, status, jqXhr)
+			{
+				if (data == "ok")
+				{
+					$("#notification").attr("class", "ok");
+					$("#notification").html("Erfolgreich gespeichert!");
+				}
+				else
+				{
+					$("#notification").attr("class", "error");
+					$("#notification").html("Fehler beim Speichern!");
+				}
+				
+				$("#notification").fadeIn();
+				if (attendancelist_notificationTimeout)
+				{
+					window.clearTimeout(attendancelist_notificationTimeout);
+				}
+				attendancelist_notificationTimeout = window.setTimeout(function()
+				{
+					$("#notification").fadeOut();
+				}, 5000);
 			}
 		});
 	}

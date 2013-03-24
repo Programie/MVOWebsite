@@ -50,6 +50,7 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 		?>
 	</head>
 	<body style="background-image: url(<?php echo $backgroundFile;?>);">
+		<div id="notification"></div>
 		<div id="container">
 			<?php require_once "header.php";?>
 			<?php require_once "body.php";?>
