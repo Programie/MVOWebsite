@@ -2,33 +2,67 @@
 $groups = array();
 $users = array();
 
-$query = Constants::$pdo->query("SELECT `musiciangroups`.`name` AS `groupName`, `musiciangroups`.`title` AS `groupTitle`, `users`.`firstName`, `users`.`lastName`, `users`.`id` AS `userId` FROM `users` LEFT JOIN `musiciangroups` ON `musiciangroups`.`id` = `users`.`musicianGroupId` WHERE `users`.`musicianGroupId` ORDER BY `musiciangroups`.`orderIndex` ASC, `musiciangroups`.`title` ASC, `users`.`lastname` ASC, `users`.`firstName` ASC");
+$query = Constants::$pdo->query("SELECT `name`, `title` FROM `musiciangroups` ORDER BY `orderIndex` ASC, `title` ASC");
 while ($row = $query->fetch())
 {
-	$groups[$row->groupName] = $row->groupTitle;
-	$users[$row->groupName][] = $row;
+	$groups[] = $row;
 }
+
+$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName` FROM `users` ORDER BY `lastname` ASC, `firstName` ASC");
+while ($row = $query->fetch())
+{
+	$users[] = $row;
+}
+
+$checkUserInGroup = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
+$checkHide = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = '-show.public'");
 
 echo "<h1>Musiker</h1>";
 
-foreach ($groups as $groupName => $groupTitle)
+foreach ($groups as $groupRow)
 {
-	echo "<h2>" . $groupTitle . "</h2>";
+	echo "<h2>" . $groupRow->title . "</h2>";
 	
-	echo "<ul class='polaroids'>";
-	foreach ($users[$groupName] as $user)
+	echo "<ul class='musiker polaroids'>";
+	foreach ($users as $userRow)
 	{
-		$file = "/files/profilepictures/" . $user->userId . ".jpg";
-		echo "
-			<li>
-				<a href='/files/profilepictures/" . $user->userId . ".jpg' rel='colorbox' caption='" . $user->firstName . " " . $user->lastName . "'>
-					<img class='profilepicture' src='" . $file . "?md5=" . @md5_file(ROOT_PATH . $file) . "'/>
-				</a>
-			</li>
-		";
+		$checkUserInGroup->execute(array
+		(
+			":userId" => $userRow->id,
+			":permission" => "groups.musiker." . $groupRow->name
+		));
+		if ($checkUserInGroup->rowCount())
+		{
+			$checkHide->execute(array
+			(
+				":userId" => $userRow->id
+			));
+			if (!$checkHide->rowCount())
+			{
+				$file = "/files/profilepictures/" . $userRow->id . ".jpg";
+				$url = $file . "?md5=" . @md5_file(ROOT_PATH . $file);
+				echo "
+					<li>
+						<a href='" . $url . "' caption='" . $userRow->firstName . " " . $userRow->lastName . "'>
+							<img class='profilepicture' src='" . $url . "' alt='" . $userRow->firstName . " " . $userRow->lastName . "'/>
+						</a>
+					</li>
+				";
+			}
+		}
 	}
-	echo "</ul>";
-	
-	echo "<div class='clear'></div>";
+	echo "
+		</ul>
+		
+		<div class='clear'></div>
+	";
 }
 ?>
+
+<script type='text/javascript'>
+	$(".musiker").photobox("li > a",
+	{
+		history : false,
+		time : 10000
+	});
+</script>

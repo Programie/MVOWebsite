@@ -139,4 +139,43 @@ function getWeekdayName($weekday, $long)
 	
 	return $weekdays[$weekday - 1];
 }
+
+function resizeImage($sourceImage, $maxWidth, $maxHeight)
+{
+	$originalWidth = imageSX($sourceImage);
+	$originalHeight = imageSY($sourceImage);
+	
+	if ($originalWidth <= $maxWidth and $originalHeight <= $maxHeight)
+	{
+		$resizedWidth = $originalWidth;
+		$resizedHeight = $originalHeight;
+	}
+	else
+	{
+		$ratio = $maxWidth / $originalWidth;
+		$resizedWidth = $maxWidth;
+		$resizedHeight = $originalHeight * $ratio;
+		
+		if ($resizedHeight > $maxHeight)
+		{
+			$ratio = $maxHeight / $originalHeight;
+			$resizedHeight = $maxHeight;
+			$resizedWidth = $originalWidth * $ratio;
+		}
+	}
+	
+	$destinationImage = @imagecreatetruecolor($resizedWidth, $resizedHeight);
+	if (!$destinationImage)
+	{
+		return false;
+	}
+	
+	if (!imagecopyresampled($destinationImage, $sourceImage, 0, 0, 0, 0, $resizedWidth, $resizedHeight, $originalWidth, $originalHeight))
+	{
+		imagedestroy($destinationImage);
+		return false;
+	}
+	
+	return $destinationImage;
+}
 ?>

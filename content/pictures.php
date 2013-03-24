@@ -33,11 +33,19 @@ if (Constants::$pagePath[1])// Year
 					</li>
 				";
 			}
-			echo "</ul>";
-			
-			echo "<div class='clear'></div>";
-			
-			echo "<script type='text/javascript' src='/files/scripts/pictures.js'></script>";
+			echo "
+				</ul>
+				
+				<div class='clear'></div>
+				
+				<script type='text/javascript'>
+					$('#gallery').photobox('li > a',
+					{
+						history : false,
+						time : 10000
+					});
+				</script>
+			";
 		}
 	}
 	

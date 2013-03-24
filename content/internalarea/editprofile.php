@@ -117,20 +117,30 @@ $userData = Constants::$accountManager->getUserData();
 					}
 					else
 					{
-						$originalWidth = $_POST["editprofile_profilepicture_originalwidth"];
-						$originalHeight = $_POST["editprofile_profilepicture_originalheight"];
-						$scaledWidth = $_POST["editprofile_profilepicture_scaledwidth"];
-						$scaledHeight = $_POST["editprofile_profilepicture_scaledheight"];
-						if ($originalWidth > 0 and $originalHeight > 0 and $scaledWidth > 0 and $scaledHeight > 0)
+						$x = $_POST["editprofile_profilepicture_x"];
+						$y = $_POST["editprofile_profilepicture_y"];
+						$width = $_POST["editprofile_profilepicture_width"];
+						$height = $_POST["editprofile_profilepicture_height"];
+						if ($width > 0 and $height > 0)
 						{
 							$sourceImage = imagecreatefromjpeg($file["tmp_name"]);
-							$resizedImage = imagecreatetruecolor($scaledWidth, $scaledHeight);
-							if (imagecopyresampled($resizedImage, $sourceImage, 0, 0, $_POST["editprofile_profilepicture_x"], $_POST["editprofile_profilepicture_y"], $scaledWidth, $scaledHeight, $originalWidth, $originalHeight))
+							if ($sourceImage)
 							{
-								if (imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userData->id . ".jpg"))
+								$croppedImage = imagecreatetruecolor($width, $height);
+								if ($croppedImage)
 								{
-									echo "<div class='ok'>Dein Profilbild wurde erfolgreich aktualisiert.</div>";
-									$showError = false;
+									if (imagecopyresampled($croppedImage, $sourceImage, 0, 0, $x,$y, $width, $height, $width, $height))
+									{
+										$resizedImage = resizeImage($croppedImage, 640, 480);
+										if ($resizedImage)
+										{
+											if (imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userData->id . ".jpg"))
+											{
+												echo "<div class='ok'>Dein Profilbild wurde erfolgreich aktualisiert.</div>";
+												$showError = false;
+											}
+										}
+									}
 								}
 							}
 						}
@@ -162,10 +172,8 @@ $userData = Constants::$accountManager->getUserData();
 				
 				<input type="hidden" id="editprofile_profilepicture_x" name="editprofile_profilepicture_x"/>
 				<input type="hidden" id="editprofile_profilepicture_y" name="editprofile_profilepicture_y"/>
-				<input type="hidden" id="editprofile_profilepicture_originalwidth" name="editprofile_profilepicture_originalwidth"/>
-				<input type="hidden" id="editprofile_profilepicture_originalheight" name="editprofile_profilepicture_originalheight"/>
-				<input type="hidden" id="editprofile_profilepicture_scaledwidth" name="editprofile_profilepicture_scaledwidth"/>
-				<input type="hidden" id="editprofile_profilepicture_scaledheight" name="editprofile_profilepicture_scaledheight"/>
+				<input type="hidden" id="editprofile_profilepicture_width" name="editprofile_profilepicture_width"/>
+				<input type="hidden" id="editprofile_profilepicture_height" name="editprofile_profilepicture_height"/>
 				
 				<input type="file" id="editprofile_profilepicture_file" name="editprofile_profilepicture_file" onchange="editprofile_profilePicture_FileSelectHandler();"/>
 				
@@ -415,12 +423,9 @@ $userData = Constants::$accountManager->getUserData();
 	
 	function editprofile_profilePicture_updateCoords(originalCoords)
 	{
-		var scaledCoords = editprofile_profilePicture_jcrop.tellScaled();
 		document.getElementById("editprofile_profilepicture_x").value = originalCoords.x;
 		document.getElementById("editprofile_profilepicture_y").value = originalCoords.y;
-		document.getElementById("editprofile_profilepicture_originalwidth").value = originalCoords.w;
-		document.getElementById("editprofile_profilepicture_originalheight").value = originalCoords.h;
-		document.getElementById("editprofile_profilepicture_scaledwidth").value = scaledCoords.w;
-		document.getElementById("editprofile_profilepicture_scaledheight").value = scaledCoords.h;
+		document.getElementById("editprofile_profilepicture_width").value = originalCoords.w;
+		document.getElementById("editprofile_profilepicture_height").value = originalCoords.h;
 	}
 </script>

@@ -193,10 +193,18 @@ class AccountManager
 	
 	public function hasPermission($permission)
 	{
+		$permissionArray = $permission;
+		
 		// Check if a permission is required
-		if (!$permission)
+		if (!$permissionArray)
 		{
 			return true;
+		}
+		
+		// Make sure the variable is a array
+		if (!is_array($permissionArray))
+		{
+			$permissionArray = array($permissionArray);
 		}
 		
 		// Check if the user is logged in and has a permissions array
@@ -205,18 +213,21 @@ class AccountManager
 			return false;
 		}
 		
+		// Check if this permission has been explicit revoked
+		foreach ($permissionArray as $permission)
+		{
+			if ($this->permission["-" . $permission])
+			{
+				return false;
+			}
+		}
+		
 		// Check if the user has all permissions (*)
 		if ($this->permissions["*"])
 		{
 			return true;
 		}
 		
-		if (!is_array($permission))
-		{
-			$permission = array($permission);
-		}
-		
-		$permissionArray = $permission;
 		foreach ($permissionArray as $permission)
 		{
 			// Check if only a login without any permissions is required
