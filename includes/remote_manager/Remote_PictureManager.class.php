@@ -53,14 +53,17 @@ class Remote_PictureManager
 			ON DUPLICATE KEY UPDATE
 			`text` = :text
 		");
-		foreach ($params->pictures as $pictureData)
+		if (is_array($params->pictures))
 		{
-			$query->execute(array
-			(
-				":albumId" => $albumId,
-				":number" => $pictureData->id,
-				":text" => $pictureData->text
-			));
+			foreach ($params->pictures as $number => $pictureData)
+			{
+				$query->execute(array
+				(
+					":albumId" => $albumId,
+					":number" => $number
+					":text" => $pictureData->text
+				));
+			}
 		}
 		
 		return $albumId ? "ok" : "album_id_is_null";
