@@ -17,13 +17,20 @@ while ($row = $query->fetch())
 
 $groups = array();
 $users = array();
-$query = Constants::$pdo->query("SELECT `musiciangroups`.`name` AS `groupName`, `musiciangroups`.`title` AS `groupTitle`, `users`.`firstName`, `users`.`lastName`, `users`.`id` AS `id` FROM `users` LEFT JOIN `musiciangroups` ON `musiciangroups`.`id` = `users`.`musicianGroupId` WHERE `users`.`musicianGroupId` ORDER BY `musiciangroups`.`orderIndex` ASC, `musiciangroups`.`title` ASC, `users`.`lastname` ASC, `users`.`firstName` ASC");
+
+$query = Constants::$pdo->query("SELECT `name`, `title` FROM `musiciangroups` ORDER BY `orderIndex` ASC, `title` ASC");
 while ($row = $query->fetch())
 {
-	$groups[$row->groupName] = $row->groupTitle;
-	$users[$row->groupName][] = $row;
+	$groups[] = $row;
 }
 
+$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName` FROM `users` ORDER BY `lastname` ASC, `firstName` ASC");
+while ($row = $query->fetch())
+{
+	$users[] = $row;
+}
+
+$checkUserInGroup = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
 $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendancelist` WHERE `dateId` = :dateId AND `userId` = :userId");
 ?>
 
@@ -55,56 +62,64 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 		</tr>
 	</thead>
 	<?php
-	foreach ($groups as $groupName => $groupTitle)
+	foreach ($groups as $groupRow)
 	{
 		echo "
 			<tbody class='tablesorter-infoOnly'>
 				<tr>
-					<th colspan='" . (count($dates) + 1) . "'>" . $groupTitle . "</th>
+					<th colspan='" . (count($dates) + 1) . "'>" . $groupRow->title . "</th>
 				</tr>
 			</tbody>
 			<tbody>
 		";
-		foreach ($users[$groupName] as $user)
+		foreach ($users as $userRow)
 		{
-			$attributes = "";
-			if ($user->id == Constants::$accountManager->getUserId())
+			$checkUserInGroup->execute(array
+			(
+				":userId" => $userRow->id,
+				":permission" => "groups.musiker." . $groupRow->name
+			));
+			if ($checkUserInGroup->rowCount())
 			{
-				$attributes = "class='table_highlight'";
-			}
-			echo "<tr userid='" . $user->id . "' " . $attributes . ">";
-			echo "<td sorttext='" . $user->lastName . " " . $user->firstName . "'>" . $user->firstName . " " . $user->lastName . "</td>";
-			foreach ($dates as $date)
-			{
-				$getAttendanceQuery->execute(array
-				(
-					":dateId" => $date->id,
-					":userId" => $user->id
-				));
-				$attendanceRow = $getAttendanceQuery->fetch();
-				$name = "attendancelist_" . $date->id . "_" . $user->id;
-				$statusText = "";
-				switch ($attendanceRow->status)
+				$attributes = "";
+				if ($userRow->id == Constants::$accountManager->getUserId())
 				{
-					case "1":
-						$statusText = "Ja";
-						break;
-					case "0":
-						$statusText = "Nein";
-						break;
+					$attributes = "class='table_highlight'";
 				}
-				echo "
-					<td dateid='" . $date->id . "' number='" . ($attendanceRow->status == "1" ? "1" : "0") . "' style='white-space: nowrap;'>
-						<div class='no-print'>
-							<input type='radio' state='1' name='" . $name . "' id='" . $name . "_yes' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "1" ? "checked='checked'" : "") . "/><label for='" . $name . "_yes'>Ja</label>
-							<input type='radio' state='0' name='" . $name . "' id='" . $name . "_no' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "0" ? "checked='checked'" : "") . "/><label for='" . $name . "_no'>Nein</label>
-							<button type='button' title='Auswahl entfernen' onclick='attendancelist_changeState(this);'><img src='/files/images/formfields/trash.png' alt='X'/></button>
-						</div>
-						<div class='print-only'>" . $statusText . "</div>
-					</td>
-				";
+				echo "<tr userid='" . $userRow->id . "' " . $attributes . ">";
+				echo "<td sorttext='" . $userRow->lastName . " " . $userRow->firstName . "'>" . $userRow->firstName . " " . $userRow->lastName . "</td>";
+				foreach ($dates as $dateRow)
+				{
+					$getAttendanceQuery->execute(array
+					(
+						":dateId" => $dateRow->id,
+						":userId" => $userRow->id
+					));
+					$attendanceRow = $getAttendanceQuery->fetch();
+					$name = "attendancelist_" . $dateRow->id . "_" . $userRow->id;
+					$statusText = "";
+					switch ($attendanceRow->status)
+					{
+						case "1":
+							$statusText = "Ja";
+							break;
+						case "0":
+							$statusText = "Nein";
+							break;
+					}
+					echo "
+						<td dateid='" . $dateRow->id . "' number='" . ($attendanceRow->status == "1" ? "1" : "0") . "' style='white-space: nowrap;'>
+							<div class='no-print'>
+								<input type='radio' state='1' name='" . $name . "' id='" . $name . "_yes' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "1" ? "checked='checked'" : "") . "/><label for='" . $name . "_yes'>Ja</label>
+								<input type='radio' state='0' name='" . $name . "' id='" . $name . "_no' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "0" ? "checked='checked'" : "") . "/><label for='" . $name . "_no'>Nein</label>
+								<button type='button' title='Auswahl entfernen' onclick='attendancelist_changeState(this);'><img src='/files/images/formfields/trash.png' alt='X'/></button>
+							</div>
+							<div class='print-only'>" . $statusText . "</div>
+						</td>
+					";
+				}
+				echo "</tr>";
 			}
-			echo "</tr>";
 		}
 		echo "</tbody>";
 	}
@@ -116,16 +131,16 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 	{
 		var status = null;
 		
-		var cell = element.parentNode;
-		var row = cell.parentNode;
+		var cell = $(element).parents("td");
+		var row = cell.parents("tr");
 		
-		if (element.getAttribute("type") == "radio")
+		if ($(element).is(":radio"))
 		{
-			status = element.getAttribute("state");
+			status = $(element).attr("state");
 		}
 		else
 		{
-			$(cell).find("input[type='radio']").each(function()
+			cell.find("input[type='radio']").each(function()
 			{
 				$(this).prop("checked", false);
 			});
@@ -136,8 +151,8 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 			url : "/internalarea/attendancelist",
 			data :
 			{
-				attendancelist_dateid : cell.getAttribute("dateid"),
-				attendancelist_userid : row.getAttribute("userid"),
+				attendancelist_dateid : cell.attr("dateid"),
+				attendancelist_userid : row.attr("userid"),
 				attendancelist_status : status
 			}
 		});
