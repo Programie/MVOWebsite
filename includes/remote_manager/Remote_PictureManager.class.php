@@ -60,7 +60,7 @@ class Remote_PictureManager
 				$query->execute(array
 				(
 					":albumId" => $albumId,
-					":number" => $number
+					":number" => $number,
 					":text" => $pictureData->text
 				));
 			}
