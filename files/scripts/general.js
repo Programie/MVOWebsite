@@ -37,7 +37,10 @@ $(document).ready(function()
 		dateFormat : "dd.mm.yy",
 		dayNames : ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
 		dayNamesMin : ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-		firstDay : 1
+		firstDay : 1,
+		monthNames : ["Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
+		monthNamesShort : ["Jan", "Feb", "M&auml;rz", "April", "Mai", "Juni", "Juli", "Aug", "Sep", "Okt", "Nov", "Dez"],
+		showAnim : "slideDown"
 	});
 	$(".menu").menu();
 	
