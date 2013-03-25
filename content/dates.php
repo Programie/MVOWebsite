@@ -79,10 +79,13 @@ if (!empty($userGroups))
 	
 	foreach ($userGroups as $index => $group)
 	{
-		if (!Dates::getDates($year, $month, $group->name))
+		if ($group->name != "all")
 		{
-			unset($userGroups[$index]);
-			continue;
+			if (!Dates::getDates($year, $month, $group->name))
+			{
+				unset($userGroups[$index]);
+				continue;
+			}
 		}
 		if ($group->name == Constants::$pagePath[3])
 		{
