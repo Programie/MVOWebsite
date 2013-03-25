@@ -77,8 +77,13 @@ if (!empty($userGroups))
 	
 	$activeGroup = "all";
 	
-	foreach ($userGroups as $group)
+	foreach ($userGroups as $index => $group)
 	{
+		if (!Dates::getDates($year, $month, $group->name))
+		{
+			unset($userGroups[$index]);
+			continue;
+		}
 		if ($group->name == Constants::$pagePath[3])
 		{
 			$activeGroup = $group->name;
