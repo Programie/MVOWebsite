@@ -36,7 +36,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 
 <h1>Anwesenheitsliste</h1>
 
-<table class="table {sortlist: [[0,0]]}">
+<table id="attendancelist_table" class="table {sortlist: [[0,0]]}">
 	<thead>
 		<tr>
 			<th class="{sorter: 'text-attribute'}">Name</th>
@@ -110,8 +110,8 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 					echo "
 						<td dateid='" . $dateRow->id . "' number='" . ($attendanceRow->status == "1" ? "1" : "0") . "' style='white-space: nowrap;'>
 							<div class='no-print'>
-								<input type='radio' state='1' name='" . $name . "' id='" . $name . "_yes' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "1" ? "checked='checked'" : "") . "/><label for='" . $name . "_yes'>Ja</label>
-								<input type='radio' state='0' name='" . $name . "' id='" . $name . "_no' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "0" ? "checked='checked'" : "") . "/><label for='" . $name . "_no'>Nein</label>
+								<input type='radio' state='1' title='Anwesend' name='" . $name . "' id='" . $name . "_yes' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "1" ? "checked='checked'" : "") . "/><label for='" . $name . "_yes' title='Anwesend'>Ja</label>
+								<input type='radio' state='0' title='Nicht anwesend' name='" . $name . "' id='" . $name . "_no' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "0" ? "checked='checked'" : "") . "/><label for='" . $name . "_no' title='Nicht anwesend'>Nein</label>
 								<button type='button' title='Auswahl entfernen' onclick='attendancelist_changeState(this);'><img src='/files/images/formfields/trash.png' alt='X'/></button>
 							</div>
 							<div class='print-only'>" . $statusText . "</div>

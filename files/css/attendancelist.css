@@ -6,8 +6,12 @@
 
 .attendancelist_title
 {
-	width: 200px;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	overflow: hidden;
+}
+
+#attendancelist_table
+{
+	table-layout: fixed;
 }
