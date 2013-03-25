@@ -27,21 +27,6 @@ body
 	font-size: 14px;
 }
 
-.center
-{
-	text-align: center;
-}
-
-.clear
-{
-	clear: both;
-}
-
-.nowrap
-{
-	white-space: nowrap;
-}
-
 #background
 {
 	width: 100%;

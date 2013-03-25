@@ -159,6 +159,10 @@ if ($dates)
 		{
 			$rowClasses[] = "table_highlight";
 		}
+		if ($date->bold)
+		{
+			$rowClasses[] = "bold";
+		}
 		
 		$rowAttributes = array();
 		
@@ -180,7 +184,15 @@ if ($dates)
 			<tr " . implode(" ", $rowAttributes) . ">
 				<td number='" . $date->startDate . "' class='nowrap'>" . implode("<br />", $startDateTime) . "</td>
 				<td number='" . $date->endDate . "' class='nowrap'>" . implode("<br />", $endDateTime) . "</td>
-				<td>" . $date->title . "</td>
+				<td>
+					" . $date->title . "
+		";
+		if ($date->description)
+		{
+			echo "<p>" . formatText($date->description) . "</p>";
+		}
+		echo "
+				</td>
 				<td>" . $location . "</td>
 			</tr>
 		";

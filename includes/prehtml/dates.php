@@ -51,6 +51,7 @@ if ($calendar == "internal.ics" or $calendar == "public.ics")
 		}
 		$event->setEnd(date("Y", $date->endDate), date("m", $date->endDate), date("d", $date->endDate), false, true, "Europe/Berlin", $useEndTime, date("H", $date->endDate), date("i", $date->endDate), date("s", $date->endDate));
 		$event->setShortDescription($date->title);
+		$event->setLongDescription($date->description);
 		$event->setLocation($date->location->name);
 		if ($date->location->latitude and $date->location->longitude)
 		{
