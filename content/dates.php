@@ -127,8 +127,8 @@ if ($dates)
 		<table id='dates_table' class='table tablesorter {sortlist: [[0,0]]}'>
 			<thead>
 				<tr>
-					<th class='{sorter: \"number-attribute\"}'>Von</th>
-					<th>Bis</th>
+					<th class='{sorter: \"number-attribute\"}'>Datum</th>
+					<th class='{sorter: \"number-attribute\"}'>Zeit</th>
 					<th>Veranstaltung</th>
 					<th>Ort</th>
 				</tr>
@@ -138,27 +138,26 @@ if ($dates)
 	foreach ($dates as $date)
 	{
 		// Start date/time
-		$startDate = date("d.m.Y", $date->startDate);
-		$startDateTime = array(getWeekdayName(date("N", $date->startDate), false) . " " . $startDate);
-		$startTime = date("H:i", $date->startDate);
-		if ($startTime != "00:00")
-		{
-			$startDateTime[] = $startTime . " Uhr";
-		}
-		
-		// End date/time
-		$endDateTime = array();
+		$dateString = getWeekdayName(date("N", $date->startDate), false) . " " . date("d.m.Y", $date->startDate);
+		$timeString = date("H:i", $date->startDate);
 		if ($date->endDate)
 		{
-			$endDate = date("d.m.Y", $date->endDate);
-			if ($startDate != $endDate)
-			{
-				$endDateTime[] = getWeekdayName(date("N", $date->endDate), false) . " " . $endDate;
-			}
 			$endTime = date("H:i", $date->endDate);
-			if ($endTime != "00:00")
+		}
+		else
+		{
+			$endTime = "";
+		}
+		if ($timeString == "00:00")
+		{
+			$timeString = "";
+			$endTime = "";
+		}
+		else
+		{
+			if ($endTime and $endTime != "00:00")
 			{
-				$endDateTime[] = $endTime . " Uhr";
+				$timeString .= " - " . $endTime;
 			}
 		}
 		
@@ -190,8 +189,8 @@ if ($dates)
 		
 		echo "
 			<tr " . implode(" ", $rowAttributes) . ">
-				<td number='" . $date->startDate . "' class='nowrap'>" . implode("<br />", $startDateTime) . "</td>
-				<td number='" . $date->endDate . "' class='nowrap'>" . implode("<br />", $endDateTime) . "</td>
+				<td number='" . $date->startDate . "' class='nowrap'>" . $dateString . "</td>
+				<td number='" . $date->startDate . "' class='nowrap'>" . $timeString. "</td>
 				<td>
 					" . $date->title . "
 		";
