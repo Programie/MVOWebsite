@@ -129,13 +129,13 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 			
 			<form id='protocols_upload_form' action='/internalarea/protocols' method='post' enctype='multipart/form-data' onsubmit='protocols_confirmUpload(); return false;'>
 				<label for='protocols_upload_date'>Datum:</label>
-				<input type='text' class='date' id='protocols_upload_date' name='protocols_upload_date'/>
+				<input type='text' class='date' id='protocols_upload_date' name='protocols_upload_date' placeholder='TT.MM.JJJJ'/>
 				
 				<label for='protocols_upload_file'>Datei:</label>
 				<input type='file' id='protocols_upload_file' name='protocols_upload_file'/>
 				
 				<label for='protocols_upload_name'>Name:</label>
-				<input type='text' id='protocols_upload_name' name='protocols_upload_name'/>
+				<input type='text' id='protocols_upload_name' name='protocols_upload_name' placeholder='Titel oder Beschreibung' title='Ein beliebiger Titel oder eine Beschreibung von diesem Protokoll (Optional)'/>
 				
 				<label for='protocols_upload_groups'>Gruppen:</label>
 				<div id='protocols_upload_groups'>
@@ -222,6 +222,7 @@ else
 <script type="text/javascript">
 	$("#protocols_upload_confirm").dialog(
 	{
+		closeText : "Schlie&szlig;en",
 		resizable : false,
 		modal : true,
 		width : "auto",

@@ -30,6 +30,7 @@ $(document).ready(function()
 	});
 	
 	// jQuery UI
+	$("button, input[type=submit]").button();
 	$(".date").datepicker(
 	{
 		changeMonth : true,
@@ -43,6 +44,10 @@ $(document).ready(function()
 		showAnim : "slideDown"
 	});
 	$(".menu").menu();
+	$(document).tooltip(
+	{
+		track : true
+	});
 	
 	// Tablesorter
 	$("table.table").tablesorter(

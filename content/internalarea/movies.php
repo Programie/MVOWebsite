@@ -268,6 +268,7 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 		
 		$("#movies_confirm").dialog(
 		{
+			closeText : "Schlie&szlig;en",
 			resizable : false,
 			modal : true,
 			width : "auto",

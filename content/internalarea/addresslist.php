@@ -184,6 +184,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 <script type="text/javascript">
 	$("#addresslist_sendmessage_confirm").dialog(
 	{
+		closeText : "Schlie&szlig;en",
 		resizable : false,
 		modal : true,
 		width : "auto",

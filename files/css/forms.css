@@ -24,6 +24,15 @@ form input[type="file"], form input[type="password"], form input[type="text"], f
 	margin: 15px;
 }
 
+form select
+{
+	padding: 5px;
+	font-size: 16px;
+	border-radius: 5px;
+	background-color: #eee;
+	border: 1px solid #ccc;
+}
+
 input[type="password"], input[type="text"]
 {
 	padding: 10px;

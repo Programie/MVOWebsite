@@ -194,6 +194,7 @@ if (isset($_POST["writemessage_confirmed"]))
 	
 	$("#writemessage_confirm").dialog(
 	{
+		closeText : "Schlie&szlig;en",
 		resizable : false,
 		modal : true,
 		width : "auto",
