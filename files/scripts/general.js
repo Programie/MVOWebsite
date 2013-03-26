@@ -69,11 +69,6 @@ $(window).scroll(function()
 	}
 });
 
-$(window).resize(function()
-{
-	//fixSize();
-});
-
 $.tablesorter.addParser(
 {
 	id : "number-attribute",
@@ -101,17 +96,3 @@ $.tablesorter.addParser(
 	},
 	type : "text"
 });
-
-function fixSize()
-{
-	$("#backgroundoverlay").css("top", (document.getElementById("backgroundimage").offsetHeight - 500) + "px");
-	$("#backgroundwrapper").css("height", document.getElementById("container").offsetHeight + "px");
-	if (document.getElementById("container").offsetHeight > document.getElementById("backgroundimage").offsetHeight)
-	{
-		document.getElementById("backgroundoverlay").style.display = "block";
-	}
-	else
-	{
-		document.getElementById("backgroundoverlay").style.display = "none";
-	}
-}

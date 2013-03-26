@@ -16,7 +16,15 @@ switch (Constants::$pagePath[1])
 		exit;
 	case "script.js":
 		header("Content-Type: text/javascript");
-		echo "SCRIPT";
+		$files = explode(" ", Constants::$pagePath[2]);
+		foreach ($files as $file)
+		{
+			$file = ROOT_PATH . "/files/scripts/" . basename($file) . ".js";
+			if (is_file($file))
+			{
+				readfile($file);
+			}
+		}
 		exit;
 }
 ?>
