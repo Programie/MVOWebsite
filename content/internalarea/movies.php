@@ -179,7 +179,7 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 	</thead>
 	<tbody>
 		<?php
-		$query = Constants::$pdo->query("SELECT `movies`.`eventYear`, `movies`.`categoryId`, `moviecategories`.`title`, `movies`.`id`, `movies`.`discs`, `movies`.`price`, `movies`.`borrowed`, `movies`.`comment`, `movietypes`.`name` AS `discType`, `movietypes`.`title` AS `discTypeTitle` FROM `movies` LEFT JOIN `moviecategories` ON `moviecategories`.`id` = `movies`.`categoryId` LEFT JOIN `movietypes` ON `movietypes`.`id` = `movies`.`discTypeId`");
+		$query = Constants::$pdo->query("SELECT `movies`.`eventYear`, `movies`.`categoryId`, `moviecategories`.`title`, `movies`.`id`, `movies`.`discs`, `movies`.`price`, `movies`.`borrowable`, `movies`.`borrowed`, `movies`.`comment`, `movietypes`.`name` AS `discType`, `movietypes`.`title` AS `discTypeTitle` FROM `movies` LEFT JOIN `moviecategories` ON `moviecategories`.`id` = `movies`.`categoryId` LEFT JOIN `movietypes` ON `movietypes`.`id` = `movies`.`discTypeId`");
 		while ($row = $query->fetch())
 		{
 			$coverImage = "/files/images/movies/covers/" . $row->eventYear . "-" . $row->categoryId . ".jpg";
@@ -212,11 +212,20 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 					<td number='" . $row->categoryId . "'>" . $row->title . "</td>
 					<td number='" . $row->eventYear . "'>" . $row->eventYear . "</td>
 					<td number='" . $row->price . "'>" . $price . "</td>
-					<td number='" . $row->borrowed . "' class='" . ($row->borrowed ? "movies_unavailable" : "movies_available") . "' title='" . ($row->borrowed ? "Derzeit ausgeliehen" : "Verf&uuml;gbar") . "'></td>
+					<td number='" . $row->borrowed . "' class='" . ((!$row->borrowable || $row->borrowed) ? "movies_unavailable" : "movies_available") . "' title='" . ($row->borrowable ? ($row->borrowed ? "Derzeit ausgeliehen" : "Verf&uuml;gbar") : "Ausleihen nicht m&ouml;glich") . "'></td>
 					<td>" . $row->comment . "</td>
 					<td>
 						<button type='button' onclick='movies_confirm(this, true);'>Kaufen (" . $price . ")</button>
-						<button type='button' onclick='movies_confirm(this, false);' " . ($row->borrowed ? "disabled" : "") . ">Ausleihen (Kostenlos)</button>
+			";
+			if ($row->borrowable)
+			{
+				echo "<button type='button' onclick='movies_confirm(this, false);' " . ($row->borrowed ? "disabled" : "") . ">Ausleihen (Kostenlos)</button>";
+			}
+			else
+			{
+				echo "<button type='button' disabled>Ausleihen nicht m&ouml;glich</button>";
+			}
+			echo "
 					</td>
 				</tr>
 			";
