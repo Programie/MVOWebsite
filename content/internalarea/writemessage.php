@@ -3,154 +3,170 @@
 <?php
 if (isset($_POST["writemessage_confirmed"]))
 {
-	$showError = true;
+	$error = "Beim Senden der Nachricht ist ein Fehler aufgetreten!";
 	if ($_POST["writemessage_confirmed"] and $_POST["writemessage_text"])
 	{
 		$userData = Constants::$accountManager->getUserData();
 		if ($_POST["writemessage_sendtoken"] == $userData->sendToken)
 		{
-			$send = true;
-			
-			$groups = array();
-			$mailRecipients = array();
-			
-			$permissionQuery = Constants::$pdo->prepare("SELECT `userId` FROM `permissions` WHERE `permission` = :permission");
-			$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
-			
-			foreach ($_POST as $field => $value)
+			$date = explode(".", $_POST["writemessage_validtill_date"]);
+			if (!$_POST["writemessage_validtill_enabled"] or checkdate($date[1], $date[0], $date[2]))
 			{
-				if (substr($field, 0, 19) == "writemessage_group_" and $value)
+				$send = true;
+				
+				$groups = array();
+				$mailRecipients = array();
+				
+				$permissionQuery = Constants::$pdo->prepare("SELECT `userId` FROM `permissions` WHERE `permission` = :permission");
+				$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
+				
+				foreach ($_POST as $field => $value)
 				{
-					$group = substr($field, 19);
-					
-					$groups[] = $group;
-					
-					$permissionQuery->execute(array
-					(
-						":permission" => "groups." . $group
-					));
-					while ($permissionRow = $permissionQuery->fetch())
+					if (substr($field, 0, 19) == "writemessage_group_" and $value)
 					{
-						$userQuery->execute(array
+						$group = substr($field, 19);
+						
+						$groups[] = $group;
+						
+						$permissionQuery->execute(array
 						(
-							":id" => $permissionRow->userId
+							":permission" => "groups." . $group
 						));
-						$userRow = $userQuery->fetch();
-						$mailRecipients[$userRow->email] = $userRow->firstName . " " . $userRow->lastName;
+						while ($permissionRow = $permissionQuery->fetch())
+						{
+							$userQuery->execute(array
+							(
+								":id" => $permissionRow->userId
+							));
+							$userRow = $userQuery->fetch();
+							$mailRecipients[$userRow->email] = $userRow->firstName . " " . $userRow->lastName;
+						}
 					}
 				}
-			}
-			
-			$uploadedFiles = array();
-			foreach ($_FILES as $fileData)
-			{
-				$uploadError = false;
-				if ($fileData["error"] == UPLOAD_ERR_OK)
+				
+				$uploadedFiles = array();
+				foreach ($_FILES as $fileData)
 				{
-					$fileName = md5_file($fileData["tmp_name"]);
-					if (move_uploaded_file($fileData["tmp_name"], UPLOAD_PATH . "/" . $fileName))
+					$uploadError = false;
+					if ($fileData["error"] == UPLOAD_ERR_OK)
 					{
-						$uploadedFiles[$fileName] = $fileData["name"];
+						$fileName = md5_file($fileData["tmp_name"]);
+						if (move_uploaded_file($fileData["tmp_name"], UPLOAD_PATH . "/" . $fileName))
+						{
+							$uploadedFiles[$fileName] = $fileData["name"];
+						}
+						else
+						{
+							$uploadError = true;
+						}
 					}
 					else
 					{
-						$uploadError = true;
+						if ($fileData["error"] != UPLOAD_ERR_NO_FILE)// One file field is always empty
+						{
+							$uploadError = true;
+						}
 					}
-				}
-				else
-				{
-					if ($fileData["error"] != UPLOAD_ERR_NO_FILE)// One file field is always empty
+					if ($uploadError)
 					{
-						$uploadError = true;
+						$error = "Beim Hochladen der Datei <b>" . $fileData["name"] . "</b> ist ein Fehler aufgetreten!";
+						$send = false;
+						break;
 					}
 				}
-				if ($uploadError)
-				{
-					echo "<div class='error'>Beim Hochladen der Datei <b>" . $fileData["name"] . "</b> ist ein Fehler aufgetreten!</div>";
-					$showError = false;
-					$send = false;
-					break;
-				}
-			}
-			
-			if (!empty($mailRecipients) and $send)
-			{
-				$ccMail = null;
-				if ($_POST["writemessage_sendcopy"])
-				{
-					$ccMail = array($userData->email => $userData->firstName . " " . $userData->lastName);
-				}
 				
-				$text = $_POST["writemessage_text"];
-				
-				$attachedFiles = array();
-				$addFileQuery = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
-				foreach ($uploadedFiles as $name => $title)
+				if (!empty($mailRecipients) and $send)
 				{
-					$addFileQuery->execute(array
-					(
-						":name" => $name,
-						":title" => $title
-					));
-					$attachedFiles[$name] = Constants::$pdo->lastInsertId();
-				}
-				
-				$query = Constants::$pdo->prepare("INSERT INTO `messages` (`date`, `targetGroups`, `userId`, `text`, `attachedFiles`) VALUES(NOW(), :targetGroups, :userId, :text, :attachedFiles)");
-				$query->execute(array
-				(
-					":targetGroups" => implode(",", $groups),
-					":userId" => Constants::$accountManager->getUserId(),
-					":text" => $text,
-					":attachedFiles" => implode(",", $attachedFiles)
-				));
-				$messageId = Constants::$pdo->lastInsertId();
-				
-				$attachmentsText = array();
-				if (!empty($uploadedFiles))
-				{
-					$attachmentsText[] = "<p><b>Anh&auml;nge:</b></p>";
-					$attachmentsText[] = "<ul>";
+					$ccMail = null;
+					if ($_POST["writemessage_sendcopy"])
+					{
+						$ccMail = array($userData->email => $userData->firstName . " " . $userData->lastName);
+					}
+					
+					$text = $_POST["writemessage_text"];
+					
+					$attachedFiles = array();
+					$addFileQuery = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
 					foreach ($uploadedFiles as $name => $title)
 					{
-						$attachmentsText[] = "<li><a href='" . BASE_URL . "/uploads/" . $attachedFiles[$name] . "/" . $name . "'>" . $title . "</a></li>";
+						$addFileQuery->execute(array
+						(
+							":name" => $name,
+							":title" => $title
+						));
+						$attachedFiles[$name] = Constants::$pdo->lastInsertId();
 					}
-					$attachmentsText[] = "</ul>";
+					
+					if ($_POST["writemessage_validtill_enabled"])
+					{
+						$validTill = $date[2] . "-" . $date[1] . "-" . $date[0];
+					}
+					else
+					{
+						$validTill = null;
+					}
+					
+					$query = Constants::$pdo->prepare("INSERT INTO `messages` (`date`, `validTill`, `targetGroups`, `userId`, `text`, `attachedFiles`) VALUES(NOW(), :validTill, :targetGroups, :userId, :text, :attachedFiles)");
+					$query->execute(array
+					(
+						":validTill" => $validTill,
+						":targetGroups" => implode(",", $groups),
+						":userId" => Constants::$accountManager->getUserId(),
+						":text" => $text,
+						":attachedFiles" => implode(",", $attachedFiles)
+					));
+					$messageId = Constants::$pdo->lastInsertId();
+					
+					$attachmentsText = array();
+					if (!empty($uploadedFiles))
+					{
+						$attachmentsText[] = "<p><b>Anh&auml;nge:</b></p>";
+						$attachmentsText[] = "<ul>";
+						foreach ($uploadedFiles as $name => $title)
+						{
+							$attachmentsText[] = "<li><a href='" . BASE_URL . "/uploads/" . $attachedFiles[$name] . "/" . $name . "'>" . $title . "</a></li>";
+						}
+						$attachmentsText[] = "</ul>";
+					}
+					
+					$replacements = array
+					(
+						"FIRSTNAME" => $userData->firstName,
+						"LASTNAME" => $userData->lastName,
+						"CONTENT" => formatText($text),
+						"ATTACHMENTS" => implode("\n", $attachmentsText),
+						"URL" => BASE_URL . "/internalarea/messages/" . $messageId
+					);
+					$mail = new Mail("Neue Nachricht im Internen Bereich", $replacements);
+					$mail->setTemplate("writemessage");
+					$mail->setTo($mailRecipients);
+					$mail->setCc($ccMail);
+					$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
+					if ($mail->send())
+					{
+						echo "
+							<div class='ok'>
+								<p>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</p>
+								" . implode("\n", $attachmentsText) . "
+							</div>
+						";
+						$error = "";
+					}
 				}
-				
-				$replacements = array
-				(
-					"FIRSTNAME" => $userData->firstName,
-					"LASTNAME" => $userData->lastName,
-					"CONTENT" => formatText($text),
-					"ATTACHMENTS" => implode("\n", $attachmentsText),
-					"URL" => BASE_URL . "/internalarea/messages/" . $messageId
-				);
-				$mail = new Mail("Neue Nachricht im Internen Bereich", $replacements);
-				$mail->setTemplate("writemessage");
-				$mail->setTo($mailRecipients);
-				$mail->setCc($ccMail);
-				$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
-				if ($mail->send())
-				{
-					echo "
-						<div class='ok'>
-							<p>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</p>
-							" . implode("\n", $attachmentsText) . "
-						</div>
-					";
-					$showError = false;
-				}
+			}
+			else
+			{
+				$error = "Ung&uuml;ltiges Datum!";
 			}
 		}
 		else
 		{
-			echo "<div class='error'>Es wurde versucht dieselbe Email erneut zu versenden!</div>";
-			$showError = false;
+			$error = "Es wurde versucht dieselbe Email erneut zu versenden!";
 		}
 	}
-	if ($showError)
+	if ($error)
 	{
-		echo "<div class='error'>Beim Senden der Nachricht ist ein Fehler aufgetreten!</div>";
+		echo "<div class='error'>" . $error . "</div>";
 	}
 }
 ?>
@@ -165,6 +181,12 @@ if (isset($_POST["writemessage_confirmed"]))
 			echo "<input type='checkbox' id='writemessage_group_" . $row->name . "' name='writemessage_group_" . $row->name . "' value='1'/><label for='writemessage_group_" . $row->name . "'>" . $row->title . "</label>";
 		}
 		?>
+	</fieldset>
+	
+	<fieldset id="writemessage_validtill">
+		<legend>G&uuml;ltigkeit</legend>
+		<input type="checkbox" id="writemessage_validtill_enabled" name="writemessage_validtill_enabled" value="1"/><label for="writemessage_validtill_enabled">G&uuml;ltig bis:</label>
+		<input type="text" class="date" id="writemessage_validtill_date" name="writemessage_validtill_date" placeholder="TT.MM.JJJJ"/>
 	</fieldset>
 	
 	<textarea id="writemessage_text" name="writemessage_text" rows="15" cols="15"></textarea>
@@ -258,27 +280,34 @@ if (isset($_POST["writemessage_confirmed"]))
 		
 		if (groups)
 		{
-			if (document.getElementById("writemessage_text").value)
+			if (!$("#writemessage_validtill_enabled").is(":checked") || $("#writemessage_validtill_date").val())
 			{
-				$("#writemessage_confirm_text1").html("Soll die Nachricht jetzt an die folgenden " + groups + " Gruppen gesendet werden?");
-				
-				var attachments = 0;
-				$("#writemessage_confirm_attachments").html("");
-				$(".writemessage_attachments_file").each(function()
+				if ($("#writemessage_text").val())
 				{
-					if ($(this)[0].files.length)
+					$("#writemessage_confirm_text1").html("Soll die Nachricht jetzt an die folgenden " + groups + " Gruppen gesendet werden?");
+					
+					var attachments = 0;
+					$("#writemessage_confirm_attachments").html("");
+					$(".writemessage_attachments_file").each(function()
 					{
-						attachments++;
-						$("#writemessage_confirm_attachments").append("<li>" + $(this)[0].files[0].name + "</li>");
-					}
-				});
-				attachments ? $("#writemessage_confirm_text2").show() : $("#writemessage_confirm_text2").hide();
-				
-				$("#writemessage_confirm").dialog("open");
+						if ($(this)[0].files.length)
+						{
+							attachments++;
+							$("#writemessage_confirm_attachments").append("<li>" + $(this)[0].files[0].name + "</li>");
+						}
+					});
+					attachments ? $("#writemessage_confirm_text2").show() : $("#writemessage_confirm_text2").hide();
+					
+					$("#writemessage_confirm").dialog("open");
+				}
+				else
+				{
+					alert("Kein Text eingegeben!");
+				}
 			}
 			else
 			{
-				alert("Kein Text eingegeben!");
+				alert(unescape("Kein Datum ausgew%E4hlt!"));
 			}
 		}
 		else

@@ -6,10 +6,10 @@ class MessageManager
 		$uploadedFileQuery = Constants::$pdo->prepare("SELECT `name`, `title` FROM `uploads` WHERE `id` = :id");
 		$userGroupsQuery = Constants::$pdo->prepare("SELECT `title` FROM `usergroups` WHERE `name` = :name");
 		
-		$commonSql = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages` LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
+		$commonSql = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`validTill`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages` LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
 		if ($id == null or $id == -1)
 		{
-			$query = Constants::$pdo->query($commonSql . " ORDER BY `messages`.`id` DESC");
+			$query = Constants::$pdo->query($commonSql . " WHERE `validTill` IS NULL OR `validTill` >= CURDATE() ORDER BY `messages`.`id` DESC");
 		}
 		else
 		{
@@ -21,9 +21,16 @@ class MessageManager
 		}
 		
 		$messageCount = 0;
+		$expired = false;
 		
 		while ($row = $query->fetch())
 		{
+			if ($id > 0 and strtotime($row->validTill . " 23:59:59") < time())
+			{
+				$expired = true;
+				break;
+			}
+			
 			$targetGroups = explode(",", $row->targetGroups);
 			$attachedFiles = explode(",", $row->attachedFiles);
 			
@@ -58,9 +65,15 @@ class MessageManager
 				<div class='messages_header'>
 					<img class='messages_header_avatar' src='" . $avatarFile . "'/>
 					<div class='messages_header_container'>
-						<div class='messages_header_sender'><b>Erstellt von:</b> " . $row->firstName . " " . $row->lastName . " [" . $row->email . "]</div>
-						<div class='messages_header_date'><b>Zeit:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>
-						<div class='messages_header_target'><b>Gesendet an:</b> " . implode(", ", $targets) . "</div>
+						<div><b>Erstellt von:</b> " . $row->firstName . " " . $row->lastName . " [" . $row->email . "]</div>
+						<div><b>Zeit:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>
+			";
+			if ($row->validTill)
+			{
+				echo "<div><b>G&uuml;ltig bis:</b> " . date("d.m.Y", strtotime($row->validTill)) . "</div>";
+			}
+			echo "
+						<div><b>Gesendet an:</b> " . implode(", ", $targets) . "</div>
 					</div>
 				</div>
 			";
@@ -113,7 +126,14 @@ class MessageManager
 		
 		if (!$messageCount)
 		{
-			echo "<div class='error'>Keine Nachricht gefunden!</div>";
+			if ($expired)
+			{
+				echo "<div class='error'>Die G&uuml;ltigkeit der Nachricht ist abgelaufen!</div>";
+			}
+			else
+			{
+				echo "<div class='error'>Keine Nachricht gefunden!</div>";
+			}
 			return false;
 		}
 		
