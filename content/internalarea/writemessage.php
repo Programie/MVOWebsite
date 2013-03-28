@@ -39,7 +39,10 @@ if (isset($_POST["writemessage_confirmed"]))
 								":id" => $permissionRow->userId
 							));
 							$userRow = $userQuery->fetch();
-							$mailRecipients[$userRow->email] = $userRow->firstName . " " . $userRow->lastName;
+							if ($userRow->email)
+							{
+								$mailRecipients[$userRow->email] = $userRow->firstName . " " . $userRow->lastName;
+							}
 						}
 					}
 				}
