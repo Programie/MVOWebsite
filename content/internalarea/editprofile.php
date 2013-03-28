@@ -131,7 +131,7 @@ $userData = Constants::$accountManager->getUserData();
 								{
 									if (imagecopyresampled($croppedImage, $sourceImage, 0, 0, $x,$y, $width, $height, $width, $height))
 									{
-										$resizedImage = resizeImage($croppedImage, 640, 480);
+										$resizedImage = resizeImage($croppedImage, 600, 600);
 										if ($resizedImage)
 										{
 											if (imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userData->id . ".jpg"))
@@ -408,7 +408,7 @@ $userData = Constants::$accountManager->getUserData();
 				
 				$("#editprofile_profilepicture_preview").Jcrop(
 				{
-					aspectRatio : 3 / 4,
+					aspectRatio : 1,
 					boxWidth : 480,
 					onChange : editprofile_profilePicture_updateCoords,
 					onSelect : editprofile_profilePicture_updateCoords
