@@ -52,7 +52,7 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 			}
 		}
 		?>
-		<script type="text/javascript" src="/files/script.js/errorreport+jquery+jquery-ui+metadata+jcrop+colorbox+photobox+tablesorter+tablesorter-widgets+general?md5=<?php echo md5($md5);?>"></script>
+		<script type="text/javascript" src="/files/script.js/errorreport+jquery+jquery-ui+metadata+jcrop+colorbox+photobox+tablesorter+tablesorter-widgets+google-analytics+general?md5=<?php echo md5($md5);?>"></script>
 	</head>
 	<body style="background-image: url(<?php echo $backgroundFile;?>);">
 		<div id="notification"></div>
