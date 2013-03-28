@@ -48,9 +48,15 @@ class MessageManager
 			{
 				echo "<a href='/internalarea/messages/" . $row->id . "' class='messages_header' title='Klicken um nur diese Nachricht anzuzeigen'>";
 			}
+			$profilePicturesPath = "/files/profilepictures";
+			$avatarFile = $profilePicturesPath . "/" . $row->userId . ".jpg";
+			if (!file_exists(ROOT_PATH . $avatarFile))
+			{
+				$avatarFile = $profilePicturesPath . "/default.png";
+			}
 			echo "
 				<div class='messages_header'>
-					<img class='messages_header_avatar' src='/files/profilepictures/" . $row->userId . ".jpg'/>
+					<img class='messages_header_avatar' src='" . $avatarFile . "'/>
 					<div class='messages_header_container'>
 						<div class='messages_header_sender'><b>Erstellt von:</b> " . $row->firstName . " " . $row->lastName . " [" . $row->email . "]</div>
 						<div class='messages_header_date'><b>Zeit:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>

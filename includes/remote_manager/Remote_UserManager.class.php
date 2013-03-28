@@ -35,7 +35,7 @@ class Remote_UserManager
 	
 	public function setPermissions($params)
 	{
-		$query = Constants::$pdo->query("TRUNCATE TABLE `permissions`");
+		Constants::$pdo->query("TRUNCATE TABLE `permissions`");
 		
 		$foundPermissions = false;
 		

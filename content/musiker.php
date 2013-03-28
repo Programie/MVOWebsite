@@ -39,12 +39,17 @@ foreach ($groups as $groupRow)
 			));
 			if (!$checkHide->rowCount())
 			{
-				$file = "/files/profilepictures/" . $userRow->id . ".jpg";
-				$url = $file . "?md5=" . @md5_file(ROOT_PATH . $file);
+				$profilePicturesPath = "/files/profilepictures";
+				$avatarFile = $profilePicturesPath . "/" . $userRow->id . ".jpg";
+				if (!file_exists(ROOT_PATH . $avatarFile))
+				{
+					$avatarFile = $profilePicturesPath . "/default.png";
+				}
+				$avatarUrl = $avatarFile . "?md5=" . @md5_file(ROOT_PATH . $avatarFile);
 				echo "
 					<li>
-						<a href='" . $url . "' caption='" . $userRow->firstName . " " . $userRow->lastName . "'>
-							<img class='profilepicture' src='" . $url . "' alt='" . $userRow->firstName . " " . $userRow->lastName . "'/>
+						<a href='" . $avatarUrl . "' caption='" . $userRow->firstName . " " . $userRow->lastName . "'>
+							<img class='profilepicture' src='" . $avatarUrl . "' alt='" . $userRow->firstName . " " . $userRow->lastName . "'/>
 						</a>
 					</li>
 				";
