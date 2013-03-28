@@ -37,6 +37,8 @@ class Remote_UserManager
 	{
 		$query = Constants::$pdo->query("TRUNCATE TABLE `permissions`");
 		
+		$foundPermissions = false;
+		
 		$query = Constants::$pdo->prepare("INSERT INTO `permissions` (`userId`, `permission`) VALUES(:userId, :permission)");
 		foreach ($params->users as $user)
 		{
@@ -47,8 +49,11 @@ class Remote_UserManager
 					":userId" => $user->id,
 					":permission" => $permission
 				));
+				$foundPermissions = true;
 			}
 		}
+		
+		return $foundPermissions;
 	}
 }
 ?>
