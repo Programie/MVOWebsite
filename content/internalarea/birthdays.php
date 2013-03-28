@@ -1,37 +1,95 @@
-<h1>Geburtstage</h1>
-
 <?php
+$row = new StdClass;
+$row->name = "all";
+$row->title = "Alle";
+$row->active = true;
+$groups = array($row->name => $row);
+
+$activeGroup = "all";
+
+$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups`");
+while ($row = $query->fetch())
+{
+	if ($row->name == Constants::$pagePath[2])
+	{
+		$row->active = true;
+		$groups["all"]->active = false;
+		$activeGroup = $row->name;
+	}
+	$groups[$row->name] = $row;
+}
+
 $users = array();
 
 $now = new DateTime;
 
 $nextBirthDay = null;
 
-$query = Constants::$pdo->query("SELECT `firstName`, `lastName`, `birthDate` FROM `users`");
+$permissionCheckQuery = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
+$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `birthDate` FROM `users`");
 while ($row = $query->fetch())
 {
-	$birthDate = new DateTime($row->birthDate);
-	$row->age = $now->diff($birthDate)->y;
-	if (date("m-d", time()) == $birthDate->format("m-d"))
+	if ($activeGroup == "all")
 	{
-		$addYear = 0;
+		$show = true;
 	}
 	else
 	{
-		$addYear = 1;
+		$permissionCheckQuery->execute(array
+		(
+			":userId" => $row->id,
+			":permission" => "groups." . $activeGroup
+		));
+		$show = $permissionCheckQuery->rowCount();
 	}
-	$birthDayInterval = new DateInterval("P" . ($row->age + $addYear) . "Y");
-	$birthDate = $birthDate->add($birthDayInterval);
-	$row->nextBirthDay = $birthDate->getTimestamp();
-	
-	if ($nextBirthDay == null or $row->nextBirthDay < $nextBirthDay)
+	if ($show)
 	{
-		$nextBirthDay = $row->nextBirthDay;
+		$birthDate = new DateTime($row->birthDate);
+		$row->age = $now->diff($birthDate)->y;
+		if (date("m-d", time()) == $birthDate->format("m-d"))
+		{
+			$addYear = 0;
+		}
+		else
+		{
+			$addYear = 1;
+		}
+		$birthDayInterval = new DateInterval("P" . ($row->age + $addYear) . "Y");
+		$birthDate = $birthDate->add($birthDayInterval);
+		$row->nextBirthDay = $birthDate->getTimestamp();
+		
+		if ($nextBirthDay == null or $row->nextBirthDay < $nextBirthDay)
+		{
+			$nextBirthDay = $row->nextBirthDay;
+		}
+		
+		$users[] = $row;
 	}
-	
-	$users[] = $row;
 }
+
+$title = "Geburtstage";
+
+if ($activeGroup != "all")
+{
+	$title .= " - " . $groups[$activeGroup]->title;
+}
+echo "<h1>" . $title . "</h1>";
 ?>
+
+<fieldset id="birthdays_groups">
+	<legend>Gruppen</legend>
+	<?php
+	foreach ($groups as $name => $row)
+	{
+		$buttonStyle = "";
+		if ($row->active)
+		{
+			$buttonStyle = "style='font-weight: bold;'";
+		}
+		echo "<a href='/internalarea/birthdays/" . $name . "'><button type='button' " . $buttonStyle . ">" . $row->title . "</button></a>";
+	}
+	?>
+</fieldset>
 
 <table id="birthdays_table" class="table {sortlist: [[2,0]]}">
 	<thead>
