@@ -178,9 +178,11 @@ $userData = Constants::$accountManager->getUserData();
 				<input type="file" id="editprofile_profilepicture_file" name="editprofile_profilepicture_file" onchange="editprofile_profilePicture_FileSelectHandler();"/>
 				
 				<div id="editprofile_profilepicture_editarea">
+					<p>W&auml;hle den Bereich aus, welchen du als Profilbild verwenden m&ouml;chtest.</p>
 					<img id="editprofile_profilepicture_preview"/>
-					<input type="submit" value="Hochladen"/>
 				</div>
+				
+				<input id="editprofile_profilepicture_upload" type="submit" value="Hochladen"/>
 			</form>
 		</fieldset>
 	</div>
@@ -399,7 +401,7 @@ $userData = Constants::$accountManager->getUserData();
 			previewImage.src = event.target.result;
 			previewImage.onload = function()
 			{
-				$("#editprofile_profilepicture_editarea").fadeIn(500);
+				$("#editprofile_profilepicture_editarea").fadeIn(1000);
 				
 				if (typeof(editprofile_profilePicture_jcrop) != "undefined")
 				{
@@ -410,8 +412,9 @@ $userData = Constants::$accountManager->getUserData();
 				{
 					aspectRatio : 1,
 					boxWidth : 480,
-					onChange : editprofile_profilePicture_updateCoords,
-					onSelect : editprofile_profilePicture_updateCoords
+					minSize : [200, 200],
+					onRelease : editprofile_profilePicture_onRelease,
+					onSelect : editprofile_profilePicture_onSelect
 				}, function()
 				{
 					editprofile_profilePicture_jcrop = this;
@@ -421,11 +424,18 @@ $userData = Constants::$accountManager->getUserData();
 		reader.readAsDataURL(file);
 	}
 	
-	function editprofile_profilePicture_updateCoords(originalCoords)
+	function editprofile_profilePicture_onRelease()
 	{
-		document.getElementById("editprofile_profilepicture_x").value = originalCoords.x;
-		document.getElementById("editprofile_profilepicture_y").value = originalCoords.y;
-		document.getElementById("editprofile_profilepicture_width").value = originalCoords.w;
-		document.getElementById("editprofile_profilepicture_height").value = originalCoords.h;
+		$("#editprofile_profilepicture_upload").fadeOut(1000);
+	}
+	
+	function editprofile_profilePicture_onSelect(coords)
+	{
+		$("#editprofile_profilepicture_x").val(coords.x);
+		$("#editprofile_profilepicture_y").val(coords.y);
+		$("#editprofile_profilepicture_width").val(coords.w);
+		$("#editprofile_profilepicture_height").val(coords.h);
+		
+		$("#editprofile_profilepicture_upload").fadeIn(1000);
 	}
 </script>
