@@ -96,44 +96,51 @@ if ($_POST["notedirectory_searchstring"])
 }
 else
 {
-	if (Constants::$pagePath[2] == "all")
+	if (Constants::$pagePath[2])
 	{
-		$query = Constants::$pdo->query("SELECT `notedirectory_titles`.`id` AS `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`");
-	}
-	else
-	{
-		$query = Constants::$pdo->prepare("SELECT `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_programtitles` LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId` WHERE `programId` = :programId");
-		$query->execute(array
-		(
-			":programId" => Constants::$pagePath[2]
-		));
-	}
-	
-	if ($query->rowCount())
-	{
-		$titles = $query->fetchAll();
 		if (Constants::$pagePath[2] == "all")
 		{
-			$columns = array
-			(
-				"title" => "Titel",
-				"composer" => "Komponist",
-				"arranger" => "Bearbeiter",
-				"publisher" => "Verleger"
-			);
+			$query = Constants::$pdo->query("SELECT `notedirectory_titles`.`id` AS `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`");
 		}
 		else
 		{
-			$columns = array
+			$query = Constants::$pdo->prepare("SELECT `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_programtitles` LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId` WHERE `programId` = :programId");
+			$query->execute(array
 			(
-				"number" => "Nummer",
-				"title" => "Titel",
-				"composer" => "Komponist",
-				"arranger" => "Bearbeiter",
-				"publisher" => "Verleger"
-			);
+				":programId" => Constants::$pagePath[2]
+			));
 		}
-		new NoteDirectory($columns, $titles, $showInGroups);
+		
+		if ($query->rowCount())
+		{
+			$titles = $query->fetchAll();
+			if (Constants::$pagePath[2] == "all")
+			{
+				$columns = array
+				(
+					"title" => "Titel",
+					"composer" => "Komponist",
+					"arranger" => "Bearbeiter",
+					"publisher" => "Verleger"
+				);
+			}
+			else
+			{
+				$columns = array
+				(
+					"number" => "Nummer",
+					"title" => "Titel",
+					"composer" => "Komponist",
+					"arranger" => "Bearbeiter",
+					"publisher" => "Verleger"
+				);
+			}
+			new NoteDirectory($columns, $titles, $showInGroups);
+		}
+		else
+		{
+			echo "<div class='error'>Keine Titel vorhanden!</div>";
+		}
 	}
 	else
 	{
