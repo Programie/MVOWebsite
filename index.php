@@ -14,6 +14,7 @@ require_once ROOT_PATH . "/includes/Pictures.class.php";
 require_once ROOT_PATH . "/includes/MenuBuilder.class.php";
 require_once ROOT_PATH . "/includes/AccountManager.class.php";
 require_once ROOT_PATH . "/includes/MessageManager.class.php";
+require_once ROOT_PATH . "/includes/NoteDirectory.class.php";
 
 session_start();
 

@@ -1,8 +1,9 @@
 <?php
 $title = "Notenverzeichnis";
+$showInGroups = true;
 if (Constants::$pagePath[2] and Constants::$pagePath[2] != "all")
 {
-	$query = Constants::$pdo->prepare("SELECT `title`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
+	$query = Constants::$pdo->prepare("SELECT `title`, `showInGroups`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
 	$query->execute(array
 	(
 		":id" => Constants::$pagePath[2]
@@ -11,6 +12,7 @@ if (Constants::$pagePath[2] and Constants::$pagePath[2] != "all")
 	{
 		$row = $query->fetch();
 		$title .= " - " . $row->title . " " . $row->year;
+		$showInGroups = $row->showInGroups;
 	}
 }
 echo "<h1>" . $title . "</h1>";
@@ -58,8 +60,14 @@ echo "<h1>" . $title . "</h1>";
 <?php
 if ($_POST["notedirectory_searchstring"])
 {
-	$titleQuery = Constants::$pdo->prepare("
-		SELECT `notedirectory_titles`.`id`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher`
+	$query = Constants::$pdo->prepare("
+		SELECT
+			`notedirectory_titles`.`id`,
+			`notedirectory_categories`.`title` AS `category`,
+			`notedirectory_titles`.`title`,
+			`composer`,
+			`arranger`,
+			`publisher`
 		FROM `notedirectory_titles`
 		LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`
 		WHERE
@@ -69,101 +77,22 @@ if ($_POST["notedirectory_searchstring"])
 			`notedirectory_titles`.`publisher` LIKE :searchstring OR
 			`notedirectory_categories`.`title` LIKE :searchstring
 	");
-	$titleQuery->execute(array
+	$query->execute(array
 	(
 		":searchstring" => "%" . $_POST["notedirectory_searchstring"] . "%"
 	));
 	
-	$programQuery = Constants::$pdo->prepare("
-		SELECT `year`, `title`
-		FROM `notedirectory_programtitles`
-		LEFT JOIN `notedirectory_programs` ON `notedirectory_programs`.`id` =`notedirectory_programtitles`.`programId`
-		LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`
-		WHERE `notedirectory_programtitles`.`titleId` = :titleId
-	");
+	$titles = $query->fetchAll();
 	
-	$categories = array();
-	$programs = array();
-	
-	while ($titleRow = $titleQuery->fetch())
-	{
-		$programQuery->execute(array
-		(
-			":titleId" => $titleRow->id
-		));
-		$programRow = $programQuery->fetch();
-		if ($programRow->title and $programRow->year)
-		{
-			$programs[$programRow->year][$programRow->title] = true;
-		}
-		
-		$categories[$titleRow->category][] = $titleRow;
-	}
-	
-	echo "
-		<h2>Gefundene Titel</h2>
-		<table id='notedirectory_table_titles' class='table {sortlist: [[0,0]]}'>
-			<thead>
-				<tr>
-					<th>Titel</th>
-					<th>Komponist</th>
-					<th>Bearbeiter</th>
-					<th>Verleger</th>
-				</tr>
-			</thead>
-	";
-	foreach ($categories as $category => $titles)
-	{
-		echo "
-			<tbody class='tablesorter-infoOnly'>
-				<tr>
-					<th colspan='4'>" . $category . "</th>
-				</tr>
-			</tbody>
-			<tbody>
-		";
-		foreach ($titles as $index => $row)
-		{
-			echo "
-				<tr>
-					<td>" . $row->title . "</td>
-					<td>" . $row->composer . "</td>
-					<td>" . $row->arranger . "</td>
-					<td>" . $row->publisher . "</td>
-				</tr>
-			";
-		}
-		echo "</tbody>";
-	}
-	echo "
-		</table>
-		
-		<h2>Programme welche diese Titel beinhalten</h2>
-		<table id='notedirectory_table_programs' class='table {sortlist: [[1,0][0,0]]}'>
-			<thead>
-				<tr>
-					<th>Typ</th>
-					<th>Jahr</th>
-				</tr>
-			</thead>
-			<tbody>
-	";
-	foreach ($programs as $year => $yearPrograms)
-	{
-		foreach ($yearPrograms as $title => $dummy)
-		{
-			echo "
-				<tr>
-					<td>" . $title . "</td>
-					<td>" . $year . "</td>
-				</tr>
-			";
-		}
-	}
-	echo "
-			</tbody>
-		</table>
-	";
+	echo "<h2>Gefundene Titel</h2>";
+	$columns = array
+	(
+		"title" => "Titel",
+		"composer" => "Komponist",
+		"arranger" => "Bearbeiter",
+		"publisher" => "Verleger"
+	);
+	new NoteDirectory($columns, $titles, $showInGroups);
 }
 else
 {
@@ -180,63 +109,35 @@ else
 		));
 	}
 	
-	$categories = array();
-	while ($row = $query->fetch())
+	if ($query->rowCount())
 	{
-		$categories[$row->category][] = $row;
-	}
-	
-	if (empty($categories))
-	{
-		echo "<div class='error'>Kein Programm ausgew&auml;hlt!</div>";
+		$titles = $query->fetchAll();
+		if (Constants::$pagePath[2] == "all")
+		{
+			$columns = array
+			(
+				"title" => "Titel",
+				"composer" => "Komponist",
+				"arranger" => "Bearbeiter",
+				"publisher" => "Verleger"
+			);
+		}
+		else
+		{
+			$columns = array
+			(
+				"number" => "Nummer",
+				"title" => "Titel",
+				"composer" => "Komponist",
+				"arranger" => "Bearbeiter",
+				"publisher" => "Verleger"
+			);
+		}
+		new NoteDirectory($columns, $titles, $showInGroups);
 	}
 	else
 	{
-		$headers = array("Nummer", "Titel", "Komponist", "Bearbeiter", "Verleger");
-		if (Constants::$pagePath[2] == "all")
-		{
-			array_shift($headers);
-		}
-		echo "
-			<table id='notedirectory_table_titles' class='table {sortlist: [[0,0]]}'>
-				<thead>
-					<tr>
-		";
-		foreach ($headers as $header)
-		{
-			echo "<th>" . $header . "</th>";
-		}
-		echo "
-					</tr>
-				</thead>
-		";
-		foreach ($categories as $category => $titles)
-		{
-			echo "
-				<tbody class='tablesorter-infoOnly'>
-					<tr>
-						<th colspan='" . count($headers) . "'>" . $category . "</th>
-					</tr>
-				</tbody>
-				<tbody>
-			";
-			foreach ($titles as $index => $row)
-			{
-				echo "<tr>";
-				$cells = array($row->number, $row->title, $row->composer, $row->arranger, $row->publisher);
-				if (Constants::$pagePath[2] == "all")
-				{
-					array_shift($cells);
-				}
-				foreach ($cells as $cell)
-				{
-					echo "<td>" . $cell . "</td>";
-				}
-				echo "</tr>";
-			}
-			echo "</tbody>";
-		}
-		echo "</table>";
+		echo "<div class='error'>Kein Programm ausgew&auml;hlt!</div>";
 	}
 }
 ?>
