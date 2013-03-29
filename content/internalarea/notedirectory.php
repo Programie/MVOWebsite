@@ -1,18 +1,31 @@
 <?php
 $title = "Notenverzeichnis";
 $showInGroups = true;
-if (Constants::$pagePath[2] and Constants::$pagePath[2] != "all")
+if (Constants::$pagePath[2])
 {
-	$query = Constants::$pdo->prepare("SELECT `title`, `showInGroups`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
-	$query->execute(array
-	(
-		":id" => Constants::$pagePath[2]
-	));
-	if ($query->rowCount())
+	if (Constants::$pagePath[2] == "all")
 	{
-		$row = $query->fetch();
-		$title .= " - " . $row->title . " " . $row->year;
-		$showInGroups = $row->showInGroups;
+		if (Constants::$accountManager->hasPermission("notedirectory.view.all"))
+		{
+			$title .= " - Alle Titel";
+		}
+	}
+	else
+	{
+		if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
+		{
+			$query = Constants::$pdo->prepare("SELECT `title`, `showInGroups`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
+			$query->execute(array
+			(
+				":id" => Constants::$pagePath[2]
+			));
+			if ($query->rowCount())
+			{
+				$row = $query->fetch();
+				$title .= " - " . $row->title . " " . $row->year;
+				$showInGroups = $row->showInGroups;
+			}
+		}
 	}
 }
 echo "<h1>" . $title . "</h1>";
@@ -23,38 +36,46 @@ echo "<h1>" . $title . "</h1>";
 		<a href="#">Auswahl</a>
 		<ul>
 			<?php
-			$years = array();
-			$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id`, `year`, `title` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`");
-			while ($row = $query->fetch())
+			if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
 			{
-				$years[$row->year][$row->id] = $row->title;
-			}
-			foreach ($years as $year => $programs)
-			{
-				echo "
-					<li>
-						<a href='#'>" . $year . "</a>
-						<ul>
-				";
-				foreach ($programs as $id => $title)
+				$years = array();
+				$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id`, `year`, `title` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`");
+				while ($row = $query->fetch())
 				{
-					echo "<li><a href='/internalarea/notedirectory/" . $id . "'>" . $title . "</a></li>";
+					$years[$row->year][$row->id] = $row->title;
 				}
-				echo "
-						</ul>
-					</li>
-				";
+				foreach ($years as $year => $programs)
+				{
+					echo "
+						<li>
+							<a href='#'>" . $year . "</a>
+							<ul>
+					";
+					foreach ($programs as $id => $title)
+					{
+						echo "<li><a href='/internalarea/notedirectory/" . $id . "'>" . $title . "</a></li>";
+					}
+					echo "
+							</ul>
+						</li>
+					";
+				}
+			}
+			if (Constants::$accountManager->hasPermission("notedirectory.view.all"))
+			{
+				echo "<li><a href='/internalarea/notedirectory/all'>Alle</a></li>";
 			}
 			?>
-			<li><a href="/internalarea/notedirectory/all">Alle</a></li>
 		</ul>
 	</li>
 </ul>
 
-<div id="notedirectory_searchform_div1" class="no-print">
-	<form id="notedirectory_searchform" action="/internalarea/notedirectory" method="post">
-		<input type="text" class="input-search" id="notedirectory_searchstring" name="notedirectory_searchstring" placeholder="Suchbegriff" value="<?php echo htmlspecialchars($_POST["notedirectory_searchstring"]);?>"/>
-	</form>
+<div id="notedirectory_options_div1" class="no-print">
+	<div id="notedirectory_options_div2">
+		<form id="notedirectory_searchform" action="/internalarea/notedirectory" method="post">
+			<input type="text" class="input-search" id="notedirectory_searchstring" name="notedirectory_searchstring" placeholder="Suchbegriff" value="<?php echo htmlspecialchars($_POST["notedirectory_searchstring"]);?>"/>
+		</form>
+	</div>
 </div>
 
 <?php
@@ -98,20 +119,27 @@ else
 {
 	if (Constants::$pagePath[2])
 	{
+		$query = null;
 		if (Constants::$pagePath[2] == "all")
 		{
-			$query = Constants::$pdo->query("SELECT `notedirectory_titles`.`id` AS `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`");
+			if (Constants::$accountManager->hasPermission("notedirectory.view.all"))
+			{
+				$query = Constants::$pdo->query("SELECT `notedirectory_titles`.`id` AS `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`");
+			}
 		}
 		else
 		{
-			$query = Constants::$pdo->prepare("SELECT `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_programtitles` LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId` WHERE `programId` = :programId");
-			$query->execute(array
-			(
-				":programId" => Constants::$pagePath[2]
-			));
+			if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
+			{
+				$query = Constants::$pdo->prepare("SELECT `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_programtitles` LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId` WHERE `programId` = :programId");
+				$query->execute(array
+				(
+					":programId" => Constants::$pagePath[2]
+				));
+			}
 		}
 		
-		if ($query->rowCount())
+		if ($query and $query->rowCount())
 		{
 			$titles = $query->fetchAll();
 			if (Constants::$pagePath[2] == "all")
