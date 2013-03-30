@@ -29,12 +29,13 @@ echo "<h1>" . $title . "</h1>";
 
 if (isset($_POST["addresslist_sendmessage_confirmed"]))
 {
-	$showError = true;
+	$error = "Beim Senden der Nachricht ist ein Fehler aufgetreten!";
 	if ($_POST["addresslist_sendmessage_confirmed"])
 	{
 		$userData = Constants::$accountManager->getUserData();
 		if ($_POST["addresslist_sendmessage_sendtoken"] == $userData->sendToken)
 		{
+			$targetUsers = array();
 			$recipients = explode(",", $_POST["addresslist_sendmessage_recipients"]);
 			if (!empty($recipients))
 			{
@@ -51,37 +52,116 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 					if ($row->email)
 					{
 						$mailRecipients[$row->email] = $row->firstName . " " . $row->lastName;
+						$targetUsers[] = "uid:" . $recipientUserId;
 					}
 				}
 				
-				$ccMail = null;
-				if ($_POST["addresslist_sendmessage_sendcopy"])
+				$send = true;
+				
+				$uploadedFiles = array();
+				foreach ($_FILES as $fileData)
 				{
-					$ccMail = array($userData->email => $userData->firstName . " " . $userData->lastName);
+					$uploadError = false;
+					if ($fileData["error"] == UPLOAD_ERR_OK)
+					{
+						$fileName = md5_file($fileData["tmp_name"]);
+						if (move_uploaded_file($fileData["tmp_name"], UPLOAD_PATH . "/" . $fileName))
+						{
+							$uploadedFiles[$fileName] = $fileData["name"];
+						}
+						else
+						{
+							$uploadError = true;
+						}
+					}
+					else
+					{
+						if ($fileData["error"] != UPLOAD_ERR_NO_FILE)// One file field is always empty
+						{
+							$uploadError = true;
+						}
+					}
+					if ($uploadError)
+					{
+						$error = "Beim Hochladen der Datei <b>" . $fileData["name"] . "</b> ist ein Fehler aufgetreten!";
+						$send = false;
+						break;
+					}
 				}
 				
-				$mail = new Mail("Nachricht vom Internen Bereich");
-				$mail->setTemplate("addresslist-sendmessage");
-				$mail->addReplacement("CONTENT", formatText($_POST["addresslist_sendmessage_text"]));
-				$mail->setTo($mailRecipients);
-				$mail->setCc($ccMail);
-				$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
-				if ($mail->send())
+				if ($send)
 				{
-					echo "<div class='ok'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</div>";
-					$showError = false;
+					$attachedFiles = array();
+					$addFileQuery = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
+					foreach ($uploadedFiles as $name => $title)
+					{
+						$addFileQuery->execute(array
+						(
+							":name" => $name,
+							":title" => $title
+						));
+						$attachedFiles[$name] = Constants::$pdo->lastInsertId();
+					}
+					
+					$text = $_POST["addresslist_sendmessage_text"];
+					
+					$query = Constants::$pdo->prepare("INSERT INTO `messages` (`date`, `targetGroups`, `userId`, `text`, `attachedFiles`) VALUES(NOW(), :targetGroups, :userId, :text, :attachedFiles)");
+					$query->execute(array
+					(
+						":targetGroups" => implode(",", $targetUsers),
+						":userId" => Constants::$accountManager->getUserId(),
+						":text" => $text,
+						":attachedFiles" => implode(",", $attachedFiles)
+					));
+					$messageId = Constants::$pdo->lastInsertId();
+					
+					$attachmentsText = array();
+					if (!empty($uploadedFiles))
+					{
+						$attachmentsText[] = "<p><b>Anh&auml;nge:</b></p>";
+						$attachmentsText[] = "<ul>";
+						foreach ($uploadedFiles as $name => $title)
+						{
+							$attachmentsText[] = "<li><a href='" . BASE_URL . "/uploads/" . $attachedFiles[$name] . "/" . $name . "'>" . $title . "</a></li>";
+						}
+						$attachmentsText[] = "</ul>";
+					}
+					
+					$ccMail = null;
+					if ($_POST["addresslist_sendmessage_sendcopy"])
+					{
+						$ccMail = array($userData->email => $userData->firstName . " " . $userData->lastName);
+					}
+					
+					$replacements = array
+					(
+						"ATTACHMENTS" => implode("\n", $attachmentsText),
+						"CONTENT" => formatText($text),
+						"FIRSTNAME" => $userData->firstName,
+						"LASTNAME" => $userData->lastName,
+						"MESSAGEID" => $messageId
+					);
+					$mail = new Mail("Nachricht vom Internen Bereich", $replacements);
+					$mail->setTemplate("writemessage");
+					$mail->setTo($mailRecipients);
+					$mail->setCc($ccMail);
+					$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
+					if ($mail->send())
+					{
+						$error = "";
+						echo "<div class='ok'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</div>";
+					}
 				}
 			}
 		}
 		else
 		{
-			echo "<div class='error'>Es wurde versucht dieselbe Email erneut zu versenden!</div>";
-			$showError = false;
+			$error = "Es wurde versucht dieselbe Email erneut zu versenden!";
 		}
 	}
-	if ($showError)
+	if ($error)
 	{
-		echo "<div class='error'>Beim Senden der Nachricht ist ein Fehler aufgetreten!</div>";
+		echo "<div class='error'>" . $error . "</div>";
 	}
 }
 ?>
@@ -165,8 +245,13 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 <fieldset id="addresslist_sendmessage">
 	<legend>Nachricht senden</legend>
 	
-	<form id="addresslist_sendmessage_form" action="/internalarea/addresslist" method="post" onsubmit="addresslist_sendMessageConfirm(); return false;">
+	<form id="addresslist_sendmessage_form" action="/internalarea/addresslist" method="post" enctype="multipart/form-data" onsubmit="addresslist_sendMessageConfirm(); return false;">
 		<textarea id="addresslist_sendmessage_text" name="addresslist_sendmessage_text" rows="15" cols="15"></textarea>
+		
+		<fieldset id="addresslist_sendmessage_attachments">
+			<legend>Anh&auml;nge</legend>
+		</fieldset>
+		
 		<input type="hidden" id="addresslist_sendmessage_sendcopy" name="addresslist_sendmessage_sendcopy"/>
 		<input type="hidden" id="addresslist_sendmessage_confirmed" name="addresslist_sendmessage_confirmed"/>
 		<input type="hidden" id="addresslist_sendmessage_recipients" name="addresslist_sendmessage_recipients"/>
@@ -176,12 +261,17 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 </fieldset>
 
 <div id="addresslist_sendmessage_confirm" title="Nachricht senden">
-	<p id="addresslist_sendmessage_confirm_text"></p>
+	<p id="addresslist_sendmessage_confirm_text1"></p>
 	<ul id="addresslist_sendmessage_confirm_recipients"></ul>
+	<p id="addresslist_sendmessage_confirm_text2"><b>Anh&auml;nge:</b></p>
+	<ul id="addresslist_sendmessage_confirm_attachments"></ul>
 	<input id="addresslist_sendmessage_confirm_sendcopy" type="checkbox"/><label for="addresslist_sendmessage_confirm_sendcopy">Eine Kopie an mich senden</label>
 </div>
 
 <script type="text/javascript">
+	addresslist_sendmessage_attachments_file = 0;
+	addresslist_sendMessageAddAttachmentFile();
+	
 	$("#addresslist_sendmessage_confirm").dialog(
 	{
 		closeText : "Schlie&szlig;en",
@@ -213,6 +303,32 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 		}
 	});
 	
+	function addresslist_sendMessageAddAttachmentFile()
+	{
+		addresslist_sendmessage_attachments_file++;
+		$("#addresslist_sendmessage_attachments").append("<input type='file' class='addresslist_sendmessage_attachments_file' id='addresslist_sendmessage_attachments_file_" + addresslist_sendmessage_attachments_file + "' name='addresslist_sendmessage_attachments_file_" + addresslist_sendmessage_attachments_file + "' onchange='addresslist_sendMessageCheckAttachmentFields();'/>");
+	}
+	
+	function addresslist_sendMessageCheckAttachmentFields()
+	{
+		var addNew = true;
+		$(".addresslist_sendmessage_attachments_file").each(function()
+		{
+			if (!$(this)[0].files.length)
+			{
+				if (!addNew)// Another field is already empty -> Remove this one
+				{
+					$(this).remove();
+				}
+				addNew = false;
+			}
+		});
+		if (addNew)
+		{
+			addresslist_sendMessageAddAttachmentFile();
+		}
+	}
+	
 	function addresslist_sendMessageConfirm()
 	{
 		var recipients = [];
@@ -232,7 +348,20 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 		if (recipients.length)
 		{
 			document.getElementById("addresslist_sendmessage_recipients").value = recipients.join(",");
-			$("#addresslist_sendmessage_confirm_text").html("Soll die Nachricht jetzt an die folgenden " + recipients.length + " Emp&auml;nger gesendet werden?");
+			$("#addresslist_sendmessage_confirm_text1").html("Soll die Nachricht jetzt an die folgenden " + recipients.length + " Emp&auml;nger gesendet werden?");
+			
+			var attachments = 0;
+			$("#addresslist_sendmessage_confirm_attachments").html("");
+			$(".addresslist_sendmessage_attachments_file").each(function()
+			{
+				if ($(this)[0].files.length)
+				{
+					attachments++;
+					$("#addresslist_sendmessage_confirm_attachments").append("<li>" + $(this)[0].files[0].name + "</li>");
+				}
+			});
+			attachments ? $("#addresslist_sendmessage_confirm_text2").show() : $("#addresslist_sendmessage_confirm_text2").hide();
+			
 			$("#addresslist_sendmessage_confirm").dialog("open");
 		}
 		else

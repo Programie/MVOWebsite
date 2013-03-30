@@ -5,6 +5,7 @@ class MessageManager
 	{
 		$uploadedFileQuery = Constants::$pdo->prepare("SELECT `name`, `title` FROM `uploads` WHERE `id` = :id");
 		$userGroupsQuery = Constants::$pdo->prepare("SELECT `title` FROM `usergroups` WHERE `name` = :name");
+		$userQuery = Constants::$pdo->prepare("SELECT `id`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
 		
 		$commonSql = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`validTill`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages` LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
 		if ($id == null or $id == -1)
@@ -34,7 +35,34 @@ class MessageManager
 			$targetGroups = explode(",", $row->targetGroups);
 			$attachedFiles = explode(",", $row->attachedFiles);
 			
-			if ($row->userId != Constants::$accountManager->getUserId() and !Constants::$accountManager->hasPermissionInArray($targetGroups, "messages.view"))
+			$allowed = false;
+			
+			if ($row->userId == Constants::$accountManager->getUserId())
+			{
+				$allowed = true;
+			}
+			
+			if (!$allowed)
+			{
+				foreach ($targetGroups as $groupName)
+				{
+					if (substr($groupName, 0, 4) == "uid:")
+					{
+						if (substr($groupName, 4) == Constants::$accountManager->getUserId())
+						{
+							$allowed = true;
+							break;
+						}
+					}
+				}
+			}
+			
+			if (!$allowed and Constants::$accountManager->hasPermissionInArray($targetGroups, "messages.view"))
+			{
+				$allowed = true;
+			}
+			
+			if (!$allowed)
 			{
 				continue;
 			}
@@ -42,12 +70,27 @@ class MessageManager
 			$targets = array();
 			foreach ($targetGroups as $groupName)
 			{
-				$userGroupsQuery->execute(array
-				(
-					":name" => $groupName
-				));
-				$userGroupsRow = $userGroupsQuery->fetch();
-				$targets[] = $userGroupsRow->title ? $userGroupsRow->title : $groupName;
+				if (substr($groupName, 0, 4) == "uid:")
+				{
+					$userQuery->execute(array
+					(
+						":id" => substr($groupName, 4)
+					));
+					$userRow = $userQuery->fetch();
+					if ($userRow->id)
+					{
+						$targets[] = $userRow->firstName . " " . $userRow->lastName;
+					}
+				}
+				else
+				{
+					$userGroupsQuery->execute(array
+					(
+						":name" => $groupName
+					));
+					$userGroupsRow = $userGroupsQuery->fetch();
+					$targets[] = $userGroupsRow->title ? $userGroupsRow->title : $groupName;
+				}
 			}
 			
 			echo "<div class='messages_container'>";

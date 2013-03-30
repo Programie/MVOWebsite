@@ -1,11 +1,6 @@
-#addresslist_groups
+#addresslist_groups, #addresslist_sendmessage_attachments, #addresslist_table
 {
 	margin-bottom: 20px;
-}
-
-#addresslist_sendmessage
-{
-	margin-top: 20px;
 }
 
 #addresslist_sendmessage_text

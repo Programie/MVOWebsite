@@ -134,11 +134,11 @@ if (isset($_POST["writemessage_confirmed"]))
 					
 					$replacements = array
 					(
+						"ATTACHMENTS" => implode("\n", $attachmentsText),
+						"CONTENT" => formatText($text),
 						"FIRSTNAME" => $userData->firstName,
 						"LASTNAME" => $userData->lastName,
-						"CONTENT" => formatText($text),
-						"ATTACHMENTS" => implode("\n", $attachmentsText),
-						"URL" => BASE_URL . "/internalarea/messages/" . $messageId
+						"MESSAGEID" => $messageId
 					);
 					$mail = new Mail("Neue Nachricht im Internen Bereich", $replacements);
 					$mail->setTemplate("writemessage");
@@ -192,7 +192,10 @@ if (isset($_POST["writemessage_confirmed"]))
 		<input type="text" class="date" id="writemessage_validtill_date" name="writemessage_validtill_date" placeholder="TT.MM.JJJJ"/>
 	</fieldset>
 	
-	<textarea id="writemessage_text" name="writemessage_text" rows="15" cols="15"></textarea>
+	<fieldset id="writemessage_textfieldset">
+		<legend>Nachricht</legend>
+		<textarea id="writemessage_text" name="writemessage_text" rows="15" cols="15"></textarea>
+	</fieldset>
 	
 	<fieldset id="writemessage_attachments">
 		<legend>Anh&auml;nge</legend>
