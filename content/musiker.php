@@ -64,7 +64,7 @@ foreach ($groups as $groupRow)
 }
 ?>
 
-<script type='text/javascript'>
+<script type="text/javascript">
 	$(".musiker").photobox("li > a",
 	{
 		history : false,
