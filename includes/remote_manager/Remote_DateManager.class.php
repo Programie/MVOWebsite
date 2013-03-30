@@ -96,10 +96,7 @@ class Remote_DateManager
 			");
 			$queryParameters[":id"] = $params->id;
 			$query->execute($queryParameters);
-			if ($query->rowCount())
-			{
-				return "ok";
-			}
+			return "ok";
 		}
 		else
 		{
