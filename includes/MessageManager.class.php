@@ -34,7 +34,7 @@ class MessageManager
 			$targetGroups = explode(",", $row->targetGroups);
 			$attachedFiles = explode(",", $row->attachedFiles);
 			
-			if (!Constants::$accountManager->hasPermissionInArray($targetGroups, "messages.view"))
+			if ($row->userId != Constants::$accountManager->getUserId() and !Constants::$accountManager->hasPermissionInArray($targetGroups, "messages.view"))
 			{
 				continue;
 			}
