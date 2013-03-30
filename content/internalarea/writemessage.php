@@ -243,7 +243,7 @@ if (isset($_POST["writemessage_confirmed"]))
 	function writeMessage_addAttachmentFile()
 	{
 		writemessage_attachments_file++;
-		$("#writemessage_attachments").append("<input type='file' class='writemessage_attachments_file' id='writemessage_attachments_file_" + writemessage_attachments_file+ "' name='writemessage_attachments_file_" + writemessage_attachments_file+ "' onchange='writeMessage_checkAttachmentFields();'/>");
+		$("#writemessage_attachments").append("<input type='file' class='writemessage_attachments_file' id='writemessage_attachments_file_" + writemessage_attachments_file + "' name='writemessage_attachments_file_" + writemessage_attachments_file + "' onchange='writeMessage_checkAttachmentFields();'/>");
 	}
 	
 	function writeMessage_checkAttachmentFields()

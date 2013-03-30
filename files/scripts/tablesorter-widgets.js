@@ -776,6 +776,7 @@ $.tablesorter.addWidget({
 		// clear out cloned table, except for sticky header
 		t2.find('thead:gt(0),tr.sticky-false,tbody,tfoot,caption').remove();
 		t2.css({ height:0, width:0, padding:0, margin:0, border:0 });
+		t2.addClass(css + "-clone");
 		// remove rows you don't want to be sticky
 		stkyHdr.find('tr.sticky-false').remove();
 		// remove resizable block
