@@ -54,6 +54,8 @@ $(document).ready(function()
 	{
 		widgets : ["stickyHeaders"]
 	});
+	
+	$.noty.defaults.timeout = 10000;
 });
 
 $(window).scroll(function()

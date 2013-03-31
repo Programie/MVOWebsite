@@ -52,7 +52,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 					$startDateTime[] = $startTime . " Uhr";
 				}
 				echo "
-					<th class='{sorter: \"number-attribute\"}'>
+					<th dateid='" . $date->id . "' class='{sorter: \"number-attribute\"}'>
 						<div class='attendancelist_title' title='" . $date->title . "'>" . $date->title . "</div>
 						<div class='attendancelist_date'>" . implode(" ", $startDateTime) . "</div>
 					</th>
@@ -146,6 +146,12 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 				$(this).prop("checked", false);
 			});
 		}
+		
+		
+		var titleElements = $("#attendancelist_table").find("thead tr th[dateid=" + cell.attr("dateid") + "] div");
+		var title = titleElements.find("div[class=attendancelist_title]").text() + " (" + titleElements.find("div[class=attendancelist_date]").text() + ")";
+		var userName = row.find("td:first").text();
+		
 		$.ajax(
 		{
 			type : "POST",
@@ -158,37 +164,30 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 			},
 			error : function(jqXhr, textStatus, errorThrown)
 			{
-				$("#notification").attr("class", "error");
-				$("#notification").html("Fehler beim Speichern!");
-				
-				$("#notification").fadeIn();
-				window.setTimeout(function()
+				noty(
 				{
-					$("#notification").fadeOut();
-				}, 5000);
+					type : "error",
+					text : "Fehler beim Speichern des Anwesenheitsstatus f&uuml;r " + title + " von " + userName + "!"
+				});
 			},
 			success : function(data, status, jqXhr)
 			{
 				if (data == "ok")
 				{
-					$("#notification").attr("class", "ok");
-					$("#notification").html("Erfolgreich gespeichert!");
+					noty(
+					{
+						type : "success",
+						text : "Anwesenheitsstatus f&uuml;r " + title + " von " + userName + " erfolgreich gespeichert!"
+					});
 				}
 				else
 				{
-					$("#notification").attr("class", "error");
-					$("#notification").html("Fehler beim Speichern!");
+					noty(
+					{
+						type : "error",
+						text : "Fehler beim Speichern des Anwesenheitsstatus f&uuml;r " + title + " von " + userName + "!"
+					});
 				}
-				
-				$("#notification").fadeIn();
-				if (attendancelist_notificationTimeout)
-				{
-					window.clearTimeout(attendancelist_notificationTimeout);
-				}
-				attendancelist_notificationTimeout = window.setTimeout(function()
-				{
-					$("#notification").fadeOut();
-				}, 5000);
 			}
 		});
 	}
