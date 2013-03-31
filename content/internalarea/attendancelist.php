@@ -127,7 +127,6 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 </table>
 
 <script type="text/javascript">
-	var attendancelist_notificationTimeout = null;
 	function attendancelist_changeState(element)
 	{
 		var status = null;
