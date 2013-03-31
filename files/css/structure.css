@@ -150,6 +150,7 @@ body
 	body
 	{
 		background-image: none !important;
+		font-size: x-large;
 	}
 	
 	#backgroundwrapper, #header, #notification, #overlay_container

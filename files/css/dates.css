@@ -3,6 +3,12 @@
 	margin-bottom: 20px;
 }
 
+#dates_groups label
+{
+	margin-right: 10px;
+	font-weight: normal;
+}
+
 #dates_info_ics
 {
 	margin-bottom: 20px;
@@ -12,12 +18,4 @@
 	height: 64px;
 	padding-top: 15px;
 	padding-left: 70px;
-}
-
-@media print
-{
-	#dates_groups
-	{
-		display: none;
-	}
 }

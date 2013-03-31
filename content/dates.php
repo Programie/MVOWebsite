@@ -1,16 +1,10 @@
 <?php
 $year = Constants::$pagePath[1];
-$month = Constants::$pagePath[2];
-$group = Constants::$pagePath[3];
+$activeGroups = explode(" ", Constants::$pagePath[2]);
 
 if (!$year)
 {
 	$year = date("Y");
-}
-
-if ($group == "all")
-{
-	$group = null;
 }
 
 $year = intval($year);
@@ -19,23 +13,12 @@ if (!$year)
 	$year = null;
 }
 
-$month = intval($month);
-if (!$month)
-{
-	$month = null;
-}
-
 $title = "Termine";
 
-$dates = Dates::getDates($year, $month, $group);
+$dates = Dates::getDates($year, $activeGroups);
 if ($dates)
 {
 	$additionalTitle = array();
-	
-	if ($month)
-	{
-		$additionalTitle[] = getMonthName($month);
-	}
 	
 	if ($year)
 	{
@@ -66,47 +49,47 @@ if (Constants::$accountManager->getUserId())
 
 if (!empty($userGroups))
 {
-	$group1 = new StdClass;
-	$group1->name = "all";
-	$group1->title = "Alle";
-	
-	$group2 = new StdClass;
-	$group2->name = "public";
-	$group2->title = "&Ouml;ffentlich";
-	array_unshift($userGroups, $group1, $group2);
-	
-	$activeGroup = "all";
+	$group = new StdClass;
+	$group->name = "public";
+	$group->title = "&Ouml;ffentlich";
+	array_unshift($userGroups, $group);
 	
 	foreach ($userGroups as $index => $group)
 	{
 		if ($group->name != "all")
 		{
-			if (!Dates::getDates($year, $month, $group->name))
+			if (!Dates::getDates($year, array($group->name)))
 			{
 				unset($userGroups[$index]);
 				continue;
 			}
 		}
-		if ($group->name == Constants::$pagePath[3])
+		if (!$activeGroups[0] or in_array($group->name, $activeGroups))
 		{
-			$activeGroup = $group->name;
+			$group->active = true;
 		}
 	}
 	
 	echo "
-		<fieldset id='dates_groups'>
+		<fieldset class='no-print' id='dates_groups'>
 			<legend>Gruppen</legend>
+			<form onsubmit='dates_applyGroups(this); return false;'>
 	";
 	foreach ($userGroups as $group)
 	{
-		$buttonStyle = "";
-		if ($group->name == $activeGroup)
+		$checked = "";
+		
+		if ($group->active)
 		{
-			$buttonStyle = "style='font-weight: bold;'";
+			$checked = "checked='checked'";
 		}
-		echo "<a href='/dates/" . $year . "/" . ($month ? $month : "all") . "/" . $group->name . "'><button type='button' " . $buttonStyle . ">" . $group->title . "</button></a>";
+		echo "<input type='checkbox' id='dates_groups_" . $group->name . "' group='" . $group->name . "' " . $checked . "/><label for='dates_groups_" . $group->name . "'>" . $group->title . "</label>";
 	}
-	echo "</fieldset>";
+	echo "
+				<input type='submit' value='OK'/>
+			</form>
+		</fieldset>
+	";
 }
 
 if ($dates)
@@ -215,3 +198,17 @@ else
 	echo "<div class='error'>Es wurden keine Termine in der ausgew&auml;hlten Gruppe und dem ausgew&auml;hlten Jahr sowie Monat gefunden!</div>";
 }
 ?>
+<script type="text/javascript">
+	function dates_applyGroups(form)
+	{
+		var groups = [];
+		$(form).find("input:checkbox").each(function()
+		{
+			if ($(this).is(":checked"))
+			{
+				groups.push($(this).attr("group"));
+			}
+		});
+		document.location.href = "/dates/<?php echo $year;?>/" + groups.join("+");
+	}
+</script>
