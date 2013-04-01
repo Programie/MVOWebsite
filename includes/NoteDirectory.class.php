@@ -3,7 +3,10 @@ class NoteDirectory
 {
 	public function __construct($columns, $titles, $showInGroups)
 	{
-		echo "<table id='notedirectory_table' class='table {sortlist: [[0,0]]}'>";
+		echo "
+			<div class='info no-print'>Klicke auf einen Titel um weitere Details anzuzeigen.</div>
+			<table id='notedirectory_table' class='table {sortlist: [[0,0]]}'>
+		";
 		$this->createHeader($columns);
 		if ($showInGroups)
 		{
@@ -62,7 +65,7 @@ class NoteDirectory
 		echo "<tbody>";
 		foreach ($titles as $index => $row)
 		{
-			echo "<tr>";
+			echo "<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/details/" . $row->id . "';\">";
 			foreach ($columns as $columnName => $coumnTitle)
 			{
 				echo "<td>" . $row->{$columnName} . "</td>";
