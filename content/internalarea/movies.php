@@ -209,11 +209,11 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 							<img class='movies_item_cover' src='" . $coverImage . "'/>
 						</div>
 					</td>
-					<td number='" . $row->categoryId . "'>" . $row->title . "</td>
+					<td number='" . $row->categoryId . "'>" . escapeText($row->title) . "</td>
 					<td number='" . $row->eventYear . "'>" . $row->eventYear . "</td>
 					<td number='" . $row->price . "'>" . $price . "</td>
 					<td number='" . $row->borrowed . "' class='" . ((!$row->borrowable || $row->borrowed) ? "movies_unavailable" : "movies_available") . "' title='" . ($row->borrowable ? ($row->borrowed ? "Derzeit ausgeliehen" : "Verf&uuml;gbar") : "Ausleihen nicht m&ouml;glich") . "'></td>
-					<td>" . $row->comment . "</td>
+					<td>" . escapeText($row->comment) . "</td>
 					<td>
 						<button type='button' onclick='movies_confirm(this, true);'>Kaufen (" . $price . ")</button>
 			";

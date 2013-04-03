@@ -79,7 +79,7 @@ class MessageManager
 					$userRow = $userQuery->fetch();
 					if ($userRow->id)
 					{
-						$targets[] = $userRow->firstName . " " . $userRow->lastName;
+						$targets[] = escapeText($userRow->firstName) . " " . escapeText($userRow->lastName);
 					}
 				}
 				else
@@ -89,7 +89,7 @@ class MessageManager
 						":name" => $groupName
 					));
 					$userGroupsRow = $userGroupsQuery->fetch();
-					$targets[] = $userGroupsRow->title ? $userGroupsRow->title : $groupName;
+					$targets[] = $userGroupsRow->title ? escapeText($userGroupsRow->title) : $groupName;
 				}
 			}
 			
@@ -108,7 +108,7 @@ class MessageManager
 				<div class='messages_header'>
 					<img class='messages_header_avatar' src='" . $avatarFile . "'/>
 					<div class='messages_header_container'>
-						<div><b>Erstellt von:</b> " . $row->firstName . " " . $row->lastName . " [" . $row->email . "]</div>
+						<div><b>Erstellt von:</b> " . escapeText($row->firstName) . " " . escapeText($row->lastName) . " [" . escapeText($row->email) . "]</div>
 						<div><b>Zeit:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>
 			";
 			if ($row->validTill)
@@ -146,7 +146,7 @@ class MessageManager
 									<ul>
 							";
 						}
-						echo "<li><a href='/uploads/" . $file . "/" . $uploadedFileRow->name . "'>" . $uploadedFileRow->title . "</a></li>";
+						echo "<li><a href='/uploads/" . $file . "/" . $uploadedFileRow->name . "'>" . escapeText($uploadedFileRow->title) . "</a></li>";
 					}
 				}
 			}

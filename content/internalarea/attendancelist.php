@@ -53,7 +53,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 				}
 				echo "
 					<th dateid='" . $date->id . "' class='{sorter: \"number-attribute\"}'>
-						<div class='attendancelist_title' title='" . $date->title . "'>" . $date->title . "</div>
+						<div class='attendancelist_title' title='" . escapeText($date->title) . "'>" . escapeText($date->title) . "</div>
 						<div class='attendancelist_date'>" . implode(" ", $startDateTime) . "</div>
 					</th>
 				";
@@ -87,7 +87,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 					$attributes = "class='table_highlight'";
 				}
 				echo "<tr userid='" . $userRow->id . "' " . $attributes . ">";
-				echo "<td sorttext='" . $userRow->lastName . " " . $userRow->firstName . "'>" . $userRow->firstName . " " . $userRow->lastName . "</td>";
+				echo "<td sorttext='" . escapeText($userRow->lastName) . " " . escapeText($userRow->firstName) . "'>" . escapeText($userRow->firstName) . " " . escapeText($userRow->lastName) . "</td>";
 				foreach ($dates as $dateRow)
 				{
 					$getAttendanceQuery->execute(array

@@ -22,7 +22,7 @@ if (Constants::$pagePath[2])
 			if ($query->rowCount())
 			{
 				$row = $query->fetch();
-				$title .= " - " . $row->title . " " . $row->year;
+				$title .= " - " . escapeText($row->title) . " " . $row->year;
 				$showInGroups = $row->showInGroups;
 			}
 		}
@@ -53,7 +53,7 @@ echo "<h1>" . $title . "</h1>";
 					";
 					foreach ($programs as $id => $title)
 					{
-						echo "<li><a href='/internalarea/notedirectory/" . $id . "'>" . $title . "</a></li>";
+						echo "<li><a href='/internalarea/notedirectory/" . $id . "'>" . escapeText($title) . "</a></li>";
 					}
 					echo "
 							</ul>
@@ -129,7 +129,7 @@ else
 			if ($query->rowCount())
 			{
 				$row = $query->fetch();
-				echo "<h2>Programme welche den Titel <i>" . $row->title . "</i> enthalten</h2>";
+				echo "<h2>Programme welche den Titel <i>" . escapeText($row->title) . "</i> enthalten</h2>";
 				$query = Constants::$pdo->prepare("
 					SELECT `notedirectory_programs`.`id`, `year`, `title`, `number`
 					FROM `notedirectory_programtitles`
@@ -160,7 +160,7 @@ else
 						echo "
 							<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/" . $row->id . "';\">
 								<td>" . $row->year . "</td>
-								<td>" . $row->title . "</td>
+								<td>" . escapeText($row->title) . "</td>
 								<td>" . $row->number . "</td>
 							</tr>
 						";

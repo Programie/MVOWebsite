@@ -198,7 +198,7 @@ else
 			});
 			foreach ($events as $event)
 			{
-				echo "<li><a href='/uploads/" . $event->uploadId . "/" . $event->uploadName . "'>" . $event->uploadTitle . "</a></li>";
+				echo "<li><a href='/uploads/" . $event->uploadId . "/" . $event->uploadName . "'>" . escapeText($event->uploadTitle) . "</a></li>";
 			}
 			echo "
 					</ul>

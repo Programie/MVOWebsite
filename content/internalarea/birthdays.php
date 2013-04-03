@@ -123,8 +123,8 @@ echo "<h1>" . $title . "</h1>";
 			
 			echo "
 				<tr " . implode(" ", $rowAttributes) . ">
-					<td>" . $user->firstName . "</td>
-					<td>" . $user->lastName . "</td>
+					<td>" . escapeText($user->firstName) . "</td>
+					<td>" . escapeText($user->lastName) . "</td>
 					<td number='" . $birthDate[1] . $birthDate[2] . "'>" . $birthDate[2] . "." . $birthDate[1] . ".</td>
 					<td>" . $birthDate[0] . "</td>
 					<td>" . $user->age . "</td>

@@ -127,7 +127,7 @@ if (isset($_POST["writemessage_confirmed"]))
 						$attachmentsText[] = "<ul>";
 						foreach ($uploadedFiles as $name => $title)
 						{
-							$attachmentsText[] = "<li><a href='" . BASE_URL . "/uploads/" . $attachedFiles[$name] . "/" . $name . "'>" . $title . "</a></li>";
+							$attachmentsText[] = "<li><a href='" . BASE_URL . "/uploads/" . $attachedFiles[$name] . "/" . $name . "'>" . escapeText($title) . "</a></li>";
 						}
 						$attachmentsText[] = "</ul>";
 					}

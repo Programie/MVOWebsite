@@ -142,7 +142,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 	";
 	foreach ($userGroups as $name => $title)
 	{
-		echo "<input type='checkbox' id='protocols_upload_groups_" . $name . "' name='protocols_upload_groups_" . $name . "'/><label for='protocols_upload_groups_" . $name . "'>" . $title . "</label>";
+		echo "<input type='checkbox' id='protocols_upload_groups_" . $name . "' name='protocols_upload_groups_" . $name . "'/><label for='protocols_upload_groups_" . $name . "'>" . escapeText($title) . "</label>";
 	}
 	echo "
 				</div>
@@ -193,7 +193,7 @@ else
 		$groupTitles = array();
 		foreach ($row->groups as $group)
 		{
-			$groupTitles[] = $userGroups[$group];
+			$groupTitles[] = escapeText($userGroups[$group]);
 		}
 		
 		$date = strtotime($row->date);
@@ -201,7 +201,7 @@ else
 		echo "
 			<tr class='pointer' onclick='document.location=\"/uploads/" . $row->uploadId . "/" . $row->uploadName . "\";'>
 				<td number='" . $date . "'>" . date("d.m.Y", $date) . "</td>
-				<td>" . $row->name . "</td>
+				<td>" . escapeText($row->name) . "</td>
 				<td>" . implode(", ", $groupTitles) . "</td>
 			</tr>
 		";

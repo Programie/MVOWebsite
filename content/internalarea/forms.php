@@ -40,7 +40,7 @@ else
 		$fileInfo = pathinfo($row->filename);
 		echo "
 			<tr>
-				<td><a href='/internalarea/forms/" . $row->filename . "'>" . $row->title . "</a></td>
+				<td><a href='/internalarea/forms/" . $row->filename . "'>" . escapeText($row->title) . "</a></td>
 				<td>" . getFileType($fileInfo["extension"]) . "</td>
 			</tr>
 		";

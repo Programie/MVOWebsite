@@ -218,22 +218,22 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 				$phonePrivate = array();
 				if ($row->phonePrivate1)
 				{
-					$phonePrivate[] = $row->phonePrivate1;
+					$phonePrivate[] = escapeText($row->phonePrivate1);
 				}
 				if ($row->phonePrivate2)
 				{
-					$phonePrivate[] = $row->phonePrivate2;
+					$phonePrivate[] = escapeText($row->phonePrivate2);
 				}
 				echo "
 					<tr userid='" . $row->id . "'>
 						<td class='no-print'><input type='checkbox'/></td>
-						<td>" . $row->firstName . "</td>
-						<td>" . $row->lastName . "</td>
-						<td>" . $row->email . "</td>
+						<td>" . escapeText($row->firstName) . "</td>
+						<td>" . escapeText($row->lastName) . "</td>
+						<td>" . escapeText($row->email) . "</td>
 						<td>" . implode("<br />", $phonePrivate) . "</td>
-						<td>" . $row->phoneWork . "</td>
-						<td>" . $row->phoneMobile . "</td>
-						<td>" . $row->fax . "</td>
+						<td>" . escapeText($row->phoneWork) . "</td>
+						<td>" . escapeText($row->phoneMobile) . "</td>
+						<td>" . escapeText($row->fax) . "</td>
 					</tr>
 				";
 			}

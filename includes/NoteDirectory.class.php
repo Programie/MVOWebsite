@@ -27,7 +27,7 @@ class NoteDirectory
 		";
 		foreach ($columns as $columnTitle)
 		{
-			echo "<th>" . $columnTitle . "</th>";
+			echo "<th>" . escapeText($columnTitle) . "</th>";
 		}
 		echo "
 				</tr>
@@ -52,7 +52,7 @@ class NoteDirectory
 			echo "
 				<tbody class='tablesorter-infoOnly'>
 					<tr>
-						<th colspan='" . count($columns) . "'>" . $category . "</th>
+						<th colspan='" . count($columns) . "'>" . escapeText($category) . "</th>
 					</tr>
 				</tbody>
 			";
@@ -68,7 +68,7 @@ class NoteDirectory
 			echo "<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/details/" . $row->id . "';\">";
 			foreach ($columns as $columnName => $coumnTitle)
 			{
-				echo "<td>" . $row->{$columnName} . "</td>";
+				echo "<td>" . escapeText($row->{$columnName}) . "</td>";
 			}
 			echo "</tr>";
 		}
