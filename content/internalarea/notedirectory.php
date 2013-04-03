@@ -1,34 +1,53 @@
 <?php
-$title = "Notenverzeichnis";
+$title = array("Notenverzeichnis");
 $showInGroups = true;
-if (Constants::$pagePath[2])
+if ($_POST["notedirectory_searchstring"])
+{
+	$title[] = "Suchergebnisse";
+}
+else
 {
 	if (Constants::$pagePath[2] == "all")
 	{
 		if (Constants::$accountManager->hasPermission("notedirectory.view.all"))
 		{
-			$title .= " - Alle Titel";
+			$title[] = "Alle Titel";
 		}
 	}
 	else
 	{
-		if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
+		if (!Constants::$pagePath[2])
 		{
-			$query = Constants::$pdo->prepare("SELECT `title`, `showInGroups`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
-			$query->execute(array
-			(
-				":id" => Constants::$pagePath[2]
-			));
-			if ($query->rowCount())
+			if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
 			{
-				$row = $query->fetch();
-				$title .= " - " . escapeText($row->title) . " " . $row->year;
-				$showInGroups = $row->showInGroups;
+				$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`year` = YEAR(NOW()) AND `notedirectory_programtypes`.`showNoSelection`");
+				if ($query->rowCount())
+				{
+					$row = $query->fetch();
+					Constants::$pagePath[2] = $row->id;
+				}
+			}
+		}
+		if (Constants::$pagePath[2])
+		{
+			if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
+			{
+				$query = Constants::$pdo->prepare("SELECT `title`, `showInGroups`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
+				$query->execute(array
+				(
+					":id" => Constants::$pagePath[2]
+				));
+				if ($query->rowCount())
+				{
+					$row = $query->fetch();
+					$title[] = escapeText($row->title) . " " . $row->year;
+					$showInGroups = $row->showInGroups;
+				}
 			}
 		}
 	}
 }
-echo "<h1>" . $title . "</h1>";
+echo "<h1>" . implode(" - ", $title) . "</h1>";
 ?>
 
 <ul id="notedirectory_selectionmenu" class="menu no-print">
@@ -105,7 +124,6 @@ if ($_POST["notedirectory_searchstring"])
 	
 	$titles = $query->fetchAll();
 	
-	echo "<h2>Gefundene Titel</h2>";
 	$columns = array
 	(
 		"title" => "Titel",
@@ -192,13 +210,17 @@ else
 			}
 			else
 			{
-				if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
+				if (Constants::$pagePath[2])
 				{
-					$query = Constants::$pdo->prepare("SELECT `notedirectory_titles`.`id`, `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_programtitles` LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId` WHERE `programId` = :programId");
-					$query->execute(array
-					(
-						":programId" => Constants::$pagePath[2]
-					));
+					if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
+					{
+					
+						$query = Constants::$pdo->prepare("SELECT `notedirectory_titles`.`id`, `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_programtitles` LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId` WHERE `programId` = :programId");
+						$query->execute(array
+						(
+							":programId" => Constants::$pagePath[2]
+						));
+					}
 				}
 			}
 			
