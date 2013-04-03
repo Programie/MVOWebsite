@@ -129,6 +129,11 @@
 				"title" : "Veranstaltungen",
 				"permissions" : "events"
 			},
+			"featurerequests" :
+			{
+				"title" : "Verbesserungsvorschl&auml;ge",
+				"permissions" : "featurerequests"
+			},
 			"forms" :
 			{
 				"title" : "Formulare",

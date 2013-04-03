@@ -4,9 +4,14 @@ function convertLinebreaks($string)
 	return str_replace(array("\r\n", "\r", "\n"), "\n", $string);
 }
 
+function escapeText($text)
+{
+	return htmlentities($text, ENT_COMPAT, "UTF-8");
+}
+
 function formatText($text)
 {
-	$text = htmlentities($text, ENT_COMPAT, "UTF-8");
+	$text = escapeText($text);
 	
 	$find = array
 	(
