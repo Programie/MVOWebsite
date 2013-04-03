@@ -106,7 +106,7 @@
 			},
 			"attendancelist" :
 			{
-				"title" : "Anwensenheitsliste",
+				"title" : "Anwesenheitsliste",
 				"permissions" : "attendancelist"
 			},
 			"birthdays" :
