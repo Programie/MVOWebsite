@@ -122,16 +122,17 @@ if ($_POST["notedirectory_searchstring"])
 		":searchstring" => "%" . $_POST["notedirectory_searchstring"] . "%"
 	));
 	
-	$titles = $query->fetchAll();
-	
-	$columns = array
+	$noteDirectory = new NoteDirectory();
+	$noteDirectory->setColumns(array
 	(
 		"title" => "Titel",
 		"composer" => "Komponist",
 		"arranger" => "Bearbeiter",
 		"publisher" => "Verleger"
-	);
-	new NoteDirectory($columns, $titles, $showInGroups);
+	));
+	$noteDirectory->setTitles($query->fetchAll());
+	$noteDirectory->setHighlight($_POST["notedirectory_searchstring"]);
+	$noteDirectory->createList();
 }
 else
 {
@@ -226,7 +227,6 @@ else
 			
 			if ($query and $query->rowCount())
 			{
-				$titles = $query->fetchAll();
 				if (Constants::$pagePath[2] == "all")
 				{
 					$columns = array
@@ -248,7 +248,11 @@ else
 						"publisher" => "Verleger"
 					);
 				}
-				new NoteDirectory($columns, $titles, $showInGroups);
+				$noteDirectory = new NoteDirectory();
+				$noteDirectory->setColumns($columns);
+				$noteDirectory->setTitles($query->fetchAll());
+				$noteDirectory->setShowInGroups($showInGroups);
+				$noteDirectory->createList();
 			}
 			else
 			{

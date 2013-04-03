@@ -19,6 +19,7 @@ function formatText($text)
 		"@[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]@is",
 		"@[^<>\\\/[:space:]]+\@[^<>\\\/[:space:]]+@is",
 		"/\[b\](.+?)\[\/b\]/is",
+		"/\[hl\](.+?)\[\/hl\]/is",
 		"/\[i\](.+?)\[\/i\]/is",
 		"/\[u\](.+?)\[\/u\]/is"
 	);
@@ -29,6 +30,7 @@ function formatText($text)
 		"<a href='\\0' target='_blank'>\\0</a>",
 		"<a href='mailto:\\0' target='_blank'>\\0</a>",
 		"<b>$1</b>",
+		"<span class='highlight'>$1</span>",
 		"<i>$1</i>",
 		"<u>$1</u>",
 		"<em>$1</em>"

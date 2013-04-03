@@ -1,31 +1,30 @@
 <?php
 class NoteDirectory
 {
-	public function __construct($columns, $titles, $showInGroups)
+	private $columns;
+	private $highlightedString;
+	private $titles;
+	private $showInGroups;
+	
+	public function createBody()
 	{
-		echo "
-			<div class='info no-print'>Klicke auf einen Titel um weitere Details anzuzeigen.</div>
-			<table id='notedirectory_table' class='table {sortlist: [[0,0]]}'>
-		";
-		$this->createHeader($columns);
-		if ($showInGroups)
+		if ($this->showInGroups)
 		{
-			$this->list_categories($columns, $titles);
+			$this->list_categories();
 		}
 		else
 		{
-			$this->list_normal($columns, $titles);
+			$this->list_normal();
 		}
-		echo "</table>";
 	}
 	
-	public function createHeader($columns)
+	public function createHeader()
 	{
 		echo "
 			<thead>
 				<tr>
 		";
-		foreach ($columns as $columnTitle)
+		foreach ($this->columns as $columnTitle)
 		{
 			echo "<th>" . escapeText($columnTitle) . "</th>";
 		}
@@ -35,10 +34,31 @@ class NoteDirectory
 		";
 	}
 	
-	public function list_categories($columns, $titles)
+	public function createList()
+	{
+		echo "
+			<div class='info no-print'>Klicke auf einen Titel um weitere Details anzuzeigen.</div>
+			<table id='notedirectory_table' class='table {sortlist: [[0,0]]}'>
+		";
+		$this->createHeader();
+		$this->createBody();
+		echo "</table>";
+	}
+	
+	public function formatString($string)
+	{
+		if ($this->highlightedString)
+		{
+			$string = preg_replace("/" . preg_quote($this->highlightedString, "/") . "/i", "[hl]\$0[/hl]", $string);
+		}
+		$string = formatText($string);
+		return $string;
+	}
+	
+	public function list_categories()
 	{
 		$categories = array();
-		foreach ($titles as $row)
+		foreach ($this->titles as $row)
 		{
 			$categories[$row->category][] = $row;
 		}
@@ -52,27 +72,51 @@ class NoteDirectory
 			echo "
 				<tbody class='tablesorter-infoOnly'>
 					<tr>
-						<th colspan='" . count($columns) . "'>" . escapeText($category) . "</th>
+						<th colspan='" . count($this->columns) . "'>" . $this->formatString($category) . "</th>
 					</tr>
 				</tbody>
 			";
-			$this->list_normal($columns, $titles);
+			$this->list_normal($titles);
 		}
 	}
 	
-	public function list_normal($columns, $titles)
+	public function list_normal($titles = null)
 	{
+		if (!$titles)
+		{
+			$titles = $this->titles;
+		}
 		echo "<tbody>";
 		foreach ($titles as $index => $row)
 		{
 			echo "<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/details/" . $row->id . "';\">";
-			foreach ($columns as $columnName => $coumnTitle)
+			foreach ($this->columns as $columnName => $coumnTitle)
 			{
-				echo "<td>" . escapeText($row->{$columnName}) . "</td>";
+				echo "<td>" . $this->formatString($row->{$columnName}) . "</td>";
 			}
 			echo "</tr>";
 		}
 		echo "</tbody>";
+	}
+	
+	public function setColumns($columns)
+	{
+		$this->columns = $columns;
+	}
+	
+	public function setHighlight($highlightedString)
+	{
+		$this->highlightedString = $highlightedString;
+	}
+	
+	public function setTitles($titles)
+	{
+		$this->titles = $titles;
+	}
+	
+	public function setShowInGroups($showInGroups)
+	{
+		$this->showInGroups = $showInGroups;
 	}
 }
 ?>
