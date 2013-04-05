@@ -166,7 +166,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 }
 ?>
 
-<fieldset id="addresslist_groups">
+<fieldset id="addresslist_groups" class="no-print">
 	<legend>Gruppen</legend>
 	<?php
 	foreach ($groups as $name => $row)
@@ -242,7 +242,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 	</tbody>
 </table>
 
-<fieldset id="addresslist_sendmessage">
+<fieldset id="addresslist_sendmessage" class="no-print">
 	<legend>Nachricht senden</legend>
 	
 	<form id="addresslist_sendmessage_form" action="/internalarea/addresslist" method="post" enctype="multipart/form-data" onsubmit="addresslist_sendMessageConfirm(); return false;">

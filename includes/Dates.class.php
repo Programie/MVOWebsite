@@ -3,7 +3,7 @@ class Dates
 {
 	public static function getDates($year = null, $groups = null)
 	{
-		$query = Constants::$pdo->prepare("SELECT `dates`.`id`, `startDate`, `endDate`, `groups`, `bold`, `title`, `description`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates` LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId` WHERE (:year IS NULL OR YEAR(`startDate`) = :year OR YEAR(`endDate`) = :year) ORDER BY `startDate` ASC");
+		$query = Constants::$pdo->prepare("SELECT `dates`.`id`, `startDate`, `endDate`, `groups`, `showInAttendanceList`, `bold`, `title`, `description`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates` LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId` WHERE (:year IS NULL OR YEAR(`startDate`) = :year OR YEAR(`endDate`) = :year) ORDER BY `startDate` ASC");
 		$query->execute(array
 		(
 			":year" => $year

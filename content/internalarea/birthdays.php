@@ -76,7 +76,7 @@ if ($activeGroup != "all")
 echo "<h1>" . $title . "</h1>";
 ?>
 
-<fieldset id="birthdays_groups">
+<fieldset id="birthdays_groups" class="no-print">
 	<legend>Gruppen</legend>
 	<?php
 	foreach ($groups as $name => $row)

@@ -7,11 +7,3 @@
 {
 	width: 100%;
 }
-
-@media print
-{
-	#addresslist_groups, #addresslist_sendmessage
-	{
-		display: none;
-	}
-}

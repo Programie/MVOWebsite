@@ -18,10 +18,11 @@ input[type="checkbox"], input[type="file"], input[type="radio"]
 	cursor: pointer;
 }
 
-form input[type="file"], form input[type="password"], form input[type="text"], form select
+form input[type="file"], form input[type="password"], form input[type="text"], form select, form textarea
 {
 	display: block;
-	margin: 15px;
+	margin-top: 10px;
+	margin-bottom: 15px;
 }
 
 form select
@@ -33,10 +34,17 @@ form select
 	border: 1px solid #ccc;
 }
 
-input[type="password"], input[type="text"]
+form textarea
+{
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+input[type="password"], input[type="text"], textarea
 {
 	padding: 10px;
-	padding-left: 30px;
 	font-size: 16px;
 	border-radius: 5px;
 	background-color: #eee;
@@ -46,6 +54,7 @@ input[type="password"], input[type="text"]
 
 input[type="password"]
 {
+	padding-left: 30px;
 	background-image: url(/files/images/formfields/lock.png);
 	background-repeat: no-repeat;
 	background-position: 5px center;
@@ -60,6 +69,7 @@ input[type="submit"]
 
 .date
 {
+	padding-left: 30px !important;
 	background-image: url(/files/images/formfields/date.png);
 	background-repeat: no-repeat;
 	background-position: 5px center;
@@ -68,6 +78,7 @@ input[type="submit"]
 
 .input-search
 {
+	padding-left: 30px !important;
 	background-image: url(/files/images/formfields/search.png);
 	background-repeat: no-repeat;
 	background-position: 5px center;

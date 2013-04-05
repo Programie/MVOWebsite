@@ -45,6 +45,11 @@ if (Constants::$accountManager->getUserId())
 			$userGroups[] = $row;
 		}
 	}
+	
+	if (Constants::$accountManager->hasPermission("dates.edit"))
+	{
+		echo "<button type='button' id='dates_add_button'>Termin hinzuf&uuml;gen</button>";
+	}
 }
 
 if (!empty($userGroups))
@@ -153,8 +158,24 @@ if ($dates)
 		{
 			$rowClasses[] = "bold";
 		}
+		if ($date->showInAttendanceList)
+		{
+			$rowClasses[] = "dates_showinattendancelist";
+		}
 		
-		$rowAttributes = array();
+		$rowAttributes = array
+		(
+			"dateid='" . $date->id . "'",
+			"startdate='" . $date->startDate . "'"
+		);
+		if ($date->endDate)
+		{
+			$rowAttributes[] = "enddate='" . $date->endDate . "'";
+		}
+		if ($date->groups and $date->groups[0])
+		{
+			$rowAttributes[] = "groups='" . implode(" ", $date->groups) . "'";
+		}
 		
 		if (!empty($rowClasses))
 		{
@@ -174,8 +195,8 @@ if ($dates)
 			<tr " . implode(" ", $rowAttributes) . ">
 				<td number='" . $date->startDate . "' class='nowrap'>" . $dateString . "</td>
 				<td number='" . $date->startDate . "' class='nowrap'>" . $timeString. "</td>
-				<td>
-					" . $date->title . "
+				<td class='dates_titledescription'>
+					<span>" . $date->title . "</span>
 		";
 		if ($date->description)
 		{
@@ -183,7 +204,7 @@ if ($dates)
 		}
 		echo "
 				</td>
-				<td>" . $location . "</td>
+				<td class='dates_location'>" . $location . "</td>
 			</tr>
 		";
 	}
@@ -196,6 +217,84 @@ if ($dates)
 else
 {
 	echo "<div class='error'>Es wurden keine Termine in der ausgew&auml;hlten Gruppe und dem ausgew&auml;hlten Jahr sowie Monat gefunden!</div>";
+}
+
+if (Constants::$accountManager->hasPermission("dates.edit"))
+{
+	echo "
+		<div id='dates_delete'>
+			<p>Soll der ausge&auml;hlte Termin wirklich gel&ouml;scht werden?</p>
+			
+			<table>
+				<tr>
+					<td><b>Datum:</b></td>
+					<td><span></span></td>
+				</tr>
+				<tr>
+					<td><b>Zeit:</b></td>
+					<td><span></span></td>
+				</tr>
+				<tr>
+					<td><b>Veranstaltung:</b></td>
+					<td><span></span></td>
+				</tr>
+				<tr>
+					<td><b>Ort:</b></td>
+					<td><span></span></td>
+				</tr>
+			</table>
+		</div>
+		
+		<div id='dates_edit'>
+			<form id='dates_edit_form' method='post'>
+				<label for='dates_edit_title'>Titel</label>
+				<input type='text' id='dates_edit_title' name='dates_edit_title' placeholder='Titel von diesem Termin'/>
+				
+				<label for='dates_edit_date'>Datum</label>
+				<input type='text' id='dates_edit_date' name='dates_edit_date' class='date' placeholder='TT.MM.JJJJ'/>
+				
+				<label for='dates_edit_time_start'>Zeit</label>
+				<div>
+					<input type='text' id='dates_edit_time_start' name='dates_edit_time_start' placeholder='HH:MM'/>
+					<span>bis</span>
+					<input type='text' id='dates_edit_time_end' name='dates_edit_time_end' placeholder='HH:MM'/>
+				</div>
+				
+				<label for='dates_edit_location'>Ort</label>
+				<input type='text' id='dates_edit_location' name='dates_edit_location' placeholder='Ort, an welchem dieser Termin stattfindet'/>
+				
+				<label for='dates_edit_description'>Beschreibung</label>
+				<textarea id='dates_edit_description' name='dates_edit_description' rows='10' cols='10' placeholder='Weitere Beschreibung von diesem Termin'></textarea>
+				
+				<fieldset id='dates_edit_groups'>
+					<legend>Gruppen</legend>
+	";
+	$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups`");
+	while ($row = $query->fetch())
+	{
+		echo "<div><input type='checkbox' id='dates_edit_groups_" . $row->name . "' name='dates_edit_groups_" . $row->name . "'/><label for='dates_edit_groups_" . $row->name . "'>" . $row->title . "</label></div>";
+	}
+	echo "
+				</fieldset>
+				
+				<fieldset id='dates_edit_options'>
+					<legend>Optionen</legend>
+					
+					<div><input type='checkbox' id='dates_edit_options_showinattendancelist' name='dates_edit_options_showinattendancelist'/><label for='dates_edit_options_showinattendancelist'>In Anwesenheitsliste anzeigen</label></div>
+					<div><input type='checkbox' id='dates_edit_options_bold' name='dates_edit_options_bold'/><label for='dates_edit_options_bold'>Fett</label></div>
+				</fieldset>
+				
+				<input type='hidden' id='dates_edit_id' name='dates_edit_id'/>
+			</form>
+		</div>
+		
+		<div id='dates_edit_contextmenu'>
+			<ul>
+				<li id='dates_edit_contextmenu_edit'>Bearbeiten</li>
+				<li id='dates_edit_contextmenu_delete'>L&ouml;schen</li>
+			</ul>
+		</div>
+	";
 }
 ?>
 <script type="text/javascript">
@@ -211,4 +310,137 @@ else
 		});
 		document.location.href = "/dates/<?php echo $year;?>/" + groups.join("+");
 	}
+	
+	<?php
+	if (Constants::$accountManager->hasPermission("dates.edit"))
+	{
+		$locations = array();
+		$query = Constants::$pdo->query("SELECT `name` FROM `locations`");
+		while ($row = $query->fetch())
+		{
+			$locations[] = $row->name;
+		}
+		?>
+		$("#dates_edit_location").autocomplete(
+		{
+			source : <?php echo json_encode($locations);?>
+		});
+		
+		$("#dates_delete").dialog(
+		{
+			autoOpen : false,
+			closeText : "Schlie&szlig;en",
+			modal : true,
+			resizable : false,
+			title : "Termin l\u00f6schen",
+			width : "auto",
+			buttons :
+			{
+				"OK" : function()
+				{
+					
+				},
+				"Abbrechen" : function()
+				{
+					$(this).dialog("close");
+				}
+			}
+		});
+		
+		$("#dates_edit").dialog(
+		{
+			autoOpen : false,
+			closeText : "Schlie&szlig;en",
+			height : 600,
+			minWidth : 500,
+			modal : true,
+			width : 800,
+			buttons :
+			{
+				"OK" : function()
+				{
+					
+				},
+				"Abbrechen" : function()
+				{
+					$(this).dialog("close");
+				}
+			}
+		});
+		
+		$("#dates_add_button").click(function()
+		{
+			$("#dates_edit_form")[0].reset();
+			$("#dates_edit_id").val(0);
+			$("#dates_edit").dialog("option", "title", $("#dates_add_button").text());
+			$("#dates_edit").dialog("open");
+		});
+		
+		$("#dates_table tbody tr").contextMenu("dates_edit_contextmenu",
+		{
+			bindings :
+			{
+				dates_edit_contextmenu_edit : function(trigger)
+				{
+					$("#dates_edit_form")[0].reset();
+					
+					var startDate = new Date($(trigger).attr("startdate") * 1000);
+					var endDate = new Date($(trigger).attr("enddate") * 1000);
+					var startTime;
+					var endTime;
+					if (startDate && (startDate.getHours() || startDate.getMinutes()))
+					{
+						startTime = ("0" + startDate.getHours()).slice(-2) + ":" + ("0" + startDate.getMinutes()).slice(-2);
+					}
+					if (endDate && (endDate.getHours() || endDate.getMinutes()))
+					{
+						endTime = ("0" + endDate.getHours()).slice(-2) + ":" + ("0" + endDate.getMinutes()).slice(-2);
+					}
+					
+					var groups = $(trigger).attr("groups");
+					if (groups)
+					{
+						groups = groups.split(" ");
+						for (var group in groups)
+						{
+							$("#dates_edit_groups_" + groups[group]).prop("checked", true);
+						}
+					}
+					
+					$("#dates_edit_id").val($(trigger).attr("dateid"));
+					$("#dates_edit_date").datepicker("setDate", startDate);
+					$("#dates_edit_time_start").val(startTime);
+					$("#dates_edit_time_end").val(endTime);
+					$("#dates_edit_title").val($(trigger).find("td.dates_titledescription").find("span").text());
+					$("#dates_edit_description").val($(trigger).find("td.dates_titledescription").find("p").text());
+					$("#dates_edit_location").val($(trigger).find("td.dates_location").text());
+					$("#dates_edit_options_bold").prop("checked", $(trigger).hasClass("bold"));
+					$("#dates_edit_options_showinattendancelist").prop("checked", $(trigger).hasClass("dates_showinattendancelist"));
+					$("#dates_edit").dialog("option", "title", "Termin bearbeiten");
+					$("#dates_edit").dialog("open");
+				},
+				
+				dates_edit_contextmenu_delete : function(trigger)
+				{
+					var column = 0;
+					var confirmTableCells = $("#dates_delete table td span");
+					$(trigger).find("td").each(function()
+					{
+						if ($(this).children().length > 0)
+						{
+							$(confirmTableCells[column]).text($($(this).children()[0]).text());
+						}
+						else
+						{
+							$(confirmTableCells[column]).text($(this).text());
+						}
+						column++;
+					});
+					$("#dates_delete").dialog("open");
+				}
+			}
+		});
+		<?php
+	}
+	?>
 </script>

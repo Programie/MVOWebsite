@@ -1,4 +1,32 @@
-#dates_groups
+#dates_delete, #dates_edit, #dates_edit_contextmenu
+{
+	display: none;
+}
+
+#dates_edit_groups
+{
+	margin-bottom: 10px;
+}
+
+#dates_edit_groups div label, #dates_edit_options div label
+{
+	font-weight: normal;
+}
+
+#dates_edit_location, #dates_edit_title
+{
+	width: 100%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+#dates_edit_time_start, #dates_edit_time_end
+{
+	display: inline;
+}
+
+#dates_add_button, #dates_groups
 {
 	margin-bottom: 20px;
 }

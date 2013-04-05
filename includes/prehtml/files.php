@@ -13,7 +13,7 @@ switch (Constants::$pagePath[1])
 			if ($file[0] != "." and is_file($path . "/" . $file))
 			{
 				readfile($path . "/" . $file);
-				echo "\n\n";
+				echo "\n";
 			}
 		}
 		exit;
@@ -29,6 +29,7 @@ switch (Constants::$pagePath[1])
 			if (is_file($file))
 			{
 				readfile($file);
+				echo "\n";
 			}
 		}
 		exit;
