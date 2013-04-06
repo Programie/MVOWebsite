@@ -19,15 +19,13 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 		}
 	}
 	
-	$userData = Constants::$accountManager->getUserData();
-	
 	if ($_POST["events_upload_confirmed"])
 	{
 		$error = "Beim Hochladen ist ein Fehler aufgetreten! Bitte versuche es erneut oder wende dich an den Webmaster.";
 		
 		if ($events[$_POST["events_upload_event"]])
 		{
-			if ($_POST["events_upload_sendtoken"] == $userData->sendToken)
+			if ($_POST["events_upload_sendtoken"] == Constants::$accountManager->getSendToken())
 			{
 				$file = $_FILES["events_upload_file"];
 				switch ($file["error"])
@@ -63,7 +61,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 							(
 								":typeId" => $typeId,
 								":year" => $year,
-								":userId" => $userData->id,
+								":userId" => Constants::$accountManager->getUserId(),
 								":uploadId" => $uploadId
 							));
 							
@@ -130,7 +128,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 				<input type='file' id='events_upload_file' name='events_upload_file'/>
 				
 				<input type='hidden' id='events_upload_confirmed' name='events_upload_confirmed'/>
-				<input type='hidden' name='events_upload_sendtoken' value='" . Constants::$accountManager->getSendToken() . "'/>
+				<input type='hidden' name='events_upload_sendtoken' value='" . Constants::$accountManager->getSendToken(true) . "'/>
 				
 				<input type='submit' value='Hochladen'/>
 			</form>

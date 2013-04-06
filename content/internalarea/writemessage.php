@@ -6,8 +6,7 @@ if (isset($_POST["writemessage_confirmed"]))
 	$error = "Beim Senden der Nachricht ist ein Fehler aufgetreten!";
 	if ($_POST["writemessage_confirmed"] and $_POST["writemessage_text"])
 	{
-		$userData = Constants::$accountManager->getUserData();
-		if ($_POST["writemessage_sendtoken"] == $userData->sendToken)
+		if ($_POST["writemessage_sendtoken"] == Constants::$accountManager->getSendToken())
 		{
 			$date = explode(".", $_POST["writemessage_validtill_date"]);
 			if (!$_POST["writemessage_validtill_enabled"] or checkdate($date[1], $date[0], $date[2]))
@@ -80,6 +79,7 @@ if (isset($_POST["writemessage_confirmed"]))
 				
 				if (!empty($mailRecipients) and $send)
 				{
+					$userData = Constants::$accountManager->getUserData();
 					$ccMail = null;
 					if ($_POST["writemessage_sendcopy"])
 					{
@@ -203,7 +203,7 @@ if (isset($_POST["writemessage_confirmed"]))
 	
 	<input type="hidden" id="writemessage_sendcopy" name="writemessage_sendcopy"/>
 	<input type="hidden" id="writemessage_confirmed" name="writemessage_confirmed"/>
-	<input type="hidden" name="writemessage_sendtoken" value="<?php echo Constants::$accountManager->getSendToken();?>"/>
+	<input type="hidden" name="writemessage_sendtoken" value="<?php echo Constants::$accountManager->getSendToken(true);?>"/>
 	
 	<input type="submit" value="Senden"/>
 </form>

@@ -129,18 +129,34 @@ class AccountManager
 		return hash("sha512", $userId . "_" . $password);
 	}
 	
+	private function generateToken()
+	{
+		return md5(time() . "-" . rand());
+	}
+	
 	public function getCalendarToken($generateNew = false)
 	{
-		$query = Constants::$pdo->prepare("SELECT `calendarToken` FROM `users` WHERE `id` = :userId");
+		$query = Constants::$pdo->prepare("SELECT `calendarToken` FROM `users` WHERE `id` = :id");
 		$query->execute(array
 		(
-			":userId" => $this->userId
+			":id" => $this->userId
 		));
 		$row = $query->fetch();
 		$token = $row->calendarToken;
+		
 		if (!$token or $generateNew)
 		{
-			$token = md5(rand());
+			$token = $this->generateToken();
+			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `calendarToken` = :calendarToken AND `id` != :id");
+			$query->execute(array
+			(
+				":calendarToken" => $token,
+				":id" => $this->id
+			));
+			if ($query->rowCount())
+			{
+				return $this->getCalendarToken(true);
+			}
 			$query = Constants::$pdo->prepare("UPDATE `users` SET `calendarToken` = :calendarToken WHERE `id` = :id");
 			$query->execute(array
 			(
@@ -148,6 +164,7 @@ class AccountManager
 				":id" => $this->userId
 			));
 		}
+		
 		return $token;
 	}
 	
@@ -168,18 +185,28 @@ class AccountManager
 		return $this->permissions;
 	}
 	
-	public function getSendToken()
+	public function getSendToken($generateNew = false)
 	{
-		$sendToken = md5(rand());
-		
-		$query = Constants::$pdo->prepare("UPDATE `users` SET `sendToken` = :sendToken WHERE `id` = :id");
+		$query = Constants::$pdo->prepare("SELECT `sendToken` FROM `users` WHERE `id` = :id");
 		$query->execute(array
 		(
-			":sendToken" => $sendToken,
 			":id" => $this->userId
 		));
+		$row = $query->fetch();
+		$token = $row->sendToken;
 		
-		return $sendToken;
+		if (!$token or $generateNew)
+		{
+			$token = $this->generateToken();
+			$query = Constants::$pdo->prepare("UPDATE `users` SET `sendToken` = :sendToken WHERE `id` = :id");
+			$query->execute(array
+			(
+				":sendToken" => $token,
+				":id" => $this->userId
+			));
+		}
+		
+		return $token;
 	}
 	
 	public function getUserData($userId = null)

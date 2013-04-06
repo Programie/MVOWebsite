@@ -33,7 +33,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 	if ($_POST["addresslist_sendmessage_confirmed"])
 	{
 		$userData = Constants::$accountManager->getUserData();
-		if ($_POST["addresslist_sendmessage_sendtoken"] == $userData->sendToken)
+		if ($_POST["addresslist_sendmessage_sendtoken"] == Constants::$accountManager->getSendToken())
 		{
 			$targetUsers = array();
 			$recipients = explode(",", $_POST["addresslist_sendmessage_recipients"]);
@@ -255,7 +255,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 		<input type="hidden" id="addresslist_sendmessage_sendcopy" name="addresslist_sendmessage_sendcopy"/>
 		<input type="hidden" id="addresslist_sendmessage_confirmed" name="addresslist_sendmessage_confirmed"/>
 		<input type="hidden" id="addresslist_sendmessage_recipients" name="addresslist_sendmessage_recipients"/>
-		<input type="hidden" name="addresslist_sendmessage_sendtoken" value="<?php echo Constants::$accountManager->getSendToken();?>"/>
+		<input type="hidden" name="addresslist_sendmessage_sendtoken" value="<?php echo Constants::$accountManager->getSendToken(true);?>"/>
 		<input type="submit" value="Senden"/>
 	</form>
 </fieldset>
