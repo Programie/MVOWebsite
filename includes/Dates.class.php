@@ -3,11 +3,19 @@ class Dates
 {
 	public static function getDates($year = null, $groups = null)
 	{
-		$query = Constants::$pdo->prepare("SELECT `dates`.`id`, `startDate`, `endDate`, `groups`, `showInAttendanceList`, `bold`, `title`, `description`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates` LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId` WHERE (:year IS NULL OR YEAR(`startDate`) = :year OR YEAR(`endDate`) = :year) ORDER BY `startDate` ASC");
-		$query->execute(array
-		(
-			":year" => $year
-		));
+		$sql = array();
+		$sql[] = "SELECT `dates`.`id`, `startDate`, `endDate`, `groups`, `showInAttendanceList`, `bold`, `title`, `description`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates`";
+		$sql[] = "LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId`";
+		if ($year == "current")
+		{
+			$sql[] = "WHERE `startDate` >= NOW() OR `endDate` >= NOW()";
+		}
+		elseif (is_numeric($year))
+		{
+			$sql[] = "WHERE (YEAR(`startDate`) = " . intval($year) . " OR YEAR(`endDate`) = " . intval($year) . ")";
+		}
+		$sql[] = "ORDER BY `startDate` ASC";
+		$query = Constants::$pdo->query(implode(" ", $sql));
 		
 		if (!$query->rowCount())
 		{
@@ -74,7 +82,7 @@ class Dates
 				$row->oldEvent = $row->startDate < time();
 			}
 			
-			if (!$nextEventFound and ($row->startDate >= time() or $row->endDate >= time()))
+			if ($year != "current" and !$nextEventFound and ($row->startDate >= time() or $row->endDate >= time()))
 			{
 				$row->nextEvent = true;
 				$nextEventFound = true;

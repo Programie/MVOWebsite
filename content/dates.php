@@ -4,34 +4,30 @@ $activeGroups = explode(" ", Constants::$pagePath[2]);
 
 if (!$year)
 {
-	$year = date("Y");
+	$year = "current";
 }
 
-$year = intval($year);
-if (!$year)
+if ($year != "current")
 {
-	$year = null;
+	$year = intval($year);
+	if (!$year)
+	{
+		$year = null;
+	}
 }
 
-$title = "Termine";
+$title = array("Termine");
 
 $dates = Dates::getDates($year, $activeGroups);
 if ($dates)
 {
-	$additionalTitle = array();
-	
-	if ($year)
+	if (is_numeric($year))
 	{
-		$additionalTitle[] = date("Y", $dates[0]->startDate);
-	}
-	
-	if (!empty($additionalTitle))
-	{
-		$title .= " - " . implode(" ", $additionalTitle);
+		$title[] = date("Y", $dates[0]->startDate);
 	}
 }
 
-echo "<h1>" . $title . "</h1>";
+echo "<h1>" . implode(" - ", $title) . "</h1>";
 
 $userGroups = array();
 

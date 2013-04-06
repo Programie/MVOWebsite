@@ -95,6 +95,11 @@ class MenuBuilder
 			case "dates":
 				$items = array();
 				
+				$item = new StdClass;
+				$item->path = "/dates/current";
+				$item->title = "Aktuell";
+				$items[] = $item;
+				
 				$years = Dates::getYears();
 				krsort($years, SORT_NUMERIC);
 				foreach ($years as $year => $data)
