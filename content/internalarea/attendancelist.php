@@ -4,7 +4,7 @@ $query = Constants::$pdo->query("SELECT `id`, `startDate`, `groups`, `title` FRO
 while ($row = $query->fetch())
 {
 	$row->groups = explode(",", $row->groups);
-	if (!Constants::$accountManager->hasPermissionInArray($row->groups, "dates"))
+	if (!Constants::$accountManager->hasPermissionInArray($row->groups, "dates.view"))
 	{
 		continue;
 	}
