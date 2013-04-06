@@ -129,6 +129,28 @@ class AccountManager
 		return hash("sha512", $userId . "_" . $password);
 	}
 	
+	public function getCalendarToken($generateNew = false)
+	{
+		$query = Constants::$pdo->prepare("SELECT `calendarToken` FROM `users` WHERE `id` = :userId");
+		$query->execute(array
+		(
+			":userId" => $this->userId
+		));
+		$row = $query->fetch();
+		$token = $row->calendarToken;
+		if (!$token or $generateNew)
+		{
+			$token = md5(rand());
+			$query = Constants::$pdo->prepare("UPDATE `users` SET `calendarToken` = :calendarToken WHERE `id` = :id");
+			$query->execute(array
+			(
+				":calendarToken" => $token,
+				":id" => $this->userId
+			));
+		}
+		return $token;
+	}
+	
 	public function getPermissions()
 	{
 		$this->permissions = array();

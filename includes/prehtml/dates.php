@@ -4,6 +4,19 @@ if ($calendar == "internal.ics" or $calendar == "public.ics")
 {
 	if ($calendar == "internal.ics")
 	{
+		if (Constants::$pagePath[2])
+		{
+			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `calendarToken` = :calendarToken");
+			$query->execute(array
+			(
+				":calendarToken" => Constants::$pagePath[2]
+			));
+			$row = $query->fetch();
+			if ($row->id)
+			{
+				Constants::$accountManager->loginWithUserId($row->id);
+			}
+		}
 		if (!Constants::$accountManager->getUserId())
 		{
 			header("WWW-Authenticate: Basic realm='Interner Bereich'");

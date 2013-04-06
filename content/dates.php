@@ -198,9 +198,12 @@ if (!empty($userGroups))
 
 if ($dates)
 {
+	$iCalendarToken = "";
 	if (Constants::$accountManager->getUserId())
 	{
+		$iCalendarToken = Constants::$accountManager->getCalendarToken();
 		$iCalendarUrl = BASE_URL . "/dates/internal.ics";
+		$iCalendarTokenUrl = $iCalendarUrl . "/" . $iCalendarToken;
 	}
 	else
 	{
@@ -208,8 +211,14 @@ if ($dates)
 	}
 	echo "
 		<div class='no-print' id='dates_info_ics'>
-			Diese Termine k&ouml;nnen im iCalendar-Format abgerufen werden, um sie in einer Kalenderanwendung wie z.B. Outlook, Google Kalender oder einer Kalender-App auf dem Smartphone anzuzeigen.<br />
-			Einfach den folgenden Link in einer Kalenderanwendung einf&uuml;gen: <a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>
+			Diese Termine k&ouml;nnen im iCalendar-Format abgerufen werden, um sie in einer Kalenderanwendung wie z.B. Outlook oder einer Kalender-App auf dem Smartphone anzuzeigen.<br />
+			Folgenden Link in der Kalenderanwendung einf&uuml;gen: <a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>.
+	";
+	if ($iCalendarToken)
+	{
+		echo "<p>Sollte die verwendete Kalenderanwendung keine Authentifizierung unterst&uuml;tzen (z.B. Google Kalender), bitte den folgenden Link verwenden: <a href='" . $iCalendarTokenUrl . "'>" . $iCalendarTokenUrl . "</a></p>";
+	}
+	echo "
 		</div>
 		<table id='dates_table' class='table tablesorter {sortlist: [[0,0]]}'>
 			<thead>
