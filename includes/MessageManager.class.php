@@ -21,7 +21,7 @@ class MessageManager
 				
 				<div id='messages_edit_contextmenu'>
 					<ul>
-						<li id='messages_edit_contextmenu_hide'>Ausblenden</li>
+						<li id='messages_edit_contextmenu_hide'><img src='/files/images/contextmenu/trash.png'/> Ausblenden</li>
 					</ul>
 				</div>
 				
@@ -101,7 +101,7 @@ class MessageManager
 		$sql[] = "WHERE `enabled`";
 		if ($id == null or $id == -1)
 		{
-			$sql[] = "AND `validTill` IS NULL OR `validTill` >= CURDATE() ORDER BY `messages`.`id` DESC";
+			$sql[] = "AND (`validTill` IS NULL OR `validTill` >= CURDATE()) ORDER BY `messages`.`id` DESC";
 			$query = Constants::$pdo->query(implode(" ", $sql));
 		}
 		else

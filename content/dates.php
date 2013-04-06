@@ -147,7 +147,7 @@ if (Constants::$accountManager->getUserId())
 				echo "<div class='error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
 			}
 		}
-		echo "<button type='button' id='dates_add_button'>Termin hinzuf&uuml;gen</button>";
+		echo "<button type='button' id='dates_add_button'>Neuer Termin</button>";
 	}
 }
 
@@ -408,8 +408,8 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 		
 		<div id='dates_edit_contextmenu'>
 			<ul>
-				<li id='dates_edit_contextmenu_edit'>Bearbeiten</li>
-				<li id='dates_edit_contextmenu_hide'>Ausblenden</li>
+				<li id='dates_edit_contextmenu_edit'><img src='/files/images/contextmenu/edit.png'/> Bearbeiten</li>
+				<li id='dates_edit_contextmenu_hide'><img src='/files/images/contextmenu/trash.png'/> Ausblenden</li>
 			</ul>
 		</div>
 	";

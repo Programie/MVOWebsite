@@ -17,7 +17,6 @@
 			margin: '0px',
 			backgroundColor: '#FFF',
 			border: '1px solid #AAA',
-			width: '100px',
 			mozBoxShadow: '0px 0px 5px 2px #AAAAAA',
 			webKitBoxShadow: '0px 0px 7px #AAAAAA',
 			boxShadow: '0px 0px 5px 2px #AAAAAA'
