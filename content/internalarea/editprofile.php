@@ -88,7 +88,7 @@ $userData = Constants::$accountManager->getUserData();
 			<input type="hidden" name="editprofile_tab" value="account"/>
 			
 			<label for="editprofile_account_username">Benutzername:</label>
-			<input type="text" id="editprofile_account_username" name="editprofile_account_username" value="<?php echo htmlspecialchars($userData->username);?>" required/>
+			<input type="text" class="input-user" id="editprofile_account_username" name="editprofile_account_username" value="<?php echo htmlspecialchars($userData->username);?>" required/>
 			
 			<label for="editprofile_account_firstname">Vorname:</label>
 			<input type="text" id="editprofile_account_firstname" name="editprofile_account_firstname" value="<?php echo htmlspecialchars($userData->firstName);?>" required/>
@@ -319,13 +319,13 @@ $userData = Constants::$accountManager->getUserData();
 			<input type="password" id="editprofile_changeemail_currentpassword" name="editprofile_changeemail_currentpassword" value="<?php echo htmlspecialchars($_POST["editprofile_changeemail_currentpassword"]);?>" required/>
 			
 			<label for="editprofile_changeemail_current">Aktuelle Email-Adresse:</label>
-			<input type="text" id="editprofile_changeemail_current" value="<?php echo $userData->email;?>" disabled/>
+			<input type="text" class="input-email" id="editprofile_changeemail_current" value="<?php echo $userData->email;?>" disabled/>
 			
 			<label for="editprofile_changeemail_new1">Neue Email-Adresse:</label>
-			<input type="text" id="editprofile_changeemail_new1" name="editprofile_changeemail_new1" value="<?php echo htmlspecialchars($_POST["editprofile_changeemail_new1"]);?>" required/>
+			<input type="text" class="input-email" id="editprofile_changeemail_new1" name="editprofile_changeemail_new1" value="<?php echo htmlspecialchars($_POST["editprofile_changeemail_new1"]);?>" required/>
 			
 			<label for="editprofile_changeemail_new2">Neue Email-Adresse wiederholen:</label>
-			<input type="text" id="editprofile_changeemail_new2" name="editprofile_changeemail_new2" value="<?php echo htmlspecialchars($_POST["editprofile_changeemail_new2"]);?>" required/>
+			<input type="text" class="input-email" id="editprofile_changeemail_new2" name="editprofile_changeemail_new2" value="<?php echo htmlspecialchars($_POST["editprofile_changeemail_new2"]);?>" required/>
 			
 			<input type="submit" value="Speichern"/>
 		</form>
@@ -355,19 +355,19 @@ $userData = Constants::$accountManager->getUserData();
 			<input type="hidden" name="editprofile_tab" value="contact"/>
 			
 			<label for="editprofile_contact_phone_private1">Telefon (Privat):</label>
-			<input type="text" id="editprofile_contact_phone_private1" name="editprofile_contact_phone_private1" value="<?php echo htmlspecialchars($userData->phonePrivate1);?>"/>
+			<input type="text" class="input-phone" id="editprofile_contact_phone_private1" name="editprofile_contact_phone_private1" value="<?php echo htmlspecialchars($userData->phonePrivate1);?>"/>
 			
 			<label for="editprofile_contact_phone_private2">Telefon (Privat):</label>
-			<input type="text" id="editprofile_contact_phone_private2" name="editprofile_contact_phone_private2" value="<?php echo htmlspecialchars($userData->phonePrivate2);?>"/>
+			<input type="text" class="input-phone" id="editprofile_contact_phone_private2" name="editprofile_contact_phone_private2" value="<?php echo htmlspecialchars($userData->phonePrivate2);?>"/>
 			
 			<label for="editprofile_contact_phone_work">Telefon (Gesch&auml;ftlich):</label>
-			<input type="text" id="editprofile_contact_phone_work" name="editprofile_contact_phone_work" value="<?php echo htmlspecialchars($userData->phoneWork);?>"/>
+			<input type="text" class="input-phone" id="editprofile_contact_phone_work" name="editprofile_contact_phone_work" value="<?php echo htmlspecialchars($userData->phoneWork);?>"/>
 			
 			<label for="editprofile_contact_phone_mobile">Mobil:</label>
-			<input type="text" id="editprofile_contact_phone_mobile" name="editprofile_contact_phone_mobile" value="<?php echo htmlspecialchars($userData->phoneMobile);?>"/>
+			<input type="text" class="input-mobile-phone" id="editprofile_contact_phone_mobile" name="editprofile_contact_phone_mobile" value="<?php echo htmlspecialchars($userData->phoneMobile);?>"/>
 			
 			<label for="editprofile_contact_fax">Fax:</label>
-			<input type="text" id="editprofile_contact_fax" name="editprofile_contact_fax" value="<?php echo htmlspecialchars($userData->fax);?>"/>
+			<input type="text" class="input-fax" id="editprofile_contact_fax" name="editprofile_contact_fax" value="<?php echo htmlspecialchars($userData->fax);?>"/>
 			
 			<input type="submit" value="Speichern"/>
 		</form>

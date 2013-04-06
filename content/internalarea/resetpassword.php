@@ -142,7 +142,7 @@ else
 		}
 		echo "
 			<form action='/internalarea/resetpassword' method='post'>
-				<input type='text' id='resetpassword_username' name='resetpassword_username' placeholder='Benutzername' required/>
+				<input type='text' class='input-user' id='resetpassword_username' name='resetpassword_username' placeholder='Benutzername' required/>
 				
 				<input type='submit' value='Senden'/>
 			</form>

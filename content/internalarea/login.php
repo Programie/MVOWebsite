@@ -14,7 +14,7 @@ else
 	}
 	echo "
 		<form action='/internalarea/login' method='post'>
-			<input type='text' id='loginform_username' name='username' placeholder='Benutzername' required/>
+			<input type='text' class='input-user' id='loginform_username' name='username' placeholder='Benutzername' required/>
 			<input type='password' name='password' placeholder='Passwort' required/>
 			
 			<div>

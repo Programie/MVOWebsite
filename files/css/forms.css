@@ -1,9 +1,4 @@
-button
-{
-	cursor: pointer;
-}
-
-label
+button, label, input[type="checkbox"], input[type="file"], input[type="radio"]
 {
 	cursor: pointer;
 }
@@ -11,11 +6,6 @@ label
 legend
 {
 	font-weight: bold;
-}
-
-input[type="checkbox"], input[type="file"], input[type="radio"]
-{
-	cursor: pointer;
 }
 
 form input[type="file"], form input[type="password"], form input[type="text"], form select, form textarea
@@ -42,6 +32,13 @@ form textarea
 	box-sizing: border-box;
 }
 
+input[type="password"], .date, .input-email, .input-fax, .input-mobile-phone, .input-phone, .input-search, .input-user
+{
+	padding-left: 30px !important;
+	background-repeat: no-repeat;
+	background-position: 5px center;
+}
+
 input[type="password"], input[type="text"], textarea
 {
 	padding: 10px;
@@ -54,10 +51,7 @@ input[type="password"], input[type="text"], textarea
 
 input[type="password"]
 {
-	padding-left: 30px;
 	background-image: url(/files/images/formfields/lock.png);
-	background-repeat: no-repeat;
-	background-position: 5px center;
 }
 
 input[type="submit"]
@@ -69,19 +63,38 @@ input[type="submit"]
 
 .date
 {
-	padding-left: 30px !important;
 	background-image: url(/files/images/formfields/date.png);
-	background-repeat: no-repeat;
-	background-position: 5px center;
 	width: 100px;
+}
+
+.input-email
+{
+	background-image: url(/files/images/formfields/email.png);
+}
+
+.input-fax
+{
+	background-image: url(/files/images/formfields/fax.png);
+}
+
+.input-mobile-phone
+{
+	background-image: url(/files/images/formfields/mobile-phone.png);
+}
+
+.input-phone
+{
+	background-image: url(/files/images/formfields/phone.png);
 }
 
 .input-search
 {
-	padding-left: 30px !important;
 	background-image: url(/files/images/formfields/search.png);
-	background-repeat: no-repeat;
-	background-position: 5px center;
+}
+
+.input-user
+{
+	background-image: url(/files/images/formfields/user.png);
 }
 
 form label
