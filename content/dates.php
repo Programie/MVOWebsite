@@ -48,6 +48,109 @@ if (Constants::$accountManager->getUserId())
 	
 	if (Constants::$accountManager->hasPermission("dates.edit"))
 	{
+		if (isset($_POST["dates_edit_id"]))
+		{
+			$userData = Constants::$accountManager->getUserData();
+			if ($_POST["dates_edit_sendtoken"] == $userData->sendToken)
+			{
+				$id = intval($_POST["dates_edit_id"]);
+				if ($id and $_POST["dates_edit_delete"])
+				{
+					$query = Constants::$pdo->prepare("DELETE FROM `dates` WHERE `id` = :id");
+					$query->execute(array
+					(
+						":id" => $_POST["dates_edit_id"]
+					));
+					$dates = Dates::getDates($year, $activeGroups);
+					echo "<div class='ok'>Der Termin wurde erfolgreich gel&ouml;scht.</div>";
+				}
+				else
+				{
+					$date = explode(".", $_POST["dates_edit_date"]);
+					if (@checkdate($date[1], $date[0], $date[2]))
+					{
+						if (!$id)
+						{
+							Constants::$pdo->query("INSERT INTO `dates` () VALUES()");
+							$id = Constants::$pdo->lastInsertId();
+						}
+						$locationId = 0;
+						if ($_POST["dates_edit_location"])
+						{
+							$query = Constants::$pdo->prepare("SELECT `id` FROM `locations` WHERE `name` = :name");
+							$query->execute(array
+							(
+								":name" => $_POST["dates_edit_location"]
+							));
+							$row = $query->fetch();
+							$locationId = $row->id;
+							if (!$locationId)
+							{
+								$query = Constants::$pdo->prepare("INSERT INTO `locations` (`name`) VALUES(:name)");
+								$query->execute(array
+								(
+									":name" => $_POST["dates_edit_location"]
+								));
+								$locationId = Constants::$pdo->lastInsertId();
+							}
+						}
+						
+						$startTime = $_POST["dates_edit_time_start"];
+						$endTime = $_POST["dates_edit_time_end"];
+						
+						$endDate = null;
+						if ($startTime and $endTime)
+						{
+							$endDate = $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $endTime;
+						}
+						$groups = array();
+						foreach ($_POST as $key => $value)
+						{
+							if (substr($key, 0, 18) == "dates_edit_groups_")
+							{
+								$groups[] = substr($key, 18);
+							}
+						}
+						
+						$query = Constants::$pdo->prepare("
+							UPDATE `dates`
+							SET
+								`startDate` = :startDate,
+								`endDate` = :endDate,
+								`groups` = :groups,
+								`title` = :title,
+								`description` = :description,
+								`locationId` = :locationId,
+								`showInAttendanceList` = :showInAttendanceList,
+								`bold` = :bold
+							WHERE `id` = :id
+						");
+						$query->execute(array
+						(
+							":startDate" => $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $startTime,
+							":endDate" => $endDate,
+							":groups" => implode(",", $groups),
+							":title" => $_POST["dates_edit_title"],
+							":description" => $_POST["dates_edit_description"],
+							":locationId" => $locationId,
+							":showInAttendanceList" => !!$_POST["dates_edit_options_showinattendancelist"],
+							":bold" => !!$_POST["dates_edit_options_bold"],
+							":id" => $id
+						));
+						$dates = Dates::getDates($year, $activeGroups);
+						echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+					}
+					else
+					{
+						echo "<div class='error'>Das eingegebene Datum ist ung&uuml;ltig!</div>";
+					}
+				}
+			}
+			else
+			{
+				echo "<div class='error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
+			}
+		}
 		echo "<button type='button' id='dates_add_button'>Termin hinzuf&uuml;gen</button>";
 	}
 }
@@ -221,6 +324,7 @@ else
 
 if (Constants::$accountManager->hasPermission("dates.edit"))
 {
+	$sendToken = Constants::$accountManager->getSendToken();
 	echo "
 		<div id='dates_delete'>
 			<p>Soll der ausge&auml;hlte Termin wirklich gel&ouml;scht werden?</p>
@@ -243,10 +347,16 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 					<td><span></span></td>
 				</tr>
 			</table>
+			
+			<form id='dates_delete_form' method='post' onsubmit='return false'>
+				<input type='hidden' id='dates_edit_sendtoken' name='dates_edit_sendtoken' value='" . $sendToken . "'/>
+				<input type='hidden' id='dates_delete_id' name='dates_edit_id'/>
+				<input type='hidden' id='dates_edit_delete' name='dates_edit_delete' value='1'/>
+			</form>
 		</div>
 		
 		<div id='dates_edit'>
-			<form id='dates_edit_form' method='post'>
+			<form id='dates_edit_form' method='post' onsubmit='return false'>
 				<label for='dates_edit_title'>Titel</label>
 				<input type='text' id='dates_edit_title' name='dates_edit_title' placeholder='Titel von diesem Termin'/>
 				
@@ -284,6 +394,7 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 					<div><input type='checkbox' id='dates_edit_options_bold' name='dates_edit_options_bold'/><label for='dates_edit_options_bold'>Fett</label></div>
 				</fieldset>
 				
+				<input type='hidden' id='dates_edit_sendtoken' name='dates_edit_sendtoken' value='" . $sendToken . "'/>
 				<input type='hidden' id='dates_edit_id' name='dates_edit_id'/>
 			</form>
 		</div>
@@ -338,7 +449,7 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 			{
 				"OK" : function()
 				{
-					
+					$("#dates_delete_form")[0].submit();
 				},
 				"Abbrechen" : function()
 				{
@@ -359,7 +470,21 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 			{
 				"OK" : function()
 				{
-					
+					if ($("#dates_edit_title").val())
+					{
+						if ($("#dates_edit_date").val())
+						{
+							$("#dates_edit_form")[0].submit();
+						}
+						else
+						{
+							alert("Kein Datum angegeben!");
+						}
+					}
+					else
+					{
+						alert("Kein Titel angegeben!");
+					}
 				},
 				"Abbrechen" : function()
 				{
@@ -411,8 +536,8 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 					$("#dates_edit_date").datepicker("setDate", startDate);
 					$("#dates_edit_time_start").val(startTime);
 					$("#dates_edit_time_end").val(endTime);
-					$("#dates_edit_title").val($(trigger).find("td.dates_titledescription").find("span").text());
-					$("#dates_edit_description").val($(trigger).find("td.dates_titledescription").find("p").text());
+					$("#dates_edit_title").val($($(trigger).find("td.dates_titledescription span")[0]).text());
+					$("#dates_edit_description").val($($(trigger).find("td.dates_titledescription p")[0]).text());
 					$("#dates_edit_location").val($(trigger).find("td.dates_location").text());
 					$("#dates_edit_options_bold").prop("checked", $(trigger).hasClass("bold"));
 					$("#dates_edit_options_showinattendancelist").prop("checked", $(trigger).hasClass("dates_showinattendancelist"));
@@ -436,6 +561,7 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 						}
 						column++;
 					});
+					$("#dates_delete_id").val($(trigger).attr("dateid"));
 					$("#dates_delete").dialog("open");
 				}
 			}
