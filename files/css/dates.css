@@ -43,4 +43,5 @@
 	background-image: url(/files/icons/ics.png);
 	background-repeat: no-repeat;
 	padding-left: 70px;
+	min-height: 64px;
 }
