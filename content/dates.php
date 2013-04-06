@@ -50,15 +50,15 @@ if (Constants::$accountManager->getUserId())
 			if ($_POST["dates_edit_sendtoken"] == $userData->sendToken)
 			{
 				$id = intval($_POST["dates_edit_id"]);
-				if ($id and $_POST["dates_edit_delete"])
+				if ($id and $_POST["dates_edit_hide"])
 				{
-					$query = Constants::$pdo->prepare("DELETE FROM `dates` WHERE `id` = :id");
+					$query = Constants::$pdo->prepare("UPDATE `dates` SET `enabled` = '0' WHERE `id` = :id");
 					$query->execute(array
 					(
 						":id" => $_POST["dates_edit_id"]
 					));
 					$dates = Dates::getDates($year, $activeGroups);
-					echo "<div class='ok'>Der Termin wurde erfolgreich gel&ouml;scht.</div>";
+					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
 				else
 				{
@@ -331,8 +331,8 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 {
 	$sendToken = Constants::$accountManager->getSendToken();
 	echo "
-		<div id='dates_delete'>
-			<p>Soll der ausge&auml;hlte Termin wirklich gel&ouml;scht werden?</p>
+		<div id='dates_hide'>
+			<p>Soll der ausgew&auml;hlte Termin wirklich ausgeblendet werden?</p>
 			
 			<table>
 				<tr>
@@ -353,10 +353,12 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 				</tr>
 			</table>
 			
-			<form id='dates_delete_form' method='post' onsubmit='return false'>
+			<p><b>Hinweis:</b> Der Termin kann nur &uuml;ber die Datenbank wiederhergestellt werden!</p>
+			
+			<form id='dates_hide_form' method='post' onsubmit='return false'>
 				<input type='hidden' id='dates_edit_sendtoken' name='dates_edit_sendtoken' value='" . $sendToken . "'/>
-				<input type='hidden' id='dates_delete_id' name='dates_edit_id'/>
-				<input type='hidden' id='dates_edit_delete' name='dates_edit_delete' value='1'/>
+				<input type='hidden' id='dates_hide_id' name='dates_edit_id'/>
+				<input type='hidden' id='dates_edit_hide' name='dates_edit_hide' value='1'/>
 			</form>
 		</div>
 		
@@ -407,7 +409,7 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 		<div id='dates_edit_contextmenu'>
 			<ul>
 				<li id='dates_edit_contextmenu_edit'>Bearbeiten</li>
-				<li id='dates_edit_contextmenu_delete'>L&ouml;schen</li>
+				<li id='dates_edit_contextmenu_hide'>Ausblenden</li>
 			</ul>
 		</div>
 	";
@@ -442,19 +444,19 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 			source : <?php echo json_encode($locations);?>
 		});
 		
-		$("#dates_delete").dialog(
+		$("#dates_hide").dialog(
 		{
 			autoOpen : false,
 			closeText : "Schlie&szlig;en",
 			modal : true,
 			resizable : false,
-			title : "Termin l\u00f6schen",
+			title : "Termin ausblenden",
 			width : "auto",
 			buttons :
 			{
 				"OK" : function()
 				{
-					$("#dates_delete_form")[0].submit();
+					$("#dates_hide_form")[0].submit();
 				},
 				"Abbrechen" : function()
 				{
@@ -550,10 +552,10 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 					$("#dates_edit").dialog("open");
 				},
 				
-				dates_edit_contextmenu_delete : function(trigger)
+				dates_edit_contextmenu_hide : function(trigger)
 				{
 					var column = 0;
-					var confirmTableCells = $("#dates_delete table td span");
+					var confirmTableCells = $("#dates_hide table td span");
 					$(trigger).find("td").each(function()
 					{
 						if ($(this).children().length > 0)
@@ -566,8 +568,8 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 						}
 						column++;
 					});
-					$("#dates_delete_id").val($(trigger).attr("dateid"));
-					$("#dates_delete").dialog("open");
+					$("#dates_hide_id").val($(trigger).attr("dateid"));
+					$("#dates_hide").dialog("open");
 				}
 			}
 		});

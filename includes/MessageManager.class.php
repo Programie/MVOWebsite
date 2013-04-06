@@ -1,20 +1,113 @@
 <?php
 class MessageManager
 {
+	public function addEditOptions()
+	{
+		if (Constants::$accountManager->hasPermission("messages.delete"))
+		{
+			echo "
+				<div id='messages_hide'>
+					<p>Soll die ausgew&auml;hlte Nachricht wirklich ausgeblendet werden?</p>
+					
+					<div id='messages_hide_info'></div>
+					
+					<p><b>Hinweis:</b> Die Nachricht kann nur &uuml;ber die Datenbank wiederhergestellt werden!</p>
+					
+					<form id='messages_hide_form' method='post' onsubmit='return false'>
+						<input type='hidden' id='messages_hide_sendtoken' name='messages_hide_sendtoken' value='" . Constants::$accountManager->getSendToken() . "'/>
+						<input type='hidden' id='messages_hide_id' name='messages_hide_id'/>
+					</form>
+				</div>
+				
+				<div id='messages_edit_contextmenu'>
+					<ul>
+						<li id='messages_edit_contextmenu_hide'>Ausblenden</li>
+					</ul>
+				</div>
+				
+				<script type='text/javascript'>
+					$('#messages_hide').dialog(
+					{
+						autoOpen : false,
+						closeText : 'Schlie&szlig;en',
+						modal : true,
+						resizable : false,
+						title : 'Nachricht ausblenden',
+						width : 'auto',
+						buttons :
+						{
+							'OK' : function()
+							{
+								$('#messages_hide_form')[0].submit();
+							},
+							'Abbrechen' : function()
+							{
+								$(this).dialog('close');
+							}
+						}
+					});
+					
+					$('.messages_container').contextMenu('messages_edit_contextmenu',
+					{
+						bindings :
+						{
+							messages_edit_contextmenu_hide : function(trigger)
+							{
+								$('#messages_hide_info').html($(trigger).find('.messages_header_container').html());
+								$('#messages_hide_id').val($(trigger).attr('msgid'));
+								$('#messages_hide').dialog('open');
+							}
+						}
+					});
+				</script>
+			";
+		}
+	}
+	
+	public function processEdit()
+	{
+		if (Constants::$accountManager->hasPermission("messages.delete"))
+		{
+			if ($_POST["messages_hide_id"])
+			{
+				$userData = Constants::$accountManager->getUserData();
+				if ($_POST["messages_hide_sendtoken"] == $userData->sendToken)
+				{
+					$query = Constants::$pdo->prepare("UPDATE `messages` SET `enabled` = '0' WHERE `id` = :id");
+					$query->execute(array
+					(
+						":id" => $_POST["messages_hide_id"]
+					));
+					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+				}
+				else
+				{
+					echo "<div class='error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
+				}
+			}
+		}
+	}
+	
 	public function showMessage($id)
 	{
 		$uploadedFileQuery = Constants::$pdo->prepare("SELECT `name`, `title` FROM `uploads` WHERE `id` = :id");
 		$userGroupsQuery = Constants::$pdo->prepare("SELECT `title` FROM `usergroups` WHERE `name` = :name");
 		$userQuery = Constants::$pdo->prepare("SELECT `id`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
 		
-		$commonSql = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`validTill`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages` LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
+		$sql = array();
+		
+		$sql[] = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`validTill`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages`";
+		$sql[] = "LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
+		$sql[] = "WHERE `enabled`";
 		if ($id == null or $id == -1)
 		{
-			$query = Constants::$pdo->query($commonSql . " WHERE `validTill` IS NULL OR `validTill` >= CURDATE() ORDER BY `messages`.`id` DESC");
+			$sql[] = "AND `validTill` IS NULL OR `validTill` >= CURDATE() ORDER BY `messages`.`id` DESC";
+			$query = Constants::$pdo->query(implode(" ", $sql));
 		}
 		else
 		{
-			$query = Constants::$pdo->prepare($commonSql . " WHERE `messages`.`id` = :id");
+			$sql[] = "AND `messages`.`id` = :id";
+			$query = Constants::$pdo->prepare(implode(" ", $sql));
 			$query->execute(array
 			(
 				":id" => $id
@@ -93,7 +186,7 @@ class MessageManager
 				}
 			}
 			
-			echo "<div class='messages_container'>";
+			echo "<div class='messages_container' msgid='" . $row->id . "'>";
 			if ($id == null)// Only show link for single message in multi message view
 			{
 				echo "<a href='/internalarea/messages/" . $row->id . "' class='messages_header' title='Klicken um nur diese Nachricht anzuzeigen'>";

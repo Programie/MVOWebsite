@@ -6,13 +6,14 @@ class Dates
 		$sql = array();
 		$sql[] = "SELECT `dates`.`id`, `startDate`, `endDate`, `groups`, `showInAttendanceList`, `bold`, `title`, `description`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates`";
 		$sql[] = "LEFT JOIN `locations` ON `locations`.`id` = `dates`.`locationId`";
+		$sql[] = "WHERE `enabled`";
 		if ($year == "current")
 		{
-			$sql[] = "WHERE `startDate` >= NOW() OR `endDate` >= NOW()";
+			$sql[] = "AND (`startDate` >= NOW() OR `endDate` >= NOW())";
 		}
 		elseif (is_numeric($year))
 		{
-			$sql[] = "WHERE (YEAR(`startDate`) = " . intval($year) . " OR YEAR(`endDate`) = " . intval($year) . ")";
+			$sql[] = "AND (YEAR(`startDate`) = " . intval($year) . " OR YEAR(`endDate`) = " . intval($year) . ")";
 		}
 		$sql[] = "ORDER BY `startDate` ASC";
 		$query = Constants::$pdo->query(implode(" ", $sql));

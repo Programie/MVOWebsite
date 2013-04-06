@@ -8,5 +8,7 @@ else
 	echo "<h1>Alle Nachrichten</h1>";
 }
 $messageManager = new MessageManager;
+$messageManager->processEdit();
 $messageManager->showMessage(Constants::$pagePath[2]);
+$messageManager->addEditOptions();
 ?>

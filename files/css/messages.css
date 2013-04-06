@@ -49,3 +49,8 @@ div.messages_header
 {
 	padding: 10px;
 }
+
+#messages_edit_contextmenu, #messages_hide
+{
+	display: none;
+}
