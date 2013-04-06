@@ -54,7 +54,7 @@ class Dates
 				}
 			}
 			
-			if (!Constants::$accountManager->hasPermissionInArray($row->groups, "dates"))
+			if (!Constants::$accountManager->hasPermissionInArray($row->groups, "dates.view"))
 			{
 				continue;
 			}
