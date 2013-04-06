@@ -17,18 +17,11 @@
 	},
 	"history" :
 	{
-		"title" : "Chronik",
-		"subpages" :
-		{
-			"short" :
-			{
-				"title" : "Kurz"
-			},
-			"long" :
-			{
-				"title" : "Ausf&uuml;hrlich"
-			}
-		}
+		"title" : "Vereinsgeschichte"
+	},
+	"chronicle" :
+	{
+		"title" : "Chronik"
 	},
 	"bisherige_erste_vorsitzende" :
 	{

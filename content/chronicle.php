@@ -1,4 +1,4 @@
-<h1>Die wichtigsten Zahlen aus der Vereinsgeschichte</h1>
+<h1>Chronik</h1>
 <ul>
 	<li>1891: Gr&uuml;ndung der Musikkapelle Reichental</li>
 	<br />

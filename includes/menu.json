@@ -17,16 +17,10 @@
 		"items" :
 		[
 			{
-				"path" : "/history",
-				"items" :
-				[
-					{
-						"path" : "/history/short"
-					},
-					{
-						"path" : "/history/long"
-					}
-				]
+				"path" : "/chronicle"
+			},
+			{
+				"path" : "/history"
 			},
 			{
 				"path" : "/bisherige_erste_vorsitzende"

@@ -1,4 +1,4 @@
-<h1>Chronik</h1>
+<h1>Vereinsgeschichte</h1>
 
 <h2>Die Gr&#252ndung der Musikkapelle</h2>
 Am 2. September 1891 unterzeichneten sechs M&#228nner im Rathaus unter den Augen des B&#252rgermeisters Philipp W&#246rner die Satzung der zuk&#252nftigen Reichentaler Musikkapelle.
