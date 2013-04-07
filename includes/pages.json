@@ -170,6 +170,11 @@
 			{
 				"title" : "Passwort zur&uuml;cksetzen"
 			},
+			"visitstats" :
+			{
+				"title" : "Besucherstatistik",
+				"permissions" : "visitstats"
+			},
 			"writemessage" :
 			{
 				"title" : "Nachricht verfassen",

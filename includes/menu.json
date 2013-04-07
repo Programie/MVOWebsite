@@ -95,6 +95,9 @@
 				"path" : "/internalarea/attendancelist"
 			},
 			{
+				"path" : "/internalarea/visitstats"
+			},
+			{
 				"path" : "/internalarea/movies"
 			},
 			{
