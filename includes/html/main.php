@@ -66,6 +66,7 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 		}
 		?>
 		<script type="text/javascript" src="/files/script.js/<?php echo implode("+", $javaScriptFiles);?>?md5=<?php echo md5($md5);?>"></script>
+		<link rel="icon" href="/files/images/favicon.ico"/>
 	</head>
 	<body style="background-image: url(<?php echo $backgroundFile;?>);">
 		<div id="notification"></div>

@@ -3,4 +3,6 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
+Redirect /favicon.ico /files/images/favicon.ico
+
 RewriteRule ^(.*)$ index.php?path=$1 [QSA]
