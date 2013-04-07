@@ -2,29 +2,23 @@
 $year = Constants::$pagePath[1];
 $activeGroups = explode(" ", Constants::$pagePath[2]);
 
-if (!$year)
-{
-	$year = "current";
-}
-
-if ($year != "current")
-{
-	$year = intval($year);
-	if (!$year)
-	{
-		$year = null;
-	}
-}
+$year = Dates::convertYear($year);
 
 $title = array("Termine");
 
 $dates = Dates::getDates($year, $activeGroups);
 if ($dates)
 {
-	if (is_numeric($year))
+	$yearText = Dates::getYearText($year);
+	if ($yearText)
 	{
-		$title[] = date("Y", $dates[0]->startDate);
+		$title[] = $yearText;
 	}
+}
+
+if ($year == "current")
+{
+	$title = array("Unsere n&auml;chsten Termine");
 }
 
 echo "<h1>" . implode(" - ", $title) . "</h1>";
@@ -197,6 +191,9 @@ if (!empty($userGroups))
 
 if ($dates)
 {
+	$newPagePath = Constants::$pagePath;
+	$newPagePath[1] = $year . ".pdf";
+	$pdfUrl = BASE_URL . "/" . implode("/", $newPagePath);
 	$iCalendarToken = "";
 	if (Constants::$accountManager->getUserId())
 	{
@@ -209,15 +206,24 @@ if ($dates)
 		$iCalendarUrl = BASE_URL . "/dates/public.ics";
 	}
 	echo "
-		<div class='no-print' id='dates_info_ics'>
-			Diese Termine k&ouml;nnen im iCalendar-Format abgerufen werden, um sie in einer Kalenderanwendung wie z.B. Outlook oder einer Kalender-App auf dem Smartphone anzuzeigen.<br />
-			Folgenden Link in der Kalenderanwendung einf&uuml;gen: <a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>.
+		<div id='dates_tabs' class='no-print'>
+			<ul>
+				<li><a href='#dates_tabs_ics'>iCalendar</a></li>
+				<li><a href='#dates_tabs_pdf'>PDF</a></li>
+			</ul>
+			<div id='dates_tabs_ics'>
+				Diese Termine k&ouml;nnen im iCalendar-Format abgerufen werden, um sie in einer Kalenderanwendung wie z.B. Outlook oder einer Kalender-App auf dem Smartphone anzuzeigen.<br />
+				Folgenden Link in der Kalenderanwendung einf&uuml;gen: <a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>.
 	";
 	if ($iCalendarToken)
 	{
 		echo "<p>Sollte die verwendete Kalenderanwendung keine Authentifizierung unterst&uuml;tzen (z.B. Google Kalender), bitte den folgenden Link verwenden: <a href='" . $iCalendarTokenUrl . "'>" . $iCalendarTokenUrl . "</a></p>";
 	}
 	echo "
+			</div>
+			<div id='dates_tabs_pdf'>
+				Mit dem folgenden Link k&ouml;nnen diese Termine als PDF Dokument heruntergeladen werden: <a href='" . $pdfUrl . "'>" . $pdfUrl . "</a>
+			</div>
 		</div>
 		<table id='dates_table' class='table tablesorter {sortlist: [[0,0]]}'>
 			<thead>
@@ -232,30 +238,6 @@ if ($dates)
 	";
 	foreach ($dates as $date)
 	{
-		// Start date/time
-		$dateString = getWeekdayName(date("N", $date->startDate), false) . " " . date("d.m.Y", $date->startDate);
-		$timeString = date("H:i", $date->startDate);
-		if ($date->endDate)
-		{
-			$endTime = date("H:i", $date->endDate);
-		}
-		else
-		{
-			$endTime = "";
-		}
-		if ($timeString == "00:00")
-		{
-			$timeString = "";
-			$endTime = "";
-		}
-		else
-		{
-			if ($endTime and $endTime != "00:00")
-			{
-				$timeString .= " - " . $endTime;
-			}
-		}
-		
 		$rowClasses = array();
 		if ($date->nextEvent)
 		{
@@ -300,8 +282,8 @@ if ($dates)
 		
 		echo "
 			<tr " . implode(" ", $rowAttributes) . ">
-				<td number='" . $date->startDate . "' class='nowrap'>" . $dateString . "</td>
-				<td number='" . $date->startDate . "' class='nowrap'>" . $timeString. "</td>
+				<td number='" . $date->startDate . "' class='nowrap'>" . Dates::getDateText($date->startDate) . "</td>
+				<td number='" . $date->startDate . "' class='nowrap'>" . Dates::getTimeText($date->startDate, $date->endDate). "</td>
 				<td class='dates_titledescription'>
 					<span>" . $date->title . "</span>
 		";
@@ -323,7 +305,14 @@ if ($dates)
 }
 else
 {
-	echo "<div class='error'>Es wurden keine Termine in der ausgew&auml;hlten Gruppe und dem ausgew&auml;hlten Jahr sowie Monat gefunden!</div>";
+	if (empty($userGroups))
+	{
+		echo "<div class='error'>Es sind keine Termine in dem ausgew&auml;hlten Jahr vorhanden!</div>";
+	}
+	else
+	{
+		echo "<div class='error'>Es sind keine Termine in den ausgew&auml;hlten Gruppen sowie dem ausgew&auml;hlten Jahr vorhanden!</div>";
+	}
 }
 
 if (Constants::$accountManager->hasPermission("dates.edit"))
@@ -427,6 +416,8 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 		});
 		document.location.href = "/dates/<?php echo $year;?>/" + groups.join("+");
 	}
+	
+	$("#dates_tabs").tabs();
 	
 	<?php
 	if (Constants::$accountManager->hasPermission("dates.edit"))

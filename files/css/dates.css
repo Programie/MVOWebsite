@@ -37,10 +37,22 @@
 	font-weight: normal;
 }
 
-#dates_info_ics
+#dates_tabs
 {
 	margin-bottom: 20px;
+}
+
+#dates_tabs_ics
+{
 	background-image: url(/files/icons/ics.png);
+	background-repeat: no-repeat;
+	padding-left: 70px;
+	min-height: 64px;
+}
+
+#dates_tabs_pdf
+{
+	background-image: url(/files/icons/pdf.png);
 	background-repeat: no-repeat;
 	padding-left: 70px;
 	min-height: 64px;

@@ -1,6 +1,25 @@
 <?php
 class Dates
 {
+	public static function convertYear($year)
+	{
+		if (!$year)
+		{
+			$year = "current";
+		}
+		
+		if (is_numeric($year))
+		{
+			$year = intval($year);
+			if (!$year)
+			{
+				$year = null;
+			}
+		}
+		
+		return $year;
+	}
+	
 	public static function getDates($year = null, $groups = null)
 	{
 		$sql = array();
@@ -95,6 +114,40 @@ class Dates
 		return $dates;
 	}
 	
+	public static function getDateText($timestamp)
+	{
+		return getWeekdayName(date("N", $timestamp), false) . " " . date("d.m.Y", $timestamp);
+	}
+	
+	public static function getTimeText($startTimestamp, $endTimestamp)
+	{
+		$timeString = date("H:i", $startTimestamp);
+		
+		if ($endTimestamp)
+		{
+			$endTime = date("H:i", $endTimestamp);
+		}
+		else
+		{
+			$endTime = "";
+		}
+		
+		if ($timeString == "00:00")
+		{
+			$timeString = "";
+			$endTime = "";
+		}
+		else
+		{
+			if ($endTime and $endTime != "00:00")
+			{
+				$timeString .= " - " . $endTime;
+			}
+		}
+		
+		return $timeString;
+	}
+	
 	public static function getYears()
 	{
 		$years = array();
@@ -106,6 +159,19 @@ class Dates
 		}
 		
 		return $years;
+	}
+	
+	public static function getYearText($year)
+	{
+		switch ($year)
+		{
+			case "all":
+				return "Alle";
+			case "current":
+				return "";
+			default:
+				return $year;
+		}
 	}
 }
 ?>

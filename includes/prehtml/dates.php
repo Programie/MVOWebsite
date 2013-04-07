@@ -77,4 +77,164 @@ if ($calendar == "internal.ics" or $calendar == "public.ics")
 	$calendar->end();
 	exit;
 }
+
+if (substr(Constants::$pagePath[1], -4) == ".pdf")
+{
+	require_once ROOT_PATH . "/includes/pdf/FPDF_ExtendedTables.class.php";
+	
+	$year = Constants::$pagePath[1];
+	$year = substr($year, 0, strlen($year) - 4);
+	$activeGroups = explode(" ", Constants::$pagePath[2]);
+	
+	$year = Dates::convertYear($year);
+	
+	$dates = Dates::getDates($year, $activeGroups);
+	if ($dates)
+	{
+		$title = "Termine";
+		$yearText = Dates::getYearText($year);
+		if ($yearText)
+		{
+			$title .= " - " . $yearText;
+		}
+		
+		$pdf = new FPDF_ExtendedTables();
+		
+		$contentWidth = $pdf->w - $pdf->lMargin - $pdf->rMargin;
+		
+		$header = array
+		(
+			array
+			(
+				"width" => $contentWidth * 0.15,
+				"text" => "Datum"
+			),
+			array
+			(
+				"width" => $contentWidth * 0.15,
+				"text" => "Zeit"
+			),
+			array
+			(
+				"width" => $contentWidth * 0.4,
+				"text" => "Veranstaltung"
+			),
+			array
+			(
+				"width" => $contentWidth * 0.3,
+				"text" => "Ort"
+			)
+		);
+		
+		$headerCells = array();
+		foreach ($header as $column => $cell)
+		{
+			if ($column)
+			{
+				$lineArea = "L";
+			}
+			else
+			{
+				$lineArea = "";
+			}
+			$headerCells[] = array
+			(
+				"width" => $cell["width"],
+				"height" => 10,
+				"text" => $cell["text"],
+				"align" => "C",
+				"lineArea" => $lineArea
+			);
+		}
+		
+		$callbackData = array
+		(
+			"tableHeaders" => array($headerCells),
+			"title" => $title
+		);
+		
+		$pdf->SetHeaderCallback(function($classInstance, $callbackData)
+		{
+			$classInstance->SetFont("Arial", "", 20);
+			$classInstance->Cell(0, 10, $callbackData["title"], 0, 1);
+			
+			$classInstance->SetFont("Arial", "", 10);
+			$classInstance->Cell(0, 10, "Stand: " . date("d.m.Y"), 0, 1);
+			
+			$classInstance->WriteTable($callbackData["tableHeaders"]);
+		}, $callbackData);
+		
+		$pdf->SetAuthor("Musikverein \"Orgelfels\" Reichental e.V.");
+		$pdf->SetTitle($title);
+		
+		if ($activeGroups[0])
+		{
+			$groupTitles = array();
+			$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups` ORDER BY `title` ASC");
+			while ($row = $query->fetch())
+			{
+				if (in_array($row->name, $activeGroups))
+				{
+					$groupTitles[] = $row->title;
+				}
+			}
+			$pdf->SetSubject(implode(", ", $groupTitles));
+		}
+		
+		$pdf->SetFont("Arial", "", 10);
+		$pdf->SetDrawColor(128, 128, 128);
+		
+		$pdf->AddPage();
+		
+		$data = array();
+		
+		foreach ($dates as $row)
+		{
+			$description = array(trim($row->title));
+			if ($row->description)
+			{
+				$description[] = trim($row->description);
+			}
+			$row = array
+			(
+				Dates::getDateText($row->startDate),
+				Dates::getTimeText($row->startDate, $row->endDate),
+				utf8_decode(implode("\n", $description)),
+				utf8_decode($row->location->name)
+			);
+			
+			$cells = array();
+			foreach ($row as $column => $cell)
+			{
+				if ($column)
+				{
+					$lineArea = "LT";
+				}
+				else
+				{
+					$lineArea = "T";
+				}
+				$cells[] = array
+				(
+					"width" => $header[$column]["width"],
+					"height" => 7,
+					"text" => $cell,
+					"align" => "L",
+					"lineArea" => $lineArea
+				);
+			}
+			$data[] = $cells;
+		}
+		
+		$pdf->WriteTable($data);
+		
+		$pdf->Output();
+	}
+	else
+	{
+		header("HTTP/1.1 404 Not Found");
+		echo "<h1>Keine Termine vorhanden</h1>";
+	}
+	exit;
+}
 ?>
