@@ -228,7 +228,7 @@ if (substr(Constants::$pagePath[1], -4) == ".pdf")
 		
 		$pdf->WriteTable($data);
 		
-		$pdf->Output();
+		$pdf->Output($title . ".pdf", "I");
 	}
 	else
 	{
