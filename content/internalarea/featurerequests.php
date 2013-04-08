@@ -10,7 +10,7 @@ if (isset($_POST["featurerequests_new_description"]))
 			$query = Constants::$pdo->prepare("INSERT INTO `featurerequests` (`userId`, `date`, `description`, `status`) VALUES(:userId, NOW(), :description, 'new')");
 			$query->execute(array
 			(
-				":userId" => $userData->id,
+				":userId" => Constants::$accountManager->getUserId(),
 				":description" => $_POST["featurerequests_new_description"]
 			));
 			echo "<div class='ok'>Dein Verbesserungsvorschlag wurde erfolgreich eingetragen.</div>";

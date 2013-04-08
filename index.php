@@ -70,35 +70,38 @@ if (!empty($pageData))
 }
 
 // Visit counter
-$query = Constants::$pdo->prepare("SELECT `id`, `userId` FROM `visits` WHERE `date` = CURDATE() AND `ip` = :ip");
-$query->execute(array
-(
-	":ip" => $_SERVER["REMOTE_ADDR"]
-));
-if ($query->rowCount())
+if (!preg_match("/bot|spider|crawler|curl|^$/i", $_SERVER["HTTP_USER_AGENT"]))
 {
-	$row = $query->fetch();
-	if (!$row->userId)
+	$query = Constants::$pdo->prepare("SELECT `id`, `userId` FROM `visits` WHERE `date` = CURDATE() AND `ip` = :ip");
+	$query->execute(array
+	(
+		":ip" => $_SERVER["REMOTE_ADDR"]
+	));
+	if ($query->rowCount())
 	{
-		$row->userId = Constants::$accountManager->getUserId();
+		$row = $query->fetch();
+		if (!$row->userId)
+		{
+			$row->userId = Constants::$accountManager->getUserId();
+		}
+		$query = Constants::$pdo->prepare("UPDATE `visits` SET `lastVisitDate` = NOW(), `lastVisitPath` = :path, `userId` = :userId WHERE `id` = :id");
+		$query->execute(array
+		(
+			":path" => implode("/", Constants::$pagePath),
+			":userId" => $row->userId,
+			":id" => $row->id
+		));
 	}
-	$query = Constants::$pdo->prepare("UPDATE `visits` SET `lastVisitDate` = NOW(), `lastVisitPath` = :path, `userId` = :userId WHERE `id` = :id");
-	$query->execute(array
-	(
-		":path" => implode("/", Constants::$pagePath),
-		":userId" => $row->userId,
-		":id" => $row->id
-	));
-}
-else
-{
-	$query = Constants::$pdo->prepare("INSERT INTO `visits` (`ip`, `date`, `firstVisitDate`, `firstVisitPath`, `lastVisitDate`, `lastVisitPath`, `userId`) VALUES(:ip, CURDATE(), NOW(), :path, NOW(), :path, :userId)");
-	$query->execute(array
-	(
-		":ip" => $_SERVER["REMOTE_ADDR"],
-		":path" => implode("/", Constants::$pagePath),
-		":userId" => Constants::$accountManager->getUserId()
-	));
+	else
+	{
+		$query = Constants::$pdo->prepare("INSERT INTO `visits` (`ip`, `date`, `firstVisitDate`, `firstVisitPath`, `lastVisitDate`, `lastVisitPath`, `userId`) VALUES(:ip, CURDATE(), NOW(), :path, NOW(), :path, :userId)");
+		$query->execute(array
+		(
+			":ip" => $_SERVER["REMOTE_ADDR"],
+			":path" => implode("/", Constants::$pagePath),
+			":userId" => Constants::$accountManager->getUserId()
+		));
+	}
 }
 
 require_once "includes/html/main.php";
