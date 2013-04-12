@@ -84,11 +84,12 @@ if (substr(Constants::$pagePath[1], -4) == ".pdf")
 	
 	$year = Constants::$pagePath[1];
 	$year = substr($year, 0, strlen($year) - 4);
-	$activeGroups = explode(" ", Constants::$pagePath[2]);
 	
 	$year = Dates::convertYear($year);
 	
-	$dates = Dates::getDates($year, $activeGroups);
+	$containingGroups = array();
+	
+	$dates = Dates::getDates($year, explode(" ", Constants::$pagePath[2]), $containingGroups);
 	if ($dates)
 	{
 		$title = "Termine";
@@ -99,6 +100,22 @@ if (substr(Constants::$pagePath[1], -4) == ".pdf")
 		}
 		
 		$pdf = new FPDF_ExtendedTables();
+		
+		$groupTitles = "";
+		if (Constants::$accountManager->getUserId() and !empty($containingGroups))
+		{
+			$groupTitles = array();
+			$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups` ORDER BY `title` ASC");
+			while ($row = $query->fetch())
+			{
+				if (in_array($row->name, $containingGroups))
+				{
+					$groupTitles[] = utf8_decode($row->title);
+				}
+			}
+			$groupTitles = implode(", ", $groupTitles);
+			$pdf->SetSubject($groupTitles);
+		}
 		
 		$contentWidth = $pdf->w - $pdf->lMargin - $pdf->rMargin;
 		
@@ -149,6 +166,7 @@ if (substr(Constants::$pagePath[1], -4) == ".pdf")
 		
 		$callbackData = array
 		(
+			"groupTitles" => $groupTitles,
 			"tableHeaders" => array($headerCells),
 			"title" => $title
 		);
@@ -159,6 +177,12 @@ if (substr(Constants::$pagePath[1], -4) == ".pdf")
 			$classInstance->Cell(0, 10, $callbackData["title"], 0, 1);
 			
 			$classInstance->SetFont("Arial", "", 10);
+			
+			if ($callbackData["groupTitles"])
+			{
+				$classInstance->Cell(0, 10, $callbackData["groupTitles"], 0, 1);
+			}
+			
 			$classInstance->Cell(0, 10, "Stand: " . date("d.m.Y"), 0, 1);
 			
 			$classInstance->WriteTable($callbackData["tableHeaders"]);
@@ -166,20 +190,6 @@ if (substr(Constants::$pagePath[1], -4) == ".pdf")
 		
 		$pdf->SetAuthor("Musikverein \"Orgelfels\" Reichental e.V.");
 		$pdf->SetTitle($title);
-		
-		if ($activeGroups[0])
-		{
-			$groupTitles = array();
-			$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups` ORDER BY `title` ASC");
-			while ($row = $query->fetch())
-			{
-				if (in_array($row->name, $activeGroups))
-				{
-					$groupTitles[] = $row->title;
-				}
-			}
-			$pdf->SetSubject(implode(", ", $groupTitles));
-		}
 		
 		$pdf->SetFont("Arial", "", 10);
 		$pdf->SetDrawColor(128, 128, 128);

@@ -20,7 +20,7 @@ class Dates
 		return $year;
 	}
 	
-	public static function getDates($year = null, $groups = null)
+	public static function getDates($year = null, $groups = null, &$containingGroups = null)
 	{
 		$sql = array();
 		$sql[] = "SELECT `dates`.`id`, `startDate`, `endDate`, `groups`, `showInAttendanceList`, `bold`, `title`, `description`, `locations`.`latitude` AS `locationLatitude`, `locations`.`longitude` AS `locationLongitude`, `locations`.`name` AS `locationName` FROM `dates`";
@@ -57,14 +57,17 @@ class Dates
 				{
 					$showGroup = true;
 				}
-				foreach ($groups as $group)
+				if (!$showGroup)
 				{
-					foreach ($row->groups as $groupName)
+					foreach ($groups as $group)
 					{
-						if ($groupName == $group)
+						foreach ($row->groups as $groupName)
 						{
-							$showGroup = true;
-							break;
+							if ($groupName == $group)
+							{
+								$showGroup = true;
+								break;
+							}
 						}
 					}
 				}
@@ -77,6 +80,16 @@ class Dates
 			if (!Constants::$accountManager->hasPermissionInArray($row->groups, "dates.view"))
 			{
 				continue;
+			}
+			
+			if (!$row->groups[0])
+			{
+				$row->groups = array("public");
+			}
+			
+			if (is_array($containingGroups))
+			{
+				$containingGroups = array_merge($containingGroups, $row->groups);
 			}
 			
 			$locationData = new StdClass;
@@ -109,6 +122,11 @@ class Dates
 			}
 			
 			$dates[] = $row;
+		}
+		
+		if ($containingGroups)
+		{
+			$containingGroups = array_unique($containingGroups);
 		}
 		
 		return $dates;

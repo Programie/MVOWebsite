@@ -146,11 +146,6 @@ if (Constants::$accountManager->getUserId())
 
 if (!empty($userGroups))
 {
-	$group = new StdClass;
-	$group->name = "public";
-	$group->title = "&Ouml;ffentlich";
-	array_unshift($userGroups, $group);
-	
 	foreach ($userGroups as $index => $group)
 	{
 		if ($group->name != "all")
@@ -208,9 +203,12 @@ if ($dates)
 	echo "
 		<div id='dates_tabs' class='no-print'>
 			<ul>
-				<li><a href='#dates_tabs_ics'>iCalendar</a></li>
 				<li><a href='#dates_tabs_pdf'>PDF</a></li>
+				<li><a href='#dates_tabs_ics'>iCalendar</a></li>
 			</ul>
+			<div id='dates_tabs_pdf'>
+				Mit dem folgenden Link k&ouml;nnen diese Termine als PDF Dokument heruntergeladen werden: <a href='" . $pdfUrl . "'>" . $pdfUrl . "</a>
+			</div>
 			<div id='dates_tabs_ics'>
 				Diese Termine k&ouml;nnen im iCalendar-Format abgerufen werden, um sie in einer Kalenderanwendung wie z.B. Outlook oder einer Kalender-App auf dem Smartphone anzuzeigen.<br />
 				Folgenden Link in der Kalenderanwendung einf&uuml;gen: <a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>.
@@ -220,9 +218,6 @@ if ($dates)
 		echo "<p>Sollte die verwendete Kalenderanwendung keine Authentifizierung unterst&uuml;tzen (z.B. Google Kalender), bitte den folgenden Link verwenden: <a href='" . $iCalendarTokenUrl . "'>" . $iCalendarTokenUrl . "</a></p>";
 	}
 	echo "
-			</div>
-			<div id='dates_tabs_pdf'>
-				Mit dem folgenden Link k&ouml;nnen diese Termine als PDF Dokument heruntergeladen werden: <a href='" . $pdfUrl . "'>" . $pdfUrl . "</a>
 			</div>
 		</div>
 		<table id='dates_table' class='table tablesorter {sortlist: [[0,0]]}'>

@@ -178,7 +178,7 @@ if (isset($_POST["writemessage_confirmed"]))
 	<fieldset id="writemessage_groups">
 		<legend>Gruppen</legend>
 		<?php
-		$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups`");
+		$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups` WHERE `id`");
 		while ($row = $query->fetch())
 		{
 			echo "<input type='checkbox' id='writemessage_group_" . $row->name . "' name='writemessage_group_" . $row->name . "' value='1'/><label for='writemessage_group_" . $row->name . "'>" . $row->title . "</label>";
