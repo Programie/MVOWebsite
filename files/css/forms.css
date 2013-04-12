@@ -70,6 +70,7 @@ input[type="submit"]
 .input-email
 {
 	background-image: url(/files/images/formfields/email.png);
+	width: 300px;
 }
 
 .input-fax
