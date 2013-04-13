@@ -77,9 +77,14 @@ if ($query->rowCount())
 			"order" => 3,
 			"title" => "In Bearbeitung"
 		),
-		"done" => array
+		"waitingforrelease" => array
 		(
 			"order" => 4,
+			"title" => "Ab dem n&auml;chsten Onlinegang verf&uuml;gbar"
+		),
+		"done" => array
+		(
+			"order" => 5,
 			"title" => "Fertig"
 		)
 	);
