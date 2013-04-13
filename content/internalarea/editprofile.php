@@ -167,7 +167,7 @@ $userData = Constants::$accountManager->getUserData();
 		
 		<fieldset>
 			<legend>Neues Profilbild hochladen</legend>
-			<form action="/internalarea/editprofile#editprofile_profilepicture" method="post" enctype="multipart/form-data">
+			<form id="editprofile_profilepicture_form" action="/internalarea/editprofile#editprofile_profilepicture" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="editprofile_tab" value="profilepicture"/>
 				
 				<input type="hidden" id="editprofile_profilepicture_x" name="editprofile_profilepicture_x"/>
@@ -184,6 +184,13 @@ $userData = Constants::$accountManager->getUserData();
 				
 				<input id="editprofile_profilepicture_upload" type="submit" value="Hochladen"/>
 			</form>
+			
+			<div id="editprofile_profilepicture_progressarea">
+				<p>Das ausgew&auml;hlte Bild wird nun hochgeladen.</p>
+				<div id="editprofile_profilepicture_progressbar" class="progressbar">
+					<span></span>
+				</div>
+			</div>
 		</fieldset>
 	</div>
 	
@@ -377,6 +384,27 @@ $userData = Constants::$accountManager->getUserData();
 <script type="text/javascript">
 	$("#editprofile_tabs").tabs();
 	
+	$("#editprofile_profilepicture_form").ajaxForm(
+	{
+		beforeSubmit : function()
+		{
+			$("#editprofile_profilepicture_progressbar span").width("0%");
+			$("#editprofile_profilepicture_form").slideUp(1000, function()
+			{
+				$("#editprofile_profilepicture_progressarea").slideDown(1000);
+			});
+		},
+		uploadProgress : function(event, position, total, percentComplete)
+		{
+			$("#editprofile_profilepicture_progressbar span").width(percentComplete + "%");
+		},
+		complete : function(response)
+		{
+			window.location.href = $("#editprofile_profilepicture_form").attr("action");
+			window.location.reload();
+		}
+	});
+	
 	function editprofile_profilePicture_FileSelectHandler()
 	{
 		var file = $("#editprofile_profilepicture_file")[0].files[0];
@@ -401,7 +429,7 @@ $userData = Constants::$accountManager->getUserData();
 			previewImage.src = event.target.result;
 			previewImage.onload = function()
 			{
-				$("#editprofile_profilepicture_editarea").fadeIn(1000);
+				$("#editprofile_profilepicture_editarea").slideDown(1000);
 				
 				if (typeof(editprofile_profilePicture_jcrop) != "undefined")
 				{
@@ -426,7 +454,7 @@ $userData = Constants::$accountManager->getUserData();
 	
 	function editprofile_profilePicture_onRelease()
 	{
-		$("#editprofile_profilepicture_upload").fadeOut(1000);
+		$("#editprofile_profilepicture_upload").slideUp(1000);
 	}
 	
 	function editprofile_profilePicture_onSelect(coords)
@@ -436,6 +464,6 @@ $userData = Constants::$accountManager->getUserData();
 		$("#editprofile_profilepicture_width").val(coords.w);
 		$("#editprofile_profilepicture_height").val(coords.h);
 		
-		$("#editprofile_profilepicture_upload").fadeIn(1000);
+		$("#editprofile_profilepicture_upload").slideDown(1000);
 	}
 </script>

@@ -1,7 +1,13 @@
-#editprofile_profilepicture_editarea, #editprofile_profilepicture_upload
+#editprofile_profilepicture_editarea, #editprofile_profilepicture_progressarea, #editprofile_profilepicture_upload
 {
 	display: none;
 }
+
+#editprofile_profilepicture_progressarea
+{
+	width: 400px;
+}
+
 #editprofile_profilepicture_upload
 {
 	margin-top: 20px;

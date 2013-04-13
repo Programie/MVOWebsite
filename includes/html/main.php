@@ -55,6 +55,7 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 			"noty",
 			"noty-layout",
 			"noty-theme",
+			"jquery.form",
 			"jquery.contextmenu",
 			"google-analytics",
 			"general"
