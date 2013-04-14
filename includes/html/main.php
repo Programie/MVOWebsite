@@ -41,32 +41,18 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 		?>
 		<link rel="stylesheet" type="text/css" href="/files/style.css?md5=<?php echo md5($md5);?>"/>
 		<?php
-		$javaScriptFiles = array
-		(
-			"errorreport",
-			"jquery",
-			"jquery-ui",
-			"metadata",
-			"jcrop",
-			"colorbox",
-			"photobox",
-			"tablesorter",
-			"tablesorter-widgets",
-			"noty",
-			"noty-layout",
-			"noty-theme",
-			"jquery.form",
-			"jquery.contextmenu",
-			"google-analytics",
-			"general"
-		);
 		$path = ROOT_PATH . "/files/scripts";
-		foreach ($javaScriptFiles as $file)
+		$md5 = "";
+		$dir = scandir($path);
+		foreach ($dir as $file)
 		{
-			$md5 .= md5_file($path . "/" . $file . ".js");
+			if ($file[0] != "." and is_file($path . "/" . $file))
+			{
+				$md5 .= md5_file($path . "/" . $file);
+			}
 		}
 		?>
-		<script type="text/javascript" src="/files/script.js/<?php echo implode("+", $javaScriptFiles);?>?md5=<?php echo md5($md5);?>"></script>
+		<script type="text/javascript" src="/files/script.js?md5=<?php echo md5($md5);?>"></script>
 		<link rel="icon" href="/files/images/favicon.ico"/>
 	</head>
 	<body style="background-image: url(<?php echo $backgroundFile;?>);">

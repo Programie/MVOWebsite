@@ -22,10 +22,29 @@ switch (Constants::$pagePath[1])
 		header("Cache-Control: public, max-age=86400");// 1 day
 		header("Expires: " . gmdate("D, d M Y H:i:s", time() + 86400) . " GMT");// 1 day
 		header("Pragma: ");
-		$files = explode(" ", Constants::$pagePath[2]);
-		foreach ($files as $file)
+		$javaScriptFiles = array
+		(
+			"errorreport",
+			"jquery",
+			"jquery-ui",
+			"metadata",
+			"jcrop",
+			"colorbox",
+			"photobox",
+			"tablesorter",
+			"tablesorter-widgets",
+			"noty",
+			"noty-layout",
+			"noty-theme",
+			"jquery.form",
+			"jquery.contextmenu",
+			"google-analytics",
+			"general"
+		);
+		$path = ROOT_PATH . "/files/scripts";
+		foreach ($javaScriptFiles as $file)
 		{
-			$file = ROOT_PATH . "/files/scripts/" . basename($file) . ".js";
+			$file = $path . "/" . $file . ".js";
 			if (is_file($file))
 			{
 				readfile($file);
