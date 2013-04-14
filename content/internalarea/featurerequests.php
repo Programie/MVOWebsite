@@ -49,8 +49,8 @@ if ($query->rowCount())
 				<tr>
 					<th>Ersteller</th>
 					<th>Beschreibung</th>
-					<th>Datum</th>
-					<th>Status</th>
+					<th class=\"{sorter: 'number-attribute'}\">Datum</th>
+					<th class=\"{sorter: 'number-attribute'}\">Status</th>
 				</tr>
 			</thead>
 			<tbody>
