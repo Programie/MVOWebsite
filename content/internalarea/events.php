@@ -25,7 +25,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 		
 		if ($events[$_POST["events_upload_event"]])
 		{
-			if ($_POST["events_upload_sendtoken"] == Constants::$accountManager->getSendToken())
+			if ($_POST["events_upload_sendtoken"] == TokenManager::getSendToken("events_upload"))
 			{
 				$file = $_FILES["events_upload_file"];
 				switch ($file["error"])
@@ -128,7 +128,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 				<input type='file' id='events_upload_file' name='events_upload_file'/>
 				
 				<input type='hidden' id='events_upload_confirmed' name='events_upload_confirmed'/>
-				<input type='hidden' name='events_upload_sendtoken' value='" . Constants::$accountManager->getSendToken(true) . "'/>
+				<input type='hidden' name='events_upload_sendtoken' value='" . TokenManager::getSendToken("events_upload", true) . "'/>
 				
 				<input type='submit' value='Hochladen'/>
 			</form>

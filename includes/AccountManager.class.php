@@ -129,11 +129,6 @@ class AccountManager
 		return hash("sha512", $userId . "_" . $password);
 	}
 	
-	private function generateToken()
-	{
-		return md5(time() . "-" . rand());
-	}
-	
 	public function getCalendarToken($generateNew = false)
 	{
 		$query = Constants::$pdo->prepare("SELECT `calendarToken` FROM `users` WHERE `id` = :id");
@@ -146,7 +141,7 @@ class AccountManager
 		
 		if (!$token or $generateNew)
 		{
-			$token = $this->generateToken();
+			$token = TokenManager::generateToken();
 			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `calendarToken` = :calendarToken AND `id` != :id");
 			$query->execute(array
 			(
@@ -183,30 +178,6 @@ class AccountManager
 		}
 		
 		return $this->permissions;
-	}
-	
-	public function getSendToken($generateNew = false)
-	{
-		$query = Constants::$pdo->prepare("SELECT `sendToken` FROM `users` WHERE `id` = :id");
-		$query->execute(array
-		(
-			":id" => $this->userId
-		));
-		$row = $query->fetch();
-		$token = $row->sendToken;
-		
-		if (!$token or $generateNew)
-		{
-			$token = $this->generateToken();
-			$query = Constants::$pdo->prepare("UPDATE `users` SET `sendToken` = :sendToken WHERE `id` = :id");
-			$query->execute(array
-			(
-				":sendToken" => $token,
-				":id" => $this->userId
-			));
-		}
-		
-		return $token;
 	}
 	
 	public function getUserData($userId = null)

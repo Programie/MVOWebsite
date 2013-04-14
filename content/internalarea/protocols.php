@@ -15,7 +15,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 	{
 		$error = "Beim Hochladen ist ein Fehler aufgetreten! Bitte versuche es erneut oder wende dich an den Webmaster.";
 		
-		if ($_POST["protocols_upload_sendtoken"] == Constants::$accountManager->getSendToken())
+		if ($_POST["protocols_upload_sendtoken"] == TokenManager::getSendToken("protocols_upload"))
 		{
 			$date = explode(".", $_POST["protocols_upload_date"]);
 			if (checkdate($date[1], $date[0], $date[2]))
@@ -148,7 +148,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 				</div>
 				
 				<input type='hidden' id='protocols_upload_confirmed' name='protocols_upload_confirmed'/>
-				<input type='hidden' name='protocols_upload_sendtoken' value='" . Constants::$accountManager->getSendToken(true) . "'/>
+				<input type='hidden' name='protocols_upload_sendtoken' value='" . TokenManager::getSendToken("protocols_upload", true) . "'/>
 				
 				<input type='submit' value='Hochladen'/>
 			</form>

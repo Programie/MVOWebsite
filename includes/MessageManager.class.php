@@ -14,7 +14,7 @@ class MessageManager
 					<p><b>Hinweis:</b> Die Nachricht kann nur &uuml;ber die Datenbank wiederhergestellt werden!</p>
 					
 					<form id='messages_hide_form' method='post' onsubmit='return false'>
-						<input type='hidden' id='messages_hide_sendtoken' name='messages_hide_sendtoken' value='" . Constants::$accountManager->getSendToken(true) . "'/>
+						<input type='hidden' id='messages_hide_sendtoken' name='messages_hide_sendtoken' value='" . TokenManager::getSendToken("messages_hide", true) . "'/>
 						<input type='hidden' id='messages_hide_id' name='messages_hide_id'/>
 					</form>
 				</div>
@@ -70,7 +70,7 @@ class MessageManager
 		{
 			if ($_POST["messages_hide_id"])
 			{
-				if ($_POST["messages_hide_sendtoken"] == Constants::$accountManager->getSendToken())
+				if ($_POST["messages_hide_sendtoken"] == TokenManager::getSendToken("messages_hide"))
 				{
 					$query = Constants::$pdo->prepare("UPDATE `messages` SET `enabled` = '0' WHERE `id` = :id");
 					$query->execute(array

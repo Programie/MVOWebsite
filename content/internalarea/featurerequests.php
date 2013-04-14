@@ -3,7 +3,7 @@
 <?php
 if (isset($_POST["featurerequests_new_description"]))
 {
-	if ($_POST["featurerequests_new_sendtoken"] == Constants::$accountManager->getSendToken())
+	if ($_POST["featurerequests_new_sendtoken"] == TokenManager::getSendToken("featurerequests_new"))
 	{
 		if ($_POST["featurerequests_new_description"])
 		{
@@ -33,7 +33,7 @@ if (isset($_POST["featurerequests_new_description"]))
 	<form action="/internalarea/featurerequests" method="post">
 		<textarea id="featurerequests_new_description" name="featurerequests_new_description" rows="5" cols="15"></textarea>
 		
-		<input type="hidden" name="featurerequests_new_sendtoken" value="<?php echo Constants::$accountManager->getSendToken(true);?>"/>
+		<input type="hidden" name="featurerequests_new_sendtoken" value="<?php echo TokenManager::getSendToken("featurerequests_new", true);?>"/>
 		
 		<input type="submit" value="OK"/>
 	</form>

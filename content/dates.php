@@ -40,7 +40,7 @@ if (Constants::$accountManager->getUserId())
 	{
 		if (isset($_POST["dates_edit_id"]))
 		{
-			if ($_POST["dates_edit_sendtoken"] == Constants::$accountManager->getSendToken())
+			if ($_POST["dates_edit_sendtoken"] == TokenManager::getSendToken("dates_edit"))
 			{
 				$id = intval($_POST["dates_edit_id"]);
 				if ($id and $_POST["dates_edit_hide"])
@@ -312,7 +312,7 @@ else
 
 if (Constants::$accountManager->hasPermission("dates.edit"))
 {
-	$sendToken = Constants::$accountManager->getSendToken(true);
+	$sendToken = TokenManager::getSendToken("dates_edit", true);
 	echo "
 		<div id='dates_hide'>
 			<p>Soll der ausgew&auml;hlte Termin wirklich ausgeblendet werden?</p>
