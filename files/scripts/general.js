@@ -4,13 +4,15 @@ $(document).ready(function()
 	$(".colorbox-iframe").colorbox(
 	{
 		iframe : true,
+		returnFocus : false,
 		width : "80%",
 		height : "80%"
 	});
 	$("[rel='colorbox']").colorbox(
 	{
 		current : "",
-		picture : true
+		picture : true,
+		returnFocus : false
 	});
 	
 	// "Back to top" button
@@ -20,7 +22,7 @@ $(document).ready(function()
 		$("body,html").animate(
 		{
 			scrollTop : 0
-		}, 800);
+		}, 2000, "easeOutExpo");
 	});
 	
 	// Print button

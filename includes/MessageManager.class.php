@@ -186,9 +186,11 @@ class MessageManager
 			}
 			
 			echo "<div class='messages_container' msgid='" . $row->id . "'>";
+			$headerContainerAttributes = "";
 			if ($id == null)// Only show link for single message in multi message view
 			{
-				echo "<a href='/internalarea/messages/" . $row->id . "' class='messages_header' title='Klicken um nur diese Nachricht anzuzeigen'>";
+				$headerContainerAttributes = "title='Klicken um nur diese Nachricht anzuzeigen'";
+				echo "<a href='/internalarea/messages/" . $row->id . "' class='messages_header'>";
 			}
 			$profilePicturesPath = "/files/profilepictures";
 			$avatarFile = $profilePicturesPath . "/" . $row->userId . ".jpg";
@@ -197,7 +199,7 @@ class MessageManager
 				$avatarFile = $profilePicturesPath . "/default.png";
 			}
 			echo "
-				<div class='messages_header'>
+				<div class='messages_header' " . $headerContainerAttributes . ">
 					<img class='messages_header_avatar' src='" . $avatarFile . "'/>
 					<div class='messages_header_container'>
 						<div><b>Erstellt von:</b> " . escapeText($row->firstName) . " " . escapeText($row->lastName) . " [" . escapeText($row->email) . "]</div>
