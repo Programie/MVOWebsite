@@ -1,6 +1,6 @@
 <h1>Ausbildungsgruppen</h1>
 
-<p>Stand: 20.02.2013</p>
+<p>Stand: 02.05.2013</p>
 
 <table cellpadding="10" width="100%">
 	<tr>
@@ -51,11 +51,8 @@
 				<tr>
 					<td valign="top" style="text-decoration:underline;">Gisela Wieland</td>
 					<td valign="top">
-						Annalena Hauns<br />
-						Meike Klumpp<br />
 						Lisa Kozlevcar<br />
-						Judith Merkel<br />
-						Paula Sieb
+						Judith Merkel
 					</td>
 				</tr>
 				<tr>
@@ -88,7 +85,7 @@
 					<td colspan="2"><h3>Schlagzeug</h3></td>
 				</tr>
 				<tr>
-					<td valign="top" style="text-decoration:underline;">Peter K&ouml;rner</td>
+					<td valign="top" style="text-decoration:underline;">Jonathan Friedel</td>
 					<td valign="top">
 						Maximilian Merkel<br />
 						Luisa Sieb
