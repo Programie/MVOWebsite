@@ -42,6 +42,7 @@ if (Constants::$pagePath[1])// Year
 					$('#gallery').photobox('li > a',
 					{
 						history : false,
+						loop : false,
 						time : 10000
 					});
 				</script>

@@ -7,7 +7,7 @@ $groups = array($row->name => $row);
 
 $activeGroup = "all";
 
-$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups`");
+$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups` WHERE `id`");
 while ($row = $query->fetch())
 {
 	if ($row->name == Constants::$pagePath[2])

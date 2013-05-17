@@ -207,15 +207,15 @@ if ($dates)
 				<li><a href='#dates_tabs_ics'>iCalendar</a></li>
 			</ul>
 			<div id='dates_tabs_pdf'>
-				Mit dem folgenden Link k&ouml;nnen diese Termine als PDF Dokument heruntergeladen werden: <a href='" . $pdfUrl . "'>" . $pdfUrl . "</a>
+				Mit dem folgenden Link k&ouml;nnen diese Termine als PDF Dokument heruntergeladen werden: <a href='" . $pdfUrl . "' target='_blank'>" . $pdfUrl . "</a>
 			</div>
 			<div id='dates_tabs_ics'>
 				Diese Termine k&ouml;nnen im iCalendar-Format abgerufen werden, um sie in einer Kalenderanwendung wie z.B. Outlook oder einer Kalender-App auf dem Smartphone anzuzeigen.<br />
-				Folgenden Link in der Kalenderanwendung einf&uuml;gen: <a href='" . $iCalendarUrl . "'>" . $iCalendarUrl . "</a>.
+				Folgenden Link in der Kalenderanwendung einf&uuml;gen: <a href='" . $iCalendarUrl . "' onclick='prompt(\"Tragen Sie die folgende Adresse in der Kalenderanwendung ein:\", \"" . $iCalendarUrl . "\"); return false;'>" . $iCalendarUrl . "</a>.
 	";
 	if ($iCalendarToken)
 	{
-		echo "<p>Sollte die verwendete Kalenderanwendung keine Authentifizierung unterst&uuml;tzen (z.B. Google Kalender), bitte den folgenden Link verwenden: <a href='" . $iCalendarTokenUrl . "'>" . $iCalendarTokenUrl . "</a></p>";
+		echo "<p>Sollte die verwendete Kalenderanwendung keine Authentifizierung unterst&uuml;tzen (z.B. Google Kalender), bitte den folgenden Link verwenden: <a href='" . $iCalendarTokenUrl . "' onclick='prompt(\"Tragen Sie die folgende Adresse in der Kalenderanwendung ein:\", \"" . $iCalendarTokenUrl . "\"); return false;'>" . $iCalendarTokenUrl . "</a></p>";
 	}
 	echo "
 			</div>
