@@ -109,7 +109,12 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 		{
 			$selected = "selected='selected'";
 		}
-		echo "<option value='" . $year . "' " . $selected . ">" . $year . "</option>";
+		$yearTitle = $year;
+		if (!$yearTitle)
+		{
+			$yearTitle = "Planung";
+		}
+		echo "<option value='" . $year . "' " . $selected . ">" . $yearTitle . "</option>";
 	}
 	echo "
 				</select>
@@ -177,6 +182,10 @@ else
 	echo "<ul>";
 	foreach ($years as $year => $eventTypes)
 	{
+		if (!$year)
+		{
+			$year = "Planung";
+		}
 		echo "
 			<li>
 				<b>" . $year . "</b>
@@ -242,8 +251,7 @@ else
 	
 	function events_confirmUpload()
 	{
-		var year = $("#events_upload_year").val();
-		if (year == null)
+		if ($("#events_upload_year").val() == null)
 		{
 			alert(unescape("Kein Jahr ausgew%E4lt!"));
 		}
@@ -257,7 +265,7 @@ else
 			{
 				if ($("#events_upload_file").val())
 				{
-					$("#events_upload_confirm_year").html(year);
+					$("#events_upload_confirm_year").html($("#events_upload_year").find(":selected").text());
 					$("#events_upload_confirm_event").html($("#events_upload_event").find(":selected").text());
 					$("#events_upload_confirm").dialog("open");
 				}
