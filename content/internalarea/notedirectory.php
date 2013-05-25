@@ -7,44 +7,27 @@ if ($_POST["notedirectory_searchstring"])
 }
 else
 {
-	if (Constants::$pagePath[2] == "all")
+	switch (Constants::$pagePath[2])
 	{
-		if (Constants::$accountManager->hasPermission("notedirectory.view.all"))
-		{
+		case "all":
 			$title[] = "Alle Titel";
-		}
-	}
-	else
-	{
-		if (!Constants::$pagePath[2])
-		{
-			if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
+			break;
+		case "details":
+			$title[] = "Titeldetails";
+			break;
+		case "program":
+			$query = Constants::$pdo->prepare("SELECT `title`, `showInGroups`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
+			$query->execute(array
+			(
+				":id" => Constants::$pagePath[3]
+			));
+			if ($query->rowCount())
 			{
-				$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`year` = YEAR(NOW()) AND `notedirectory_programtypes`.`showNoSelection`");
-				if ($query->rowCount())
-				{
-					$row = $query->fetch();
-					Constants::$pagePath[2] = $row->id;
-				}
+				$row = $query->fetch();
+				$title[] = escapeText($row->title) . " " . $row->year;
+				$showInGroups = $row->showInGroups;
 			}
-		}
-		if (Constants::$pagePath[2])
-		{
-			if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
-			{
-				$query = Constants::$pdo->prepare("SELECT `title`, `showInGroups`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
-				$query->execute(array
-				(
-					":id" => Constants::$pagePath[2]
-				));
-				if ($query->rowCount())
-				{
-					$row = $query->fetch();
-					$title[] = escapeText($row->title) . " " . $row->year;
-					$showInGroups = $row->showInGroups;
-				}
-			}
-		}
+			break;
 	}
 }
 echo "<h1>" . implode(" - ", $title) . "</h1>";
@@ -72,7 +55,7 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 					";
 					foreach ($programs as $id => $title)
 					{
-						echo "<li><a href='/internalarea/notedirectory/" . $id . "'>" . escapeText($title) . "</a></li>";
+						echo "<li><a href='/internalarea/notedirectory/program/" . $id . "'>" . escapeText($title) . "</a></li>";
 					}
 					echo "
 							</ul>
@@ -80,11 +63,8 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 					";
 				}
 			}
-			if (Constants::$accountManager->hasPermission("notedirectory.view.all"))
-			{
-				echo "<li><a href='/internalarea/notedirectory/all'>Alle</a></li>";
-			}
 			?>
+			<li><a href="/internalarea/notedirectory/all">Alle Titel</a></li>
 		</ul>
 	</li>
 </ul>
@@ -116,6 +96,7 @@ if ($_POST["notedirectory_searchstring"])
 			`notedirectory_titles`.`arranger` LIKE :searchstring OR
 			`notedirectory_titles`.`publisher` LIKE :searchstring OR
 			`notedirectory_categories`.`title` LIKE :searchstring
+		ORDER BY `notedirectory_titles`.`categoryId` ASC
 	");
 	$query->execute(array
 	(
@@ -132,14 +113,41 @@ if ($_POST["notedirectory_searchstring"])
 	));
 	$noteDirectory->setTitles($query->fetchAll());
 	$noteDirectory->setHighlight($_POST["notedirectory_searchstring"]);
+	$noteDirectory->setShowInGroups(true);
 	$noteDirectory->createList();
 }
 else
 {
-	if (Constants::$pagePath[2])
+	switch (Constants::$pagePath[2])
 	{
-		if (Constants::$pagePath[2] == "details")
-		{
+		case "all":
+			$query = Constants::$pdo->query("
+				SELECT `notedirectory_titles`.`id`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher`
+				FROM `notedirectory_titles`
+				LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`
+				ORDER BY `notedirectory_titles`.`categoryId` ASC
+			");
+			if ($query->rowCount())
+			{
+				$columns = array
+				(
+					"title" => "Titel",
+					"composer" => "Komponist",
+					"arranger" => "Bearbeiter",
+					"publisher" => "Verleger"
+				);
+				$noteDirectory = new NoteDirectory();
+				$noteDirectory->setColumns($columns);
+				$noteDirectory->setTitles($query->fetchAll());
+				$noteDirectory->setShowInGroups(true);
+				$noteDirectory->createList();
+			}
+			else
+			{
+				echo "<div class='error'>Keine Titel vorhanden!</div>";
+			}
+			break;
+		case "details":
 			$query = Constants::$pdo->prepare("SELECT `title` FROM `notedirectory_titles` WHERE `id` = :id");
 			$query->execute(array
 			(
@@ -177,7 +185,7 @@ else
 					while ($row = $query->fetch())
 					{
 						echo "
-							<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/" . $row->id . "';\">
+							<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/program/" . $row->id . "';\">
 								<td>" . $row->year . "</td>
 								<td>" . escapeText($row->title) . "</td>
 								<td>" . $row->number . "</td>
@@ -198,56 +206,30 @@ else
 			{
 				echo "<div class='error'>Titel nicht gefunden!</div>";
 			}
-		}
-		else
-		{
-			$query = null;
-			if (Constants::$pagePath[2] == "all")
+			break;
+		case "program":
+			$query = Constants::$pdo->prepare("
+				SELECT `notedirectory_titles`.`id`, `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher`
+				FROM `notedirectory_programtitles`
+				LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId`
+				LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`
+				WHERE `programId` = :programId
+				ORDER BY `notedirectory_titles`.`categoryId` ASC
+			");
+			$query->execute(array
+			(
+				":programId" => Constants::$pagePath[3]
+			));
+			if ($query->rowCount())
 			{
-				if (Constants::$accountManager->hasPermission("notedirectory.view.all"))
-				{
-					$query = Constants::$pdo->query("SELECT `notedirectory_titles`.`id`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`");
-				}
-			}
-			else
-			{
-				if (Constants::$pagePath[2])
-				{
-					if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
-					{
-					
-						$query = Constants::$pdo->prepare("SELECT `notedirectory_titles`.`id`, `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher` FROM `notedirectory_programtitles` LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId` LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId` WHERE `programId` = :programId");
-						$query->execute(array
-						(
-							":programId" => Constants::$pagePath[2]
-						));
-					}
-				}
-			}
-			
-			if ($query and $query->rowCount())
-			{
-				if (Constants::$pagePath[2] == "all")
-				{
-					$columns = array
-					(
-						"title" => "Titel",
-						"composer" => "Komponist",
-						"arranger" => "Bearbeiter",
-						"publisher" => "Verleger"
-					);
-				}
-				else
-				{
-					$columns = array
-					(
-						"number" => "Nummer",
-						"title" => "Titel",
-						"composer" => "Komponist",
-						"arranger" => "Bearbeiter",
-						"publisher" => "Verleger"
-					);
-				}
+				$columns = array
+				(
+					"number" => "Nummer",
+					"title" => "Titel",
+					"composer" => "Komponist",
+					"arranger" => "Bearbeiter",
+					"publisher" => "Verleger"
+				);
 				$noteDirectory = new NoteDirectory();
 				$noteDirectory->setColumns($columns);
 				$noteDirectory->setTitles($query->fetchAll());
@@ -258,11 +240,7 @@ else
 			{
 				echo "<div class='error'>Keine Titel vorhanden!</div>";
 			}
-		}
-	}
-	else
-	{
-		echo "<div class='error'>Kein Programm ausgew&auml;hlt!</div>";
+			break;
 	}
 }
 ?>
