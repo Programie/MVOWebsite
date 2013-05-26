@@ -8,10 +8,15 @@
 	margin: 10px;
 }
 
-#protocols_upload_groups label
+#protocols_upload_groups label, #protocols_upload_miscoptions label
 {
 	margin-right: 10px;
 	font-weight: normal;
+}
+
+#protocols_upload_miscoptions
+{
+	margin: 10px;
 }
 
 #protocols_upload_name

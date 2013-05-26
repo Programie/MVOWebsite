@@ -80,19 +80,22 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 									":name" => $_POST["protocols_upload_name"]
 								));
 								
-								$replacements = array
-								(
-									"FIRSTNAME" => $userData->firstName,
-									"LASTNAME" => $userData->lastName,
-									"DATE" => $_POST["protocols_upload_date"],
-									"NAME" => $_POST["protocols_upload_name"],
-									"URL" => BASE_URL . "/uploads/" . $uploadId . "/" . $fileName
-								);
-								$mail = new Mail("Protokoll hochgeladen", $replacements);
-								$mail->setTemplate("protocol-uploaded");
-								$mail->setTo($mailRecipients);
-								$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
-								$mail->send();
+								if ($_POST["protocols_upload_sendmail"])
+								{
+									$replacements = array
+									(
+										"FIRSTNAME" => $userData->firstName,
+										"LASTNAME" => $userData->lastName,
+										"DATE" => $_POST["protocols_upload_date"],
+										"NAME" => $_POST["protocols_upload_name"],
+										"URL" => BASE_URL . "/uploads/" . $uploadId . "/" . $fileName
+									);
+									$mail = new Mail("Protokoll hochgeladen", $replacements);
+									$mail->setTemplate("protocol-uploaded");
+									$mail->setTo($mailRecipients);
+									$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
+									$mail->send();
+								}
 								
 								echo "<div class='ok'>Das Protokoll wurde erfolgreich hochgeladen.</div>";
 								
@@ -145,6 +148,12 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 		echo "<input type='checkbox' id='protocols_upload_groups_" . $name . "' name='protocols_upload_groups_" . $name . "'/><label for='protocols_upload_groups_" . $name . "'>" . escapeText($title) . "</label>";
 	}
 	echo "
+				</div>
+				
+				<label for='protocols_upload_miscoptions'>Sonstige Optionen:</label>
+				<div id='protocols_upload_miscoptions'>
+					<input type='checkbox' id='protocols_upload_sendmail' name='protocols_upload_sendmail' value='1' checked='checked'/>
+					<label for='protocols_upload_sendmail'>Email versenden</label>
 				</div>
 				
 				<input type='hidden' id='protocols_upload_confirmed' name='protocols_upload_confirmed'/>
