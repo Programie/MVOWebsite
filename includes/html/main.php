@@ -3,7 +3,7 @@
 $backgroundType = getCurrentSeason();
 $backgroundPath = ROOT_PATH . "/files/backgrounds/" . $backgroundType;
 $backgroundFile = $_SESSION["backgroundFile"];
-if (!$backgroundFile or !file_exists($backgroundPath . "/" . $backgroundFile))
+if (!$backgroundFile or $_SESSION["backgroundType"] != $backgroundType or !file_exists($backgroundPath . "/" . $backgroundFile))
 {
 	$dir = scandir($backgroundPath);
 	$files = array();
@@ -19,6 +19,7 @@ if (!$backgroundFile or !file_exists($backgroundPath . "/" . $backgroundFile))
 		}
 	}
 	$backgroundFile = $files[rand(0, count($dir) - 1)];
+	$_SESSION["backgroundType"] = $backgroundType;
 	$_SESSION["backgroundFile"] = $backgroundFile;
 }
 $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFile;
