@@ -32,7 +32,7 @@ form textarea
 	box-sizing: border-box;
 }
 
-input[type="password"], .date, .input-email, .input-fax, .input-mobile-phone, .input-phone, .input-search, .input-user
+input[type="password"], .date, .input-email, .input-fax, .input-mobile-phone, .input-phone, .input-search, .input-user, .time
 {
 	padding-left: 30px !important;
 	background-repeat: no-repeat;
@@ -96,6 +96,12 @@ input[type="submit"]
 .input-user
 {
 	background-image: url(/files/images/formfields/user.png);
+}
+
+.time
+{
+	background-image: url(/files/images/formfields/time.png);
+	width: 100px;
 }
 
 form label

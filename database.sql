@@ -260,6 +260,20 @@ CREATE TABLE `protocols` (
   KEY `userId` (`userId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `roomoccupancyplan` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) NOT NULL,
+  `reservedBy` varchar(100) NOT NULL,
+  `date` date NOT NULL,
+  `startTime` time NOT NULL,
+  `endTime` time NOT NULL,
+  `endRepeat` date DEFAULT NULL,
+  `weekly` tinyint(1) NOT NULL DEFAULT '0',
+  `changeUserId` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `changeUserId` (`changeUserId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 CREATE TABLE `uploads` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) CHARACTER SET latin1 NOT NULL,
@@ -362,6 +376,9 @@ ALTER TABLE `pictureyears`
 ALTER TABLE `protocols`
   ADD CONSTRAINT `protocols_upload` FOREIGN KEY (`uploadId`) REFERENCES `uploads` (`id`),
   ADD CONSTRAINT `protocols_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
+
+ALTER TABLE `roomoccupancyplan`
+  ADD CONSTRAINT `roomoccupancyplan_user` FOREIGN KEY (`changeUserId`) REFERENCES `users` (`id`);
 
 ALTER TABLE `visits`
   ADD CONSTRAINT `visits_user` FOREIGN KEY (`userId`) REFERENCES `visits` (`userId`) ON DELETE SET NULL ON UPDATE SET NULL;

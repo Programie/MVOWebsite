@@ -37,18 +37,25 @@ $(document).ready(function()
 	{
 		changeMonth : true,
 		changeYear : true,
-		dateFormat : "dd.mm.yy",
-		dayNames : ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
-		dayNamesMin : ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
-		firstDay : 1,
-		monthNames : ["Januar", "Februar", "M&auml;rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"],
-		monthNamesShort : ["Jan", "Feb", "M&auml;rz", "April", "Mai", "Juni", "Juli", "Aug", "Sep", "Okt", "Nov", "Dez"],
-		showAnim : "slideDown"
+		showAnim : "slideDown",
+		showButtonPanel : true
+	});
+	$(".datetime").datetimepicker(
+	{
+		changeMonth : true,
+		changeYear : true,
+		showAnim : "slideDown",
+		showButtonPanel : true
 	});
 	$(".menu").menu();
 	$(document).tooltip(
 	{
 		track : true
+	});
+	$(".time").timepicker(
+	{
+		showAnim : "slideDown",
+		showButtonPanel : true
 	});
 	
 	// Tablesorter
@@ -73,6 +80,15 @@ $(window).scroll(function()
 		div.fadeOut();
 	}
 });
+
+$.fullCalendar.axisFormat = "HH:mm";
+$.fullCalendar.buttonText =
+{
+	day : "Tag",
+	month : "Monat",
+	today : "Heute",
+	week : "Woche"
+};
 
 $.tablesorter.addParser(
 {

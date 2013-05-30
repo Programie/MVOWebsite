@@ -116,6 +116,9 @@
 				"path" : "/internalarea/notedirectory"
 			},
 			{
+				"path" : "/internalarea/roomoccupancyplan"
+			},
+			{
 				"path" : "/internalarea/protocols"
 			},
 			{

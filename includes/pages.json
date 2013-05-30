@@ -170,6 +170,11 @@
 			{
 				"title" : "Passwort zur&uuml;cksetzen"
 			},
+			"roomoccupancyplan" :
+			{
+				"title" : "Proberaumbelegungsplan",
+				"permissions" : "roomoccupancyplan"
+			},
 			"visitstats" :
 			{
 				"title" : "Besucherstatistik",

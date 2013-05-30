@@ -355,9 +355,9 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 				
 				<label for='dates_edit_time_start'>Zeit</label>
 				<div>
-					<input type='text' id='dates_edit_time_start' name='dates_edit_time_start' placeholder='HH:MM'/>
+					<input type='text' class='time' id='dates_edit_time_start' name='dates_edit_time_start' placeholder='HH:MM'/>
 					<span>bis</span>
-					<input type='text' id='dates_edit_time_end' name='dates_edit_time_end' placeholder='HH:MM'/>
+					<input type='text' class='time' id='dates_edit_time_end' name='dates_edit_time_end' placeholder='HH:MM'/>
 				</div>
 				
 				<label for='dates_edit_location'>Ort</label>

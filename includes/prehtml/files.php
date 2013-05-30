@@ -27,6 +27,9 @@ switch (Constants::$pagePath[1])
 			"errorreport",
 			"jquery",
 			"jquery-ui",
+			"globalize",
+			"globalize-de",
+			"datepicker-de",
 			"metadata",
 			"jcrop",
 			"colorbox",
@@ -36,8 +39,11 @@ switch (Constants::$pagePath[1])
 			"noty",
 			"noty-layout",
 			"noty-theme",
+			"timepicker",
+			"timepicker-de",
 			"jquery.form",
 			"jquery.contextmenu",
+			"fullcalendar",
 			"google-analytics",
 			"general"
 		);
