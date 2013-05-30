@@ -63,7 +63,7 @@ if (Constants::$accountManager->getUserId())
 							Constants::$pdo->query("INSERT INTO `dates` () VALUES()");
 							$id = Constants::$pdo->lastInsertId();
 						}
-						$locationId = 0;
+						$locationId = null;
 						if ($_POST["dates_edit_location"])
 						{
 							$query = Constants::$pdo->prepare("SELECT `id` FROM `locations` WHERE `name` = :name");
