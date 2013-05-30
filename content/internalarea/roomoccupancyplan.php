@@ -50,6 +50,7 @@
 		},
 		dayNames : ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"],
 		dayNamesShort : ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"],
+		defaultView : "agendaWeek",
 		editable : <?php echo (int) $allowEdit;?>,
 		eventClick : function(event, jsEvent, view)
 		{
