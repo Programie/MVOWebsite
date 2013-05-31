@@ -1,7 +1,14 @@
 <?php
 if (isset($_POST["username"]) and isset($_POST["password"]) and Constants::$accountManager->getUserId())
 {
-	header("Location: " . BASE_URL . "/internalarea");
+	if ($_GET["jumpto"])
+	{
+		header("Location: /" . $_GET["jumpto"]);
+	}
+	else
+	{
+		header("Location: /internalarea");
+	}
 	exit;
 }
 if (Constants::$pagePath[1])

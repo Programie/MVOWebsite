@@ -13,7 +13,7 @@ else
 		echo "<div class='error'>Login fehlgeschlagen: Benutzername oder Passwort falsch!</div>";
 	}
 	echo "
-		<form action='/internalarea/login' method='post'>
+		<form action='" . $_SERVER["REQUEST_URI"] . "' method='post'>
 			<input type='text' class='input-user' id='loginform_username' name='username' placeholder='Benutzername' required/>
 			<input type='password' name='password' placeholder='Passwort' required/>
 			
