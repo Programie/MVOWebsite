@@ -229,7 +229,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 						<td class='no-print'><input type='checkbox'/></td>
 						<td>" . escapeText($row->firstName) . "</td>
 						<td>" . escapeText($row->lastName) . "</td>
-						<td>" . escapeText($row->email) . "</td>
+						<td><a href='mailto:" . escapeText($row->email) . "'>" . escapeText($row->email) . "</a></td>
 						<td>" . implode("<br />", $phonePrivate) . "</td>
 						<td>" . escapeText($row->phoneWork) . "</td>
 						<td>" . escapeText($row->phoneMobile) . "</td>
