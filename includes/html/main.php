@@ -57,7 +57,11 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 		<link rel="icon" href="/files/images/favicon.ico"/>
 	</head>
 	<body style="background-image: url(<?php echo $backgroundFile;?>);">
-		<div id="notification"></div>
+		<div id="unsupported_browser_warning">
+			<p><b>Warnung: Ihr Browser ist nicht auf dem aktuellsten Stand!</b></p>
+			<p>Der von Ihnen verwendete Internetbrowser ist veraltet bzw. unterst&uuml;tzt nicht alle auf dieser Seite verwendeten Eigenschaften.</p>
+			<p><a href="/update_browser" target="_blank">Klicken Sie hier um weitere Informationen zu erhalten.</a></p>
+		</div>
 		<div id="container">
 			<?php require_once "header.php";?>
 			<?php require_once "body.php";?>

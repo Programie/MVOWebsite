@@ -65,6 +65,19 @@ body
 	padding-bottom: 110px;
 }
 
+#unsupported_browser_warning
+{
+	display: none;
+	width: 1200px;
+	margin: 0 auto;
+	padding: 10px;
+	padding-left: 40px;
+	background-color: #ffffcc;
+	background-image: url(/files/images/alerts/warning.png);
+	background-repeat: no-repeat;
+	background-position: center left;
+}
+
 @media screen
 {
 	#backtotop
@@ -78,6 +91,7 @@ body
 	#bodycontent_div1
 	{
 		padding: 10px;
+		background: #fff;
 		background: rgba(255, 255, 255, 0.5);
 		border-radius: 10px;
 		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
@@ -86,6 +100,7 @@ body
 	#bodycontent_div2
 	{
 		padding: 10px;
+		background: #fff;
 		background: rgba(255, 255, 255, 0.9);
 		border-radius: 10px;
 	}
@@ -106,6 +121,7 @@ body
 		bottom: 0px;
 		padding: 10px;
 		color: #fff;
+		background-color: #000;
 		background-color: rgba(0, 0, 0, 0.6);
 		border-top-left-radius: 10px;
 	}
@@ -119,21 +135,6 @@ body
 	#overlay_container div:last-child
 	{
 		margin-right: 0px;
-	}
-	
-	#notification
-	{
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		margin: 0;
-		border-radius: 0;
-		border-bottom: 1px solid;
-		border: 0;
-		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-		display: none;
-		z-index: 1000;
 	}
 	
 	#print
@@ -153,7 +154,7 @@ body
 		font-size: large;
 	}
 	
-	#backgroundwrapper, #header, #notification, #overlay_container
+	#backgroundwrapper, #header, #overlay_container
 	{
 		display: none;
 	}

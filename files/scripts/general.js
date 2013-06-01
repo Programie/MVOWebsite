@@ -66,6 +66,30 @@ $(document).ready(function()
 	
 	$.noty.defaults.layout = "bottom";
 	$.noty.defaults.timeout = 10000;
+	
+	var htmlElement = document.getElementsByTagName("html")[0];
+	var unsupported = 0;
+	unsupported += typeof(htmlElement.style.borderRadius) == "undefined";
+	unsupported += typeof(htmlElement.style.boxShadow) == "undefined";
+	unsupported += typeof(htmlElement.style.textShadow) == "undefined";
+	if (!unsupported)
+	{
+		try
+		{
+			var oldColor = htmlElement.style.backgroundColor;
+			htmlElement.style.backgroundColor = "rgba(255, 255, 255, 0.5)";
+			unsupported += !htmlElement.style.backgroundColor;
+			htmlElement.style.backgroundColor = oldColor;
+		}
+		catch (exception)
+		{
+			unsupported++;
+		}
+	}
+	if (unsupported)
+	{
+		$("#unsupported_browser_warning").show();
+	}
 });
 
 $(window).scroll(function()
