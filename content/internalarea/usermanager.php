@@ -117,13 +117,20 @@ if (isset($_POST["usermanager_edituser_id"]))
 				$query = Constants::$pdo->query("SELECT `id`, `enabled`, `email`, `firstName`, `lastName`, `lastOnline` FROM `users`");
 				while ($row = $query->fetch())
 				{
+					$lastOnline = "";
+					if ($row->lastOnline)
+					{
+						$lastOnline = explode(" ", $row->lastOnline);
+						$lastOnlineDate = explode("-", $lastOnline[0]);
+						$lastOnline = $lastOnlineDate[2] . "." . $lastOnlineDate[1] . "." . $lastOnlineDate[0] . " " . $lastOnline[1];
+					}
 					echo "
 						<tr userid='" . $row->id . "'>
 							<td><img src='/files/images/alerts/" . ($row->enabled ? "ok" : "error") . ".png' title='" . ($row->enabled ? "Aktiviert" : "Deaktiviert") . "'/></td>
 							<td>" . htmlspecialchars($row->firstName) . "</td>
 							<td>" . htmlspecialchars($row->lastName) . "</td>
 							<td>" . htmlspecialchars($row->email) . "</td>
-							<td>" . htmlspecialchars($row->lastOnline) . "</td>
+							<td>" . $lastOnline . "</td>
 						</tr>
 					";
 				}
