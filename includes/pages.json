@@ -175,6 +175,11 @@
 				"title" : "Proberaumbelegungsplan",
 				"permissions" : "roomoccupancyplan"
 			},
+			"usermanager" :
+			{
+				"title" : "Benutzerverwaltung",
+				"permissions" : "usermanager"
+			},
 			"visitstats" :
 			{
 				"title" : "Besucherstatistik",

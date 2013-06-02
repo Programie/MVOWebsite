@@ -14,7 +14,7 @@ else
 		$data = explode("-", Constants::$pagePath[2]);
 		if (count($data) == 2)
 		{
-			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `id` = :id AND `resetPasswordDate` IS NOT NULL AND `resetPasswordDate` = :date");
+			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `id` = :id AND `enabled` AND `resetPasswordDate` IS NOT NULL AND `resetPasswordDate` = :date");
 			$query->execute(array
 			(
 				":id" => $data[0],
@@ -91,7 +91,7 @@ else
 		{
 			$time = time();
 			
-			$query = Constants::$pdo->prepare("SELECT `id`, `email`, `firstName`, `lastName` FROM `users` WHERE `username` = :username");
+			$query = Constants::$pdo->prepare("SELECT `id`, `email`, `firstName`, `lastName` FROM `users` WHERE `enabled` AND `username` = :username");
 			$query->execute(array
 			(
 				":username" => $_POST["resetpassword_username"]

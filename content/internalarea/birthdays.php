@@ -26,7 +26,7 @@ $now = new DateTime;
 $nextBirthDay = null;
 
 $permissionCheckQuery = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
-$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `birthDate` FROM `users`");
+$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `birthDate` FROM `users` WHERE `enabled`");
 while ($row = $query->fetch())
 {
 	if ($activeGroup == "all")

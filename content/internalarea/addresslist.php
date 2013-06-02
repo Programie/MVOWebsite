@@ -40,7 +40,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 			if (!empty($recipients))
 			{
 				$mailRecipients = array();
-				$query = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
+				$query = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id AND `enabled`");
 				foreach ($recipients as $index => $recipientUserId)
 				{
 					$query->execute(array
@@ -197,7 +197,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 	<tbody>
 		<?php
 		$permissionCheckQuery = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
-		$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email`, `phonePrivate1`, `phonePrivate2`, `phoneWork`, `phoneMobile`, `fax` FROM `users`");
+		$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email`, `phonePrivate1`, `phonePrivate2`, `phoneWork`, `phoneMobile`, `fax` FROM `users` WHERE `enabled`");
 		while ($row = $query->fetch())
 		{
 			if ($activeGroup == "all")

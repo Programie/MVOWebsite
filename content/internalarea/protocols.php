@@ -21,7 +21,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 			if (checkdate($date[1], $date[0], $date[2]))
 			{
 				$permissionQuery = Constants::$pdo->prepare("SELECT `userId` FROM `permissions` WHERE `permission` = :permission");
-				$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
+				$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id AND `enabled`");
 				
 				$mailRecipients = array();
 				$groups = array();
@@ -44,7 +44,10 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 								":id" => $permissionRow->userId
 							));
 							$userRow = $userQuery->fetch();
-							$mailRecipients[$userRow->email] = $userRow->firstName . " " . $userRow->lastName;
+							if ($userRow->email)
+							{
+								$mailRecipients[$userRow->email] = $userRow->firstName . " " . $userRow->lastName;
+							}
 						}
 					}
 				}

@@ -17,7 +17,7 @@ if (isset($_POST["writemessage_confirmed"]))
 				$mailRecipients = array();
 				
 				$permissionQuery = Constants::$pdo->prepare("SELECT `userId` FROM `permissions` WHERE `permission` = :permission");
-				$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
+				$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id AND `enabled`");
 				
 				foreach ($_POST as $field => $value)
 				{

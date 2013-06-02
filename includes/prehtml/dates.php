@@ -6,7 +6,7 @@ if ($calendar == "internal.ics" or $calendar == "public.ics")
 	{
 		if (Constants::$pagePath[2])
 		{
-			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `calendarToken` = :calendarToken");
+			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `enabled` AND `calendarToken` = :calendarToken");
 			$query->execute(array
 			(
 				":calendarToken" => Constants::$pagePath[2]

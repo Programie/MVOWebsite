@@ -24,7 +24,7 @@ while ($row = $query->fetch())
 	$groups[] = $row;
 }
 
-$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName` FROM `users` ORDER BY `lastname` ASC, `firstName` ASC");
+$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName` FROM `users` WHERE `enabled` ORDER BY `lastname` ASC, `firstName` ASC");
 while ($row = $query->fetch())
 {
 	$users[] = $row;

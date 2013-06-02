@@ -291,6 +291,7 @@ CREATE TABLE `usergroups` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `username` varchar(100) CHARACTER SET latin1 NOT NULL,
   `email` varchar(100) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `newEmail` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
@@ -381,7 +382,7 @@ ALTER TABLE `roomoccupancyplan`
   ADD CONSTRAINT `roomoccupancyplan_user` FOREIGN KEY (`changeUserId`) REFERENCES `users` (`id`);
 
 ALTER TABLE `visits`
-  ADD CONSTRAINT `visits_user` FOREIGN KEY (`userId`) REFERENCES `visits` (`userId`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `visits_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -325,6 +325,25 @@ if (Constants::$pagePath[1])
 					exit;
 			}
 			break;
+		case "usermanager":
+			if (Constants::$accountManager->hasPermission("usermanager"))
+			{
+				switch (Constants::$pagePath[2])
+				{
+					case "getuserdata":
+						$query = Constants::$pdo->prepare("SELECT `id`, `enabled`, `username`, `email`, `firstName`, `lastName`, `birthDate` FROM `users` WHERE `id` = :id");
+						$query->execute(array
+						(
+							":id" => Constants::$pagePath[3]
+						));
+						$row = $query->fetch();
+						$row->id = (int) $row->id;
+						$row->enabled = (bool) $row->enabled;
+						echo json_encode($row);
+						exit;
+				}
+			}
+			break;
 	}
 }
 else

@@ -97,7 +97,7 @@ class MessageManager
 		
 		$sql[] = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`validTill`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages`";
 		$sql[] = "LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
-		$sql[] = "WHERE `enabled`";
+		$sql[] = "WHERE `messages`.`enabled`";
 		if ($id == null or $id == -1)
 		{
 			$sql[] = "AND (`validTill` IS NULL OR `validTill` >= CURDATE()) ORDER BY `messages`.`id` DESC";

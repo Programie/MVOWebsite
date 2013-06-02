@@ -321,7 +321,7 @@ class AccountManager
 	{
 		$this->loginFailed = false;
 		$this->logout();
-		$query = Constants::$pdo->prepare("SELECT `id`, `username`, `password` FROM `users` WHERE `username` = :username");
+		$query = Constants::$pdo->prepare("SELECT `id`, `username`, `password` FROM `users` WHERE `enabled` AND `username` = :username");
 		$query->execute(array
 		(
 			":username" => $username
@@ -346,7 +346,7 @@ class AccountManager
 	public function loginWithUserId($userId)
 	{
 		$this->logout();
-		$query = Constants::$pdo->prepare("SELECT `username` FROM `users` WHERE `id` = :id");
+		$query = Constants::$pdo->prepare("SELECT `username` FROM `users` WHERE `id` = :id AND `enabled`");
 		$query->execute(array
 		(
 			":id" => $userId
