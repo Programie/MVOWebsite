@@ -109,7 +109,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 					<th>Vorname</th>
 					<th>Nachname</th>
 					<th>Email</th>
-					<th>Zuletzt Online</th>
+					<th class="{sorter: 'number-attribute'}">Zuletzt Online</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -130,7 +130,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 							<td>" . htmlspecialchars($row->firstName) . "</td>
 							<td>" . htmlspecialchars($row->lastName) . "</td>
 							<td>" . htmlspecialchars($row->email) . "</td>
-							<td>" . $lastOnline . "</td>
+							<td number='" . strtotime($row->lastOnline) . "'>" . $lastOnline . "</td>
 						</tr>
 					";
 				}
