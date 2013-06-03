@@ -252,7 +252,15 @@ if (isset($_POST["usermanager_edituser_id"]))
 				{
 					if ($("#usermanager_edituser_lastname").val())
 					{
-						$("#usermanager_edituser_form")[0].submit();
+						if (!$("#usermanager_edituser_sendnewusermail").prop("checked") || $("#usermanager_edituser_email").val())
+						{
+							$("#usermanager_edituser_form")[0].submit();
+						}
+						else
+						{
+							alert("Die Option 'Zugangsdaten versenden' erfordert die Angabe einer Email-Adresse!");
+							$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_contact").parent().index());
+						}
 					}
 					else
 					{
