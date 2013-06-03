@@ -129,14 +129,14 @@ if (isset($_POST["usermanager_edituser_id"]))
 }
 ?>
 
-<div id="usermanager_tabs" class="no-print">
+<div id="usermanager_tabs">
 	<ul>
 		<li><a href="#usermanager_tabs_users">Benutzer</a></li>
 		<li><a href="#usermanager_tabs_groups">Gruppen</a></li>
 		<li><a href="#usermanager_tabs_permissiongroups">Berechtigungsgruppen</a></li>
 	</ul>
 	<div id="usermanager_tabs_users">
-		<button type="button" id="usermanager_users_addbutton">Benutzer erstellen</button>
+		<button type="button" id="usermanager_users_addbutton" class="no-print">Benutzer erstellen</button>
 		<table id="usermanager_users_table" class="table tablesorter {sortlist: [[2,0],[1,0]]}">
 			<thead>
 				<tr>
