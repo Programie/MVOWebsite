@@ -35,7 +35,7 @@ class AccountManager
 			}
 		}
 		
-		$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password, `resetPasswordDate` = NULL WHERE `id` = :id");
+		$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password, `resetPasswordDate` = NULL, `forcePasswordChange` = '0' WHERE `id` = :id");
 		$query->execute(array
 		(
 			":id" => $this->userId,
@@ -124,7 +124,7 @@ class AccountManager
 		return true;
 	}
 	
-	private function encrypt($userId, $password)
+	public function encrypt($userId, $password)
 	{
 		return hash("sha512", $userId . "_" . $password);
 	}

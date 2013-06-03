@@ -291,13 +291,13 @@ CREATE TABLE `usergroups` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `username` varchar(100) CHARACTER SET latin1 NOT NULL,
   `email` varchar(100) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `newEmail` varchar(100) CHARACTER SET latin1 DEFAULT NULL,
   `newEmailChangeDate` datetime DEFAULT NULL,
   `password` varchar(128) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `resetPasswordDate` datetime DEFAULT NULL,
+  `forcePasswordChange` tinyint(1) NOT NULL DEFAULT '0',
   `firstName` varchar(100) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `lastName` varchar(100) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `birthDate` date DEFAULT NULL,
@@ -308,6 +308,7 @@ CREATE TABLE `users` (
   `fax` varchar(200) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `calendarToken` varchar(32) DEFAULT NULL,
   `lastOnline` datetime DEFAULT NULL,
+  `enabled` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `calendarToken` (`calendarToken`)

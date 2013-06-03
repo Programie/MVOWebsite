@@ -11,6 +11,16 @@ if (isset($_POST["username"]) and isset($_POST["password"]) and Constants::$acco
 	}
 	exit;
 }
+$userData = Constants::$accountManager->getUserData();
+if ($userData->id and $userData->forcePasswordChange)
+{
+	$validPages = array("confirmemail", "editprofile", "logout");
+	if (!in_array(Constants::$pagePath[1], $validPages))
+	{
+		header("Location: /internalarea/editprofile#editprofile_changepassword");
+		exit;
+	}
+}
 if (Constants::$pagePath[1])
 {
 	switch (Constants::$pagePath[1])

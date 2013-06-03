@@ -2,6 +2,10 @@
 
 <?php
 $userData = Constants::$accountManager->getUserData();
+if ($userData->forcePasswordChange)
+{
+	echo "<div class='warning' id='editprofile_passwordchangeinfo'>Du musst dein Passwort &auml;ndern bevor du auf die anderen Bereiche des internen Bereichs zugreifen kannst.</div>";
+}
 ?>
 
 <div id="editprofile_tabs">
@@ -206,7 +210,12 @@ $userData = Constants::$accountManager->getUserData();
 					{
 						if (Constants::$accountManager->changePassword($_POST["editprofile_changepassword_new1"], $_POST["editprofile_changepassword_current"]))
 						{
-							echo "<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert.</div>";
+							echo "
+								<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert.</div>
+								<script type='text/javascript'>
+									$('#editprofile_passwordchangeinfo').hide();
+								</script>
+							";
 						}
 						else
 						{

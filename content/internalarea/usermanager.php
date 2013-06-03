@@ -4,8 +4,9 @@
 if (isset($_POST["usermanager_edituser_id"]))
 {
 	$birthDate = explode(".", $_POST["usermanager_edituser_birthdate"]);
-	if (checkdate($birthDate[1], $birthDate[0], $birthDate[2]))
+	if ($_POST["usermanager_edituser_birthdate"] and checkdate($birthDate[1], $birthDate[0], $birthDate[2]))
 	{
+		$userId = $_POST["usermanager_edituser_id"];
 		$username = $_POST["usermanager_edituser_username"];
 		$firstName = $_POST["usermanager_edituser_firstname"];
 		$lastName = $_POST["usermanager_edituser_lastname"];
@@ -13,10 +14,13 @@ if (isset($_POST["usermanager_edituser_id"]))
 		{
 			$usernames = array
 			(
-				$firstName . " " . $lastName,
-				$firstName . $lastName,
-				$firstName . "_" . $lastName,
-				$firstName . "." . $lastName
+				str_replace(" ", "", $firstName . $lastName),
+				str_replace(" ", "", $firstName . "_" . $lastName),
+				str_replace(" ", "", $firstName . "." . $lastName),
+				str_replace(" ", "", $firstName . "." . $lastName . substr($birthDate[2], 2, 2)),
+				str_replace(" ", "", $firstName . $lastName . substr($birthDate[2], 2, 2)),
+				str_replace(" ", "", $firstName . "_" . $lastName . substr($birthDate[2], 2, 2)),
+				str_replace(" ", "", $firstName . "." . $lastName . substr($birthDate[2], 2, 2))
 			);
 			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `username` = :username");
 			foreach ($usernames as $tryUsername)
@@ -43,9 +47,9 @@ if (isset($_POST["usermanager_edituser_id"]))
 				":lastName" => $lastName,
 				":birthDate" => $birthDate[2] . "-" . $birthDate[1] . "-" . $birthDate[0]
 			);
-			if ($_POST["usermanager_edituser_id"])
+			if ($userId)
 			{
-				$queryData[":id"] = $_POST["usermanager_edituser_id"];
+				$queryData[":id"] = $userId;
 				$query = Constants::$pdo->prepare("
 					UPDATE `users`
 					SET
@@ -68,13 +72,44 @@ if (isset($_POST["usermanager_edituser_id"]))
 			}
 			if ($query->execute($queryData))
 			{
-				if ($_POST["usermanager_edituser_id"])
+				if ($userId)
 				{
 					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
 				else
 				{
+					$userId = Constants::$pdo->lastInsertId();
 					echo "<div class='ok'>Der Benutzer wurde erfolgreich erstellt.</div>";
+				}
+				if ($_POST["usermanager_edituser_sendcredentialsmail"])
+				{
+					$emailError = "";
+					if ($_POST["usermanager_edituser_email"])
+					{
+						$password = substr(str_shuffle("abcdefghkmnpqrstuvwxyzABCDEFGHKMNPQRSTUVWXYZ23456789_-"), 0, 10);
+						$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password, `forcePasswordChange` = '1' WHERE `id` = :id");
+						$query->execute(array
+						(
+							":password" => Constants::$accountManager->encrypt($userId, $password),
+							":id" => $userId
+						));
+						
+						$mail = new Mail("Zugangsdaten für den internen Bereich");
+						$mail->addReplacement("FIRSTNAME", $firstName);
+						$mail->addReplacement("USERNAME", $username);
+						$mail->addReplacement("PASSWORD", $password);
+						$mail->setTemplate("credentialsmail");
+						$mail->setTo(array($_POST["usermanager_edituser_email"] => $firstName . " " . $lastName));
+						$mail->send();
+					}
+					else
+					{
+						$emailError = "F&uuml;r die Option 'Zugangsdaten versenden' muss eine g&uuml;tige Email-Adresse angegeben werden!";
+					}
+					if ($emailError)
+					{
+						echo "<div class='error'>Die Email mit den Zugangsdaten konnte nicht versendet werden: " . $emailError . "</div>";
+					}
 				}
 			}
 			else
@@ -183,7 +218,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 			</div>
 			<div id="usermanager_edituser_tabs_options">
 				<div><input type="checkbox" id="usermanager_edituser_enabled" name="usermanager_edituser_enabled" value="1" checked="checked"/><label for="usermanager_edituser_enabled">Aktiviert</label></div>
-				<div><input type="checkbox" id="usermanager_edituser_sendnewusermail" name="usermanager_edituser_sendnewusermail" value="1"/><label for="usermanager_edituser_sendnewusermail">Zugangsdaten versenden</label></div>
+				<div><input type="checkbox" id="usermanager_edituser_sendcredentialsmail" name="usermanager_edituser_sendcredentialsmail" value="1"/><label for="usermanager_edituser_sendcredentialsmail">Zugangsdaten versenden</label></div>
 			</div>
 			<div id="usermanager_edituser_tabs_permissions">
 			</div>
@@ -252,14 +287,39 @@ if (isset($_POST["usermanager_edituser_id"]))
 				{
 					if ($("#usermanager_edituser_lastname").val())
 					{
-						if (!$("#usermanager_edituser_sendnewusermail").prop("checked") || $("#usermanager_edituser_email").val())
+						if ($("#usermanager_edituser_birthdate").val())
 						{
-							$("#usermanager_edituser_form")[0].submit();
+							if ($("#usermanager_edituser_birthdate").datepicker("getDate"))
+							{
+								var emailRegEx =/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+								if (!$("#usermanager_edituser_email").val() || emailRegEx.test($("#usermanager_edituser_email").val()))
+								{
+									if (!$("#usermanager_edituser_sendcredentialsmail").prop("checked") || $("#usermanager_edituser_email").val())
+									{
+										if (!$("#usermanager_edituser_id").val() || !$("#usermanager_edituser_sendcredentialsmail").prop("checked") || ($("#usermanager_edituser_sendcredentialsmail").prop("checked") && confirm("Durch die Option 'Zugangsdaten versenden' wird ein neues Passwort generiert!\n\nWirklich fortfahren?")))
+										{
+											$("#usermanager_edituser_form")[0].submit();
+										}
+									}
+									else
+									{
+										alert("Die Option 'Zugangsdaten versenden' erfordert die Angabe einer Email-Adresse!");
+										$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_contact").parent().index());
+									}
+								}
+								else
+								{
+									alert("Die eingegebene Email-Adresse hat ein ung\u00fcltiges Format!");
+								}
+							}
+							else
+							{
+								alert("Das eingegebene Geburtsdatum ist ung\u00fcltig!");
+							}
 						}
 						else
 						{
-							alert("Die Option 'Zugangsdaten versenden' erfordert die Angabe einer Email-Adresse!");
-							$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_contact").parent().index());
+							alert("Kein Geburtsdatum angegeben!");
 						}
 					}
 					else
