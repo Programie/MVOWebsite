@@ -72,7 +72,7 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 <div id="notedirectory_options_div1" class="no-print">
 	<div id="notedirectory_options_div2">
 		<form id="notedirectory_searchform" action="/internalarea/notedirectory" method="post">
-			<input type="text" class="input-search" id="notedirectory_searchstring" name="notedirectory_searchstring" placeholder="Suchbegriff" value="<?php echo htmlspecialchars($_POST["notedirectory_searchstring"]);?>"/>
+			<input type="text" class="input-search" id="notedirectory_searchstring" name="notedirectory_searchstring" placeholder="Suchbegriff" value="<?php echo escapeText($_POST["notedirectory_searchstring"]);?>"/>
 		</form>
 	</div>
 </div>

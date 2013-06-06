@@ -349,7 +349,14 @@ if (Constants::$pagePath[1])
 						$row = $query->fetch();
 						$row->id = (int) $row->id;
 						$row->enabled = (bool) $row->enabled;
-						echo json_encode($row);
+						$data = $row;
+						$query = Constants::$pdo->prepare("SELECT `id`, `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
+						$query->execute(array
+						(
+							":userId" => $data->id
+						));
+						$data->phoneNumbers = $query->fetchAll();
+						echo json_encode($data);
 						exit;
 				}
 			}

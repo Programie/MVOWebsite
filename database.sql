@@ -220,6 +220,16 @@ CREATE TABLE `permissions` (
   UNIQUE KEY `PERMISSION` (`userId`,`permission`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `phonenumbers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `category` set('phone','mobile','fax') NOT NULL,
+  `subCategory` set('business','private') NOT NULL,
+  `number` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userId` (`userId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 CREATE TABLE `picturealbums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
@@ -301,11 +311,6 @@ CREATE TABLE `users` (
   `firstName` varchar(100) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `lastName` varchar(100) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `birthDate` date DEFAULT NULL,
-  `phonePrivate1` varchar(200) CHARACTER SET latin1 NOT NULL DEFAULT '',
-  `phonePrivate2` varchar(200) CHARACTER SET latin1 NOT NULL DEFAULT '',
-  `phoneWork` varchar(200) CHARACTER SET latin1 NOT NULL DEFAULT '',
-  `phoneMobile` varchar(200) CHARACTER SET latin1 NOT NULL DEFAULT '',
-  `fax` varchar(200) CHARACTER SET latin1 NOT NULL DEFAULT '',
   `calendarToken` varchar(32) DEFAULT NULL,
   `lastOnline` datetime DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
@@ -368,6 +373,9 @@ ALTER TABLE `notedirectory_titles`
 
 ALTER TABLE `permissions`
   ADD CONSTRAINT `permissions_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `phonenumbers`
+  ADD CONSTRAINT `phonenumbers_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `pictures`
   ADD CONSTRAINT `pictures_album` FOREIGN KEY (`albumId`) REFERENCES `picturealbums` (`id`);

@@ -8,6 +8,82 @@ if ($userData->forcePasswordChange)
 }
 ?>
 
+<script type="text/javascript">
+	var editProfileContactNewFieldId = 0;
+	function editprofile_contact_addPhoneNumber(category, subCategory, number, id)
+	{
+		if (!id)
+		{
+			editProfileContactNewFieldId++;
+			id = "new_" + editProfileContactNewFieldId;
+		}
+		var categories =
+		{
+			fax : "Fax",
+			mobile : "Mobil",
+			phone : "Telefon",
+		};
+		var subCategories =
+		{
+			business : "Gesch\u00e4ftlich",
+			private : "Privat"
+		};
+		
+		var div = $("<div/>");
+		
+		var categorySelectBox = $("<select/>");
+		categorySelectBox.attr("id", "editprofile_contact_" + id + "_category");
+		categorySelectBox.attr("name", categorySelectBox.attr("id"));
+		for (var index in categories)
+		{
+			var option = $("<option/>");
+			option.attr("value", index);
+			option.text(categories[index]);
+			if (index == category)
+			{
+				option.prop("selected", true);
+			}
+			categorySelectBox.append(option);
+		}
+		div.append(categorySelectBox);
+		
+		var subCategorySelectBox = $("<select/>");
+		subCategorySelectBox.attr("id", "editprofile_contact_" + id + "_subcategory");
+		subCategorySelectBox.attr("name", subCategorySelectBox.attr("id"));
+		for (var index in subCategories)
+		{
+			var option = $("<option/>");
+			option.attr("value", index);
+			option.text(subCategories[index]);
+			if (index == subCategory)
+			{
+				option.prop("selected", true);
+			}
+			subCategorySelectBox.append(option);
+		}
+		div.append(subCategorySelectBox);
+		
+		var inputField = $("<input/>");
+		inputField.attr("type", "text");
+		inputField.attr("id", "editprofile_contact_" + id + "_number");
+		inputField.attr("name", inputField.attr("id"));
+		inputField.val(number);
+		div.append(inputField);
+
+		var removeButton = $("<button/>");
+		removeButton.attr("type", "button");
+		removeButton.text("Entfernen");
+		removeButton.button();
+		removeButton.click(function()
+		{
+			div.remove();
+		});
+		div.append(removeButton);
+		
+		$("#editprofile_contact_div").append(div);
+	}
+</script>
+
 <div id="editprofile_tabs">
 	<ul>
 		<li><a href="#editprofile_account">Account</a></li>
@@ -92,13 +168,13 @@ if ($userData->forcePasswordChange)
 			<input type="hidden" name="editprofile_tab" value="account"/>
 			
 			<label for="editprofile_account_username">Benutzername:</label>
-			<input type="text" class="input-user" id="editprofile_account_username" name="editprofile_account_username" value="<?php echo htmlspecialchars($userData->username);?>" required/>
+			<input type="text" class="input-user" id="editprofile_account_username" name="editprofile_account_username" value="<?php echo escapeText($userData->username);?>" required/>
 			
 			<label for="editprofile_account_firstname">Vorname:</label>
-			<input type="text" id="editprofile_account_firstname" name="editprofile_account_firstname" value="<?php echo htmlspecialchars($userData->firstName);?>" required/>
+			<input type="text" id="editprofile_account_firstname" name="editprofile_account_firstname" value="<?php echo escapeText($userData->firstName);?>" required/>
 			
 			<label for="editprofile_account_lastname">Nachname:</label>
-			<input type="text" id="editprofile_account_lastname" name="editprofile_account_lastname" value="<?php echo htmlspecialchars($userData->lastName);?>" required/>
+			<input type="text" id="editprofile_account_lastname" name="editprofile_account_lastname" value="<?php echo escapeText($userData->lastName);?>" required/>
 			
 			<input type="submit" value="Speichern"/>
 		</form>
@@ -243,13 +319,13 @@ if ($userData->forcePasswordChange)
 			<input type="hidden" name="editprofile_tab" value="password"/>
 			
 			<label for="editprofile_changepassword_current">Aktuelles Passwort:</label>
-			<input type="password" id="editprofile_changepassword_current" name="editprofile_changepassword_current" value="<?php echo htmlspecialchars($_POST["editprofile_changepassword_current"]);?>" required/>
+			<input type="password" id="editprofile_changepassword_current" name="editprofile_changepassword_current" value="<?php echo escapeText($_POST["editprofile_changepassword_current"]);?>" required/>
 			
 			<label for="editprofile_changepassword_new1">Neues Passwort:</label>
-			<input type="password" id="editprofile_changepassword_new1" name="editprofile_changepassword_new1" value="<?php echo htmlspecialchars($_POST["editprofile_changepassword_new1"]);?>" required/>
+			<input type="password" id="editprofile_changepassword_new1" name="editprofile_changepassword_new1" value="<?php echo escapeText($_POST["editprofile_changepassword_new1"]);?>" required/>
 			
 			<label for="editprofile_changepassword_new2">Neues Passwort wiederholen:</label>
-			<input type="password" id="editprofile_changepassword_new2" name="editprofile_changepassword_new2" value="<?php echo htmlspecialchars($_POST["editprofile_changepassword_new2"]);?>" required/>
+			<input type="password" id="editprofile_changepassword_new2" name="editprofile_changepassword_new2" value="<?php echo escapeText($_POST["editprofile_changepassword_new2"]);?>" required/>
 			
 			<input type="submit" value="Speichern"/>
 		</form>
@@ -332,16 +408,16 @@ if ($userData->forcePasswordChange)
 			<input type="hidden" name="editprofile_tab" value="email"/>
 			
 			<label for="editprofile_changeemail_currentpassword">Aktuelles Passwort:</label>
-			<input type="password" id="editprofile_changeemail_currentpassword" name="editprofile_changeemail_currentpassword" value="<?php echo htmlspecialchars($_POST["editprofile_changeemail_currentpassword"]);?>" required/>
+			<input type="password" id="editprofile_changeemail_currentpassword" name="editprofile_changeemail_currentpassword" value="<?php echo escapeText($_POST["editprofile_changeemail_currentpassword"]);?>" required/>
 			
 			<label for="editprofile_changeemail_current">Aktuelle Email-Adresse:</label>
 			<input type="text" class="input-email" id="editprofile_changeemail_current" value="<?php echo $userData->email;?>" disabled/>
 			
 			<label for="editprofile_changeemail_new1">Neue Email-Adresse:</label>
-			<input type="text" class="input-email" id="editprofile_changeemail_new1" name="editprofile_changeemail_new1" value="<?php echo htmlspecialchars($_POST["editprofile_changeemail_new1"]);?>" required/>
+			<input type="text" class="input-email" id="editprofile_changeemail_new1" name="editprofile_changeemail_new1" value="<?php echo escapeText($_POST["editprofile_changeemail_new1"]);?>" required/>
 			
 			<label for="editprofile_changeemail_new2">Neue Email-Adresse wiederholen:</label>
-			<input type="text" class="input-email" id="editprofile_changeemail_new2" name="editprofile_changeemail_new2" value="<?php echo htmlspecialchars($_POST["editprofile_changeemail_new2"]);?>" required/>
+			<input type="text" class="input-email" id="editprofile_changeemail_new2" name="editprofile_changeemail_new2" value="<?php echo escapeText($_POST["editprofile_changeemail_new2"]);?>" required/>
 			
 			<input type="submit" value="Speichern"/>
 		</form>
@@ -351,39 +427,73 @@ if ($userData->forcePasswordChange)
 		<?php
 		if ($_POST["editprofile_tab"] == "contact")
 		{
-			$query = Constants::$pdo->prepare("UPDATE `users` SET `phonePrivate1` = :phonePrivate1, `phonePrivate2` = :phonePrivate2, `phoneWork` = :phoneWork, `phoneMobile` = :phoneMobile, `fax` = :fax WHERE `id` = :id");
-			$query->execute(array
-			(
-				":phonePrivate1" => $_POST["editprofile_contact_phone_private1"],
-				":phonePrivate2" => $_POST["editprofile_contact_phone_private2"],
-				":phoneWork" => $_POST["editprofile_contact_phone_work"],
-				":phoneMobile" => $_POST["editprofile_contact_phone_mobile"],
-				":fax" => $_POST["editprofile_contact_fax"],
-				":id" => Constants::$accountManager->getUserId()
-			));
-			
-			$userData = Constants::$accountManager->getUserData();
-			
+			$addQuery = Constants::$pdo->prepare("INSERT INTO `phonenumbers` (`userId`, `category`, `subCategory`, `number`) VALUES(:userId, :category, :subCategory, :number)");
+			$updateQuery = Constants::$pdo->prepare("UPDATE `phonenumbers` SET `category` = :category, `subCategory` = :subCategory, `number` = :number WHERE `id` = :id AND `userId` = :userId");
+			$entryIds = array();
+			foreach ($_POST as $field => $value)
+			{
+				if (preg_match("/^editprofile_contact_([0-9]+)_number$/", $field, $matches))
+				{
+					if ($value)
+					{
+						$id = $matches[1];
+						$updateQuery->execute(array
+						(
+							":id" => $id,
+							":userId" => Constants::$accountManager->getUserId(),
+							":category" => $_POST["editprofile_contact_" . $id . "_category"],
+							":subCategory" => $_POST["editprofile_contact_" . $id . "_subcategory"],
+							":number" => $value
+						));
+						$entryIds[] = intval($id);
+					}
+				}
+				elseif (preg_match("/^editprofile_contact_new_([0-9]+)_number$/", $field, $matches))
+				{
+					if ($value)
+					{
+						$id = $matches[1];
+						$addQuery->execute(array
+						(
+							":userId" => Constants::$accountManager->getUserId(),
+							":category" => $_POST["editprofile_contact_new_" . $id . "_category"],
+							":subCategory" => $_POST["editprofile_contact_new_" . $id . "_subcategory"],
+							":number" => $value
+						));
+						$entryIds[] = Constants::$pdo->lastInsertId();
+					}
+				}
+			}
+			if (!empty($entryIds))
+			{
+				$query = Constants::$pdo->prepare("DELETE FROM `phonenumbers` WHERE `userId` = :userId AND `id` NOT IN (" . implode(",", $entryIds) . ")");
+				$query->execute(array
+				(
+					":userId" => Constants::$accountManager->getUserId()
+				));
+			}
 			echo "<div class='ok'>Deine &Auml;nderungen wurden gespeichert.</div>";
 		}
 		?>
 		<form action="/internalarea/editprofile#editprofile_contact" method="post">
 			<input type="hidden" name="editprofile_tab" value="contact"/>
 			
-			<label for="editprofile_contact_phone_private1">Telefon (Privat):</label>
-			<input type="text" class="input-phone" id="editprofile_contact_phone_private1" name="editprofile_contact_phone_private1" value="<?php echo htmlspecialchars($userData->phonePrivate1);?>"/>
+			<div id="editprofile_contact_div"></div>
+			<script type="text/javascript">
+				<?php
+				$query = Constants::$pdo->prepare("SELECT `id`, `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
+				$query->execute(array
+				(
+					":userId" => Constants::$accountManager->getUserId()
+				));
+				while ($row = $query->fetch())
+				{
+					echo "editprofile_contact_addPhoneNumber('" . $row->category . "', '" . $row->subCategory . "', '" . escapeText($row->number) . "', " . $row->id . ");";
+				}
+				?>
+			</script>
 			
-			<label for="editprofile_contact_phone_private2">Telefon (Privat):</label>
-			<input type="text" class="input-phone" id="editprofile_contact_phone_private2" name="editprofile_contact_phone_private2" value="<?php echo htmlspecialchars($userData->phonePrivate2);?>"/>
-			
-			<label for="editprofile_contact_phone_work">Telefon (Gesch&auml;ftlich):</label>
-			<input type="text" class="input-phone" id="editprofile_contact_phone_work" name="editprofile_contact_phone_work" value="<?php echo htmlspecialchars($userData->phoneWork);?>"/>
-			
-			<label for="editprofile_contact_phone_mobile">Mobil:</label>
-			<input type="text" class="input-mobile-phone" id="editprofile_contact_phone_mobile" name="editprofile_contact_phone_mobile" value="<?php echo htmlspecialchars($userData->phoneMobile);?>"/>
-			
-			<label for="editprofile_contact_fax">Fax:</label>
-			<input type="text" class="input-fax" id="editprofile_contact_fax" name="editprofile_contact_fax" value="<?php echo htmlspecialchars($userData->fax);?>"/>
+			<button id="editprofile_contact_addbutton" type="button">Hinzuf&uuml;gen</button>
 			
 			<input type="submit" value="Speichern"/>
 		</form>
@@ -413,6 +523,8 @@ if ($userData->forcePasswordChange)
 			window.location.reload();
 		}
 	});
+	
+	$("#editprofile_contact_addbutton").click(editprofile_contact_addPhoneNumber);
 	
 	function editprofile_profilePicture_FileSelectHandler()
 	{

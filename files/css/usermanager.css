@@ -1,3 +1,9 @@
+#usermanager_edituser_contact_div button, #usermanager_edituser_contact_div input, #usermanager_edituser_contact_div select
+{
+	display: inline;
+	margin: 5px;
+}
+
 #usermanager_edituser_tabs_options label
 {
 	font-weight: normal;

@@ -188,16 +188,25 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 			<th>Vorname</th>
 			<th>Nachname</th>
 			<th>Email</th>
-			<th>Telefon (Privat)</th>
-			<th>Telefon (Gesch&auml;ftlich)</th>
-			<th>Mobil</th>
-			<th>Fax</th>
+			<th>Telefon</th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php
+		$phoneNumberCategories = array
+		(
+			"fax" => "Fax",
+			"mobile" => "Mobil",
+			"phone" => "Telefon"
+		);
+		$phoneNumberSubCategories = array
+		(
+			"business" => "Gesch&auml;ftlich",
+			"private" => "Privat"
+		);
 		$permissionCheckQuery = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
-		$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email`, `phonePrivate1`, `phonePrivate2`, `phoneWork`, `phoneMobile`, `fax` FROM `users` WHERE `enabled`");
+		$phoneNumbersQuery = Constants::$pdo->prepare("SELECT `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
+		$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email` FROM `users` WHERE `enabled`");
 		while ($row = $query->fetch())
 		{
 			if ($activeGroup == "all")
@@ -215,14 +224,14 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 			}
 			if ($show)
 			{
-				$phonePrivate = array();
-				if ($row->phonePrivate1)
+				$phoneNumbersQuery->execute(array
+				(
+					":userId" => $row->id
+				));
+				$phoneNumbers = array();
+				while ($phoneNumberRow = $phoneNumbersQuery->fetch())
 				{
-					$phonePrivate[] = escapeText($row->phonePrivate1);
-				}
-				if ($row->phonePrivate2)
-				{
-					$phonePrivate[] = escapeText($row->phonePrivate2);
+					$phoneNumbers[] = $phoneNumberCategories[$phoneNumberRow->category] . " (" . $phoneNumberSubCategories[$phoneNumberRow->subCategory] . "): " . escapeText($phoneNumberRow->number);
 				}
 				echo "
 					<tr userid='" . $row->id . "'>
@@ -230,10 +239,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 						<td>" . escapeText($row->firstName) . "</td>
 						<td>" . escapeText($row->lastName) . "</td>
 						<td><a href='mailto:" . escapeText($row->email) . "'>" . escapeText($row->email) . "</a></td>
-						<td>" . implode("<br />", $phonePrivate) . "</td>
-						<td>" . escapeText($row->phoneWork) . "</td>
-						<td>" . escapeText($row->phoneMobile) . "</td>
-						<td>" . escapeText($row->fax) . "</td>
+						<td>" . implode("<br />", $phoneNumbers) . "</td>
 					</tr>
 				";
 			}
