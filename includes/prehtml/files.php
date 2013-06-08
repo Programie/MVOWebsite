@@ -43,6 +43,7 @@ switch (Constants::$pagePath[1])
 			"timepicker-de",
 			"jquery.form",
 			"jquery.contextmenu",
+			"jstree",
 			"fullcalendar",
 			"google-analytics",
 			"general"

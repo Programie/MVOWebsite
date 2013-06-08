@@ -128,6 +128,84 @@ if (isset($_POST["usermanager_edituser_id"]))
 					));
 				}
 				
+				$permissionData = json_decode(file_get_contents(ROOT_PATH . "/includes/permissions.json"));
+				function getObjectsByProperty($objectArray, $idProperty, $childrenProperty, $id, &$objects, $inArray = false)
+				{
+					foreach ($objectArray as $object)
+					{
+						if ($object->{$idProperty})
+						{
+							if ($inArray)
+							{
+								if (in_array($id, $object->{$idProperty}))
+								{
+									$objects[] = $object;
+								}
+							}
+							else
+							{
+								if ($object->{$idProperty} == $id)
+								{
+									$objects[] = $object;
+								}
+							}
+						}
+						if ($object->{$childrenProperty} and !empty($object->{$childrenProperty}))
+						{
+							getObjectsByProperty($object->{$childrenProperty}, $idProperty, $childrenProperty, $id, $objects, $inArray);
+						}
+					}
+				}
+				function usermanager_removePermissionIds($groups, &$ids)
+				{
+					foreach ($groups as $group)
+					{
+						$item = array_search($group->id, $ids);
+						if ($item !== false)
+						{
+							unset($ids[$item]);
+						}
+						if ($group->subGroups and !empty($group->subGroups))
+						{
+							usermanager_removePermissionIds($group->subGroups, $ids);
+						}
+					}
+				}
+				$groups = array();
+				foreach ($_POST as $field => $value)
+				{
+					if (preg_match("/^usermanager_edituser_permissions_([0-9]+)$/", $field, $matches) and $value)
+					{
+						$groups[] = $matches[1];
+					}
+				}
+				foreach ($groups as $group)
+				{
+					$nodes = array();
+					getObjectsByProperty($permissionData, "id", "subGroups", $group, $nodes);
+					if (!empty($nodes) and $nodes[0]->subGroups and !empty($nodes[0]->subGroups))
+					{
+						usermanager_removePermissionIds($nodes[0]->subGroups, $groups);
+					}
+				}
+				$nodes = array();
+				getObjectsByProperty($permissionData, "users", "subGroups", $userId, $nodes, true);
+				foreach ($nodes as $node)
+				{
+					$node->users = array_values(array_diff($node->users, array($userId)));
+				}
+				foreach ($groups as $group)
+				{
+					$nodes = array();
+					getObjectsByProperty($permissionData, "id", "subGroups", $group, $nodes);
+					if (!empty($nodes) and $nodes[0])
+					{
+						$nodes[0]->users[] = (int) $userId;
+						sort($nodes[0]->users, SORT_NUMERIC);
+					}
+				}
+				file_put_contents(ROOT_PATH . "/includes/permissions.json", json_encode($permissionData));
+				
 				if ($newUser)
 				{
 					echo "<div class='ok'>Der Benutzer wurde erfolgreich erstellt.</div>";
@@ -136,6 +214,8 @@ if (isset($_POST["usermanager_edituser_id"]))
 				{
 					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
+				
+				echo "<div class='info'>Eventuell ge&auml;nderte Berechtigungen m&uuml;ssen &uuml;ber den Button <b>Berechtigungen &uuml;bernehmen</b> auf der Seite <b>Berechtigungsgruppen</b> &uuml;bernommen werden!</div>";
 				
 				if ($_POST["usermanager_edituser_sendcredentialsmail"])
 				{
@@ -241,7 +321,8 @@ if (isset($_POST["usermanager_edituser_id"]))
 		</ul>
 	</div>
 	<div id="usermanager_tabs_permissiongroups">
-		<div class='info'>Diese Funktion steht derzeit noch nicht zur Verf&uuml;gung!</div>
+		<button type="button" id="usermanager_permissiongroups_applybutton">Berechtigungen &uuml;bernehmen</button>
+		<div id="usermanager_permissiongroups_tree"></div>
 	</div>
 </div>
 
@@ -281,6 +362,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 				<div><input type="checkbox" id="usermanager_edituser_sendcredentialsmail" name="usermanager_edituser_sendcredentialsmail" value="1"/><label for="usermanager_edituser_sendcredentialsmail">Zugangsdaten versenden</label></div>
 			</div>
 			<div id="usermanager_edituser_tabs_permissions">
+				<div id="usermanager_edituser_permissions_tree"></div>
 			</div>
 		</div>
 	</form>
@@ -292,6 +374,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 		$("#usermanager_edituser_form")[0].reset();
 		$("#usermanager_edituser_id").val("");
 		$("#usermanager_edituser_contact_div").empty();
+		$("#usermanager_edituser_permissions_tree").jstree("refresh");
 		$("#usermanager_edituser").dialog("option", "title", "Benutzer erstellen");
 		$("#usermanager_edituser").dialog("open");
 	});
@@ -326,6 +409,8 @@ if (isset($_POST["usermanager_edituser_id"]))
 						var phoneNumberData = data.phoneNumbers[index];
 						usermanager_edituser_contact_addPhoneNumber(phoneNumberData.category, phoneNumberData.subCategory, phoneNumberData.number, phoneNumberData.id);
 					}
+					
+					$("#usermanager_edituser_permissions_tree").jstree("refresh");
 					
 					$("#usermanager_edituser").dialog("option", "title", "Benutzer bearbeiten");
 					$("#usermanager_edituser").dialog("open");
@@ -414,6 +499,151 @@ if (isset($_POST["usermanager_edituser_id"]))
 	});
 	
 	$("#usermanager_edituser_contact_addbutton").click(usermanager_edituser_contact_addPhoneNumber);
+	
+	$("#usermanager_edituser_permissions_tree").jstree(
+	{
+		checkbox :
+		{
+			real_checkboxes : true,
+			real_checkboxes_names : function(node)
+			{
+				return ["usermanager_edituser_permissions_" + $(node).data("groupId"), 1];
+			}
+		},
+		core :
+		{
+			string :
+			{
+				loading : "Daten werden geladen...",
+				new_node : "Neuer Eintrag"
+			}
+		},
+		json_data :
+		{
+			ajax :
+			{
+				url : function()
+				{
+					return "/internalarea/usermanager/getuserpermissions/" + $("#usermanager_edituser_id").val();
+				}
+			}
+		},
+		themes :
+		{
+			dots : true
+		},
+		types :
+		{
+			types :
+			{
+				permission :
+				{
+					icon :
+					{
+						image : "/files/images/usermanager/permission.png"
+					}
+				},
+				permission_revoked :
+				{
+					icon :
+					{
+						image : "/files/images/usermanager/permission-revoked.png"
+					}
+				}
+			}
+		},
+		plugins : ["checkbox", "json_data", "themes", "types", "ui"]
+	});
+	
+	$("#usermanager_permissiongroups_applybutton").click(function()
+	{
+		if (confirm("Sollen alle Berechtigungen jetzt \u00fcbernommen werden?"))
+		{
+			$.ajax(
+			{
+				type : "GET",
+				url : "/internalarea/usermanager/applypermissions",
+				error : function(jqXhr, textStatus, errorThrown)
+				{
+					noty(
+					{
+						type : "error",
+						text : "Fehler beim \u00dcbernehmen der Berechtigungen!"
+					});
+				},
+				success : function(data, status, jqXhr)
+				{
+					if (data == "ok")
+					{
+						noty(
+						{
+							type : "success",
+							text : "Berechtigungen \u00fcbernommen"
+						});
+					}
+					else
+					{
+						noty(
+						{
+							type : "error",
+							text : "Fehler beim \u00dcbernehmen der Berechtigungen!"
+						});
+					}
+				}
+			});
+		}
+	});
+	
+	$("#usermanager_permissiongroups_tree").jstree(
+	{
+		core :
+		{
+			string :
+			{
+				loading : "Daten werden geladen...",
+				new_node : "Neuer Eintrag"
+			}
+		},
+		json_data :
+		{
+			ajax :
+			{
+				url : "/internalarea/usermanager/getpermissiongroups"
+			}
+		},
+		themes :
+		{
+			dots : true
+		},
+		types :
+		{
+			types :
+			{
+				permission :
+				{
+					icon :
+					{
+						image : "/files/images/usermanager/permission.png"
+					}
+				},
+				permission_revoked :
+				{
+					icon :
+					{
+						image : "/files/images/usermanager/permission-revoked.png"
+					}
+				},
+				user :
+				{
+					icon :
+					{
+						image : "/files/images/usermanager/user.png"
+					}
+				}
+			}
+		},
+		plugins : ["json_data", "themes", "types", "ui"]
+	});
 	
 	var userManagerEditUserContactNewFieldId = 0;
 	function usermanager_edituser_contact_addPhoneNumber(category, subCategory, number, id)

@@ -24,7 +24,7 @@
 	padding: 5px;
 }
 
-#usermanager_users_addbutton
+#usermanager_permissiongroups_applybutton, #usermanager_users_addbutton
 {
 	margin-bottom: 20px;
 }

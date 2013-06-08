@@ -340,6 +340,94 @@ if (Constants::$pagePath[1])
 			{
 				switch (Constants::$pagePath[2])
 				{
+					case "applypermissions":
+						// TODO: Copy permissions from JSON to database
+						exit;
+					case "getpermissiongroups":
+						$sourceData = json_decode(file_get_contents(ROOT_PATH . "/includes/permissions.json"));
+						function getpermissiongroups_createTree($sourceData)
+						{
+							$data = array();
+							foreach ($sourceData as $group)
+							{
+								$groupData = new StdClass;
+								$groupData->data = $group->title;
+								$children = array();
+								if ($group->subGroups and !empty($group->subGroups))
+								{
+									$children = getpermissiongroups_createTree($group->subGroups);
+								}
+								if ($group->permissions and !empty($group->permissions))
+								{
+									$permissions = array();
+									foreach ($group->permissions as $permission)
+									{
+										$type = "permission";
+										if (substr($permission, 0, 1) == "-")
+										{
+											$type = "permission_revoked";
+											$permission = substr($permission, 1);
+										}
+										$permissions[] = array
+										(
+											"data" => $permission,
+											"attr" => array
+											(
+												"rel" => $type
+											)
+										);
+									}
+									if (!empty($permissions))
+									{
+										$children[] = array
+										(
+											"data" => "Berechtigungen",
+											"attr" => array
+											(
+												"rel" => "permission"
+											),
+											"children" => $permissions
+										);
+									}
+								}
+								if ($group->users and !empty($group->users))
+								{
+									$users = array();
+									$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName` FROM `users` WHERE `id` IN(" . implode(",", $group->users) . ") ORDER BY `lastName`, `firstName`");
+									while ($row = $query->fetch())
+									{
+										$users[] = array
+										(
+											"data" => $row->firstName . " " . $row->lastName,
+											"attr" => array
+											(
+												"rel" => "user"
+											)
+										);
+									}
+									if (!empty($users))
+									{
+										$children[] = array
+										(
+											"data" => "Benutzer",
+											"attr" => array
+											(
+												"rel" => "user"
+											),
+											"children" => $users
+										);
+									}
+								}
+								if ($children)
+								{
+									$groupData->children = $children;
+								}
+								$data[] = $groupData;
+							}
+							return $data;
+						}
+						echo json_encode(getpermissiongroups_createTree($sourceData));
+						exit;
 					case "getuserdata":
 						$query = Constants::$pdo->prepare("SELECT `id`, `enabled`, `username`, `email`, `firstName`, `lastName`, `birthDate` FROM `users` WHERE `id` = :id");
 						$query->execute(array
@@ -357,6 +445,34 @@ if (Constants::$pagePath[1])
 						));
 						$data->phoneNumbers = $query->fetchAll();
 						echo json_encode($data);
+						exit;
+					case "getuserpermissions":
+						$sourceData = json_decode(file_get_contents(ROOT_PATH . "/includes/permissions.json"));
+						function getuserpermissions_createTree($sourceData)
+						{
+							$data = array();
+							foreach ($sourceData as $group)
+							{
+								$groupData = new StdClass;
+								$groupData->data = $group->title;
+								$groupData->attr = array
+								(
+									"class" => ($group->users and !empty($group->users) and in_array(Constants::$pagePath[3], $group->users)) ? "jstree-checked" : ""
+								);
+								$groupData->metadata = array
+								(
+									"groupId" => $group->id
+								);
+								$children = array();
+								if ($group->subGroups and !empty($group->subGroups))
+								{
+									$groupData->children = getuserpermissions_createTree($group->subGroups);
+								}
+								$data[] = $groupData;
+							}
+							return $data;
+						}
+						echo json_encode(getuserpermissions_createTree($sourceData));
 						exit;
 				}
 			}
