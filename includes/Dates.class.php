@@ -50,25 +50,15 @@ class Dates
 		{
 			$row->groups = explode(",", $row->groups);
 			
-			if ($groups and $groups[0])
+			if ($groups and $groups[0] != "")
 			{
 				$showGroup = false;
-				if (in_array("public", $groups) and !$row->groups[0])
+				foreach ($groups as $group)
 				{
-					$showGroup = true;
-				}
-				if (!$showGroup)
-				{
-					foreach ($groups as $group)
+					if (in_array($group, $row->groups))
 					{
-						foreach ($row->groups as $groupName)
-						{
-							if ($groupName == $group)
-							{
-								$showGroup = true;
-								break;
-							}
-						}
+						$showGroup = true;
+						break;
 					}
 				}
 				if (!$showGroup)
@@ -77,14 +67,9 @@ class Dates
 				}
 			}
 			
-			if (!Constants::$accountManager->hasPermissionInArray($row->groups, "dates.view"))
+			if (!in_array("public", $row->groups) and !Constants::$accountManager->hasPermissionInArray($row->groups, "dates.view"))
 			{
 				continue;
-			}
-			
-			if (!$row->groups[0])
-			{
-				$row->groups = array("public");
 			}
 			
 			if (is_array($containingGroups))

@@ -58,11 +58,6 @@ if (Constants::$accountManager->getUserId())
 					$date = explode(".", $_POST["dates_edit_date"]);
 					if (@checkdate($date[1], $date[0], $date[2]))
 					{
-						if (!$id)
-						{
-							Constants::$pdo->query("INSERT INTO `dates` () VALUES()");
-							$id = Constants::$pdo->lastInsertId();
-						}
 						$locationId = null;
 						if ($_POST["dates_edit_location"])
 						{
@@ -100,21 +95,12 @@ if (Constants::$accountManager->getUserId())
 								$groups[] = substr($key, 18);
 							}
 						}
+						if (empty($groups))
+						{
+							$groups[] = "public";
+						}
 						
-						$query = Constants::$pdo->prepare("
-							UPDATE `dates`
-							SET
-								`startDate` = :startDate,
-								`endDate` = :endDate,
-								`groups` = :groups,
-								`title` = :title,
-								`description` = :description,
-								`locationId` = :locationId,
-								`showInAttendanceList` = :showInAttendanceList,
-								`bold` = :bold
-							WHERE `id` = :id
-						");
-						$query->execute(array
+						$queryData = array
 						(
 							":startDate" => $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $startTime,
 							":endDate" => $endDate,
@@ -123,9 +109,33 @@ if (Constants::$accountManager->getUserId())
 							":description" => $_POST["dates_edit_description"],
 							":locationId" => $locationId,
 							":showInAttendanceList" => !!$_POST["dates_edit_options_showinattendancelist"],
-							":bold" => !!$_POST["dates_edit_options_bold"],
-							":id" => $id
-						));
+							":bold" => !!$_POST["dates_edit_options_bold"]
+						);
+						if ($id)
+						{
+							$query = Constants::$pdo->prepare("
+								UPDATE `dates`
+								SET
+									`startDate` = :startDate,
+									`endDate` = :endDate,
+									`groups` = :groups,
+									`title` = :title,
+									`description` = :description,
+									`locationId` = :locationId,
+									`showInAttendanceList` = :showInAttendanceList,
+									`bold` = :bold
+								WHERE `id` = :id
+							");
+							$queryData["id"] = $id;
+						}
+						else
+						{
+							$query = Constants::$pdo->prepare("
+								INSERT INTO `dates` (`startDate`, `enddate`, `groups`, `title`, `description`, `locationId`, `showInAttendanceList`, `bold`)
+								VALUES(:startDate, :endDate, :groups, :title, :description, :locationId, :showInAttendanceList, :bold)
+							");
+						}
+						$query->execute($queryData);
 						$dates = Dates::getDates($year, $activeGroups);
 						echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 					}
