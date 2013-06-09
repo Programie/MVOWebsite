@@ -559,12 +559,20 @@ if (isset($_POST["usermanager_edituser_id"]))
 	{
 		if (confirm("Sollen alle Berechtigungen jetzt \u00fcbernommen werden?"))
 		{
+			noty(
+			{
+				type : "success",
+				text : "Die Berechtigungen werden \u00fcbernommen. Bitte warten..."
+			});
+			$("#usermanager_permissiongroups_applybutton").button("disable");
 			$.ajax(
 			{
 				type : "GET",
+				dataType : "json",
 				url : "/internalarea/usermanager/applypermissions",
 				error : function(jqXhr, textStatus, errorThrown)
 				{
+					$("#usermanager_permissiongroups_applybutton").button("enable");
 					noty(
 					{
 						type : "error",
@@ -573,21 +581,33 @@ if (isset($_POST["usermanager_edituser_id"]))
 				},
 				success : function(data, status, jqXhr)
 				{
-					if (data == "ok")
+					$("#usermanager_permissiongroups_applybutton").button("enable");
+					if (data.ok && !data.errors)
 					{
 						noty(
 						{
 							type : "success",
-							text : "Berechtigungen \u00fcbernommen"
+							text : "Es wurden " + data.ok + " Berechtigungen erfolgreich \u00fcbernommen."
 						});
 					}
 					else
 					{
-						noty(
+						if (data.ok)
 						{
-							type : "error",
-							text : "Fehler beim \u00dcbernehmen der Berechtigungen!"
-						});
+							noty(
+							{
+								type : "warning",
+								text : "Es wurden " + data.ok + " Berechtigungen erfolgreich \u00fcbernommen. " + data.errors + " Berechtigungen konnten nicht \u00fcbernommen werden!"
+							});
+						}
+						else
+						{
+							noty(
+							{
+								type : "error",
+								text : "Fehler beim \u00dcbernehmen der Berechtigungen!"
+							});
+						}
 					}
 				}
 			});

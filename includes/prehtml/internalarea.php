@@ -341,7 +341,112 @@ if (Constants::$pagePath[1])
 				switch (Constants::$pagePath[2])
 				{
 					case "applypermissions":
-						// TODO: Copy permissions from JSON to database
+						function applypermissions_getParentGroups($groupList, $groupId, &$foundGroups)
+						{
+							if ($groupId)
+							{
+								$group = $groupList[$groupId];
+								if ($group->parentGroupId)
+								{
+									$foundGroups[] = $group->parentGroupId;
+									applypermissions_getParentGroups($groupList, $group->parentGroupId, $foundGroups);
+								}
+							}
+						}
+						function applypermissions_searchUserInGroups($groupList, $groups, $userId, &$foundGroups)
+						{
+							foreach ($groups as $group)
+							{
+								if ($group->users)
+								{
+									if (in_array($userId, $group->users) and !in_array($group->id, $foundGroups))
+									{
+										$foundGroups[] = $group->id;
+										applypermissions_getParentGroups($groupList, $group->id, $foundGroups);
+									}
+								}
+								if ($group->subGroups)
+								{
+									applypermissions_searchUserInGroups($groupList, $group->subGroups, $userId, $foundGroups);
+								}
+							}
+						}
+						function applypermissions_setGroupIds(&$groups, &$groupList, $id = 0)
+						{
+							$parentGroupId = $id;
+							foreach ($groups as $group)
+							{
+								$id++;
+								$groupId = $id;
+								$group->parentGroupId = $parentGroupId;
+								$group->id = $groupId;
+								$groupList[$groupId] = clone $group;
+								if ($group->subGroups)
+								{
+									$id = applypermissions_setGroupIds($group->subGroups, $groupList, $id);
+									$childIds = array();
+									foreach ($group->subGroups as $subGroup)
+									{
+										$childIds[] = $subGroup->id;
+									}
+									$groupList[$groupId]->subGroups = $childIds;
+								}
+							}
+							return $id;
+						}
+						
+						$sourceData = json_decode(file_get_contents(ROOT_PATH . "/includes/permissions.json"));
+						$groupList = array();
+						applypermissions_setGroupIds($sourceData, $groupList);
+						
+						$errors = 0;
+						$ok = 0;
+						Constants::$pdo->query("TRUNCATE TABLE `permissions`");
+						$query = Constants::$pdo->query("SELECT `id` FROM `users`");
+						$permissionQuery = Constants::$pdo->prepare("INSERT INTO `permissions` (`userId`, `permission`) VALUES(:userId, :permission)");
+						while ($row = $query->fetch())
+						{
+							$users++;
+							$foundGroups = array();
+							$permissions = array();
+							applypermissions_searchUserInGroups($groupList, $sourceData, $row->id, $foundGroups);
+							foreach ($foundGroups as $groupId)
+							{
+								$group = $groupList[$groupId];
+								if ($group->permissions)
+								{
+									foreach ($group->permissions as $permission)
+									{
+										if (!in_array($permission, $permissions))
+										{
+											$permissions[] = $permission;
+										}
+									}
+								}
+							}
+							foreach ($permissions as $permission)
+							{
+								$queryData = array
+								(
+									":userId" => $row->id,
+									":permission" => $permission
+								);
+								if ($permissionQuery->execute($queryData))
+								{
+									$ok++;
+								}
+								else
+								{
+									$errors++;
+								}
+							}
+						}
+						
+						echo json_encode(array
+						(
+							"errors" => $errors,
+							"ok" => $ok
+						));
 						exit;
 					case "getpermissiongroups":
 						$sourceData = json_decode(file_get_contents(ROOT_PATH . "/includes/permissions.json"));
