@@ -5,7 +5,7 @@
 	<p>
 		Musikverein "Orgelfels" Reichental e.V.<br />
 		Birgit Gerweck<br />
-		Langenackerstr. 8<br />
+		Neuer Weg 13/1<br />
 		76593 Gernsbach - Reichental
 	</p>
 
