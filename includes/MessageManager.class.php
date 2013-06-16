@@ -192,15 +192,17 @@ class MessageManager
 				$headerContainerAttributes = "title='Klicken um nur diese Nachricht anzuzeigen'";
 				echo "<a href='/internalarea/messages/" . $row->id . "' class='messages_header'>";
 			}
-			$profilePicturesPath = "/files/profilepictures";
-			$avatarFile = $profilePicturesPath . "/" . $row->userId . ".jpg";
-			if (!file_exists(ROOT_PATH . $avatarFile))
+			if (file_exists(ROOT_PATH . "/files/profilepictures/" . $row->userId . ".jpg"))
 			{
-				$avatarFile = $profilePicturesPath . "/default.png";
+				$avatarPath = "/getprofilepicture/" . $row->userId . "/" . md5_file(ROOT_PATH . "/files/profilepictures/" . $row->userId . ".jpg");
+			}
+			else
+			{
+				$avatarPath = "/getprofilepicture/default/" . md5_file(ROOT_PATH . "/files/profilepictures/default.png");
 			}
 			echo "
 				<div class='messages_header' " . $headerContainerAttributes . ">
-					<img class='messages_header_avatar' src='" . $avatarFile . "'/>
+					<img class='messages_header_avatar' src='" . $avatarPath . "'/>
 					<div class='messages_header_container'>
 						<div><b>Erstellt von:</b> " . escapeText($row->firstName) . " " . escapeText($row->lastName) . " [" . escapeText($row->email) . "]</div>
 						<div><b>Zeit:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>
