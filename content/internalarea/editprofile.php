@@ -271,8 +271,8 @@ if ($userData->forcePasswordChange)
 			
 			<div id="editprofile_profilepicture_progressarea">
 				<p>Das ausgew&auml;hlte Bild wird nun hochgeladen.</p>
-				<div id="editprofile_profilepicture_progressbar" class="progressbar">
-					<span></span>
+				<div id="editprofile_profilepicture_progressbar">
+					<div id="editprofile_profilepicture_progressbar_label"></div>
 				</div>
 			</div>
 		</fieldset>
@@ -506,12 +506,19 @@ if ($userData->forcePasswordChange)
 
 <script type="text/javascript">
 	$("#editprofile_tabs").tabs();
+	$("#editprofile_profilepicture_progressbar").progressbar(
+	{
+		change : function()
+		{
+			$("#editprofile_profilepicture_progressbar_label").text($("#editprofile_profilepicture_progressbar").progressbar("value") + "%");
+		}
+	});
 	
 	$("#editprofile_profilepicture_form").ajaxForm(
 	{
 		beforeSubmit : function()
 		{
-			$("#editprofile_profilepicture_progressbar span").width("0%");
+			$("#editprofile_profilepicture_progressbar").progressbar("value", 0);
 			$("#editprofile_profilepicture_form").slideUp(1000, function()
 			{
 				$("#editprofile_profilepicture_progressarea").slideDown(1000);
@@ -519,7 +526,7 @@ if ($userData->forcePasswordChange)
 		},
 		uploadProgress : function(event, position, total, percentComplete)
 		{
-			$("#editprofile_profilepicture_progressbar span").width(percentComplete + "%");
+			$("#editprofile_profilepicture_progressbar").progressbar("value", percentComplete);
 		},
 		complete : function(response)
 		{

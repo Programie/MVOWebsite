@@ -9,9 +9,18 @@
 	display: none;
 }
 
-#editprofile_profilepicture_progressarea
+#editprofile_profilepicture_progressbar
 {
-	width: 400px;
+	position: relative;
+}
+
+#editprofile_profilepicture_progressbar_label
+{
+	position: absolute;
+	left: 50%;
+	top: 4px;
+	font-weight: bold;
+	text-shadow: 1px 1px 0 #fff;
 }
 
 #editprofile_profilepicture_upload
