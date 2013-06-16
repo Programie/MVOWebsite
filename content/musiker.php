@@ -39,17 +39,18 @@ foreach ($groups as $groupRow)
 			));
 			if (!$checkHide->rowCount())
 			{
-				$profilePicturesPath = "/files/profilepictures";
-				$avatarFile = $profilePicturesPath . "/" . $userRow->id . ".jpg";
-				if (!file_exists(ROOT_PATH . $avatarFile))
+				if (file_exists(ROOT_PATH . "/files/profilepictures/" . $userRow->id . ".jpg"))
 				{
-					$avatarFile = $profilePicturesPath . "/default.png";
+					$avatarPath = "/getprofilepicture/" . $userRow->id . "/" . md5_file(ROOT_PATH . "/files/profilepictures/" . $userRow->id . ".jpg");
 				}
-				$avatarUrl = $avatarFile . "?md5=" . @md5_file(ROOT_PATH . $avatarFile);
+				else
+				{
+					$avatarPath = "/getprofilepicture/default/" . md5_file(ROOT_PATH . "/files/profilepictures/default.png");
+				}
 				echo "
 					<li>
-						<a href='" . $avatarUrl . "' caption='" . $userRow->firstName . " " . $userRow->lastName . "'>
-							<img class='profilepicture' src='" . $avatarUrl . "' alt='" . $userRow->firstName . " " . $userRow->lastName . "'/>
+						<a href='" . $avatarPath . "' caption='" . $userRow->firstName . " " . $userRow->lastName . "'>
+							<img class='profilepicture' src='" . $avatarPath . "' alt='" . $userRow->firstName . " " . $userRow->lastName . "'/>
 						</a>
 					</li>
 				";

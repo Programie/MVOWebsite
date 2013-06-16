@@ -239,7 +239,7 @@ if ($userData->forcePasswordChange)
 			echo "
 				<fieldset>
 					<legend>Aktuelles Profilbild</legend>
-					<img class='profilepicture' src='" . $file . "?md5=" . md5_file(ROOT_PATH . $file) . "'/>
+					<img class='profilepicture' src='/getprofilepicture/" . $userData->id ."/" . md5_file(ROOT_PATH . $file) . "'/>
 				</fieldset>
 			";
 		}
