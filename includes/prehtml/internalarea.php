@@ -543,12 +543,20 @@ if (Constants::$pagePath[1])
 						$row->id = (int) $row->id;
 						$row->enabled = (bool) $row->enabled;
 						$data = $row;
+						
 						$query = Constants::$pdo->prepare("SELECT `id`, `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
 						$query->execute(array
 						(
 							":userId" => $data->id
 						));
 						$data->phoneNumbers = $query->fetchAll();
+						
+						$profilePictureFile = "/files/profilepictures/" . $data->id . ".jpg";
+						if (file_exists(ROOT_PATH . $profilePictureFile))
+						{
+							$data->profilePictureUrl = $profilePictureFile . "?md5=" . md5_file(ROOT_PATH . $profilePictureFile);
+						}
+						
 						echo json_encode($data);
 						exit;
 					case "getuserpermissions":

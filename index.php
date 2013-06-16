@@ -2,6 +2,7 @@
 define("ROOT_PATH", __DIR__);
 define("UPLOAD_PATH", ROOT_PATH . "/uploads");
 define("BASE_URL", (@$_SERVER["HTTPS"] ? "https" : "http") . "://" . $_SERVER["SERVER_NAME"]);
+define("MAX_UPLOAD_SIZE", min(intval(ini_get("upload_max_filesize")), intval(ini_get("post_max_size")), intval(ini_get("memory_limit"))));
 
 require_once ROOT_PATH . "/includes/config.inc.php";
 require_once ROOT_PATH . "/includes/Constants.class.php";

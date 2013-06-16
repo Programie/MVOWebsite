@@ -247,6 +247,9 @@ if ($userData->forcePasswordChange)
 		
 		<fieldset>
 			<legend>Neues Profilbild hochladen</legend>
+			
+			<p><b>Maximale Dateigr&ouml;&szlig;e:</b> <?php echo MAX_UPLOAD_SIZE;?> MB</p>
+			
 			<form id="editprofile_profilepicture_form" action="/internalarea/editprofile#editprofile_profilepicture" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="editprofile_tab" value="profilepicture"/>
 				
@@ -255,6 +258,7 @@ if ($userData->forcePasswordChange)
 				<input type="hidden" id="editprofile_profilepicture_width" name="editprofile_profilepicture_width"/>
 				<input type="hidden" id="editprofile_profilepicture_height" name="editprofile_profilepicture_height"/>
 				
+				<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD_SIZE * 1024 * 1024;?>"/>
 				<input type="file" id="editprofile_profilepicture_file" name="editprofile_profilepicture_file" onchange="editprofile_profilePicture_FileSelectHandler();"/>
 				
 				<div id="editprofile_profilepicture_editarea">

@@ -215,6 +215,53 @@ if (isset($_POST["usermanager_edituser_id"]))
 					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
 				
+				if ($_FILES)
+				{
+					$profilePictureUploaded = false;
+					$file = $_FILES["usermanager_edituser_profilepicture_file"];
+					if ($file["name"])
+					{
+						if (!$file["error"])
+						{
+							if ($file["size"] > 1024 * 1024 * MAX_UPLOAD_SIZE)
+							{
+								echo "<div class='error'>Die maximal erlaubte Dateigr&ouml;&szlig;e f&uuml;r das Profilbild ist " . MAX_UPLOAD_SIZE . " MB!</div>";
+								$profilePictureUploadError = false;
+							}
+							else
+							{
+								$x = $_POST["usermanager_edituser_profilepicture_x"];
+								$y = $_POST["usermanager_edituser_profilepicture_y"];
+								$width = $_POST["usermanager_edituser_profilepicture_width"];
+								$height = $_POST["usermanager_edituser_profilepicture_height"];
+								if ($width > 0 and $height > 0)
+								{
+									$sourceImage = imagecreatefromjpeg($file["tmp_name"]);
+									if ($sourceImage)
+									{
+										$croppedImage = imagecreatetruecolor($width, $height);
+										if ($croppedImage)
+										{
+											if (imagecopyresampled($croppedImage, $sourceImage, 0, 0, $x,$y, $width, $height, $width, $height))
+											{
+												$resizedImage = resizeImage($croppedImage, 600, 600);
+												if ($resizedImage)
+												{
+													$profilePictureUploaded = imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userId . ".jpg");
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+						if (!$profilePictureUploaded)
+						{
+							echo "<div class='error'>Beim Hochladen des Profilbilds ist ein Fehler aufgetreten!</div>";
+						}
+					}
+				}
+				
 				echo "<div class='info'>Eventuell ge&auml;nderte Berechtigungen m&uuml;ssen &uuml;ber den Button <b>Berechtigungen &uuml;bernehmen</b> auf der Seite <b>Berechtigungsgruppen</b> &uuml;bernommen werden!</div>";
 				
 				if ($_POST["usermanager_edituser_sendcredentialsmail"])
@@ -327,11 +374,12 @@ if (isset($_POST["usermanager_edituser_id"]))
 </div>
 
 <div id="usermanager_edituser">
-	<form id="usermanager_edituser_form" action="/internalarea/usermanager" method="post">
+	<form id="usermanager_edituser_form" action="/internalarea/usermanager" method="post" enctype="multipart/form-data">
 		<input type="hidden" id="usermanager_edituser_id" name="usermanager_edituser_id"/>
 		<div id="usermanager_edituser_tabs">
 			<ul>
 				<li><a href="#usermanager_edituser_tabs_general">Allgemein</a></li>
+				<li><a href="#usermanager_edituser_tabs_profilepicture">Profilbild</a></li>
 				<li><a href="#usermanager_edituser_tabs_contact">Kontakt</a></li>
 				<li><a href="#usermanager_edituser_tabs_options">Optionen</a></li>
 				<li><a href="#usermanager_edituser_tabs_permissions">Berechtigungen</a></li>
@@ -348,6 +396,31 @@ if (isset($_POST["usermanager_edituser_id"]))
 				
 				<label for="usermanager_edituser_birthdate">Geburtsdatum:</label>
 				<input type="text" id="usermanager_edituser_birthdate" name="usermanager_edituser_birthdate" class="date"/>
+			</div>
+			<div id="usermanager_edituser_tabs_profilepicture">
+				<fieldset id="usermanager_edituser_profilepicture_current_fieldset">
+					<legend>Aktuelles Profilbild</legend>
+					<img id="usermanager_edituser_profilepicture_current_image" class="profilepicture"/>
+				</fieldset>
+				
+				<fieldset>
+					<legend>Neues Profilbild hochladen</legend>
+					
+					<p><b>Maximale Dateigr&ouml;&szlig;e:</b> <?php echo MAX_UPLOAD_SIZE;?> MB</p>
+					
+					<input type="hidden" id="usermanager_edituser_profilepicture_x" name="usermanager_edituser_profilepicture_x"/>
+					<input type="hidden" id="usermanager_edituser_profilepicture_y" name="usermanager_edituser_profilepicture_y"/>
+					<input type="hidden" id="usermanager_edituser_profilepicture_width" name="usermanager_edituser_profilepicture_width"/>
+					<input type="hidden" id="usermanager_edituser_profilepicture_height" name="usermanager_edituser_profilepicture_height"/>
+					
+					<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD_SIZE * 1024 * 1024;?>"/>
+					<input type="file" id="usermanager_edituser_profilepicture_file" name="usermanager_edituser_profilepicture_file" onchange="usermanager_edituser_profilepicture_fileSelectHandler();"/>
+					
+					<div id="usermanager_edituser_profilepicture_editarea">
+						<p>W&auml;hle den Bereich aus, welchen du als Profilbild verwenden m&ouml;chtest.</p>
+						<img id="usermanager_edituser_profilepicture_preview"/>
+					</div>
+				</fieldset>
 			</div>
 			<div id="usermanager_edituser_tabs_contact">
 				<label for="usermanager_edituser_email">Email-Adresse:</label>
@@ -373,6 +446,9 @@ if (isset($_POST["usermanager_edituser_id"]))
 	{
 		$("#usermanager_edituser_form")[0].reset();
 		$("#usermanager_edituser_id").val("");
+		$("#usermanager_edituser_profilepicture_current_fieldset").hide();
+		$("#usermanager_edituser_profilepicture_current_image").attr("src", "");
+		$("#usermanager_edituser_profilepicture_editarea").hide();
 		$("#usermanager_edituser_contact_div").empty();
 		$("#usermanager_edituser_permissions_tree").jstree("refresh");
 		$("#usermanager_edituser").dialog("option", "title", "Benutzer erstellen");
@@ -403,6 +479,18 @@ if (isset($_POST["usermanager_edituser_id"]))
 					$("#usermanager_edituser_birthdate").datepicker("setDate", new Date(data.birthDate));
 					$("#usermanager_edituser_email").val(data.email);
 					$("#usermanager_edituser_enabled").prop("checked", data.enabled);
+					$("#usermanager_edituser_profilepicture_editarea").hide();
+					
+					if (data.profilePictureUrl)
+					{
+						$("#usermanager_edituser_profilepicture_current_fieldset").show();
+						$("#usermanager_edituser_profilepicture_current_image").attr("src", data.profilePictureUrl);
+					}
+					else
+					{
+						$("#usermanager_edituser_profilepicture_current_fieldset").hide();
+						$("#usermanager_edituser_profilepicture_current_image").attr("src", "");
+					}
 					
 					for (var index in data.phoneNumbers)
 					{
@@ -434,68 +522,79 @@ if (isset($_POST["usermanager_edituser_id"]))
 		resizable : false,
 		width : 800,
 		buttons :
-		{
-			"OK" : function()
+		[
 			{
-				if ($("#usermanager_edituser_firstname").val())
+				id : "usermanager_edituser_ok",
+				text : "OK",
+				click : function()
 				{
-					if ($("#usermanager_edituser_lastname").val())
+					if ($("#usermanager_edituser_firstname").val())
 					{
-						if ($("#usermanager_edituser_birthdate").val())
+						if ($("#usermanager_edituser_lastname").val())
 						{
-							if ($("#usermanager_edituser_birthdate").datepicker("getDate"))
+							if ($("#usermanager_edituser_birthdate").val())
 							{
-								var emailRegEx =/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-								if (!$("#usermanager_edituser_email").val() || emailRegEx.test($("#usermanager_edituser_email").val()))
+								if ($("#usermanager_edituser_birthdate").datepicker("getDate"))
 								{
-									if (!$("#usermanager_edituser_sendcredentialsmail").prop("checked") || $("#usermanager_edituser_email").val())
+									var emailRegEx =/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+									if (!$("#usermanager_edituser_email").val() || emailRegEx.test($("#usermanager_edituser_email").val()))
 									{
-										if (!$("#usermanager_edituser_id").val() || !$("#usermanager_edituser_sendcredentialsmail").prop("checked") || ($("#usermanager_edituser_sendcredentialsmail").prop("checked") && confirm("Durch die Option 'Zugangsdaten versenden' wird ein neues Passwort generiert!\n\nWirklich fortfahren?")))
+										if (!$("#usermanager_edituser_sendcredentialsmail").prop("checked") || $("#usermanager_edituser_email").val())
 										{
-											$("#usermanager_edituser_form")[0].submit();
+											if (!$("#usermanager_edituser_id").val() || !$("#usermanager_edituser_sendcredentialsmail").prop("checked") || ($("#usermanager_edituser_sendcredentialsmail").prop("checked") && confirm("Durch die Option 'Zugangsdaten versenden' wird ein neues Passwort generiert!\n\nWirklich fortfahren?")))
+											{
+												$("#usermanager_edituser_ok").button("disable");
+												$("#usermanager_edituser_cancel").button("disable");
+												$("#usermanager_edituser_ok").text("Wird \u00fcbernommen...");
+												$("#usermanager_edituser_form")[0].submit();
+											}
+										}
+										else
+										{
+											alert("Die Option 'Zugangsdaten versenden' erfordert die Angabe einer Email-Adresse!");
+											$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_contact").index("#usermanager_edituser_tabs > div"));
 										}
 									}
 									else
 									{
-										alert("Die Option 'Zugangsdaten versenden' erfordert die Angabe einer Email-Adresse!");
+										alert("Die eingegebene Email-Adresse hat ein ung\u00fcltiges Format!");
 										$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_contact").index("#usermanager_edituser_tabs > div"));
 									}
 								}
 								else
 								{
-									alert("Die eingegebene Email-Adresse hat ein ung\u00fcltiges Format!");
-									$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_contact").index("#usermanager_edituser_tabs > div"));
+									alert("Das eingegebene Geburtsdatum ist ung\u00fcltig!");
+									$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_general").index("#usermanager_edituser_tabs > div"));
 								}
 							}
 							else
 							{
-								alert("Das eingegebene Geburtsdatum ist ung\u00fcltig!");
+								alert("Kein Geburtsdatum angegeben!");
 								$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_general").index("#usermanager_edituser_tabs > div"));
 							}
 						}
 						else
 						{
-							alert("Kein Geburtsdatum angegeben!");
+							alert("Kein Nachname angegeben!");
 							$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_general").index("#usermanager_edituser_tabs > div"));
 						}
 					}
 					else
 					{
-						alert("Kein Nachname angegeben!");
+						alert("Kein Vorname angegeben!");
 						$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_general").index("#usermanager_edituser_tabs > div"));
 					}
 				}
-				else
-				{
-					alert("Kein Vorname angegeben!");
-					$("#usermanager_edituser_tabs").tabs("option", "active", $("#usermanager_edituser_tabs_general").index("#usermanager_edituser_tabs > div"));
-				}
 			},
-			"Abbrechen" : function()
 			{
-				$(this).dialog("close");
+				id : "usermanager_edituser_cancel",
+				text : "Abbrechen",
+				click : function()
+				{
+					$(this).dialog("close");
+				}
 			}
-		}
+		]
 	});
 	
 	$("#usermanager_edituser_contact_addbutton").click(usermanager_edituser_contact_addPhoneNumber);
@@ -554,6 +653,58 @@ if (isset($_POST["usermanager_edituser_id"]))
 		},
 		plugins : ["checkbox", "json_data", "themes", "types", "ui"]
 	});
+	
+	function usermanager_edituser_profilepicture_fileSelectHandler()
+	{
+		var file = $("#usermanager_edituser_profilepicture_file")[0].files[0];
+		
+		if (file.type != "image/jpeg")
+		{
+			alert("Das ausgew\u00e4hlte Bild hat einen ung\u00fcltigen Dateintyp!\n\nBitte ein Bild vom Typ 'JPEG' (.jpg oder .jpeg) ausw\u00e4hlen.");
+			return;
+		}
+		
+		if (file.size > 1024 * 1024 * 10)// 10 MB
+		{
+			alert("Die maximal erlaubte Dateigr\u00f6\u00dfe ist 10 MB!");
+			return ;
+		}
+		
+		var previewImage = document.getElementById("usermanager_edituser_profilepicture_preview");
+		
+		var reader = new FileReader;
+		reader.onload = function(event)
+		{
+			previewImage.src = event.target.result;
+			previewImage.onload = function()
+			{
+				$("#usermanager_edituser_profilepicture_editarea").slideDown(1000);
+				
+				if (typeof(usermanager_edituser_profilePicture_jcrop) != "undefined")
+				{
+					usermanager_edituser_profilePicture_jcrop.destroy();
+				}
+				
+				$("#usermanager_edituser_profilepicture_preview").Jcrop(
+				{
+					aspectRatio : 1,
+					boxWidth : 480,
+					minSize : [200, 200],
+					onSelect : function(coords)
+					{
+						$("#usermanager_edituser_profilepicture_x").val(coords.x);
+						$("#usermanager_edituser_profilepicture_y").val(coords.y);
+						$("#usermanager_edituser_profilepicture_width").val(coords.w);
+						$("#usermanager_edituser_profilepicture_height").val(coords.h);
+					}
+				}, function()
+				{
+					usermanager_edituser_profilePicture_jcrop = this;
+				});
+			}
+		}
+		reader.readAsDataURL(file);
+	}
 	
 	$("#usermanager_permissiongroups_applybutton").click(function()
 	{
