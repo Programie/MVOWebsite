@@ -1,10 +1,6 @@
 <?php
 $query = Constants::$pdo->prepare("SELECT `name`, `title` FROM `uploads` WHERE `id` = :id AND `name` = :name");
-$query->execute(array
-(
-	":id" => Constants::$pagePath[1],
-	":name" => Constants::$pagePath[2]
-));
+$query->execute(array(":id" => Constants::$pagePath[1], ":name" => Constants::$pagePath[2]));
 if ($query->rowCount())
 {
 	$row = $query->fetch();

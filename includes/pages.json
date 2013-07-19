@@ -1,203 +1,157 @@
 {
-	"home" :
-	{
-		"title" : "Home"
+	"home": {
+		"title": "Home"
 	},
-	"contact" :
-	{
-		"title" : "Kontakt"
+	"contact": {
+		"title": "Kontakt"
 	},
-	"links" :
-	{
-		"title" : "Links"
+	"links": {
+		"title": "Links"
 	},
-	"vorstand" :
-	{
-		"title" : "Vorstand"
+	"vorstand": {
+		"title": "Vorstand"
 	},
-	"history" :
-	{
-		"title" : "Vereinsgeschichte"
+	"history": {
+		"title": "Vereinsgeschichte"
 	},
-	"chronicle" :
-	{
-		"title" : "Chronik"
+	"chronicle": {
+		"title": "Chronik"
 	},
-	"bisherige_erste_vorsitzende" :
-	{
-		"title" : "Bisherige erste Vorsitzende"
+	"bisherige_erste_vorsitzende": {
+		"title": "Bisherige erste Vorsitzende"
 	},
-	"bisherige_dirigenten" :
-	{
-		"title" : "Bisherige Dirigenten"
+	"bisherige_dirigenten": {
+		"title": "Bisherige Dirigenten"
 	},
-	"newmember" :
-	{
-		"title" : "Beitreten"
+	"newmember": {
+		"title": "Beitreten"
 	},
-	"musiker" :
-	{
-		"title" : "Musiker"
+	"musiker": {
+		"title": "Musiker"
 	},
-	"jugendausbildung" :
-	{
-		"title" : "Jugendausbildung",
-		"index" : "verein",
-		"subpages" :
-		{
-			"verein" :
-			{
-				"title" : "Ausbildung im Verein"
+	"jugendausbildung": {
+		"title": "Jugendausbildung",
+		"index": "verein",
+		"subpages": {
+			"verein": {
+				"title": "Ausbildung im Verein"
 			},
-			"groups" :
-			{
-				"title" : "Ausbildungsgruppen"
+			"groups": {
+				"title": "Ausbildungsgruppen"
 			},
-			"agreement" :
-			{
-				"title" : "Ausbildungsvereinbarung"
+			"agreement": {
+				"title": "Ausbildungsvereinbarung"
 			}
 		}
 	},
-	"foerderverein" :
-	{
-		"title" : "F&ouml;rderverein",
-		"index" : "why",
-		"subpages" :
-		{
-			"why" :
-			{
-				"title" : "Warum F&ouml;rderverein?"
+	"foerderverein": {
+		"title": "F&ouml;rderverein",
+		"index": "why",
+		"subpages": {
+			"why": {
+				"title": "Warum F&ouml;rderverein?"
 			},
-			"vorstand" :
-			{
-				"title" : "Vorstand"
+			"vorstand": {
+				"title": "Vorstand"
 			},
-			"contact" :
-			{
-				"title" : "Kontakt"
+			"contact": {
+				"title": "Kontakt"
 			}
 		}
 	},
-	"dates" :
-	{
-		"title" : "Termine"
+	"dates": {
+		"title": "Termine"
 	},
-	"pictures" :
-	{
-		"title" : "Fotogalerie"
+	"pictures": {
+		"title": "Fotogalerie"
 	},
-	"internalarea" :
-	{
-		"title" : "Interner Bereich",
-		"subpages" :
-		{
-			"addresslist" :
-			{
-				"title" : "Adressenliste",
-				"permissions" : "addresslist"
+	"internalarea": {
+		"title": "Interner Bereich",
+		"subpages": {
+			"addresslist": {
+				"title": "Adressenliste",
+				"permissions": "addresslist"
 			},
-			"attendancelist" :
-			{
-				"title" : "Anwesenheitsliste",
-				"permissions" : "attendancelist"
+			"attendancelist": {
+				"title": "Anwesenheitsliste",
+				"permissions": "attendancelist"
 			},
-			"birthdays" :
-			{
-				"title" : "Geburtstage",
-				"permissions" : "birthdays"
+			"birthdays": {
+				"title": "Geburtstage",
+				"permissions": "birthdays"
 			},
-			"confirmemail" :
-			{
-				"title" : "Email-Adresse best&auml;tigen",
-				"permissions" : true
+			"confirmemail": {
+				"title": "Email-Adresse best&auml;tigen",
+				"permissions": true
 			},
-			"editprofile" :
-			{
-				"title" : "Benutzerprofil bearbeiten",
-				"permissions" : true
+			"editprofile": {
+				"title": "Benutzerprofil bearbeiten",
+				"permissions": true
 			},
-			"events" :
-			{
-				"title" : "Veranstaltungen",
-				"permissions" : "events"
+			"events": {
+				"title": "Veranstaltungen",
+				"permissions": "events"
 			},
-			"featurerequests" :
-			{
-				"title" : "Verbesserungsvorschl&auml;ge",
-				"permissions" : "featurerequests"
+			"featurerequests": {
+				"title": "Verbesserungsvorschl&auml;ge",
+				"permissions": "featurerequests"
 			},
-			"forms" :
-			{
-				"title" : "Formulare",
-				"permissions" : "forms"
+			"forms": {
+				"title": "Formulare",
+				"permissions": "forms"
 			},
-			"home" :
-			{
-				"title" : "Home",
-				"permissions" : true
+			"home": {
+				"title": "Home",
+				"permissions": true
 			},
-			"login" :
-			{
-				"title" : "Login"
+			"login": {
+				"title": "Login"
 			},
-			"logout" :
-			{
-				"title" : "Logout",
-				"permissions" : true
+			"logout": {
+				"title": "Logout",
+				"permissions": true
 			},
-			"messages" :
-			{
-				"title" : "Nachrichten",
-				"permissions" : "messages.view"
+			"messages": {
+				"title": "Nachrichten",
+				"permissions": "messages.view"
 			},
-			"movies" :
-			{
-				"title" : "Fastnachtsfilme",
-				"permissions" : "movies"
+			"movies": {
+				"title": "Fastnachtsfilme",
+				"permissions": "movies"
 			},
-			"notedirectory" :
-			{
-				"title" : "Notenverzeichnis",
-				"permissions" : "notedirectory"
+			"notedirectory": {
+				"title": "Notenverzeichnis",
+				"permissions": "notedirectory"
 			},
-			"protocols" :
-			{
-				"title" : "Protokolle",
-				"permissions" : "protocols"
+			"protocols": {
+				"title": "Protokolle",
+				"permissions": "protocols"
 			},
-			"resetpassword" :
-			{
-				"title" : "Passwort zur&uuml;cksetzen"
+			"resetpassword": {
+				"title": "Passwort zur&uuml;cksetzen"
 			},
-			"roomoccupancyplan" :
-			{
-				"title" : "Proberaumbelegungsplan",
-				"permissions" : "roomoccupancyplan"
+			"roomoccupancyplan": {
+				"title": "Proberaumbelegungsplan",
+				"permissions": "roomoccupancyplan"
 			},
-			"usermanager" :
-			{
-				"title" : "Benutzerverwaltung",
-				"permissions" : "usermanager"
+			"usermanager": {
+				"title": "Benutzerverwaltung",
+				"permissions": "usermanager"
 			},
-			"visitstats" :
-			{
-				"title" : "Besucherstatistik",
-				"permissions" : "visitstats"
+			"visitstats": {
+				"title": "Besucherstatistik",
+				"permissions": "visitstats"
 			},
-			"writemessage" :
-			{
-				"title" : "Nachricht verfassen",
-				"permissions" : "messages.write"
+			"writemessage": {
+				"title": "Nachricht verfassen",
+				"permissions": "messages.write"
 			}
 		}
 	},
-	"imprint" :
-	{
-		"title" : "Impressum"
+	"imprint": {
+		"title": "Impressum"
 	},
-	"uploads" :
-	{
-		"title" : "Datei herunterladen"
+	"uploads": {
+		"title": "Datei herunterladen"
 	}
 }

@@ -1,141 +1,136 @@
 [
 	{
-		"path" : "/home",
-		"items" :
-		[
+		"path": "/home",
+		"items": [
 			{
-				"path" : "/contact"
+				"path": "/contact"
 			},
 			{
-				"path" : "/links"
+				"path": "/links"
 			}
 		]
 	},
 	{
-		"path" : "/vorstand",
-		"title" : "Verein",
-		"items" :
-		[
+		"path": "/vorstand",
+		"title": "Verein",
+		"items": [
 			{
-				"path" : "/chronicle"
+				"path": "/chronicle"
 			},
 			{
-				"path" : "/history"
+				"path": "/history"
 			},
 			{
-				"path" : "/bisherige_erste_vorsitzende"
+				"path": "/bisherige_erste_vorsitzende"
 			},
 			{
-				"path" : "/bisherige_dirigenten"
+				"path": "/bisherige_dirigenten"
 			},
 			{
-				"path" : "/vorstand"
+				"path": "/vorstand"
 			},
 			{
-				"path" : "/newmember"
+				"path": "/newmember"
 			},
 			{
-				"path" : "/musiker"
+				"path": "/musiker"
 			}
 		]
 	},
 	{
-		"path" : "/jugendausbildung",
-		"items" :
-		[
+		"path": "/jugendausbildung",
+		"items": [
 			{
-				"path" : "/jugendausbildung/verein"
+				"path": "/jugendausbildung/verein"
 			},
 			{
-				"path" : "/jugendausbildung/groups"
+				"path": "/jugendausbildung/groups"
 			},
 			{
-				"path" : "/jugendausbildung/agreement"
+				"path": "/jugendausbildung/agreement"
 			}
 		]
 	},
 	{
-		"path" : "/foerderverein",
-		"items" :
-		[
+		"path": "/foerderverein",
+		"items": [
 			{
-				"path" : "/foerderverein/why"
+				"path": "/foerderverein/why"
 			},
 			{
-				"path" : "/foerderverein/vorstand"
+				"path": "/foerderverein/vorstand"
 			},
 			{
-				"path" : "/foerderverein/contact"
+				"path": "/foerderverein/contact"
 			}
 		]
 	},
 	{
-		"path" : "/dates",
-		"items" : "dates"
+		"path": "/dates",
+		"items": "dates"
 	},
 	{
-		"path" : "/pictures",
-		"items" : "pictures"
+		"path": "/pictures",
+		"items": "pictures"
 	},
 	{
-		"path" : "/internalarea",
-		"items" :
-		[
+		"path": "/internalarea",
+		"items": [
 			{
-				"path" : "/internalarea/editprofile"
+				"path": "/internalarea/editprofile"
 			},
 			{
-				"type" : "separator",
-				"permissions" : "1"
+				"type": "separator",
+				"permissions": "1"
 			},
 			{
-				"path" : "/internalarea/addresslist"
+				"path": "/internalarea/addresslist"
 			},
 			{
-				"path" : "/internalarea/attendancelist"
+				"path": "/internalarea/attendancelist"
 			},
 			{
-				"path" : "/internalarea/usermanager"
+				"path": "/internalarea/usermanager"
 			},
 			{
-				"path" : "/internalarea/visitstats"
+				"path": "/internalarea/visitstats"
 			},
 			{
-				"path" : "/internalarea/movies"
+				"path": "/internalarea/movies"
 			},
 			{
-				"path" : "/internalarea/forms"
+				"path": "/internalarea/forms"
 			},
 			{
-				"path" : "/internalarea/birthdays"
+				"path": "/internalarea/birthdays"
 			},
 			{
-				"path" : "/internalarea/messages"
+				"path": "/internalarea/messages"
 			},
 			{
-				"path" : "/internalarea/writemessage"
+				"path": "/internalarea/writemessage"
 			},
 			{
-				"path" : "/internalarea/notedirectory"
+				"path": "/internalarea/notedirectory"
 			},
 			{
-				"path" : "/internalarea/roomoccupancyplan"
+				"path": "/internalarea/roomoccupancyplan"
 			},
 			{
-				"path" : "/internalarea/protocols"
+				"path": "/internalarea/protocols"
 			},
 			{
-				"path" : "/internalarea/events"
+				"path": "/internalarea/events"
 			},
 			{
-				"path" : "/internalarea/featurerequests"
+				"path": "/internalarea/featurerequests"
 			},
 			{
-				"type" : "separator",
-				"permissions" : "1"
+				"type": "separator",
+				"permissions": "1"
 			},
 			{
-				"path" : "/internalarea/logout"
+				"path": "/internalarea/logout"
 			}
 		]
 	}

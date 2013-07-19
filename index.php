@@ -1,7 +1,19 @@
 <?php
+/**
+ * The absolute path on the filesystem to the root of the website
+ */
 define("ROOT_PATH", __DIR__);
+/**
+ * The absolute path on the filesystem to the upload directory
+ */
 define("UPLOAD_PATH", ROOT_PATH . "/uploads");
+/**
+ * The base URL of the website (http|https + :// + hostname)
+ */
 define("BASE_URL", (@$_SERVER["HTTPS"] ? "https" : "http") . "://" . $_SERVER["SERVER_NAME"]);
+/**
+ * The maximum upload size in bytes
+ */
 define("MAX_UPLOAD_SIZE", min(intval(ini_get("upload_max_filesize")), intval(ini_get("post_max_size")), intval(ini_get("memory_limit"))));
 
 require_once ROOT_PATH . "/includes/config.inc.php";
@@ -41,7 +53,7 @@ if (empty(Constants::$pagePath))
 	Constants::$pagePath = array("home");
 }
 
-$preHtmlFile = ROOT_PATH . "/includes/prehtml/" . Constants::$pagePath[0]. ".php";
+$preHtmlFile = ROOT_PATH . "/includes/prehtml/" . Constants::$pagePath[0] . ".php";
 if (file_exists($preHtmlFile))
 {
 	require_once $preHtmlFile;
@@ -75,10 +87,7 @@ if (!empty($pageData))
 if (!preg_match("/bot|spider|crawler|curl|^$/i", $_SERVER["HTTP_USER_AGENT"]))
 {
 	$query = Constants::$pdo->prepare("SELECT `id`, `userId` FROM `visits` WHERE `date` = CURDATE() AND `ip` = :ip");
-	$query->execute(array
-	(
-		":ip" => $_SERVER["REMOTE_ADDR"]
-	));
+	$query->execute(array(":ip" => $_SERVER["REMOTE_ADDR"]));
 	if ($query->rowCount())
 	{
 		$row = $query->fetch();
@@ -87,28 +96,18 @@ if (!preg_match("/bot|spider|crawler|curl|^$/i", $_SERVER["HTTP_USER_AGENT"]))
 			$row->userId = Constants::$accountManager->getUserId();
 		}
 		$query = Constants::$pdo->prepare("UPDATE `visits` SET `lastVisitDate` = NOW(), `lastVisitPath` = :path, `userId` = :userId WHERE `id` = :id");
-		$query->execute(array
-		(
-			":path" => implode("/", Constants::$pagePath),
-			":userId" => $row->userId,
-			":id" => $row->id
-		));
+		$query->execute(array(":path" => implode("/", Constants::$pagePath), ":userId" => $row->userId, ":id" => $row->id));
 	}
 	else
 	{
 		$query = Constants::$pdo->prepare("INSERT INTO `visits` (`ip`, `date`, `firstVisitDate`, `firstVisitPath`, `lastVisitDate`, `lastVisitPath`, `userId`) VALUES(:ip, CURDATE(), NOW(), :path, NOW(), :path, :userId)");
-		$query->execute(array
-		(
-			":ip" => $_SERVER["REMOTE_ADDR"],
-			":path" => implode("/", Constants::$pagePath),
-			":userId" => Constants::$accountManager->getUserId()
-		));
+		$query->execute(array(":ip" => $_SERVER["REMOTE_ADDR"], ":path" => implode("/", Constants::$pagePath), ":userId" => Constants::$accountManager->getUserId()));
 	}
 }
 
-ob_start(function()
+ob_start(function ()
 {
-	chdir(dirname($_SERVER["SCRIPT_FILENAME"]));
+	chdir(dirname($_SERVER["SCRIPT_FILENAME"])); // ob_start changes the working directory
 });
 
 require_once "includes/html/main.php";

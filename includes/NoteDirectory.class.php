@@ -1,11 +1,29 @@
 <?php
+/**
+ * Class to create the note directory HTML table
+ */
 class NoteDirectory
 {
+	/**
+	 * @var Array An associated array containing the column names as keys and column titles as values
+	 */
 	private $columns;
+	/**
+	 * @var String The string which should be highlighted (e.g. for search results)
+	 */
 	private $highlightedString;
+	/**
+	 * @var Array An array containing the rows of the titles as maps. Each column in the table is one property in the row map.
+	 */
 	private $titles;
+	/**
+	 * @var Boolean Whether to show the titles in groups
+	 */
 	private $showInGroups;
-	
+
+	/**
+	 * Create the body (Multiple tbody elements) of the table
+	 */
 	public function createBody()
 	{
 		if ($this->showInGroups)
@@ -17,7 +35,10 @@ class NoteDirectory
 			$this->list_normal();
 		}
 	}
-	
+
+	/**
+	 * Create the header (Single thead element) of the table
+	 */
 	public function createHeader()
 	{
 		echo "
@@ -33,7 +54,10 @@ class NoteDirectory
 			</thead>
 		";
 	}
-	
+
+	/**
+	 * Create the table
+	 */
 	public function createList()
 	{
 		echo "
@@ -44,7 +68,13 @@ class NoteDirectory
 		$this->createBody();
 		echo "</table>";
 	}
-	
+
+	/**
+	 * Format the string using the formatText function and highlight the string specified in $highlightedString
+	 *
+	 * @param String $string The string which should be formatted
+	 * @return String The formatted string
+	 */
 	public function formatString($string)
 	{
 		if ($this->highlightedString)
@@ -52,9 +82,13 @@ class NoteDirectory
 			$string = preg_replace("/" . preg_quote($this->highlightedString, "/") . "/i", "[hl]\$0[/hl]", $string);
 		}
 		$string = formatText($string);
+
 		return $string;
 	}
-	
+
+	/**
+	 * List all titles in categories
+	 */
 	public function list_categories()
 	{
 		$categories = array();
@@ -62,7 +96,7 @@ class NoteDirectory
 		{
 			$categories[$row->category][] = $row;
 		}
-		
+
 		foreach ($categories as $category => $titles)
 		{
 			if (!$category)
@@ -79,7 +113,11 @@ class NoteDirectory
 			$this->list_normal($titles);
 		}
 	}
-	
+
+	/**
+	 * List all titles without categories
+	 * @param Array $titles An array containing the titles to show. Set to null or omit to show all titles.
+	 */
 	public function list_normal($titles = null)
 	{
 		if (!$titles)
@@ -87,10 +125,10 @@ class NoteDirectory
 			$titles = $this->titles;
 		}
 		echo "<tbody>";
-		foreach ($titles as $index => $row)
+		foreach ($titles as $row)
 		{
 			echo "<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/details/" . $row->id . "';\">";
-			foreach ($this->columns as $columnName => $coumnTitle)
+			foreach ($this->columns as $columnName => $columnTitle)
 			{
 				echo "<td>" . $this->formatString($row->{$columnName}) . "</td>";
 			}
@@ -98,22 +136,38 @@ class NoteDirectory
 		}
 		echo "</tbody>";
 	}
-	
+
+	/**
+	 * Set the columns which should be shown
+	 * @param Array $columns An associated array containing the column names as keys and column titles as values
+	 */
 	public function setColumns($columns)
 	{
 		$this->columns = $columns;
 	}
-	
+
+	/**
+	 * Set the string which should be highlighted in the table
+	 * @param String $highlightedString The string which should be highlighted (e.g. for search results)
+	 */
 	public function setHighlight($highlightedString)
 	{
 		$this->highlightedString = $highlightedString;
 	}
-	
+
+	/**
+	 * Set the titles which should be shown in the table
+	 * @param Array $titles An array containing the rows of the titles as maps. Each column in the table is one property in the row map.
+	 */
 	public function setTitles($titles)
 	{
 		$this->titles = $titles;
 	}
-	
+
+	/**
+	 * Set whether the titles should be shown in groups
+	 * @param Boolean $showInGroups True to show in groups, false otherwise
+	 */
 	public function setShowInGroups($showInGroups)
 	{
 		$this->showInGroups = $showInGroups;

@@ -5,8 +5,7 @@
 
 #header_logo
 {
-	background-image: url(/files/images/logo.png);
-	background-repeat: no-repeat;
+	background: url(/files/images/logo.png) no-repeat;
 	margin-left: 30px;
 	width: 111px;
 	height: 75px;
@@ -16,8 +15,8 @@
 #header_image
 {
 	position: absolute;
-	left: 0px;
-	right: 0px;
+	left: 0;
+	right: 0;
 	background-image: url(/files/images/header.png);
 	background-repeat: no-repeat;
 	background-position: center;

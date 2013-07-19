@@ -35,8 +35,7 @@ form textarea
 input[type="password"], .date, .input-email, .input-fax, .input-mobile-phone, .input-phone, .input-search, .input-user, .time
 {
 	padding-left: 30px !important;
-	background-repeat: no-repeat;
-	background-position: 5px center;
+	background: no-repeat 5px center;
 }
 
 input[type="password"], input[type="text"], textarea

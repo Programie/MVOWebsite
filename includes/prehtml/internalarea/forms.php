@@ -2,10 +2,7 @@
 if (Constants::$pagePath[2])
 {
 	$query = Constants::$pdo->prepare("SELECT `name` FROM `forms` WHERE `filename` = :filename");
-	$query->execute(array
-	(
-		":filename" => Constants::$pagePath[2]
-	));
+	$query->execute(array(":filename" => Constants::$pagePath[2]));
 	$row = $query->fetch();
 	if (Constants::$accountManager->hasPermission("forms." . $row->name))
 	{

@@ -75,7 +75,6 @@ if (Constants::$accountManager->hasPermission("usermanager"))
 				$permissionQuery = Constants::$pdo->prepare("INSERT INTO `permissions` (`userId`, `permission`) VALUES(:userId, :permission)");
 				while ($row = $query->fetch())
 				{
-					$users++;
 					$foundGroups = array();
 					$permissions = array();
 					applypermissions_searchUserInGroups($groupList, $sourceData, $row->id, $foundGroups);
@@ -101,7 +100,8 @@ if (Constants::$accountManager->hasPermission("usermanager"))
 						if ($permissionQuery->execute($queryData))
 						{
 							$ok++;
-						} else
+						}
+						else
 						{
 							$errors++;
 						}

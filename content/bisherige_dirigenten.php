@@ -38,6 +38,6 @@
 	</tr>
 	<tr>
 		<td>1999 bis heute</td>
-		<td>Diana Jourdan </td>
+		<td>Diana Jourdan</td>
 	</tr>
 </table>

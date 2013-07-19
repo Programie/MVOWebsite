@@ -16,13 +16,7 @@ if (isset($_POST["attendancelist_dateid"]) and isset($_POST["attendancelist_user
 			ON DUPLICATE KEY UPDATE
 			`changeUserId` = :changeUserId, `changeTime` = NOW(), `status` = :status
 		");
-		$query->execute(array
-		(
-			":dateId" => $_POST["attendancelist_dateid"],
-			":userId" => $_POST["attendancelist_userid"],
-			":changeUserId" => Constants::$accountManager->getUserId(),
-			":status" => $status
-		));
+		$query->execute(array(":dateId" => $_POST["attendancelist_dateid"], ":userId" => $_POST["attendancelist_userid"], ":changeUserId" => Constants::$accountManager->getUserId(), ":status" => $status));
 		if ($query->rowCount())
 		{
 			echo "ok";

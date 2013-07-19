@@ -1,7 +1,8 @@
 <h1>Impressum</h1>
 <p>
-	Diese Seiten wurden erstellt vom Musikverein "Orgelfels" Reichental e.V.<br />
-	Hinweise und Fragen k&ouml;nnen Sie gerne an <a href="mailto:webmaster@musikverein-reichental.de">webmaster@musikverein-reichental.de</a> richten.
+	Diese Seiten wurden erstellt vom Musikverein "Orgelfels" Reichental e.V.<br/>
+	Hinweise und Fragen k&ouml;nnen Sie gerne an <a href="mailto:webmaster@musikverein-reichental.de">webmaster@musikverein-reichental.de</a>
+	richten.
 </p>
 
 <h2>Haftungsausschluss</h2>

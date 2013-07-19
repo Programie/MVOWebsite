@@ -441,7 +441,7 @@ $.tablesorter.addWidget({
 										r1 = fmt(s[0].replace(reg.nondigit, ''), table);
 										r2 = fmt(s[1].replace(reg.nondigit, ''), table);
 										if (r1 > r2) { ff = r1; r1 = r2; r2 = ff; } // swap
-										ff = (rg >= r1 && rg <= r2) || (r1 === '' || r2 === '') ? true : false;
+										ff = !!((rg >= r1 && rg <= r2) || (r1 === '' || r2 === ''));
 									// Look for wild card: ? = single, * = multiple, or | = logical OR
 									} else if ( /[\?|\*]/.test(val) || /\s+OR\s+/.test(v[i]) ){
 										ff = new RegExp( val.replace(/\s+or\s+/gi,"|").replace(/\?/g, '\\S{1}').replace(/\*/g, '\\S*') ).test(xi);
@@ -450,7 +450,7 @@ $.tablesorter.addWidget({
 										x = (xi + t).indexOf(val);
 										ff  = ( (!wo.filter_startsWith && x >= 0) || (wo.filter_startsWith && x === 0) );
 									}
-									r = (ff) ? (r ? true : false) : false;
+									r = (ff) ? (!!r) : false;
 								}
 							}
 							$tr[j].style.display = (r ? '' : 'none');

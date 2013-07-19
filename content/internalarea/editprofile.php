@@ -19,18 +19,18 @@ if ($userData->forcePasswordChange)
 		}
 		var categories =
 		{
-			fax : "Fax",
-			mobile : "Mobil",
-			phone : "Telefon"
+			fax: "Fax",
+			mobile: "Mobil",
+			phone: "Telefon"
 		};
 		var subCategories =
 		{
-			business : "Gesch\u00e4ftlich",
-			private : "Privat"
+			business: "Gesch\u00e4ftlich",
+			private: "Privat"
 		};
-		
+
 		var div = $("<div/>");
-		
+
 		var categorySelectBox = $("<select/>");
 		categorySelectBox.attr("id", "editprofile_contact_" + id + "_category");
 		categorySelectBox.attr("name", categorySelectBox.attr("id"));
@@ -46,7 +46,7 @@ if ($userData->forcePasswordChange)
 			categorySelectBox.append(option);
 		}
 		div.append(categorySelectBox);
-		
+
 		var subCategorySelectBox = $("<select/>");
 		subCategorySelectBox.attr("id", "editprofile_contact_" + id + "_subcategory");
 		subCategorySelectBox.attr("name", subCategorySelectBox.attr("id"));
@@ -62,7 +62,7 @@ if ($userData->forcePasswordChange)
 			subCategorySelectBox.append(option);
 		}
 		div.append(subCategorySelectBox);
-		
+
 		var inputField = $("<input/>");
 		inputField.attr("type", "text");
 		inputField.attr("id", "editprofile_contact_" + id + "_number");
@@ -74,151 +74,144 @@ if ($userData->forcePasswordChange)
 		removeButton.attr("type", "button");
 		removeButton.text("Entfernen");
 		removeButton.button();
-		removeButton.click(function()
+		removeButton.click(function ()
 		{
 			div.remove();
 		});
 		div.append(removeButton);
-		
+
 		$("#editprofile_contact_div").append(div);
 	}
 </script>
 
 <div id="editprofile_tabs">
-	<ul>
-		<li><a href="#editprofile_account">Account</a></li>
-		<li><a href="#editprofile_profilepicture">Profilbild</a></li>
-		<li><a href="#editprofile_changepassword">Passwort &auml;ndern</a></li>
-		<li><a href="#editprofile_changeemail">Email-Adresse &auml;ndern</a></li>
-		<li><a href="#editprofile_contact">Kontakt</a></li>
-	</ul>
-	
-	<div id="editprofile_account">
-		<?php
-		if ($_POST["editprofile_tab"] == "account")
+<ul>
+	<li><a href="#editprofile_account">Account</a></li>
+	<li><a href="#editprofile_profilepicture">Profilbild</a></li>
+	<li><a href="#editprofile_changepassword">Passwort &auml;ndern</a></li>
+	<li><a href="#editprofile_changeemail">Email-Adresse &auml;ndern</a></li>
+	<li><a href="#editprofile_contact">Kontakt</a></li>
+</ul>
+
+<div id="editprofile_account">
+	<?php
+	if ($_POST["editprofile_tab"] == "account")
+	{
+		if ($_POST["editprofile_account_username"])
 		{
-			if ($_POST["editprofile_account_username"])
+			if ($_POST["editprofile_account_firstname"])
 			{
-				if ($_POST["editprofile_account_firstname"])
+				if ($_POST["editprofile_account_lastname"])
 				{
-					if ($_POST["editprofile_account_lastname"])
+					$oldUserData = clone $userData;
+					$usernameChanged = false;
+					if ($userData->username != $_POST["editprofile_account_username"])
 					{
-						$oldUserData = clone $userData;
-						$usernameChanged = false;
-						if ($userData->username != $_POST["editprofile_account_username"])
-						{
-							$ok = Constants::$accountManager->changeUsername($_POST["editprofile_account_username"]);
-							$usernameChanged = true;
-						}
-						else
-						{
-							$ok = true;
-						}
-						if ($ok)
-						{
-							$query = Constants::$pdo->prepare("UPDATE `users` SET `firstName` = :firstName, `lastName` = :lastName WHERE `id` = :id");
-							$query->execute(array
-							(
-								":firstName" => $_POST["editprofile_account_firstname"],
-								":lastName" => $_POST["editprofile_account_lastname"],
-								":id" => Constants::$accountManager->getUserId()
-							));
-							
-							$userData = Constants::$accountManager->getUserData();// Reload user data
-							
-							if ($usernameChanged)
-							{
-								$replacements = array
-								(
-									"FIRSTNAME" => $userData->firstName,
-									"OLDUSERNAME" => $oldUserData->username,
-									"NEWUSERNAME" => $userData->username
-								);
-								$mail = new Mail("Benutzername geändert", $replacements);
-								$mail->setTemplate("username-changed");
-								$mail->setTo($userData->email);
-								$mail->send();
-							}
-							
-							echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
-						}
-						else
-						{
-							echo "<div class='error'>Der Benutzername wird bereits verwendet!</div>";
-						}
+						$ok = Constants::$accountManager->changeUsername($_POST["editprofile_account_username"]);
+						$usernameChanged = true;
 					}
 					else
 					{
-						echo "<div class='error'>Der Nachname muss angegeben werden!</div>";
+						$ok = true;
+					}
+					if ($ok)
+					{
+						$query = Constants::$pdo->prepare("UPDATE `users` SET `firstName` = :firstName, `lastName` = :lastName WHERE `id` = :id");
+						$query->execute(array(":firstName" => $_POST["editprofile_account_firstname"], ":lastName" => $_POST["editprofile_account_lastname"], ":id" => Constants::$accountManager->getUserId()));
+
+						$userData = Constants::$accountManager->getUserData(); // Reload user data
+
+						if ($usernameChanged)
+						{
+							$replacements = array("FIRSTNAME" => $userData->firstName, "OLDUSERNAME" => $oldUserData->username, "NEWUSERNAME" => $userData->username);
+							$mail = new Mail("Benutzername geändert", $replacements);
+							$mail->setTemplate("username-changed");
+							$mail->setTo($userData->email);
+							$mail->send();
+						}
+
+						echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+					}
+					else
+					{
+						echo "<div class='error'>Der Benutzername wird bereits verwendet!</div>";
 					}
 				}
 				else
 				{
-					echo "<div class='error'>Der Vorname muss angegeben werden!</div>";
+					echo "<div class='error'>Der Nachname muss angegeben werden!</div>";
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Ein Benutzername muss angegeben werden!</div>";
+				echo "<div class='error'>Der Vorname muss angegeben werden!</div>";
 			}
 		}
-		?>
-		
-		<form action="/internalarea/editprofile#editprofile_account" method="post">
-			<input type="hidden" name="editprofile_tab" value="account"/>
-			
-			<label for="editprofile_account_username">Benutzername:</label>
-			<input type="text" class="input-user" id="editprofile_account_username" name="editprofile_account_username" value="<?php echo escapeText($userData->username);?>" required/>
-			
-			<label for="editprofile_account_firstname">Vorname:</label>
-			<input type="text" id="editprofile_account_firstname" name="editprofile_account_firstname" value="<?php echo escapeText($userData->firstName);?>" required/>
-			
-			<label for="editprofile_account_lastname">Nachname:</label>
-			<input type="text" id="editprofile_account_lastname" name="editprofile_account_lastname" value="<?php echo escapeText($userData->lastName);?>" required/>
-			
-			<input type="submit" value="Speichern"/>
-		</form>
-	</div>
-	
-	<div id="editprofile_profilepicture">
-		<?php
-		if ($_POST["editprofile_tab"] == "profilepicture")
+		else
 		{
-			$showError = true;
-			if ($_FILES)
+			echo "<div class='error'>Ein Benutzername muss angegeben werden!</div>";
+		}
+	}
+	?>
+
+	<form action="/internalarea/editprofile#editprofile_account" method="post">
+		<input type="hidden" name="editprofile_tab" value="account"/>
+
+		<label for="editprofile_account_username">Benutzername:</label>
+		<input type="text" class="input-user" id="editprofile_account_username"
+		       name="editprofile_account_username" value="<?php echo escapeText($userData->username); ?>"
+		       required/>
+
+		<label for="editprofile_account_firstname">Vorname:</label>
+		<input type="text" id="editprofile_account_firstname" name="editprofile_account_firstname"
+		       value="<?php echo escapeText($userData->firstName); ?>" required/>
+
+		<label for="editprofile_account_lastname">Nachname:</label>
+		<input type="text" id="editprofile_account_lastname" name="editprofile_account_lastname"
+		       value="<?php echo escapeText($userData->lastName); ?>" required/>
+
+		<input type="submit" value="Speichern"/>
+	</form>
+</div>
+
+<div id="editprofile_profilepicture">
+	<?php
+	if ($_POST["editprofile_tab"] == "profilepicture")
+	{
+		$showError = true;
+		if ($_FILES)
+		{
+			$file = $_FILES["editprofile_profilepicture_file"];
+			if (!$file["error"])
 			{
-				$file = $_FILES["editprofile_profilepicture_file"];
-				if (!$file["error"])
+				if ($file["size"] > 1024 * 1024 * 10)
 				{
-					if ($file["size"] > 1024 * 1024 * 10)
+					echo "<div class='error'>Die maximal erlaubte Dateigr&ouml;&szlig;e ist 10 MB!</div>";
+					$showError = false;
+				}
+				else
+				{
+					$x = $_POST["editprofile_profilepicture_x"];
+					$y = $_POST["editprofile_profilepicture_y"];
+					$width = $_POST["editprofile_profilepicture_width"];
+					$height = $_POST["editprofile_profilepicture_height"];
+					if ($width > 0 and $height > 0)
 					{
-						echo "<div class='error'>Die maximal erlaubte Dateigr&ouml;&szlig;e ist 10 MB!</div>";
-						$showError = false;
-					}
-					else
-					{
-						$x = $_POST["editprofile_profilepicture_x"];
-						$y = $_POST["editprofile_profilepicture_y"];
-						$width = $_POST["editprofile_profilepicture_width"];
-						$height = $_POST["editprofile_profilepicture_height"];
-						if ($width > 0 and $height > 0)
+						$sourceImage = imagecreatefromjpeg($file["tmp_name"]);
+						if ($sourceImage)
 						{
-							$sourceImage = imagecreatefromjpeg($file["tmp_name"]);
-							if ($sourceImage)
+							$croppedImage = imagecreatetruecolor($width, $height);
+							if ($croppedImage)
 							{
-								$croppedImage = imagecreatetruecolor($width, $height);
-								if ($croppedImage)
+								if (imagecopyresampled($croppedImage, $sourceImage, 0, 0, $x, $y, $width, $height, $width, $height))
 								{
-									if (imagecopyresampled($croppedImage, $sourceImage, 0, 0, $x,$y, $width, $height, $width, $height))
+									$resizedImage = resizeImage($croppedImage, 600, 600);
+									if ($resizedImage)
 									{
-										$resizedImage = resizeImage($croppedImage, 600, 600);
-										if ($resizedImage)
+										if (imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userData->id . ".jpg"))
 										{
-											if (imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userData->id . ".jpg"))
-											{
-												echo "<div class='ok'>Dein Profilbild wurde erfolgreich aktualisiert.</div>";
-												$showError = false;
-											}
+											echo "<div class='ok'>Dein Profilbild wurde erfolgreich aktualisiert.</div>";
+											$showError = false;
 										}
 									}
 								}
@@ -227,75 +220,159 @@ if ($userData->forcePasswordChange)
 					}
 				}
 			}
-			if ($showError)
-			{
-				echo "<div class='error'>Beim Hochladen ist ein Fehler ausgetreten. Bitte versuche es erneut oder wende dich an den Webmaster.</div>";
-			}
 		}
-		
-		$file = "/files/profilepictures/" . $userData->id . ".jpg";
-		if (file_exists(ROOT_PATH . $file))
+		if ($showError)
 		{
-			echo "
+			echo "<div class='error'>Beim Hochladen ist ein Fehler ausgetreten. Bitte versuche es erneut oder wende dich an den Webmaster.</div>";
+		}
+	}
+
+	$file = "/files/profilepictures/" . $userData->id . ".jpg";
+	if (file_exists(ROOT_PATH . $file))
+	{
+		echo "
 				<fieldset>
 					<legend>Aktuelles Profilbild</legend>
-					<img class='profilepicture' src='/getprofilepicture/" . $userData->id ."/" . md5_file(ROOT_PATH . $file) . "'/>
+					<img class='profilepicture' src='/getprofilepicture/" . $userData->id . "/" . md5_file(ROOT_PATH . $file) . "'/>
 				</fieldset>
 			";
-		}
-		?>
-		
-		<fieldset>
-			<legend>Neues Profilbild hochladen</legend>
-			
-			<p><b>Maximale Dateigr&ouml;&szlig;e:</b> <?php echo MAX_UPLOAD_SIZE;?> MB</p>
-			
-			<form id="editprofile_profilepicture_form" action="/internalarea/editprofile#editprofile_profilepicture" method="post" enctype="multipart/form-data">
-				<input type="hidden" name="editprofile_tab" value="profilepicture"/>
-				
-				<input type="hidden" id="editprofile_profilepicture_x" name="editprofile_profilepicture_x"/>
-				<input type="hidden" id="editprofile_profilepicture_y" name="editprofile_profilepicture_y"/>
-				<input type="hidden" id="editprofile_profilepicture_width" name="editprofile_profilepicture_width"/>
-				<input type="hidden" id="editprofile_profilepicture_height" name="editprofile_profilepicture_height"/>
-				
-				<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD_SIZE * 1024 * 1024;?>"/>
-				<input type="file" id="editprofile_profilepicture_file" name="editprofile_profilepicture_file" onchange="editprofile_profilePicture_FileSelectHandler();"/>
-				
-				<div id="editprofile_profilepicture_editarea">
-					<p>W&auml;hle den Bereich aus, welchen du als Profilbild verwenden m&ouml;chtest.</p>
-					<img id="editprofile_profilepicture_preview"/>
-				</div>
-				
-				<input id="editprofile_profilepicture_upload" type="submit" value="Hochladen"/>
-			</form>
-			
-			<div id="editprofile_profilepicture_progressarea">
-				<p>Das ausgew&auml;hlte Bild wird nun hochgeladen.</p>
-				<div id="editprofile_profilepicture_progressbar">
-					<div id="editprofile_profilepicture_progressbar_label"></div>
-				</div>
+	}
+	?>
+
+	<fieldset>
+		<legend>Neues Profilbild hochladen</legend>
+
+		<p><b>Maximale Dateigr&ouml;&szlig;e:</b> <?php echo MAX_UPLOAD_SIZE; ?> MB</p>
+
+		<form id="editprofile_profilepicture_form" action="/internalarea/editprofile#editprofile_profilepicture"
+		      method="post" enctype="multipart/form-data">
+			<input type="hidden" name="editprofile_tab" value="profilepicture"/>
+
+			<input type="hidden" id="editprofile_profilepicture_x" name="editprofile_profilepicture_x"/>
+			<input type="hidden" id="editprofile_profilepicture_y" name="editprofile_profilepicture_y"/>
+			<input type="hidden" id="editprofile_profilepicture_width"
+			       name="editprofile_profilepicture_width"/>
+			<input type="hidden" id="editprofile_profilepicture_height"
+			       name="editprofile_profilepicture_height"/>
+
+			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD_SIZE * 1024 * 1024; ?>"/>
+			<input type="file" id="editprofile_profilepicture_file" name="editprofile_profilepicture_file"
+			       onchange="editprofile_profilePicture_FileSelectHandler();"/>
+
+			<div id="editprofile_profilepicture_editarea">
+				<p>W&auml;hle den Bereich aus, welchen du als Profilbild verwenden m&ouml;chtest.</p>
+				<img id="editprofile_profilepicture_preview"/>
 			</div>
-		</fieldset>
-	</div>
-	
-	<div id="editprofile_changepassword">
-		<?php
-		if ($_POST["editprofile_tab"] == "password")
+
+			<input id="editprofile_profilepicture_upload" type="submit" value="Hochladen"/>
+		</form>
+
+		<div id="editprofile_profilepicture_progressarea">
+			<p>Das ausgew&auml;hlte Bild wird nun hochgeladen.</p>
+
+			<div id="editprofile_profilepicture_progressbar">
+				<div id="editprofile_profilepicture_progressbar_label"></div>
+			</div>
+		</div>
+	</fieldset>
+</div>
+
+<div id="editprofile_changepassword">
+	<?php
+	if ($_POST["editprofile_tab"] == "password")
+	{
+		if ($_POST["editprofile_changepassword_current"])
 		{
-			if ($_POST["editprofile_changepassword_current"])
+			if ($_POST["editprofile_changepassword_new1"] and strlen($_POST["editprofile_changepassword_new1"]) >= PASSWORDS_MINLENGTH)
 			{
-				if ($_POST["editprofile_changepassword_new1"] and strlen($_POST["editprofile_changepassword_new1"]) >= PASSWORDS_MINLENGTH)
+				if ($_POST["editprofile_changepassword_new1"] == $_POST["editprofile_changepassword_new2"])
 				{
-					if ($_POST["editprofile_changepassword_new1"] == $_POST["editprofile_changepassword_new2"])
+					if (Constants::$accountManager->changePassword($_POST["editprofile_changepassword_new1"], $_POST["editprofile_changepassword_current"]))
 					{
-						if (Constants::$accountManager->changePassword($_POST["editprofile_changepassword_new1"], $_POST["editprofile_changepassword_current"]))
-						{
-							echo "
+						echo "
 								<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert.</div>
 								<script type='text/javascript'>
 									$('#editprofile_passwordchangeinfo').hide();
 								</script>
 							";
+					}
+					else
+					{
+						echo "<div class='error'>Das eingegebene Passwort ist falsch!</div>";
+					}
+				}
+				else
+				{
+					echo "<div class='error'>Das neue Passwort stimmt nicht mit dem wiederholen Passwort &uuml;berein!</div>";
+				}
+			}
+			else
+			{
+				echo "<div class='error'>Das neue Passwort muss mindestens " . PASSWORDS_MINLENGTH . " Zeichen haben!</div>";
+			}
+		}
+		else
+		{
+			echo "<div class='error'>Das aktuelle Passwort muss angegeben werden!</div>";
+		}
+	}
+	?>
+
+	<form action="/internalarea/editprofile#editprofile_changepassword" method="post">
+		<input type="hidden" name="editprofile_tab" value="password"/>
+
+		<label for="editprofile_changepassword_current">Aktuelles Passwort:</label>
+		<input type="password" id="editprofile_changepassword_current" name="editprofile_changepassword_current"
+		       value="<?php echo escapeText($_POST["editprofile_changepassword_current"]); ?>" required/>
+
+		<label for="editprofile_changepassword_new1">Neues Passwort:</label>
+		<input type="password" id="editprofile_changepassword_new1" name="editprofile_changepassword_new1"
+		       value="<?php echo escapeText($_POST["editprofile_changepassword_new1"]); ?>" required/>
+
+		<label for="editprofile_changepassword_new2">Neues Passwort wiederholen:</label>
+		<input type="password" id="editprofile_changepassword_new2" name="editprofile_changepassword_new2"
+		       value="<?php echo escapeText($_POST["editprofile_changepassword_new2"]); ?>" required/>
+
+		<input type="submit" value="Speichern"/>
+	</form>
+</div>
+
+<div id="editprofile_changeemail">
+	<?php
+	if ($_POST["editprofile_tab"] == "email")
+	{
+		if ($_POST["editprofile_changeemail_currentpassword"])
+		{
+			if ($_POST["editprofile_changeemail_new1"])
+			{
+				if (preg_match("/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i", $_POST["editprofile_changeemail_new1"]))
+				{
+					if ($_POST["editprofile_changeemail_new1"] == $_POST["editprofile_changeemail_new2"])
+					{
+						if (Constants::$accountManager->checkPassword($_POST["editprofile_changeemail_currentpassword"]))
+						{
+							$query = Constants::$pdo->prepare("UPDATE `users` SET `newEmail` = :email, `newEmailChangeDate` = NOW() WHERE `id` = :id");
+							$query->execute(array(":email" => $_POST["editprofile_changeemail_new1"], ":id" => Constants::$accountManager->getUserId()));
+
+							$userData = Constants::$accountManager->getUserData();
+
+							$replacements = array("FIRSTNAME" => $userData->firstName, "NEWEMAILADDRESS" => $userData->newEmail, "URL" => BASE_URL . "/internalarea/confirmemail/" . strtotime($userData->newEmailChangeDate), "TIMEOUT" => date("d.m.Y H:i:s", strtotime($userData->newEmailChangeDate) + TIMEOUT_CONFIRMLINK));
+							$mail = new Mail("Neue Email-Adresse bestätigen", $replacements);
+							$mail->setTemplate("confirm-email");
+							$mail->setTo($userData->newEmail);
+							if ($mail->send())
+							{
+								echo "<div class='info'>Es wurde eine Email mit dem Link zum Best&auml;tigen der Email-Adresse an die neue Email-Adresse gesendet.</div>";
+							}
+							else
+							{
+								echo "
+										<div class='error'>
+											<p>Beim Senden der Email ist ein Fehler aufgetreten!</p>
+											<p>Bitte versuchen Sie es sp&auml;ter erneut oder wenden Sie sich an den Webmaster.</p>
+										</div>
+									";
+							}
 						}
 						else
 						{
@@ -304,298 +381,204 @@ if ($userData->forcePasswordChange)
 					}
 					else
 					{
-						echo "<div class='error'>Das neue Passwort stimmt nicht mit dem wiederholen Passwort &uuml;berein!</div>";
+						echo "<div class='error'>Die neue Email-Adresse stimmt nicht mit der wiederholen Email-Adresse &uuml;berein!</div>";
 					}
 				}
 				else
 				{
-					echo "<div class='error'>Das neue Passwort muss mindestens " . PASSWORDS_MINLENGTH . " Zeichen haben!</div>";
+					echo "<div class='error'>Die neue Email-Adresse hat ein ung&uuml;tiges Format! Bitte verwende das Format <b>benutzername@domain.tld</b>.</div>";
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Das aktuelle Passwort muss angegeben werden!</div>";
+				echo "<div class='error'>Es muss eine neue Email-Adresse angegeben werden!</div>";
 			}
 		}
-		?>
-		
-		<form action="/internalarea/editprofile#editprofile_changepassword" method="post">
-			<input type="hidden" name="editprofile_tab" value="password"/>
-			
-			<label for="editprofile_changepassword_current">Aktuelles Passwort:</label>
-			<input type="password" id="editprofile_changepassword_current" name="editprofile_changepassword_current" value="<?php echo escapeText($_POST["editprofile_changepassword_current"]);?>" required/>
-			
-			<label for="editprofile_changepassword_new1">Neues Passwort:</label>
-			<input type="password" id="editprofile_changepassword_new1" name="editprofile_changepassword_new1" value="<?php echo escapeText($_POST["editprofile_changepassword_new1"]);?>" required/>
-			
-			<label for="editprofile_changepassword_new2">Neues Passwort wiederholen:</label>
-			<input type="password" id="editprofile_changepassword_new2" name="editprofile_changepassword_new2" value="<?php echo escapeText($_POST["editprofile_changepassword_new2"]);?>" required/>
-			
-			<input type="submit" value="Speichern"/>
-		</form>
-	</div>
-	
-	<div id="editprofile_changeemail">
-		<?php
-		if ($_POST["editprofile_tab"] == "email")
+		else
 		{
-			if ($_POST["editprofile_changeemail_currentpassword"])
-			{
-				if ($_POST["editprofile_changeemail_new1"])
-				{
-					if (preg_match("/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i", $_POST["editprofile_changeemail_new1"]))
-					{
-						if ($_POST["editprofile_changeemail_new1"] == $_POST["editprofile_changeemail_new2"])
-						{
-							if (Constants::$accountManager->checkPassword($_POST["editprofile_changeemail_currentpassword"]))
-							{
-								$query = Constants::$pdo->prepare("UPDATE `users` SET `newEmail` = :email, `newEmailChangeDate` = NOW() WHERE `id` = :id");
-								$query->execute(array
-								(
-									":email" => $_POST["editprofile_changeemail_new1"],
-									":id" => Constants::$accountManager->getUserId()
-								));
-								
-								$userData = Constants::$accountManager->getUserData();
-								
-								$replacements = array
-								(
-									"FIRSTNAME" => $userData->firstName,
-									"NEWEMAILADDRESS" => $userData->newEmail,
-									"URL" => BASE_URL . "/internalarea/confirmemail/" . strtotime($userData->newEmailChangeDate),
-									"TIMEOUT" => date("d.m.Y H:i:s", strtotime($userData->newEmailChangeDate) + TIMEOUT_CONFIRMLINK)
-								);
-								$mail = new Mail("Neue Email-Adresse bestätigen", $replacements);
-								$mail->setTemplate("confirm-email");
-								$mail->setTo($userData->newEmail);
-								if ($mail->send())
-								{
-									echo "<div class='info'>Es wurde eine Email mit dem Link zum Best&auml;tigen der Email-Adresse an die neue Email-Adresse gesendet.</div>";
-								}
-								else
-								{
-									echo "
-										<div class='error'>
-											<p>Beim Senden der Email ist ein Fehler aufgetreten!</p>
-											<p>Bitte versuchen Sie es sp&auml;ter erneut oder wenden Sie sich an den Webmaster.</p>
-										</div>
-									";
-								}
-							}
-							else
-							{
-								echo "<div class='error'>Das eingegebene Passwort ist falsch!</div>";
-							}
-						}
-						else
-						{
-							echo "<div class='error'>Die neue Email-Adresse stimmt nicht mit der wiederholen Email-Adresse &uuml;berein!</div>";
-						}
-					}
-					else
-					{
-						echo "<div class='error'>Die neue Email-Adresse hat ein ung&uuml;tiges Format! Bitte verwende das Format <b>benutzername@domain.tld</b>.</div>";
-					}
-				}
-				else
-				{
-					echo "<div class='error'>Es muss eine neue Email-Adresse angegeben werden!</div>";
-				}
-			}
-			else
-			{
-				echo "<div class='error'>Das aktuelle Passwort muss angegeben werden!</div>";
-			}
+			echo "<div class='error'>Das aktuelle Passwort muss angegeben werden!</div>";
 		}
-		?>
-		<form action="/internalarea/editprofile#editprofile_changeemail" method="post">
-			<input type="hidden" name="editprofile_tab" value="email"/>
-			
-			<label for="editprofile_changeemail_currentpassword">Aktuelles Passwort:</label>
-			<input type="password" id="editprofile_changeemail_currentpassword" name="editprofile_changeemail_currentpassword" value="<?php echo escapeText($_POST["editprofile_changeemail_currentpassword"]);?>" required/>
-			
-			<label for="editprofile_changeemail_current">Aktuelle Email-Adresse:</label>
-			<input type="text" class="input-email" id="editprofile_changeemail_current" value="<?php echo $userData->email;?>" disabled/>
-			
-			<label for="editprofile_changeemail_new1">Neue Email-Adresse:</label>
-			<input type="text" class="input-email" id="editprofile_changeemail_new1" name="editprofile_changeemail_new1" value="<?php echo escapeText($_POST["editprofile_changeemail_new1"]);?>" required/>
-			
-			<label for="editprofile_changeemail_new2">Neue Email-Adresse wiederholen:</label>
-			<input type="text" class="input-email" id="editprofile_changeemail_new2" name="editprofile_changeemail_new2" value="<?php echo escapeText($_POST["editprofile_changeemail_new2"]);?>" required/>
-			
-			<input type="submit" value="Speichern"/>
-		</form>
-	</div>
-	
-	<div id="editprofile_contact">
-		<?php
-		if ($_POST["editprofile_tab"] == "contact")
+	}
+	?>
+	<form action="/internalarea/editprofile#editprofile_changeemail" method="post">
+		<input type="hidden" name="editprofile_tab" value="email"/>
+
+		<label for="editprofile_changeemail_currentpassword">Aktuelles Passwort:</label>
+		<input type="password" id="editprofile_changeemail_currentpassword"
+		       name="editprofile_changeemail_currentpassword"
+		       value="<?php echo escapeText($_POST["editprofile_changeemail_currentpassword"]); ?>" required/>
+
+		<label for="editprofile_changeemail_current">Aktuelle Email-Adresse:</label>
+		<input type="text" class="input-email" id="editprofile_changeemail_current"
+		       value="<?php echo $userData->email; ?>" disabled/>
+
+		<label for="editprofile_changeemail_new1">Neue Email-Adresse:</label>
+		<input type="text" class="input-email" id="editprofile_changeemail_new1"
+		       name="editprofile_changeemail_new1"
+		       value="<?php echo escapeText($_POST["editprofile_changeemail_new1"]); ?>" required/>
+
+		<label for="editprofile_changeemail_new2">Neue Email-Adresse wiederholen:</label>
+		<input type="text" class="input-email" id="editprofile_changeemail_new2"
+		       name="editprofile_changeemail_new2"
+		       value="<?php echo escapeText($_POST["editprofile_changeemail_new2"]); ?>" required/>
+
+		<input type="submit" value="Speichern"/>
+	</form>
+</div>
+
+<div id="editprofile_contact">
+	<?php
+	if ($_POST["editprofile_tab"] == "contact")
+	{
+		$addQuery = Constants::$pdo->prepare("INSERT INTO `phonenumbers` (`userId`, `category`, `subCategory`, `number`) VALUES(:userId, :category, :subCategory, :number)");
+		$updateQuery = Constants::$pdo->prepare("UPDATE `phonenumbers` SET `category` = :category, `subCategory` = :subCategory, `number` = :number WHERE `id` = :id AND `userId` = :userId");
+		$entryIds = array();
+		foreach ($_POST as $field => $value)
 		{
-			$addQuery = Constants::$pdo->prepare("INSERT INTO `phonenumbers` (`userId`, `category`, `subCategory`, `number`) VALUES(:userId, :category, :subCategory, :number)");
-			$updateQuery = Constants::$pdo->prepare("UPDATE `phonenumbers` SET `category` = :category, `subCategory` = :subCategory, `number` = :number WHERE `id` = :id AND `userId` = :userId");
-			$entryIds = array();
-			foreach ($_POST as $field => $value)
+			if (preg_match("/^editprofile_contact_([0-9]+)_number$/", $field, $matches))
 			{
-				if (preg_match("/^editprofile_contact_([0-9]+)_number$/", $field, $matches))
+				if ($value)
 				{
-					if ($value)
-					{
-						$id = $matches[1];
-						$updateQuery->execute(array
-						(
-							":id" => $id,
-							":userId" => Constants::$accountManager->getUserId(),
-							":category" => $_POST["editprofile_contact_" . $id . "_category"],
-							":subCategory" => $_POST["editprofile_contact_" . $id . "_subcategory"],
-							":number" => $value
-						));
-						$entryIds[] = intval($id);
-					}
-				}
-				elseif (preg_match("/^editprofile_contact_new_([0-9]+)_number$/", $field, $matches))
-				{
-					if ($value)
-					{
-						$id = $matches[1];
-						$addQuery->execute(array
-						(
-							":userId" => Constants::$accountManager->getUserId(),
-							":category" => $_POST["editprofile_contact_new_" . $id . "_category"],
-							":subCategory" => $_POST["editprofile_contact_new_" . $id . "_subcategory"],
-							":number" => $value
-						));
-						$entryIds[] = Constants::$pdo->lastInsertId();
-					}
+					$id = $matches[1];
+					$updateQuery->execute(array(":id" => $id, ":userId" => Constants::$accountManager->getUserId(), ":category" => $_POST["editprofile_contact_" . $id . "_category"], ":subCategory" => $_POST["editprofile_contact_" . $id . "_subcategory"], ":number" => $value));
+					$entryIds[] = intval($id);
 				}
 			}
-			if (!empty($entryIds))
+			elseif (preg_match("/^editprofile_contact_new_([0-9]+)_number$/", $field, $matches))
 			{
-				$query = Constants::$pdo->prepare("DELETE FROM `phonenumbers` WHERE `userId` = :userId AND `id` NOT IN (" . implode(",", $entryIds) . ")");
-				$query->execute(array
-				(
-					":userId" => Constants::$accountManager->getUserId()
-				));
+				if ($value)
+				{
+					$id = $matches[1];
+					$addQuery->execute(array(":userId" => Constants::$accountManager->getUserId(), ":category" => $_POST["editprofile_contact_new_" . $id . "_category"], ":subCategory" => $_POST["editprofile_contact_new_" . $id . "_subcategory"], ":number" => $value));
+					$entryIds[] = Constants::$pdo->lastInsertId();
+				}
 			}
-			echo "<div class='ok'>Deine &Auml;nderungen wurden gespeichert.</div>";
 		}
-		?>
-		<form action="/internalarea/editprofile#editprofile_contact" method="post">
-			<input type="hidden" name="editprofile_tab" value="contact"/>
-			
-			<div id="editprofile_contact_div"></div>
-			<script type="text/javascript">
-				<?php
-				$query = Constants::$pdo->prepare("SELECT `id`, `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
-				$query->execute(array
-				(
-					":userId" => Constants::$accountManager->getUserId()
-				));
-				while ($row = $query->fetch())
-				{
-					echo "editprofile_contact_addPhoneNumber('" . $row->category . "', '" . $row->subCategory . "', '" . escapeText($row->number) . "', " . $row->id . ");";
-				}
-				?>
-			</script>
-			
-			<button id="editprofile_contact_addbutton" type="button">Hinzuf&uuml;gen</button>
-			
-			<input type="submit" value="Speichern"/>
-		</form>
-	</div>
+		if (!empty($entryIds))
+		{
+			$query = Constants::$pdo->prepare("DELETE FROM `phonenumbers` WHERE `userId` = :userId AND `id` NOT IN (" . implode(",", $entryIds) . ")");
+			$query->execute(array(":userId" => Constants::$accountManager->getUserId()));
+		}
+		echo "<div class='ok'>Deine &Auml;nderungen wurden gespeichert.</div>";
+	}
+	?>
+	<form action="/internalarea/editprofile#editprofile_contact" method="post">
+		<input type="hidden" name="editprofile_tab" value="contact"/>
+
+		<div id="editprofile_contact_div"></div>
+		<script type="text/javascript">
+			<?php
+			$query = Constants::$pdo->prepare("SELECT `id`, `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
+			$query->execute(array
+			(
+				":userId" => Constants::$accountManager->getUserId()
+			));
+			while ($row = $query->fetch())
+			{
+				echo "editprofile_contact_addPhoneNumber('" . $row->category . "', '" . $row->subCategory . "', '" . escapeText($row->number) . "', " . $row->id . ");";
+			}
+			?>
+		</script>
+
+		<button id="editprofile_contact_addbutton" type="button">Hinzuf&uuml;gen</button>
+
+		<input type="submit" value="Speichern"/>
+	</form>
+</div>
 </div>
 
 <script type="text/javascript">
 	$("#editprofile_tabs").tabs();
 	$("#editprofile_profilepicture_progressbar").progressbar(
-	{
-		change : function()
 		{
-			$("#editprofile_profilepicture_progressbar_label").text($("#editprofile_profilepicture_progressbar").progressbar("value") + "%");
-		}
-	});
-	
-	$("#editprofile_profilepicture_form").ajaxForm(
-	{
-		beforeSubmit : function()
-		{
-			$("#editprofile_profilepicture_progressbar").progressbar("value", 0);
-			$("#editprofile_profilepicture_form").slideUp(1000, function()
+			change: function ()
 			{
-				$("#editprofile_profilepicture_progressarea").slideDown(1000);
-			});
-		},
-		uploadProgress : function(event, position, total, percentComplete)
+				$("#editprofile_profilepicture_progressbar_label").text($("#editprofile_profilepicture_progressbar").progressbar("value") + "%");
+			}
+		});
+
+	$("#editprofile_profilepicture_form").ajaxForm(
 		{
-			$("#editprofile_profilepicture_progressbar").progressbar("value", percentComplete);
-		},
-		complete : function(response)
-		{
-			window.location.href = $("#editprofile_profilepicture_form").attr("action");
-			window.location.reload();
-		}
-	});
-	
+			beforeSubmit: function ()
+			{
+				$("#editprofile_profilepicture_progressbar").progressbar("value", 0);
+				$("#editprofile_profilepicture_form").slideUp(1000, function ()
+				{
+					$("#editprofile_profilepicture_progressarea").slideDown(1000);
+				});
+			},
+			uploadProgress: function (event, position, total, percentComplete)
+			{
+				$("#editprofile_profilepicture_progressbar").progressbar("value", percentComplete);
+			},
+			complete: function (response)
+			{
+				window.location.href = $("#editprofile_profilepicture_form").attr("action");
+				window.location.reload();
+			}
+		});
+
 	$("#editprofile_contact_addbutton").click(editprofile_contact_addPhoneNumber);
-	
+
 	function editprofile_profilePicture_FileSelectHandler()
 	{
 		var file = $("#editprofile_profilepicture_file")[0].files[0];
-		
+
 		if (file.type != "image/jpeg")
 		{
 			alert(unescape("Das ausgew%E4hlte Bild hat einen ung%FCltigen Dateintyp!\n\nBitte ein Bild vom Typ 'JPEG' (.jpg oder .jpeg) ausw%E4hlen."));
 			return;
 		}
-		
+
 		if (file.size > 1024 * 1024 * 10)// 10 MB
 		{
 			alert(unescape("Die maximal erlaubte Dateigr%F6%DFe ist 10 MB!"));
-			return ;
+			return;
 		}
-		
+
 		var previewImage = document.getElementById("editprofile_profilepicture_preview");
-		
+
 		var reader = new FileReader;
-		reader.onload = function(event)
+		reader.onload = function (event)
 		{
 			previewImage.src = event.target.result;
-			previewImage.onload = function()
+			previewImage.onload = function ()
 			{
 				$("#editprofile_profilepicture_editarea").slideDown(1000);
-				
+
 				if (typeof(editprofile_profilePicture_jcrop) != "undefined")
 				{
 					editprofile_profilePicture_jcrop.destroy();
 				}
-				
+
 				$("#editprofile_profilepicture_preview").Jcrop(
-				{
-					aspectRatio : 1,
-					boxWidth : 480,
-					minSize : [200, 200],
-					onRelease : editprofile_profilePicture_onRelease,
-					onSelect : editprofile_profilePicture_onSelect
-				}, function()
-				{
-					editprofile_profilePicture_jcrop = this;
-				});
+					{
+						aspectRatio: 1,
+						boxWidth: 480,
+						minSize: [200, 200],
+						onRelease: editprofile_profilePicture_onRelease,
+						onSelect: editprofile_profilePicture_onSelect
+					}, function ()
+					{
+						editprofile_profilePicture_jcrop = this;
+					});
 			}
-		}
+		};
 		reader.readAsDataURL(file);
 	}
-	
+
 	function editprofile_profilePicture_onRelease()
 	{
 		$("#editprofile_profilepicture_upload").slideUp(1000);
 	}
-	
+
 	function editprofile_profilePicture_onSelect(coords)
 	{
 		$("#editprofile_profilepicture_x").val(coords.x);
 		$("#editprofile_profilepicture_y").val(coords.y);
 		$("#editprofile_profilepicture_width").val(coords.w);
 		$("#editprofile_profilepicture_height").val(coords.h);
-		
+
 		$("#editprofile_profilepicture_upload").slideDown(1000);
 	}
 </script>

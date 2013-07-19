@@ -3,36 +3,31 @@
 	margin: 10px;
 	padding: 15px 10px 15px 50px;
 	border: 1px solid;
-	background-repeat: no-repeat;
-	background-position: 10px center;
+	background: no-repeat 10px center;
 	border-radius: 5px;
 	box-shadow: 1px 1px 15px #444;
 }
 
 .error
 {
-	background-color: #ffbaba;
-	background-image: url(/files/images/alerts/error.png);
+	background: #ffbaba url(/files/images/alerts/error.png);
 	color: #d8000c;
 }
 
 .info
 {
-	background-color: #bde5f8;
-	background-image: url(/files/images/alerts/info.png);
+	background: #bde5f8 url(/files/images/alerts/info.png);
 	color: #00529b;
 }
 
 .ok
 {
-	background-color: #dff2bf;
-	background-image: url(/files/images/alerts/ok.png);
+	background: #dff2bf url(/files/images/alerts/ok.png);
 	color: #4f8a10;
 }
 
 .warning
 {
-	background-color: #feefb3;
-	background-image: url(/files/images/alerts/warning.png);
+	background: #feefb3 url(/files/images/alerts/warning.png);
 	color: #9f6000;
 }

@@ -27,7 +27,7 @@
 	</tr>
 	<tr>
 		<td>1977:</td>
-		<td>Eigene Fastnachtsveranstaltung am Rosenmontag  in der Turnhalle</td>
+		<td>Eigene Fastnachtsveranstaltung am Rosenmontag in der Turnhalle</td>
 	</tr>
 	<tr>
 		<td>1978:</td>
@@ -43,11 +43,13 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>Bis 2010 Beteiligung am Altstadtfest mit Bewirtschaftung, zuerst in der Storrentorstra&szlig;e, dann auf Motex-Parkplatz</td>
+		<td>Bis 2010 Beteiligung am Altstadtfest mit Bewirtschaftung, zuerst in der Storrentorstra&szlig;e, dann
+			auf Motex-Parkplatz
+		</td>
 	</tr>
 	<tr>
 		<td>1981:</td>
-		<td>Auftritt  bei der Landesgartenschau in Baden-Baden</td>
+		<td>Auftritt bei der Landesgartenschau in Baden-Baden</td>
 	</tr>
 	<tr>
 		<td>1982:</td>
@@ -59,7 +61,9 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>Der Verein wird in das Vereinsregister eingetragen und lautet nun: Musikverein "Orgelfels" Reichental e.V.</td>
+		<td>Der Verein wird in das Vereinsregister eingetragen und lautet nun: Musikverein "Orgelfels"
+			Reichental e.V.
+		</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -103,7 +107,9 @@
 	</tr>
 	<tr>
 		<td>1998:</td>
-		<td>Am 2. Dezember startet die erste Blockfl&ouml;tengruppe, Ausbilder sind Sarah Knapp und Vanessa Kuhs</td>
+		<td>Am 2. Dezember startet die erste Blockfl&ouml;tengruppe, Ausbilder sind Sarah Knapp und Vanessa
+			Kuhs
+		</td>
 	</tr>
 	<tr>
 		<td>1999:</td>
@@ -111,7 +117,9 @@
 	</tr>
 	<tr>
 		<td>2000:</td>
-		<td>Im November findet der erste Jugendaktionstag im Pfarrheim statt bei dem die Jugendarbeit im Verein vorgestellt wird</td>
+		<td>Im November findet der erste Jugendaktionstag im Pfarrheim statt bei dem die Jugendarbeit im Verein
+			vorgestellt wird
+		</td>
 	</tr>
 	<tr>
 		<td></td>
@@ -135,7 +143,9 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>F&ouml;rderverein wird gegr&uuml;ndet.  Gleichberechtigte Vorst&auml;nde sind Esther Klumpp und Ulrike Brasseur</td>
+		<td>F&ouml;rderverein wird gegr&uuml;ndet. Gleichberechtigte Vorst&auml;nde sind Esther Klumpp und
+			Ulrike Brasseur
+		</td>
 	</tr>
 	<tr>
 		<td>2009:</td>
@@ -144,9 +154,10 @@
 	<tr>
 		<td></td>
 		<td>
-			Satzungs&auml;nderung: Der erste und zweite Vorstand werden zu gleichberechtigten Vorst&auml;nden eingetragen.<br />
-			Neues Vorstandsteam werden Erhard Klumpp und Birgit Gerweck.<br />
-			Guido Wieland gibt nach 16 Jahren die Vereinsspitze ab und &uuml;bernimmt von<br />
+			Satzungs&auml;nderung: Der erste und zweite Vorstand werden zu gleichberechtigten Vorst&auml;nden
+			eingetragen.<br/>
+			Neues Vorstandsteam werden Erhard Klumpp und Birgit Gerweck.<br/>
+			Guido Wieland gibt nach 16 Jahren die Vereinsspitze ab und &uuml;bernimmt von<br/>
 			Esther Klumpp die Stelle im Vorstandsteam des F&ouml;rdervereins
 		</td>
 	</tr>
@@ -156,7 +167,9 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>Zum ersten Mal in der Geschichte des Vereins absolviert eine Jungmusikerin, Liliane Brasseur, das Jungmusikerleistungsabzeichen in Gold</td>
+		<td>Zum ersten Mal in der Geschichte des Vereins absolviert eine Jungmusikerin, Liliane Brasseur, das
+			Jungmusikerleistungsabzeichen in Gold
+		</td>
 	</tr>
 	<tr>
 		<td>2011:</td>
@@ -165,7 +178,7 @@
 	<tr>
 		<td></td>
 		<td>
-			Erstes Herbstfest in der Festhalle mit Vorstellung der Jugendarbeit<br />
+			Erstes Herbstfest in der Festhalle mit Vorstellung der Jugendarbeit<br/>
 			Als Mittagessen wird Wildschweingulasch aus den heimischen W&auml;ldern serviert
 		</td>
 	</tr>
@@ -179,6 +192,8 @@
 	</tr>
 	<tr>
 		<td></td>
-		<td>Zusammen mit dem Musikverein Staufenberg wird das 43. Bezirkskonzert in der Stadthalle in Gernsbach organisiert</td>
+		<td>Zusammen mit dem Musikverein Staufenberg wird das 43. Bezirkskonzert in der Stadthalle in Gernsbach
+			organisiert
+		</td>
 	</tr>
 </table>

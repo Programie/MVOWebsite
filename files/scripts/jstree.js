@@ -1299,8 +1299,8 @@
 						}, this),
 						"keyup" : function (event) {
 							var key = event.keyCode || event.which;
-							if(key == 27) { this.value = t; this.blur(); return; }
-							else if(key == 13) { this.blur(); return; }
+							if(key == 27) { this.value = t; this.blur(); }
+							else if(key == 13) { this.blur(); }
 							else {
 								h2.width(Math.min(h1.text("pW" + this.value).width(),w));
 							}
@@ -1361,8 +1361,8 @@
 			check_move : function () {
 				if(!this.__call_old()) { return false; }
 				var s = this._get_settings().crrm.move;
-				if(!s.check_move.call(this, this._get_move())) { return false; }
-				return true;
+				return s.check_move.call(this, this._get_move());
+
 			},
 			move_node : function (obj, ref, position, is_copy, is_prepared, skip_check) {
 				var s = this._get_settings().crrm.move;

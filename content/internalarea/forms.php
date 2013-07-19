@@ -15,7 +15,7 @@ while ($row = $query->fetch())
 	{
 		continue;
 	}
-	
+
 	$forms[] = $row;
 }
 

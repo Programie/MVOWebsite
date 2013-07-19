@@ -8,25 +8,21 @@ if (Constants::$accountManager->getUserId())
 else
 {
 	$showResetForm = true;
-	
+
 	if (Constants::$pagePath[2])
 	{
 		$data = explode("-", Constants::$pagePath[2]);
 		if (count($data) == 2)
 		{
 			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `id` = :id AND `enabled` AND `resetPasswordDate` IS NOT NULL AND `resetPasswordDate` = :date");
-			$query->execute(array
-			(
-				":id" => $data[0],
-				":date" => date("Y-m-d H:i:s", $data[1])
-			));
+			$query->execute(array(":id" => $data[0], ":date" => date("Y-m-d H:i:s", $data[1])));
 			if ($query->rowCount())
 			{
 				$row = $query->fetch();
 				if ($data[1] >= time() - TIMEOUT_CONFIRMLINK)
 				{
 					$showChangeForm = true;
-					
+
 					if (isset($_POST["resetpassword_password1"]) and isset($_POST["resetpassword_password2"]))
 					{
 						if (strlen($_POST["resetpassword_password1"]) >= PASSWORDS_MINLENGTH)
@@ -35,9 +31,9 @@ else
 							{
 								Constants::$accountManager->loginWithUserId($row->id);
 								Constants::$accountManager->changePassword($_POST["resetpassword_password1"]);
-								
+
 								$showChangeForm = false;
-								
+
 								echo "<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert. Du bist nun angemeldet.</div>";
 							}
 							else
@@ -50,7 +46,7 @@ else
 							echo "<div class='error'>Bitte verwende ein Passwort mit mindestens " . PASSWORDS_MINLENGTH . " Zeichen!</div>";
 						}
 					}
-					
+
 					if ($showChangeForm)
 					{
 						echo "
@@ -64,7 +60,7 @@ else
 							</form>
 						";
 					}
-					
+
 					$showResetForm = false;
 				}
 				else
@@ -82,42 +78,28 @@ else
 			echo "<div class='error'>Ung&uuml;ltiger Schl&uuml;ssel!</div>";
 		}
 	}
-	
+
 	if ($showResetForm)
 	{
 		echo "<p>Wenn du dein Passwort vergessen hast, kannst du dieses auf dieser Seite zur&uuml;cksetzen.</p>";
-		
+
 		if (isset($_POST["resetpassword_username"]))
 		{
 			$time = time();
-			
+
 			$query = Constants::$pdo->prepare("SELECT `id`, `email`, `firstName`, `lastName` FROM `users` WHERE `enabled` AND `username` = :username");
-			$query->execute(array
-			(
-				":username" => $_POST["resetpassword_username"]
-			));
+			$query->execute(array(":username" => $_POST["resetpassword_username"]));
 			if ($query->rowCount())
 			{
 				$row = $query->fetch();
-				
+
 				$query = Constants::$pdo->prepare("UPDATE `users` SET `resetPasswordDate` = :date WHERE `id` = :id");
-				$query->execute(array
-				(
-					":date" => date("Y-m-d H:i:s", $time),
-					":id" => $row->id
-				));
-				
+				$query->execute(array(":date" => date("Y-m-d H:i:s", $time), ":id" => $row->id));
+
 				$key = $row->id . "-" . $time;
-				
-				$replacements = array
-				(
-					"FIRSTNAME" => $row->firstName,
-					"LASTNAME" => $row->lastName,
-					"URL" => BASE_URL . "/internalarea/resetpassword/" . $key,
-					"KEY" => $key,
-					"TIMEOUT" => date("d.m.Y H:i:s", $time + TIMEOUT_CONFIRMLINK)
-				);
-				
+
+				$replacements = array("FIRSTNAME" => $row->firstName, "LASTNAME" => $row->lastName, "URL" => BASE_URL . "/internalarea/resetpassword/" . $key, "KEY" => $key, "TIMEOUT" => date("d.m.Y H:i:s", $time + TIMEOUT_CONFIRMLINK));
+
 				$mail = new Mail("Passwort zurücksetzen", $replacements);
 				$mail->setTemplate("resetpassword");
 				$mail->setTo($row->email);

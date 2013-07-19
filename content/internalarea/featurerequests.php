@@ -8,11 +8,7 @@ if (isset($_POST["featurerequests_new_description"]))
 		if ($_POST["featurerequests_new_description"])
 		{
 			$query = Constants::$pdo->prepare("INSERT INTO `featurerequests` (`userId`, `date`, `description`, `status`) VALUES(:userId, NOW(), :description, 'new')");
-			$query->execute(array
-			(
-				":userId" => Constants::$accountManager->getUserId(),
-				":description" => $_POST["featurerequests_new_description"]
-			));
+			$query->execute(array(":userId" => Constants::$accountManager->getUserId(), ":description" => $_POST["featurerequests_new_description"]));
 			echo "<div class='ok'>Dein Verbesserungsvorschlag wurde erfolgreich eingetragen.</div>";
 		}
 		else
@@ -29,12 +25,14 @@ if (isset($_POST["featurerequests_new_description"]))
 
 <fieldset id="featurerequests_new_fieldset">
 	<legend>Neuer Verbesserungsvorschlag</legend>
-	
+
 	<form action="/internalarea/featurerequests" method="post">
-		<textarea id="featurerequests_new_description" name="featurerequests_new_description" rows="5" cols="15"></textarea>
-		
-		<input type="hidden" name="featurerequests_new_sendtoken" value="<?php echo TokenManager::getSendToken("featurerequests_new", true);?>"/>
-		
+		<textarea id="featurerequests_new_description" name="featurerequests_new_description" rows="5"
+			  cols="15"></textarea>
+
+		<input type="hidden" name="featurerequests_new_sendtoken"
+		       value="<?php echo TokenManager::getSendToken("featurerequests_new", true); ?>"/>
+
 		<input type="submit" value="OK"/>
 	</form>
 </fieldset>
@@ -55,39 +53,7 @@ if ($query->rowCount())
 			</thead>
 			<tbody>
 	";
-	$statusTypes = array
-	(
-		"new" => array
-		(
-			"order" => 1,
-			"title" => "Neu"
-		),
-		"accepted" => array
-		(
-			"order" => 2,
-			"title" => "Angenommen"
-		),
-		"declined" => array
-		(
-			"order" => 2,
-			"title" => "Abgelehnt"
-		),
-		"wip" => array
-		(
-			"order" => 3,
-			"title" => "In Bearbeitung"
-		),
-		"waitingforrelease" => array
-		(
-			"order" => 4,
-			"title" => "Ab dem n&auml;chsten Onlinegang verf&uuml;gbar"
-		),
-		"done" => array
-		(
-			"order" => 5,
-			"title" => "Fertig"
-		)
-	);
+	$statusTypes = array("new" => array("order" => 1, "title" => "Neu"), "accepted" => array("order" => 2, "title" => "Angenommen"), "declined" => array("order" => 2, "title" => "Abgelehnt"), "wip" => array("order" => 3, "title" => "In Bearbeitung"), "waitingforrelease" => array("order" => 4, "title" => "Ab dem n&auml;chsten Onlinegang verf&uuml;gbar"), "done" => array("order" => 5, "title" => "Fertig"));
 	while ($row = $query->fetch())
 	{
 		$row->date = strtotime($row->date);

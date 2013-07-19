@@ -103,7 +103,7 @@
         // yes i know, it fired for every created gallery (instead of asking the code implementer to fire it after all galleries are loaded)
         history.load();
         return this;
-    }
+    };
     
     Photobox = function(_options, object, target){
         this.options = $.extend({}, _options);
@@ -231,7 +231,7 @@
                 if( this.images.length < 2 )
                     overlay.removeClass('thumbs hasArrows hasCounter hasAutoplay');
                 else{
-                    overlay.addClass('hasArrows hasCounter')
+                    overlay.addClass('hasArrows hasCounter');
                     
                     // check is the autoplay button should be visible (per gallery) and if so, should it autoplay or not.
                     if( options.time > 1000 ){
@@ -278,7 +278,7 @@
 			close();
             return this.selector;
         }
-    }
+    };
     
     // on touch-devices only
     function onSwipe(e, Dx, Dy){
@@ -409,7 +409,7 @@
             e.stopPropagation();
             APControl[ options.autoplay ? 'pause' : 'play']();
         }
-    }
+    };
     
     function getPrefixed(prop){
         var i, s = doc.createElement('p').style, v = ['ms','O','Moz','Webkit'];

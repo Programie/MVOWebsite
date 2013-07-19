@@ -35,11 +35,7 @@ while ($row = $query->fetch())
 	}
 	else
 	{
-		$permissionCheckQuery->execute(array
-		(
-			":userId" => $row->id,
-			":permission" => "groups." . $activeGroup
-		));
+		$permissionCheckQuery->execute(array(":userId" => $row->id, ":permission" => "groups." . $activeGroup));
 		$show = $permissionCheckQuery->rowCount();
 	}
 	if ($show)
@@ -57,12 +53,12 @@ while ($row = $query->fetch())
 		$birthDayInterval = new DateInterval("P" . ($row->age + $addYear) . "Y");
 		$birthDate = $birthDate->add($birthDayInterval);
 		$row->nextBirthDay = $birthDate->getTimestamp();
-		
+
 		if ($nextBirthDay == null or $row->nextBirthDay < $nextBirthDay)
 		{
 			$nextBirthDay = $row->nextBirthDay;
 		}
-		
+
 		$users[] = $row;
 	}
 }
@@ -93,35 +89,35 @@ echo "<h1>" . $title . "</h1>";
 
 <table id="birthdays_table" class="table {sortlist: [[2,0]]}">
 	<thead>
-		<tr>
-			<th>Vorname</th>
-			<th>Nachname</th>
-			<th class="{sorter: 'number-attribute'}">Geburtstag</th>
-			<th>Geburtsjahr</th>
-			<th>Alter</th>
-		</tr>
+	<tr>
+		<th>Vorname</th>
+		<th>Nachname</th>
+		<th class="{sorter: 'number-attribute'}">Geburtstag</th>
+		<th>Geburtsjahr</th>
+		<th>Alter</th>
+	</tr>
 	</thead>
 	<tbody>
-		<?php
-		foreach ($users as $user)
+	<?php
+	foreach ($users as $user)
+	{
+		$rowClasses = array();
+
+		if (date("Y-m-d", $user->nextBirthDay) == date("Y-m-d", $nextBirthDay))
 		{
-			$rowClasses = array();
-			
-			if (date("Y-m-d", $user->nextBirthDay) == date("Y-m-d", $nextBirthDay))
-			{
-				$rowClasses[] = "table_highlight";
-			}
-			
-			$rowAttributes = array();
-			
-			if (!empty($rowClasses))
-			{
-				$rowAttributes[] = "class='" . implode(" ", $rowClasses) . "'";
-			}
-			
-			$birthDate = explode("-", $user->birthDate);
-			
-			echo "
+			$rowClasses[] = "table_highlight";
+		}
+
+		$rowAttributes = array();
+
+		if (!empty($rowClasses))
+		{
+			$rowAttributes[] = "class='" . implode(" ", $rowClasses) . "'";
+		}
+
+		$birthDate = explode("-", $user->birthDate);
+
+		echo "
 				<tr " . implode(" ", $rowAttributes) . ">
 					<td>" . escapeText($user->firstName) . "</td>
 					<td>" . escapeText($user->lastName) . "</td>
@@ -130,7 +126,7 @@ echo "<h1>" . $title . "</h1>";
 					<td>" . $user->age . "</td>
 				</tr>
 			";
-		}
-		?>
+	}
+	?>
 	</tbody>
 </table>

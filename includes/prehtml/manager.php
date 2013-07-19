@@ -5,7 +5,7 @@ if ($_SERVER["PHP_AUTH_USER"] == "manager" and $_SERVER["PHP_AUTH_PW"] == MANAGE
 	if ($data)
 	{
 		$data->service = basename($data->service);
-		
+
 		$file = ROOT_PATH . "/includes/remote_manager/Remote_" . $data->service . ".class.php";
 		if (file_exists($file))
 		{
@@ -39,11 +39,7 @@ if ($_SERVER["PHP_AUTH_USER"] == "manager" and $_SERVER["PHP_AUTH_PW"] == MANAGE
 	}
 
 	header("Content-Type: application/json");
-	echo json_encode(array
-	(
-		"id" => $data->id,
-		"result" => $response
-	));
+	echo json_encode(array("id" => $data->id, "result" => $response));
 }
 else
 {

@@ -17,10 +17,7 @@ else
 			break;
 		case "program":
 			$query = Constants::$pdo->prepare("SELECT `title`, `showInGroups`, `year` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` WHERE `notedirectory_programs`.`id` = :id");
-			$query->execute(array
-			(
-				":id" => Constants::$pagePath[3]
-			));
+			$query->execute(array(":id" => Constants::$pagePath[3]));
 			if ($query->rowCount())
 			{
 				$row = $query->fetch();
@@ -33,49 +30,51 @@ else
 echo "<h1>" . implode(" - ", $title) . "</h1>";
 ?>
 
-<ul id="notedirectory_selectionmenu" class="menu no-print">
-	<li>
-		<a href="#">Auswahl</a>
-		<ul>
-			<?php
-			if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
-			{
-				$years = array();
-				$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id`, `year`, `title` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`");
-				while ($row = $query->fetch())
+	<ul id="notedirectory_selectionmenu" class="menu no-print">
+		<li>
+			<a href="#">Auswahl</a>
+			<ul>
+				<?php
+				if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
 				{
-					$years[$row->year][$row->id] = $row->title;
-				}
-				foreach ($years as $year => $programs)
-				{
-					echo "
+					$years = array();
+					$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id`, `year`, `title` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`");
+					while ($row = $query->fetch())
+					{
+						$years[$row->year][$row->id] = $row->title;
+					}
+					foreach ($years as $year => $programs)
+					{
+						echo "
 						<li>
 							<a href='#'>" . $year . "</a>
 							<ul>
 					";
-					foreach ($programs as $id => $title)
-					{
-						echo "<li><a href='/internalarea/notedirectory/program/" . $id . "'>" . escapeText($title) . "</a></li>";
-					}
-					echo "
+						foreach ($programs as $id => $title)
+						{
+							echo "<li><a href='/internalarea/notedirectory/program/" . $id . "'>" . escapeText($title) . "</a></li>";
+						}
+						echo "
 							</ul>
 						</li>
 					";
+					}
 				}
-			}
-			?>
-			<li><a href="/internalarea/notedirectory/all">Alle Titel</a></li>
-		</ul>
-	</li>
-</ul>
+				?>
+				<li><a href="/internalarea/notedirectory/all">Alle Titel</a></li>
+			</ul>
+		</li>
+	</ul>
 
-<div id="notedirectory_options_div1" class="no-print">
-	<div id="notedirectory_options_div2">
-		<form id="notedirectory_searchform" action="/internalarea/notedirectory" method="post">
-			<input type="text" class="input-search" id="notedirectory_searchstring" name="notedirectory_searchstring" placeholder="Suchbegriff" value="<?php echo escapeText($_POST["notedirectory_searchstring"]);?>"/>
-		</form>
+	<div id="notedirectory_options_div1" class="no-print">
+		<div id="notedirectory_options_div2">
+			<form id="notedirectory_searchform" action="/internalarea/notedirectory" method="post">
+				<input type="text" class="input-search" id="notedirectory_searchstring"
+				       name="notedirectory_searchstring" placeholder="Suchbegriff"
+				       value="<?php echo escapeText($_POST["notedirectory_searchstring"]); ?>"/>
+			</form>
+		</div>
 	</div>
-</div>
 
 <?php
 if ($_POST["notedirectory_searchstring"])
@@ -98,19 +97,10 @@ if ($_POST["notedirectory_searchstring"])
 			`notedirectory_categories`.`title` LIKE :searchstring
 		ORDER BY `notedirectory_titles`.`categoryId` ASC
 	");
-	$query->execute(array
-	(
-		":searchstring" => "%" . $_POST["notedirectory_searchstring"] . "%"
-	));
-	
+	$query->execute(array(":searchstring" => "%" . $_POST["notedirectory_searchstring"] . "%"));
+
 	$noteDirectory = new NoteDirectory();
-	$noteDirectory->setColumns(array
-	(
-		"title" => "Titel",
-		"composer" => "Komponist",
-		"arranger" => "Bearbeiter",
-		"publisher" => "Verleger"
-	));
+	$noteDirectory->setColumns(array("title" => "Titel", "composer" => "Komponist", "arranger" => "Bearbeiter", "publisher" => "Verleger"));
 	$noteDirectory->setTitles($query->fetchAll());
 	$noteDirectory->setHighlight($_POST["notedirectory_searchstring"]);
 	$noteDirectory->setShowInGroups(true);
@@ -129,13 +119,7 @@ else
 			");
 			if ($query->rowCount())
 			{
-				$columns = array
-				(
-					"title" => "Titel",
-					"composer" => "Komponist",
-					"arranger" => "Bearbeiter",
-					"publisher" => "Verleger"
-				);
+				$columns = array("title" => "Titel", "composer" => "Komponist", "arranger" => "Bearbeiter", "publisher" => "Verleger");
 				$noteDirectory = new NoteDirectory();
 				$noteDirectory->setColumns($columns);
 				$noteDirectory->setTitles($query->fetchAll());
@@ -149,10 +133,7 @@ else
 			break;
 		case "details":
 			$query = Constants::$pdo->prepare("SELECT `title` FROM `notedirectory_titles` WHERE `id` = :id");
-			$query->execute(array
-			(
-				":id" => Constants::$pagePath[3]
-			));
+			$query->execute(array(":id" => Constants::$pagePath[3]));
 			if ($query->rowCount())
 			{
 				$row = $query->fetch();
@@ -164,10 +145,7 @@ else
 					LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`
 					WHERE `notedirectory_programtitles`.`titleId` = :id
 				");
-				$query->execute(array
-				(
-					":id" => Constants::$pagePath[3]
-				));
+				$query->execute(array(":id" => Constants::$pagePath[3]));
 				if ($query->rowCount())
 				{
 					echo "
@@ -216,20 +194,10 @@ else
 				WHERE `programId` = :programId
 				ORDER BY `notedirectory_titles`.`categoryId` ASC
 			");
-			$query->execute(array
-			(
-				":programId" => Constants::$pagePath[3]
-			));
+			$query->execute(array(":programId" => Constants::$pagePath[3]));
 			if ($query->rowCount())
 			{
-				$columns = array
-				(
-					"number" => "Nummer",
-					"title" => "Titel",
-					"composer" => "Komponist",
-					"arranger" => "Bearbeiter",
-					"publisher" => "Verleger"
-				);
+				$columns = array("number" => "Nummer", "title" => "Titel", "composer" => "Komponist", "arranger" => "Bearbeiter", "publisher" => "Verleger");
 				$noteDirectory = new NoteDirectory();
 				$noteDirectory->setColumns($columns);
 				$noteDirectory->setTitles($query->fetchAll());

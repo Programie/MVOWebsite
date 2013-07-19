@@ -7,7 +7,7 @@ img.movies_item_cover
 {
 	position: relative;
 	border-radius: 5px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 img.movies_item_disc
@@ -29,9 +29,9 @@ img.movies_item_disc2
 
 img.movies_item_disc
 {
-	-moz-transform: translate(90px,0) rotate(330deg);
-	-webkit-transform: translate(90px,0) rotate(330deg);
-	transform: translate(90px,0) rotate(330deg);
+	-moz-transform: translate(90px, 0) rotate(330deg);
+	-webkit-transform: translate(90px, 0) rotate(330deg);
+	transform: translate(90px, 0) rotate(330deg);
 }
 
 td.movies_item
@@ -42,8 +42,7 @@ td.movies_item
 
 td.movies_available, td.movies_unavailable
 {
-	background-repeat: no-repeat;
-	background-position: center center;
+	background: no-repeat center center;
 }
 
 td.movies_available

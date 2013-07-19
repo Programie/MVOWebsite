@@ -1,27 +1,27 @@
 <?php
 $yearFound = false;
-if (Constants::$pagePath[1])// Year
+if (Constants::$pagePath[1]) // Year
 {
 	$albumFound = false;
-	if (Constants::$pagePath[2])// Album
+	if (Constants::$pagePath[2]) // Album
 	{
 		$albumData = Pictures::getPictures(Constants::$pagePath[1], Constants::$pagePath[2]);
-		
+
 		if ($albumData)
 		{
 			$albumFound = true;
 			$yearFound = true;
 			$path = "files/pictures/" . basename(Constants::$pagePath[1]) . "/" . basename(Constants::$pagePath[2]);
 			$pictures = $albumData->pictures;
-			
+
 			echo "<h1>" . $albumData->title . "</h1>";
 			echo "<p>Datum: " . date("d.m.Y", strtotime($albumData->date)) . "</p>";
-			
+
 			if ($albumData->text)
 			{
 				echo "<p id='pictures_text'>" . formatText($albumData->text) . "</p>";
 			}
-			
+
 			echo "<ul id='gallery' class='polaroids'>";
 			foreach ($pictures as $number => $data)
 			{
@@ -49,17 +49,17 @@ if (Constants::$pagePath[1])// Year
 			";
 		}
 	}
-	
+
 	if (!$albumFound)
 	{
 		$albums = Pictures::getAlbums(Constants::$pagePath[1]);
-		
+
 		if ($albums)
 		{
 			$yearFound = true;
-			
+
 			echo "<h1>Fotogalerie von " . Constants::$pagePath[1] . "</h1>";
-			
+
 			echo "<ul class='polaroids'>";
 			foreach ($albums as $data)
 			{
@@ -72,7 +72,7 @@ if (Constants::$pagePath[1])// Year
 				";
 			}
 			echo "</ul>";
-			
+
 			echo "<div class='clear'></div>";
 		}
 	}
@@ -80,30 +80,24 @@ if (Constants::$pagePath[1])// Year
 if (!$yearFound)
 {
 	echo "<h1>Fotogalerie</h1>";
-	
+
 	$years = Pictures::getYears();
 	krsort($years, SORT_NUMERIC);
-	
+
 	$queryId = Constants::$pdo->prepare("SELECT `name`, `coverPicture` FROM `picturealbums` WHERE `id` = :id");
 	$queryYear = Constants::$pdo->prepare("SELECT `name`, `coverPicture` FROM `picturealbums` WHERE YEAR(`date`) = :year ORDER BY `id` ASC LIMIT 1");
-	
+
 	echo "<ul class='polaroids'>";
 	foreach ($years as $year => $data)
 	{
-		$queryId->execute(array
-		(
-			":id" => $data->coverAlbumId
-		));
+		$queryId->execute(array(":id" => $data->coverAlbumId));
 		if ($queryId->rowCount())
 		{
 			$query = $queryId;
 		}
 		else
 		{
-			$queryYear->execute(array
-			(
-				":year" => $year
-			));
+			$queryYear->execute(array(":year" => $year));
 			$query = $queryYear;
 		}
 		$albumRow = $query->fetch();
@@ -116,7 +110,7 @@ if (!$yearFound)
 		";
 	}
 	echo "</ul>";
-	
+
 	echo "<div class='clear'></div>";
 }
 ?>

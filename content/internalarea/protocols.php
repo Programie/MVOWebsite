@@ -1,4 +1,5 @@
 <?php
+$userGroups = array();
 $query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups`");
 while ($row = $query->fetch())
 {
@@ -14,7 +15,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 	if ($_POST["protocols_upload_confirmed"])
 	{
 		$error = "Beim Hochladen ist ein Fehler aufgetreten! Bitte versuche es erneut oder wende dich an den Webmaster.";
-		
+
 		if ($_POST["protocols_upload_sendtoken"] == TokenManager::getSendToken("protocols_upload"))
 		{
 			$date = explode(".", $_POST["protocols_upload_date"]);
@@ -22,7 +23,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 			{
 				$permissionQuery = Constants::$pdo->prepare("SELECT `userId` FROM `permissions` WHERE `permission` = :permission");
 				$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id AND `enabled`");
-				
+
 				$mailRecipients = array();
 				$groups = array();
 				foreach ($_POST as $field => $value)
@@ -30,19 +31,13 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 					if (substr($field, 0, 24) == "protocols_upload_groups_" and $value)
 					{
 						$group = substr($field, 24);
-						
+
 						$groups[] = $group;
-						
-						$permissionQuery->execute(array
-						(
-							":permission" => "groups." . $group
-						));
+
+						$permissionQuery->execute(array(":permission" => "groups." . $group));
 						while ($permissionRow = $permissionQuery->fetch())
 						{
-							$userQuery->execute(array
-							(
-								":id" => $permissionRow->userId
-							));
+							$userQuery->execute(array(":id" => $permissionRow->userId));
 							$userRow = $userQuery->fetch();
 							if ($userRow->email)
 							{
@@ -51,7 +46,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 						}
 					}
 				}
-				
+
 				if (empty($groups))
 				{
 					$error = "Keine Gruppe ausgew&auml;hlt!";
@@ -66,42 +61,24 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 							if (move_uploaded_file($file["tmp_name"], UPLOAD_PATH . "/" . $fileName))
 							{
 								$query = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
-								$query->execute(array
-								(
-									":name" => $fileName,
-									":title" => $file["name"]
-								));
+								$query->execute(array(":name" => $fileName, ":title" => $file["name"]));
 								$uploadId = Constants::$pdo->lastInsertId();
-								
+
 								$query = Constants::$pdo->prepare("INSERT INTO `protocols` (`userId`, `uploadId`, `groups`, `date`, `name`) VALUES(:userId, :uploadId, :groups, :date, :name)");
-								$query->execute(array
-								(
-									":userId" => $userData->id,
-									":uploadId" => $uploadId,
-									":groups" => implode(",", $groups),
-									":date" => $date[2] . "-" . $date[1] . "-" . $date[0],
-									":name" => $_POST["protocols_upload_name"]
-								));
-								
+								$query->execute(array(":userId" => $userData->id, ":uploadId" => $uploadId, ":groups" => implode(",", $groups), ":date" => $date[2] . "-" . $date[1] . "-" . $date[0], ":name" => $_POST["protocols_upload_name"]));
+
 								if ($_POST["protocols_upload_sendmail"])
 								{
-									$replacements = array
-									(
-										"FIRSTNAME" => $userData->firstName,
-										"LASTNAME" => $userData->lastName,
-										"DATE" => $_POST["protocols_upload_date"],
-										"NAME" => $_POST["protocols_upload_name"],
-										"URL" => BASE_URL . "/uploads/" . $uploadId . "/" . $fileName
-									);
+									$replacements = array("FIRSTNAME" => $userData->firstName, "LASTNAME" => $userData->lastName, "DATE" => $_POST["protocols_upload_date"], "NAME" => $_POST["protocols_upload_name"], "URL" => BASE_URL . "/uploads/" . $uploadId . "/" . $fileName);
 									$mail = new Mail("Protokoll hochgeladen", $replacements);
 									$mail->setTemplate("protocol-uploaded");
 									$mail->setTo($mailRecipients);
 									$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
 									$mail->send();
 								}
-								
+
 								echo "<div class='ok'>Das Protokoll wurde erfolgreich hochgeladen.</div>";
-								
+
 								$error = "";
 							}
 							break;
@@ -174,12 +151,12 @@ $query = Constants::$pdo->query("SELECT `uploadId`, `groups`, `date`, `protocols
 while ($row = $query->fetch())
 {
 	$row->groups = explode(",", $row->groups);
-	
+
 	if (!Constants::$accountManager->hasPermissionInArray($row->groups, "protocols.view"))
 	{
 		continue;
 	}
-	
+
 	$protocols[] = $row;
 }
 
@@ -207,9 +184,9 @@ else
 		{
 			$groupTitles[] = escapeText($userGroups[$group]);
 		}
-		
+
 		$date = strtotime($row->date);
-		
+
 		echo "
 			<tr class='pointer' onclick='document.location=\"/uploads/" . $row->uploadId . "/" . $row->uploadName . "\";'>
 				<td number='" . $date . "'>" . date("d.m.Y", $date) . "</td>
@@ -227,46 +204,46 @@ else
 
 <div id="protocols_upload_confirm" title="Protokoll hochladen">
 	<p>Soll das ausgew&auml;hlte Protokoll jetzt hochgeladen werden?</p>
+
 	<p>Das Protokoll wird f&uuml;r die folgenden Benutzergruppen sichtbar sein:</p>
 	<ul id="protocols_upload_confirm_groups"></ul>
 </div>
 
 <script type="text/javascript">
 	$("#protocols_upload_confirm").dialog(
-	{
-		closeText : "Schlie&szlig;en",
-		resizable : false,
-		modal : true,
-		width : "auto",
-		maxHeight : 500,
-		autoOpen : false,
-		buttons :
 		{
-			"Hochladen" : function()
-			{
-				$("#protocols_upload_confirmed").val(true);
-				document.getElementById("protocols_upload_form").submit();
-			},
-			"Abbrechen" : function()
-			{
-				$(this).dialog("close");
+			closeText: "Schlie&szlig;en",
+			resizable: false,
+			modal: true,
+			width: "auto",
+			maxHeight: 500,
+			autoOpen: false,
+			buttons: {
+				"Hochladen": function ()
+				{
+					$("#protocols_upload_confirmed").val(true);
+					document.getElementById("protocols_upload_form").submit();
+				},
+				"Abbrechen": function ()
+				{
+					$(this).dialog("close");
+				}
 			}
-		}
-	});
-	
+		});
+
 	function protocols_confirmUpload()
 	{
 		var groups = 0;
 		$("#protocols_upload_confirm_groups").html("");
-		$("#protocols_upload_groups input:checkbox").each(function()
+		$("#protocols_upload_groups input:checkbox").each(function ()
 		{
 			if ($(this).is(":checked"))
 			{
 				groups++;
-				$("#protocols_upload_confirm_groups").append("<li>" + $("label[for='" + $(this).attr("id") + "']").text()+ "</li>");
+				$("#protocols_upload_confirm_groups").append("<li>" + $("label[for='" + $(this).attr("id") + "']").text() + "</li>");
 			}
 		});
-		
+
 		if ($("#protocols_upload_date").val())
 		{
 			if ($("#protocols_upload_file").val())

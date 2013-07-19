@@ -35,7 +35,7 @@ if (Constants::$accountManager->getUserId())
 			$userGroups[] = $row;
 		}
 	}
-	
+
 	if (Constants::$accountManager->hasPermission("dates.edit"))
 	{
 		if (isset($_POST["dates_edit_id"]))
@@ -46,10 +46,7 @@ if (Constants::$accountManager->getUserId())
 				if ($id and $_POST["dates_edit_hide"])
 				{
 					$query = Constants::$pdo->prepare("UPDATE `dates` SET `enabled` = '0' WHERE `id` = :id");
-					$query->execute(array
-					(
-						":id" => $_POST["dates_edit_id"]
-					));
+					$query->execute(array(":id" => $_POST["dates_edit_id"]));
 					$dates = Dates::getDates($year, $activeGroups);
 					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
@@ -62,26 +59,20 @@ if (Constants::$accountManager->getUserId())
 						if ($_POST["dates_edit_location"])
 						{
 							$query = Constants::$pdo->prepare("SELECT `id` FROM `locations` WHERE `name` = :name");
-							$query->execute(array
-							(
-								":name" => $_POST["dates_edit_location"]
-							));
+							$query->execute(array(":name" => $_POST["dates_edit_location"]));
 							$row = $query->fetch();
 							$locationId = $row->id;
 							if (!$locationId)
 							{
 								$query = Constants::$pdo->prepare("INSERT INTO `locations` (`name`) VALUES(:name)");
-								$query->execute(array
-								(
-									":name" => $_POST["dates_edit_location"]
-								));
+								$query->execute(array(":name" => $_POST["dates_edit_location"]));
 								$locationId = Constants::$pdo->lastInsertId();
 							}
 						}
-						
+
 						$startTime = $_POST["dates_edit_time_start"];
 						$endTime = $_POST["dates_edit_time_end"];
-						
+
 						$endDate = null;
 						if ($startTime and $endTime)
 						{
@@ -99,18 +90,8 @@ if (Constants::$accountManager->getUserId())
 						{
 							$groups[] = "public";
 						}
-						
-						$queryData = array
-						(
-							":startDate" => $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $startTime,
-							":endDate" => $endDate,
-							":groups" => implode(",", $groups),
-							":title" => $_POST["dates_edit_title"],
-							":description" => $_POST["dates_edit_description"],
-							":locationId" => $locationId,
-							":showInAttendanceList" => !!$_POST["dates_edit_options_showinattendancelist"],
-							":bold" => !!$_POST["dates_edit_options_bold"]
-						);
+
+						$queryData = array(":startDate" => $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $startTime, ":endDate" => $endDate, ":groups" => implode(",", $groups), ":title" => $_POST["dates_edit_title"], ":description" => $_POST["dates_edit_description"], ":locationId" => $locationId, ":showInAttendanceList" => !!$_POST["dates_edit_options_showinattendancelist"], ":bold" => !!$_POST["dates_edit_options_bold"]);
 						if ($id)
 						{
 							$query = Constants::$pdo->prepare("
@@ -171,7 +152,7 @@ if (!empty($userGroups))
 			$group->active = true;
 		}
 	}
-	
+
 	echo "
 		<fieldset class='no-print' id='dates_groups'>
 			<legend>Gruppen</legend>
@@ -180,7 +161,7 @@ if (!empty($userGroups))
 	foreach ($userGroups as $group)
 	{
 		$checked = "";
-		
+
 		if ($group->active)
 		{
 			$checked = "checked='checked'";
@@ -256,12 +237,8 @@ if ($dates)
 		{
 			$rowClasses[] = "dates_showinattendancelist";
 		}
-		
-		$rowAttributes = array
-		(
-			"dateid='" . $date->id . "'",
-			"startdate='" . $date->startDate . "'"
-		);
+
+		$rowAttributes = array("dateid='" . $date->id . "'", "startdate='" . $date->startDate . "'");
 		if ($date->endDate)
 		{
 			$rowAttributes[] = "enddate='" . $date->endDate . "'";
@@ -270,12 +247,12 @@ if ($dates)
 		{
 			$rowAttributes[] = "groups='" . implode(" ", $date->groups) . "'";
 		}
-		
+
 		if (!empty($rowClasses))
 		{
 			$rowAttributes[] = "class='" . implode(" ", $rowClasses) . "'";
 		}
-		
+
 		if ($date->location->latitude and $date->location->longitude)
 		{
 			$location = "<a class='colorbox-iframe' href='http://maps.google.com/maps?f=q&amp;q=loc:" . $date->location->latitude . "," . $date->location->longitude . "&amp;z=17&amp;iwloc=near&amp;output=embed' title='" . $date->location->name . "'>" . $date->location->name . "</a>";
@@ -284,11 +261,11 @@ if ($dates)
 		{
 			$location = $date->location->name;
 		}
-		
+
 		echo "
 			<tr " . implode(" ", $rowAttributes) . ">
 				<td number='" . $date->startDate . "' class='nowrap'>" . Dates::getDateText($date->startDate) . "</td>
-				<td number='" . $date->startDate . "' class='nowrap'>" . Dates::getTimeText($date->startDate, $date->endDate). "</td>
+				<td number='" . $date->startDate . "' class='nowrap'>" . Dates::getTimeText($date->startDate, $date->endDate) . "</td>
 				<td class='dates_titledescription'>
 					<span>" . $date->title . "</span>
 		";
@@ -412,7 +389,7 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 	function dates_applyGroups(form)
 	{
 		var groups = [];
-		$(form).find("input:checkbox").each(function()
+		$(form).find("input:checkbox").each(function ()
 		{
 			if ($(this).is(":checked"))
 			{
@@ -421,154 +398,155 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 		});
 		document.location.href = "/dates/<?php echo $year;?>/" + groups.join("+");
 	}
-	
+
 	$("#dates_tabs").tabs();
-	
-	<?php
-	if (Constants::$accountManager->hasPermission("dates.edit"))
+
+<?php
+if (Constants::$accountManager->hasPermission("dates.edit"))
+{
+	$locations = array();
+	$query = Constants::$pdo->query("SELECT `name` FROM `locations`");
+	while ($row = $query->fetch())
 	{
-		$locations = array();
-		$query = Constants::$pdo->query("SELECT `name` FROM `locations`");
-		while ($row = $query->fetch())
+		$locations[] = $row->name;
+	}
+?>
+
+	$("#dates_edit_location").autocomplete(
+	{
+		source: <?php echo json_encode($locations);?>
+	});
+
+	$("#dates_hide").dialog(
+	{
+		autoOpen: false,
+		closeText: "Schlie&szlig;en",
+		modal: true,
+		resizable: false,
+		title: "Termin ausblenden",
+		width: "auto",
+		buttons:
 		{
-			$locations[] = $row->name;
-		}
-		?>
-		$("#dates_edit_location").autocomplete(
-		{
-			source : <?php echo json_encode($locations);?>
-		});
-		
-		$("#dates_hide").dialog(
-		{
-			autoOpen : false,
-			closeText : "Schlie&szlig;en",
-			modal : true,
-			resizable : false,
-			title : "Termin ausblenden",
-			width : "auto",
-			buttons :
+			"OK": function ()
 			{
-				"OK" : function()
-				{
-					$("#dates_hide_form")[0].submit();
-				},
-				"Abbrechen" : function()
-				{
-					$(this).dialog("close");
-				}
+				$("#dates_hide_form")[0].submit();
+			},
+			"Abbrechen": function ()
+			{
+				$(this).dialog("close");
 			}
-		});
-		
-		$("#dates_edit").dialog(
+		}
+	});
+
+	$("#dates_edit").dialog(
+	{
+		autoOpen: false,
+		closeText: "Schlie&szlig;en",
+		height: 600,
+		minWidth: 500,
+		modal: true,
+		width: 800,
+		buttons:
 		{
-			autoOpen : false,
-			closeText : "Schlie&szlig;en",
-			height : 600,
-			minWidth : 500,
-			modal : true,
-			width : 800,
-			buttons :
+			"OK": function ()
 			{
-				"OK" : function()
+				if ($("#dates_edit_title").val())
 				{
-					if ($("#dates_edit_title").val())
+					if ($("#dates_edit_date").val())
 					{
-						if ($("#dates_edit_date").val())
-						{
-							$("#dates_edit_form")[0].submit();
-						}
-						else
-						{
-							alert("Kein Datum angegeben!");
-						}
+						$("#dates_edit_form")[0].submit();
 					}
 					else
 					{
-						alert("Kein Titel angegeben!");
+						alert("Kein Datum angegeben!");
 					}
-				},
-				"Abbrechen" : function()
-				{
-					$(this).dialog("close");
 				}
-			}
-		});
-		
-		$("#dates_add_button").click(function()
-		{
-			$("#dates_edit_form")[0].reset();
-			$("#dates_edit_id").val(0);
-			$("#dates_edit").dialog("option", "title", $("#dates_add_button").text());
-			$("#dates_edit").dialog("open");
-		});
-		
-		$("#dates_table tbody tr").contextMenu("dates_edit_contextmenu",
-		{
-			bindings :
+				else
+				{
+					alert("Kein Titel angegeben!");
+				}
+			},
+			"Abbrechen": function ()
 			{
-				dates_edit_contextmenu_edit : function(trigger)
-				{
-					$("#dates_edit_form")[0].reset();
-					
-					var startDate = new Date($(trigger).attr("startdate") * 1000);
-					var endDate = new Date($(trigger).attr("enddate") * 1000);
-					var startTime;
-					var endTime;
-					if (startDate && (startDate.getHours() || startDate.getMinutes()))
-					{
-						startTime = ("0" + startDate.getHours()).slice(-2) + ":" + ("0" + startDate.getMinutes()).slice(-2);
-					}
-					if (endDate && (endDate.getHours() || endDate.getMinutes()))
-					{
-						endTime = ("0" + endDate.getHours()).slice(-2) + ":" + ("0" + endDate.getMinutes()).slice(-2);
-					}
-					
-					var groups = $(trigger).attr("groups");
-					if (groups)
-					{
-						groups = groups.split(" ");
-						for (var group in groups)
-						{
-							$("#dates_edit_groups_" + groups[group]).prop("checked", true);
-						}
-					}
-					
-					$("#dates_edit_id").val($(trigger).attr("dateid"));
-					$("#dates_edit_date").datepicker("setDate", startDate);
-					$("#dates_edit_time_start").val(startTime);
-					$("#dates_edit_time_end").val(endTime);
-					$("#dates_edit_title").val($($(trigger).find("td.dates_titledescription span")[0]).text());
-					$("#dates_edit_description").val($($(trigger).find("td.dates_titledescription p")[0]).text());
-					$("#dates_edit_location").val($(trigger).find("td.dates_location").text());
-					$("#dates_edit_options_bold").prop("checked", $(trigger).hasClass("bold"));
-					$("#dates_edit_options_showinattendancelist").prop("checked", $(trigger).hasClass("dates_showinattendancelist"));
-					$("#dates_edit").dialog("option", "title", "Termin bearbeiten");
-					$("#dates_edit").dialog("open");
-				},
-				
-				dates_edit_contextmenu_hide : function(trigger)
-				{
-					var column = 0;
-					var confirmTableCells = $("#dates_hide table td span");
-					$(trigger).find("td").each(function()
-					{
-						if ($(this).children().length > 0)
-						{
-							$(confirmTableCells[column]).text($($(this).children()[0]).text());
-						}
-						else
-						{
-							$(confirmTableCells[column]).text($(this).text());
-						}
-						column++;
-					});
-					$("#dates_hide_id").val($(trigger).attr("dateid"));
-					$("#dates_hide").dialog("open");
-				}
+				$(this).dialog("close");
 			}
-		});
-		<?php
-	}
-	?>
+		}
+	});
+
+	$("#dates_add_button").click(function ()
+	{
+		$("#dates_edit_form")[0].reset();
+		$("#dates_edit_id").val(0);
+		$("#dates_edit").dialog("option", "title", $("#dates_add_button").text());
+		$("#dates_edit").dialog("open");
+	});
+
+	$("#dates_table tbody tr").contextMenu("dates_edit_contextmenu",
+	{
+		bindings:
+		{
+			dates_edit_contextmenu_edit: function (trigger)
+			{
+				$("#dates_edit_form")[0].reset();
+
+				var startDate = new Date($(trigger).attr("startdate") * 1000);
+				var endDate = new Date($(trigger).attr("enddate") * 1000);
+				var startTime;
+				var endTime;
+				if (startDate && (startDate.getHours() || startDate.getMinutes()))
+				{
+					startTime = ("0" + startDate.getHours()).slice(-2) + ":" + ("0" + startDate.getMinutes()).slice(-2);
+				}
+				if (endDate && (endDate.getHours() || endDate.getMinutes()))
+				{
+					endTime = ("0" + endDate.getHours()).slice(-2) + ":" + ("0" + endDate.getMinutes()).slice(-2);
+				}
+
+				var groups = $(trigger).attr("groups");
+				if (groups)
+				{
+					groups = groups.split(" ");
+					for (var group in groups)
+					{
+						$("#dates_edit_groups_" + groups[group]).prop("checked", true);
+					}
+				}
+
+				$("#dates_edit_id").val($(trigger).attr("dateid"));
+				$("#dates_edit_date").datepicker("setDate", startDate);
+				$("#dates_edit_time_start").val(startTime);
+				$("#dates_edit_time_end").val(endTime);
+				$("#dates_edit_title").val($($(trigger).find("td.dates_titledescription span")[0]).text());
+				$("#dates_edit_description").val($($(trigger).find("td.dates_titledescription p")[0]).text());
+				$("#dates_edit_location").val($(trigger).find("td.dates_location").text());
+				$("#dates_edit_options_bold").prop("checked", $(trigger).hasClass("bold"));
+				$("#dates_edit_options_showinattendancelist").prop("checked", $(trigger).hasClass("dates_showinattendancelist"));
+				$("#dates_edit").dialog("option", "title", "Termin bearbeiten");
+				$("#dates_edit").dialog("open");
+			},
+
+			dates_edit_contextmenu_hide: function (trigger)
+			{
+				var column = 0;
+				var confirmTableCells = $("#dates_hide table td span");
+				$(trigger).find("td").each(function ()
+				{
+					if ($(this).children().length > 0)
+					{
+						$(confirmTableCells[column]).text($($(this).children()[0]).text());
+					}
+					else
+					{
+						$(confirmTableCells[column]).text($(this).text());
+					}
+					column++;
+				});
+				$("#dates_hide_id").val($(trigger).attr("dateid"));
+				$("#dates_hide").dialog("open");
+			}
+		}
+	});
+<?php
+}
+?>
 </script>

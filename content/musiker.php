@@ -22,21 +22,14 @@ echo "<h1>Musiker</h1>";
 foreach ($groups as $groupRow)
 {
 	echo "<h2>" . $groupRow->title . "</h2>";
-	
+
 	echo "<ul class='musiker polaroids'>";
 	foreach ($users as $userRow)
 	{
-		$checkUserInGroup->execute(array
-		(
-			":userId" => $userRow->id,
-			":permission" => "groups.musiker." . $groupRow->name
-		));
+		$checkUserInGroup->execute(array(":userId" => $userRow->id, ":permission" => "groups.musiker." . $groupRow->name));
 		if ($checkUserInGroup->rowCount())
 		{
-			$checkHide->execute(array
-			(
-				":userId" => $userRow->id
-			));
+			$checkHide->execute(array(":userId" => $userRow->id));
 			if (!$checkHide->rowCount())
 			{
 				if (file_exists(ROOT_PATH . "/files/profilepictures/" . $userRow->id . ".jpg"))
@@ -67,8 +60,8 @@ foreach ($groups as $groupRow)
 
 <script type="text/javascript">
 	$(".musiker").photobox("li > a",
-	{
-		history : false,
-		time : 10000
-	});
+		{
+			history: false,
+			time: 10000
+		});
 </script>

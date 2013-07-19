@@ -63,7 +63,7 @@ class MessageManager
 			";
 		}
 	}
-	
+
 	public function processEdit()
 	{
 		if (Constants::$accountManager->hasPermission("messages.delete"))
@@ -73,10 +73,7 @@ class MessageManager
 				if ($_POST["messages_hide_sendtoken"] == TokenManager::getSendToken("messages_hide"))
 				{
 					$query = Constants::$pdo->prepare("UPDATE `messages` SET `enabled` = '0' WHERE `id` = :id");
-					$query->execute(array
-					(
-						":id" => $_POST["messages_hide_id"]
-					));
+					$query->execute(array(":id" => $_POST["messages_hide_id"]));
 					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
 				else
@@ -86,15 +83,15 @@ class MessageManager
 			}
 		}
 	}
-	
+
 	public function showMessage($id)
 	{
 		$uploadedFileQuery = Constants::$pdo->prepare("SELECT `name`, `title` FROM `uploads` WHERE `id` = :id");
 		$userGroupsQuery = Constants::$pdo->prepare("SELECT `title` FROM `usergroups` WHERE `name` = :name");
 		$userQuery = Constants::$pdo->prepare("SELECT `id`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
-		
+
 		$sql = array();
-		
+
 		$sql[] = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`validTill`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages`";
 		$sql[] = "LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
 		$sql[] = "WHERE `messages`.`enabled`";
@@ -107,15 +104,12 @@ class MessageManager
 		{
 			$sql[] = "AND `messages`.`id` = :id";
 			$query = Constants::$pdo->prepare(implode(" ", $sql));
-			$query->execute(array
-			(
-				":id" => $id
-			));
+			$query->execute(array(":id" => $id));
 		}
-		
+
 		$messageCount = 0;
 		$expired = false;
-		
+
 		while ($row = $query->fetch())
 		{
 			if ($id > 0 and strtotime($row->validTill . " 23:59:59") < time())
@@ -123,17 +117,17 @@ class MessageManager
 				$expired = true;
 				break;
 			}
-			
+
 			$targetGroups = explode(",", $row->targetGroups);
 			$attachedFiles = explode(",", $row->attachedFiles);
-			
+
 			$allowed = false;
-			
+
 			if ($row->userId == Constants::$accountManager->getUserId())
 			{
 				$allowed = true;
 			}
-			
+
 			if (!$allowed)
 			{
 				foreach ($targetGroups as $groupName)
@@ -148,26 +142,23 @@ class MessageManager
 					}
 				}
 			}
-			
+
 			if (!$allowed and Constants::$accountManager->hasPermissionInArray($targetGroups, "messages.view"))
 			{
 				$allowed = true;
 			}
-			
+
 			if (!$allowed)
 			{
 				continue;
 			}
-			
+
 			$targets = array();
 			foreach ($targetGroups as $groupName)
 			{
 				if (substr($groupName, 0, 4) == "uid:")
 				{
-					$userQuery->execute(array
-					(
-						":id" => substr($groupName, 4)
-					));
+					$userQuery->execute(array(":id" => substr($groupName, 4)));
 					$userRow = $userQuery->fetch();
 					if ($userRow->id)
 					{
@@ -176,18 +167,15 @@ class MessageManager
 				}
 				else
 				{
-					$userGroupsQuery->execute(array
-					(
-						":name" => $groupName
-					));
+					$userGroupsQuery->execute(array(":name" => $groupName));
 					$userGroupsRow = $userGroupsQuery->fetch();
 					$targets[] = $userGroupsRow->title ? escapeText($userGroupsRow->title) : $groupName;
 				}
 			}
-			
+
 			echo "<div class='messages_container' msgid='" . $row->id . "'>";
 			$headerContainerAttributes = "";
-			if ($id == null)// Only show link for single message in multi message view
+			if ($id == null) // Only show link for single message in multi message view
 			{
 				$headerContainerAttributes = "title='Klicken um nur diese Nachricht anzuzeigen'";
 				echo "<a href='/internalarea/messages/" . $row->id . "' class='messages_header'>";
@@ -216,7 +204,7 @@ class MessageManager
 					</div>
 				</div>
 			";
-			if ($id == null)// Only show link for single message in multi message view
+			if ($id == null) // Only show link for single message in multi message view
 			{
 				echo "</a>";
 			}
@@ -226,10 +214,7 @@ class MessageManager
 			{
 				if ($file)
 				{
-					$uploadedFileQuery->execute(array
-					(
-						":id" => $file
-					));
+					$uploadedFileQuery->execute(array(":id" => $file));
 					$uploadedFileRow = $uploadedFileQuery->fetch();
 					if ($uploadedFileRow)
 					{
@@ -254,15 +239,15 @@ class MessageManager
 				";
 			}
 			echo "</div>";
-			
+
 			$messageCount++;
-			
+
 			if ($messageCount == 1 and $id == -1)
 			{
 				break;
 			}
 		}
-		
+
 		if (!$messageCount)
 		{
 			if ($expired)
@@ -273,10 +258,12 @@ class MessageManager
 			{
 				echo "<div class='error'>Keine Nachricht gefunden!</div>";
 			}
+
 			return false;
 		}
-		
+
 		return true;
 	}
 }
+
 ?>

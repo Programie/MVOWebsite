@@ -1771,7 +1771,7 @@
 	var detectSupport = function(timeFormat){
 		var tf = timeFormat.replace(/\'.*?\'/g,'').toLowerCase(), // removes literals
 			isIn = function(f, t){ // does the format contain the token?
-					return f.indexOf(t) !== -1? true:false; 
+					return !!(f.indexOf(t) !== -1);
 				};
 		return {
 				hour: isIn(tf,'h'),

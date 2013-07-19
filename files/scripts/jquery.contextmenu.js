@@ -84,7 +84,7 @@
 
 				return this;
 			}
-		}
+		};
 
 		var helpers = {
 			create: function(index, trigger, e, options) {
@@ -117,7 +117,7 @@
 			hideMenu: function() {
 				menu.hide();
 			}
-		}
+		};
 
 		$.contextMenu = {
 			defaults: function(userDefaults) {

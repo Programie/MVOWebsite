@@ -21,14 +21,14 @@ nav ul li:hover > ul
 nav ul
 {
 	background: #efefef;
-	background: -moz-linear-gradient(top, #efefef 0%, #bbbbbb 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #bbbbbb));
-	background: -webkit-linear-gradient(top, #efefef 0%, #bbbbbb 100%);
-	background: -o-linear-gradient(top, #efefef 0%, #bbbbbb 100%);
-	background: -ms-linear-gradient(top, #efefef 0%, #bbbbbb 100%);
-	background: linear-gradient(to bottom, #efefef 0%, #bbbbbb 100%);
-	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#bbbbbb', GradientType=0);
-	box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.15);
+	background: -moz-linear-gradient(top, #efefef 0%, #bbb 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #bbb));
+	background: -webkit-linear-gradient(top, #efefef 0%, #bbb 100%);
+	background: -o-linear-gradient(top, #efefef 0%, #bbb 100%);
+	background: -ms-linear-gradient(top, #efefef 0%, #bbb 100%);
+	background: linear-gradient(to bottom, #efefef 0%, #bbb 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#bbbbbb', GradientType=0);
+	box-shadow: 0 0 9px rgba(0, 0, 0, 0.15);
 	padding: 0 20px;
 	border-radius: 10px;
 	list-style: none;
@@ -57,10 +57,10 @@ nav > ul li:hover
 	background: -o-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%);
 	background: -ms-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%);
 	background: linear-gradient(to bottom, #a90329 0%, #8f0222 44%, #6d0019 100%);
-	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0);
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
-	box-shadow: 0px -1px 5px 2px #888;
+	box-shadow: 0 -1px 5px 2px #888;
 }
 
 nav ul li:hover a, nav ul li:hover span
@@ -86,11 +86,9 @@ nav ul ul
 	background: -o-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%);
 	background: -ms-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%);
 	background: linear-gradient(to bottom, #a90329 0%, #8f0222 44%, #6d0019 100%);
-	filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019', GradientType=0 );
-	box-shadow: 0px 1px 5px 2px #888;
-	border-radius: 0px;
-	border-bottom-left-radius: 10px;
-	border-bottom-right-radius: 10px;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0);
+	box-shadow: 0 1px 5px 2px #888;
+	border-radius: 0 0 10px 10px;
 	padding: 0;
 	position: absolute;
 	top: 100%;
@@ -107,7 +105,7 @@ nav ul ul li a, nav ul ul li span
 	padding: 15px 40px;
 	color: #fff;
 	max-width: 250px;
-	overflow: hidden; 
+	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }

@@ -8,7 +8,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 	{
 		$years[] = $year;
 	}
-	
+
 	$events = array();
 	$query = Constants::$pdo->query("SELECT `name`, `title` FROM `eventtypes` ORDER BY `title` ASC");
 	while ($row = $query->fetch())
@@ -18,11 +18,11 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 			$events[$row->name] = $row->title;
 		}
 	}
-	
+
 	if ($_POST["events_upload_confirmed"])
 	{
 		$error = "Beim Hochladen ist ein Fehler aufgetreten! Bitte versuche es erneut oder wende dich an den Webmaster.";
-		
+
 		if ($events[$_POST["events_upload_event"]])
 		{
 			if ($_POST["events_upload_sendtoken"] == TokenManager::getSendToken("events_upload"))
@@ -35,38 +35,25 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 						if (move_uploaded_file($file["tmp_name"], UPLOAD_PATH . "/" . $fileName))
 						{
 							$query = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
-							$query->execute(array
-							(
-								":name" => $fileName,
-								":title" => $file["name"]
-							));
+							$query->execute(array(":name" => $fileName, ":title" => $file["name"]));
 							$uploadId = Constants::$pdo->lastInsertId();
-							
+
 							$query = Constants::$pdo->prepare("SELECT `id` FROM `eventtypes` WHERE `name` = :name");
-							$query->execute(array
-							(
-								":name" => $_POST["events_upload_event"]
-							));
+							$query->execute(array(":name" => $_POST["events_upload_event"]));
 							$row = $query->fetch();
 							$typeId = $row->id;
-							
+
 							$year = $_POST["events_upload_year"];
 							if (!$year)
 							{
 								$year = null;
 							}
-							
+
 							$query = Constants::$pdo->prepare("INSERT INTO `events` (`typeId`, `year`, `userId`, `uploadId`) VALUES(:typeId, :year, :userId, :uploadId)");
-							$query->execute(array
-							(
-								":typeId" => $typeId,
-								":year" => $year,
-								":userId" => Constants::$accountManager->getUserId(),
-								":uploadId" => $uploadId
-							));
-							
+							$query->execute(array(":typeId" => $typeId, ":year" => $year, ":userId" => Constants::$accountManager->getUserId(), ":uploadId" => $uploadId));
+
 							echo "<div class='ok'>Die Datei wurde erfolgreich hochgeladen.</div>";
-							
+
 							$error = "";
 						}
 						break;
@@ -93,7 +80,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 			echo "<div class='error'>" . $error . "</div>";
 		}
 	}
-	
+
 	echo "
 		<fieldset>
 			<legend>Datei hochladen</legend>
@@ -166,7 +153,7 @@ if (empty($years))
 }
 else
 {
-	uksort($years, function($item1, $item2)
+	uksort($years, function ($item1, $item2)
 	{
 		if (!$item1 and $item2)
 		{
@@ -176,9 +163,10 @@ else
 		{
 			return 1;
 		}
+
 		return $item1 < $item2;
 	});
-	
+
 	echo "<ul>";
 	foreach ($years as $year => $eventTypes)
 	{
@@ -199,7 +187,7 @@ else
 					<b>" . $eventType . "</b>
 					<ul>
 			";
-			uasort($events, function($item1, $item2)
+			uasort($events, function ($item1, $item2)
 			{
 				return $item1->uploadTitle > $item2->uploadTitle;
 			});
@@ -222,33 +210,34 @@ else
 
 <div id="events_upload_confirm" title="Datei hochladen">
 	<p>Soll die ausgew&auml;hlte Datei nun hochgeladen werden?</p>
+
 	<p>
 		<p><b>Jahr:</b> <span id="events_upload_confirm_year"/></p>
+
 		<p><b>Veranstaltung:</b> <span id="events_upload_confirm_event"/></p>
 	</p>
 </div>
 
 <script type="text/javascript">
 	$("#events_upload_confirm").dialog(
-	{
-		resizable : false,
-		modal : true,
-		width : "auto",
-		autoOpen : false,
-		buttons :
 		{
-			"Hochladen" : function()
-			{
-				$("#events_upload_confirmed").val(true);
-				document.getElementById("events_upload_form").submit();
-			},
-			"Abbrechen" : function()
-			{
-				$(this).dialog("close");
+			resizable: false,
+			modal: true,
+			width: "auto",
+			autoOpen: false,
+			buttons: {
+				"Hochladen": function ()
+				{
+					$("#events_upload_confirmed").val(true);
+					document.getElementById("events_upload_form").submit();
+				},
+				"Abbrechen": function ()
+				{
+					$(this).dialog("close");
+				}
 			}
-		}
-	});
-	
+		});
+
 	function events_confirmUpload()
 	{
 		if ($("#events_upload_year").val() == null)

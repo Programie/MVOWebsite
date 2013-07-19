@@ -38,28 +38,28 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 
 <table id="attendancelist_table" class="table {sortlist: [[0,0]]}">
 	<thead>
-		<tr>
-			<th class="{sorter: 'text-attribute'}">Name</th>
-			<?php
-			foreach ($dates as $date)
+	<tr>
+		<th class="{sorter: 'text-attribute'}">Name</th>
+		<?php
+		foreach ($dates as $date)
+		{
+			$startDateTime = strtotime($date->startDate);
+			$startDate = date("d.m.Y", $startDateTime);
+			$startTime = date("H:i", $startDateTime);
+			$startDateTime = array(getWeekdayName(date("N", $startDateTime), false), $startDate);
+			if ($startTime != "00:00")
 			{
-				$startDateTime = strtotime($date->startDate);
-				$startDate = date("d.m.Y", $startDateTime);
-				$startTime = date("H:i", $startDateTime);
-				$startDateTime = array(getWeekdayName(date("N", $startDateTime), false), $startDate);
-				if ($startTime != "00:00")
-				{
-					$startDateTime[] = $startTime . " Uhr";
-				}
-				echo "
+				$startDateTime[] = $startTime . " Uhr";
+			}
+			echo "
 					<th dateid='" . $date->id . "' class='{sorter: \"number-attribute\"}'>
 						<div class='attendancelist_title' title='" . escapeText($date->title) . "'>" . escapeText($date->title) . "</div>
 						<div class='attendancelist_date'>" . implode(" ", $startDateTime) . "</div>
 					</th>
 				";
-			}
-			?>
-		</tr>
+		}
+		?>
+	</tr>
 	</thead>
 	<?php
 	foreach ($groups as $groupRow)
@@ -74,11 +74,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 		";
 		foreach ($users as $userRow)
 		{
-			$checkUserInGroup->execute(array
-			(
-				":userId" => $userRow->id,
-				":permission" => "groups.musiker." . $groupRow->name
-			));
+			$checkUserInGroup->execute(array(":userId" => $userRow->id, ":permission" => "groups.musiker." . $groupRow->name));
 			if ($checkUserInGroup->rowCount())
 			{
 				$attributes = "";
@@ -90,11 +86,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 				echo "<td sorttext='" . escapeText($userRow->lastName) . " " . escapeText($userRow->firstName) . "'>" . escapeText($userRow->firstName) . " " . escapeText($userRow->lastName) . "</td>";
 				foreach ($dates as $dateRow)
 				{
-					$getAttendanceQuery->execute(array
-					(
-						":dateId" => $dateRow->id,
-						":userId" => $userRow->id
-					));
+					$getAttendanceQuery->execute(array(":dateId" => $dateRow->id, ":userId" => $userRow->id));
 					$attendanceRow = $getAttendanceQuery->fetch();
 					$name = "attendancelist_" . $dateRow->id . "_" . $userRow->id;
 					$statusText = "";
@@ -130,64 +122,62 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 	function attendancelist_changeState(element)
 	{
 		var status = null;
-		
+
 		var cell = $(element).parents("td");
 		var row = cell.parents("tr");
-		
+
 		if ($(element).is(":radio"))
 		{
 			status = $(element).attr("state");
 		}
 		else
 		{
-			cell.find("input[type='radio']").each(function()
+			cell.find("input[type='radio']").each(function ()
 			{
 				$(this).prop("checked", false);
 			});
 		}
-		
-		
+
 		var titleElements = $("#attendancelist_table").find("thead tr th[dateid=" + cell.attr("dateid") + "] div");
 		var title = titleElements.find("div[class=attendancelist_title]").text() + " (" + titleElements.find("div[class=attendancelist_date]").text() + ")";
 		var userName = row.find("td:first").text();
-		
+
 		$.ajax(
-		{
-			type : "POST",
-			url : "/internalarea/attendancelist",
-			data :
 			{
-				attendancelist_dateid : cell.attr("dateid"),
-				attendancelist_userid : row.attr("userid"),
-				attendancelist_status : status
-			},
-			error : function(jqXhr, textStatus, errorThrown)
-			{
-				noty(
-				{
-					type : "error",
-					text : "Fehler beim Speichern des Anwesenheitsstatus f&uuml;r " + title + " von " + userName + "!"
-				});
-			},
-			success : function(data, status, jqXhr)
-			{
-				if (data == "ok")
+				type: "POST",
+				url: "/internalarea/attendancelist",
+				data: {
+					attendancelist_dateid: cell.attr("dateid"),
+					attendancelist_userid: row.attr("userid"),
+					attendancelist_status: status
+				},
+				error: function (jqXhr, textStatus, errorThrown)
 				{
 					noty(
-					{
-						type : "success",
-						text : "Anwesenheitsstatus f&uuml;r " + title + " von " + userName + " erfolgreich gespeichert!"
-					});
-				}
-				else
+						{
+							type: "error",
+							text: "Fehler beim Speichern des Anwesenheitsstatus f&uuml;r " + title + " von " + userName + "!"
+						});
+				},
+				success: function (data, status, jqXhr)
 				{
-					noty(
+					if (data == "ok")
 					{
-						type : "error",
-						text : "Fehler beim Speichern des Anwesenheitsstatus f&uuml;r " + title + " von " + userName + "!"
-					});
+						noty(
+							{
+								type: "success",
+								text: "Anwesenheitsstatus f&uuml;r " + title + " von " + userName + " erfolgreich gespeichert!"
+							});
+					}
+					else
+					{
+						noty(
+							{
+								type: "error",
+								text: "Fehler beim Speichern des Anwesenheitsstatus f&uuml;r " + title + " von " + userName + "!"
+							});
+					}
 				}
-			}
-		});
+			});
 	}
 </script>

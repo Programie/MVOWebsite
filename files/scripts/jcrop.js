@@ -1259,7 +1259,7 @@
         if (e.ctrlKey || e.metaKey) {
           return true;
         }
-        shift_down = e.shiftKey ? true : false;
+        shift_down = !!e.shiftKey;
         var nudge = shift_down ? 10 : 1;
 
         switch (e.keyCode) {

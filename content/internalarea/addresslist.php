@@ -43,21 +43,18 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 				$query = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id AND `enabled`");
 				foreach ($recipients as $index => $recipientUserId)
 				{
-					$query->execute(array
-					(
-						":id" => $recipientUserId
-					));
+					$query->execute(array(":id" => $recipientUserId));
 					$row = $query->fetch();
-					
+
 					if ($row->email)
 					{
 						$mailRecipients[$row->email] = $row->firstName . " " . $row->lastName;
 						$targetUsers[] = "uid:" . $recipientUserId;
 					}
 				}
-				
+
 				$send = true;
-				
+
 				$uploadedFiles = array();
 				foreach ($_FILES as $fileData)
 				{
@@ -76,7 +73,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 					}
 					else
 					{
-						if ($fileData["error"] != UPLOAD_ERR_NO_FILE)// One file field is always empty
+						if ($fileData["error"] != UPLOAD_ERR_NO_FILE) // One file field is always empty
 						{
 							$uploadError = true;
 						}
@@ -88,33 +85,23 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 						break;
 					}
 				}
-				
+
 				if ($send)
 				{
 					$attachedFiles = array();
 					$addFileQuery = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
 					foreach ($uploadedFiles as $name => $title)
 					{
-						$addFileQuery->execute(array
-						(
-							":name" => $name,
-							":title" => $title
-						));
+						$addFileQuery->execute(array(":name" => $name, ":title" => $title));
 						$attachedFiles[$name] = Constants::$pdo->lastInsertId();
 					}
-					
+
 					$text = $_POST["addresslist_sendmessage_text"];
-					
+
 					$query = Constants::$pdo->prepare("INSERT INTO `messages` (`date`, `targetGroups`, `userId`, `text`, `attachedFiles`) VALUES(NOW(), :targetGroups, :userId, :text, :attachedFiles)");
-					$query->execute(array
-					(
-						":targetGroups" => implode(",", $targetUsers),
-						":userId" => Constants::$accountManager->getUserId(),
-						":text" => $text,
-						":attachedFiles" => implode(",", $attachedFiles)
-					));
+					$query->execute(array(":targetGroups" => implode(",", $targetUsers), ":userId" => Constants::$accountManager->getUserId(), ":text" => $text, ":attachedFiles" => implode(",", $attachedFiles)));
 					$messageId = Constants::$pdo->lastInsertId();
-					
+
 					$attachmentsText = array();
 					if (!empty($uploadedFiles))
 					{
@@ -126,21 +113,14 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 						}
 						$attachmentsText[] = "</ul>";
 					}
-					
+
 					$ccMail = null;
 					if ($_POST["addresslist_sendmessage_sendcopy"])
 					{
 						$ccMail = array($userData->email => $userData->firstName . " " . $userData->lastName);
 					}
-					
-					$replacements = array
-					(
-						"ATTACHMENTS" => implode("\n", $attachmentsText),
-						"CONTENT" => formatText($text),
-						"FIRSTNAME" => $userData->firstName,
-						"LASTNAME" => $userData->lastName,
-						"MESSAGEID" => $messageId
-					);
+
+					$replacements = array("ATTACHMENTS" => implode("\n", $attachmentsText), "CONTENT" => formatText($text), "FIRSTNAME" => $userData->firstName, "LASTNAME" => $userData->lastName, "MESSAGEID" => $messageId);
 					$mail = new Mail("Nachricht vom Internen Bereich", $replacements);
 					$mail->setTemplate("writemessage");
 					$mail->setTo($mailRecipients);
@@ -183,57 +163,41 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 
 <table id="addresslist_table" class="table {sortlist: [[2,0],[1,0]]}">
 	<thead>
-		<tr>
-			<th class="no-print"></th>
-			<th>Vorname</th>
-			<th>Nachname</th>
-			<th>Email</th>
-			<th>Telefon</th>
-		</tr>
+	<tr>
+		<th class="no-print"></th>
+		<th>Vorname</th>
+		<th>Nachname</th>
+		<th>Email</th>
+		<th>Telefon</th>
+	</tr>
 	</thead>
 	<tbody>
-		<?php
-		$phoneNumberCategories = array
-		(
-			"fax" => "Fax",
-			"mobile" => "Mobil",
-			"phone" => "Telefon"
-		);
-		$phoneNumberSubCategories = array
-		(
-			"business" => "Gesch&auml;ftlich",
-			"private" => "Privat"
-		);
-		$permissionCheckQuery = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
-		$phoneNumbersQuery = Constants::$pdo->prepare("SELECT `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
-		$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email` FROM `users` WHERE `enabled`");
-		while ($row = $query->fetch())
+	<?php
+	$phoneNumberCategories = array("fax" => "Fax", "mobile" => "Mobil", "phone" => "Telefon");
+	$phoneNumberSubCategories = array("business" => "Gesch&auml;ftlich", "private" => "Privat");
+	$permissionCheckQuery = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
+	$phoneNumbersQuery = Constants::$pdo->prepare("SELECT `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
+	$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email` FROM `users` WHERE `enabled`");
+	while ($row = $query->fetch())
+	{
+		if ($activeGroup == "all")
 		{
-			if ($activeGroup == "all")
+			$show = true;
+		}
+		else
+		{
+			$permissionCheckQuery->execute(array(":userId" => $row->id, ":permission" => "groups." . $activeGroup));
+			$show = $permissionCheckQuery->rowCount();
+		}
+		if ($show)
+		{
+			$phoneNumbersQuery->execute(array(":userId" => $row->id));
+			$phoneNumbers = array();
+			while ($phoneNumberRow = $phoneNumbersQuery->fetch())
 			{
-				$show = true;
+				$phoneNumbers[] = $phoneNumberCategories[$phoneNumberRow->category] . " (" . $phoneNumberSubCategories[$phoneNumberRow->subCategory] . "): " . escapeText($phoneNumberRow->number);
 			}
-			else
-			{
-				$permissionCheckQuery->execute(array
-				(
-					":userId" => $row->id,
-					":permission" => "groups." . $activeGroup
-				));
-				$show = $permissionCheckQuery->rowCount();
-			}
-			if ($show)
-			{
-				$phoneNumbersQuery->execute(array
-				(
-					":userId" => $row->id
-				));
-				$phoneNumbers = array();
-				while ($phoneNumberRow = $phoneNumbersQuery->fetch())
-				{
-					$phoneNumbers[] = $phoneNumberCategories[$phoneNumberRow->category] . " (" . $phoneNumberSubCategories[$phoneNumberRow->subCategory] . "): " . escapeText($phoneNumberRow->number);
-				}
-				echo "
+			echo "
 					<tr userid='" . $row->id . "'>
 						<td class='no-print'><input type='checkbox'/></td>
 						<td>" . escapeText($row->firstName) . "</td>
@@ -242,26 +206,29 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 						<td>" . implode("<br />", $phoneNumbers) . "</td>
 					</tr>
 				";
-			}
 		}
-		?>
+	}
+	?>
 	</tbody>
 </table>
 
 <fieldset id="addresslist_sendmessage" class="no-print">
 	<legend>Nachricht senden</legend>
-	
-	<form id="addresslist_sendmessage_form" action="/internalarea/addresslist" method="post" enctype="multipart/form-data" onsubmit="addresslist_sendMessageConfirm(); return false;">
-		<textarea id="addresslist_sendmessage_text" name="addresslist_sendmessage_text" rows="15" cols="15"></textarea>
-		
+
+	<form id="addresslist_sendmessage_form" action="/internalarea/addresslist" method="post"
+	      enctype="multipart/form-data" onsubmit="addresslist_sendMessageConfirm(); return false;">
+		<textarea id="addresslist_sendmessage_text" name="addresslist_sendmessage_text" rows="15"
+			  cols="15"></textarea>
+
 		<fieldset id="addresslist_sendmessage_attachments">
 			<legend>Anh&auml;nge</legend>
 		</fieldset>
-		
+
 		<input type="hidden" id="addresslist_sendmessage_sendcopy" name="addresslist_sendmessage_sendcopy"/>
 		<input type="hidden" id="addresslist_sendmessage_confirmed" name="addresslist_sendmessage_confirmed"/>
 		<input type="hidden" id="addresslist_sendmessage_recipients" name="addresslist_sendmessage_recipients"/>
-		<input type="hidden" name="addresslist_sendmessage_sendtoken" value="<?php echo TokenManager::getSendToken("addresslist_sendmessage", true);?>"/>
+		<input type="hidden" name="addresslist_sendmessage_sendtoken"
+		       value="<?php echo TokenManager::getSendToken("addresslist_sendmessage", true); ?>"/>
 		<input type="submit" value="Senden"/>
 	</form>
 </fieldset>
@@ -271,54 +238,54 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 	<ul id="addresslist_sendmessage_confirm_recipients"></ul>
 	<p id="addresslist_sendmessage_confirm_text2"><b>Anh&auml;nge:</b></p>
 	<ul id="addresslist_sendmessage_confirm_attachments"></ul>
-	<input id="addresslist_sendmessage_confirm_sendcopy" type="checkbox"/><label for="addresslist_sendmessage_confirm_sendcopy">Eine Kopie an mich senden</label>
+	<input id="addresslist_sendmessage_confirm_sendcopy" type="checkbox"/><label
+		for="addresslist_sendmessage_confirm_sendcopy">Eine Kopie an mich senden</label>
 </div>
 
 <script type="text/javascript">
 	addresslist_sendmessage_attachments_file = 0;
 	addresslist_sendMessageAddAttachmentFile();
-	
+
 	$("#addresslist_sendmessage_confirm").dialog(
-	{
-		closeText : "Schlie&szlig;en",
-		resizable : false,
-		modal : true,
-		width : "auto",
-		maxHeight : 500,
-		autoOpen : false,
-		buttons :
 		{
-			"Senden" : function()
-			{
-				document.getElementById("addresslist_sendmessage_sendcopy").value = document.getElementById("addresslist_sendmessage_confirm_sendcopy").checked ? "1" : "0";
-				document.getElementById("addresslist_sendmessage_confirmed").value = true;
-				document.getElementById("addresslist_sendmessage_form").submit();
-			},
-			"Abbrechen" : function()
-			{
-				$(this).dialog("close");
+			closeText: "Schlie&szlig;en",
+			resizable: false,
+			modal: true,
+			width: "auto",
+			maxHeight: 500,
+			autoOpen: false,
+			buttons: {
+				"Senden": function ()
+				{
+					document.getElementById("addresslist_sendmessage_sendcopy").value = document.getElementById("addresslist_sendmessage_confirm_sendcopy").checked ? "1" : "0";
+					document.getElementById("addresslist_sendmessage_confirmed").value = true;
+					document.getElementById("addresslist_sendmessage_form").submit();
+				},
+				"Abbrechen": function ()
+				{
+					$(this).dialog("close");
+				}
 			}
-		}
-	});
-	
-	$("#addresslist_table tbody tr").click(function(event)
+		});
+
+	$("#addresslist_table tbody tr").click(function (event)
 	{
 		if (event.target.type != "checkbox")
 		{
 			$(":checkbox", this).trigger("click");
 		}
 	});
-	
+
 	function addresslist_sendMessageAddAttachmentFile()
 	{
 		addresslist_sendmessage_attachments_file++;
 		$("#addresslist_sendmessage_attachments").append("<input type='file' class='addresslist_sendmessage_attachments_file' id='addresslist_sendmessage_attachments_file_" + addresslist_sendmessage_attachments_file + "' name='addresslist_sendmessage_attachments_file_" + addresslist_sendmessage_attachments_file + "' onchange='addresslist_sendMessageCheckAttachmentFields();'/>");
 	}
-	
+
 	function addresslist_sendMessageCheckAttachmentFields()
 	{
 		var addNew = true;
-		$(".addresslist_sendmessage_attachments_file").each(function()
+		$(".addresslist_sendmessage_attachments_file").each(function ()
 		{
 			if (!$(this)[0].files.length)
 			{
@@ -334,14 +301,14 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 			addresslist_sendMessageAddAttachmentFile();
 		}
 	}
-	
+
 	function addresslist_sendMessageConfirm()
 	{
 		var recipients = [];
-		
+
 		$("#addresslist_sendmessage_confirm_recipients").html("");
-		
-		$("#addresslist_table tbody:first tr").each(function()
+
+		$("#addresslist_table tbody:first tr").each(function ()
 		{
 			var cells = $(this).find("td");
 			if (cells.eq(0).find("input:checkbox").is(":checked"))
@@ -350,15 +317,15 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 				$("#addresslist_sendmessage_confirm_recipients").append("<li>" + cells.eq(1).html() + " " + cells.eq(2).html() + "</li>");
 			}
 		});
-		
+
 		if (recipients.length)
 		{
 			document.getElementById("addresslist_sendmessage_recipients").value = recipients.join(",");
 			$("#addresslist_sendmessage_confirm_text1").html("Soll die Nachricht jetzt an die folgenden " + recipients.length + " Emp&auml;nger gesendet werden?");
-			
+
 			var attachments = 0;
 			$("#addresslist_sendmessage_confirm_attachments").html("");
-			$(".addresslist_sendmessage_attachments_file").each(function()
+			$(".addresslist_sendmessage_attachments_file").each(function ()
 			{
 				if ($(this)[0].files.length)
 				{
@@ -367,7 +334,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 				}
 			});
 			attachments ? $("#addresslist_sendmessage_confirm_text2").show() : $("#addresslist_sendmessage_confirm_text2").hide();
-			
+
 			$("#addresslist_sendmessage_confirm").dialog("open");
 		}
 		else

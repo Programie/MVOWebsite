@@ -20,24 +20,24 @@ table.table tbody tr th
 {
 	table.table
 	{
-		border-spacing: 0px;
+		border-spacing: 0;
 	}
-	
+
 	table.table tbody tr td, table.table tbody tr th
 	{
 		border-bottom: 1px solid #ccc;
 	}
-	
+
 	table.table tbody tr td
 	{
 		border-left: 1px solid #ccc;
 	}
-	
+
 	table.table tbody tr td:last-child
 	{
 		border-right: 1px solid #ccc;
 	}
-	
+
 	.tablesorter-stickyHeader
 	{
 		display: none;
@@ -51,66 +51,66 @@ table.table tbody tr th
 		border-spacing: 1px;
 		background-color: #cdcdcd;
 		border-radius: 10px;
-		box-shadow: 0px -1px 5px 2px #888;
+		box-shadow: 0 -1px 5px 2px #888;
 	}
-	
+
 	table.tablesorter-stickyHeader-clone
 	{
 		background-color: transparent;
 		border-radius: 0;
 		box-shadow: none;
 	}
-	
+
 	table.table thead:first-child tr:first-child th:first-child
 	{
 		border-top-left-radius: 10px;
 	}
-	
+
 	table.table thead:first-child tr:first-child th:last-child
 	{
 		border-top-right-radius: 10px;
 	}
-	
+
 	table.table tbody:last-child tr:last-child td:first-child
 	{
 		border-bottom-left-radius: 10px;
 	}
-	
+
 	table.table tbody:last-child tr:last-child td:last-child
 	{
 		border-bottom-right-radius: 10px;
 	}
-	
+
 	table.table thead tr th, table.table tfoot tr th
 	{
 		white-space: nowrap;
 		background: #efefef;
-		background: -moz-linear-gradient(top, #efefef 0%, #bbbbbb 100%);
-		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #bbbbbb));
-		background: -webkit-linear-gradient(top, #efefef 0%, #bbbbbb 100%);
-		background: -o-linear-gradient(top, #efefef 0%, #bbbbbb 100%);
-		background: -ms-linear-gradient(top, #efefef 0%, #bbbbbb 100%);
-		background: linear-gradient(to bottom, #efefef 0%, #bbbbbb 100%);
-		filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#bbbbbb', GradientType=0);
+		background: -moz-linear-gradient(top, #efefef 0%, #bbb 100%);
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #efefef), color-stop(100%, #bbb));
+		background: -webkit-linear-gradient(top, #efefef 0%, #bbb 100%);
+		background: -o-linear-gradient(top, #efefef 0%, #bbb 100%);
+		background: -ms-linear-gradient(top, #efefef 0%, #bbb 100%);
+		background: linear-gradient(to bottom, #efefef 0%, #bbb 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#efefef', endColorstr='#bbbbbb', GradientType=0);
 		border: 1px solid #ccc;
 		cursor: pointer;
 	}
-	
+
 	table.table tbody tr:nth-child(even)
 	{
 		background-color: #dfdfdf;
 	}
-	
+
 	table.table tbody tr:nth-child(odd)
 	{
-		background-color:#efefef;
+		background-color: #efefef;
 	}
-	
+
 	table.table thead.tablesorter-stickyHeader > tr th
 	{
-		border-radius: 0px !important;
+		border-radius: 0 !important;
 	}
-	
+
 	table.table thead tr .tablesorter-headerAsc, table.table thead tr .tablesorter-headerDesc
 	{
 		background: #a90329;
@@ -120,20 +120,20 @@ table.table tbody tr th
 		background: -o-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%);
 		background: -ms-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%);
 		background: linear-gradient(to bottom, #a90329 0%, #8f0222 44%, #6d0019 100%);
-		filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0);
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0);
 		color: #fff;
 	}
-	
+
 	table.table thead tr th.tablesorter-headerAsc > .tablesorter-header-inner:after
 	{
-		content: " ⇧"
+		content: " ⇧";
 	}
 
 	table.table thead tr th.tablesorter-headerDesc > .tablesorter-header-inner:after
 	{
-		content: " ⇩"
+		content: " ⇩";
 	}
-	
+
 	.table_highlight
 	{
 		background: #a90329 !important;
@@ -143,20 +143,20 @@ table.table tbody tr th
 		background: -o-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%) !important;
 		background: -ms-linear-gradient(top, #a90329 0%, #8f0222 44%, #6d0019 100%) !important;
 		background: linear-gradient(to bottom, #a90329 0%, #8f0222 44%, #6d0019 100%) !important;
-		filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0) !important;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a90329', endColorstr='#6d0019', GradientType=0) !important;
 	}
-	
+
 	.table_highlight *
 	{
 		color: #fff !important;
 	}
-	
+
 	.table_highlight td:first-child
 	{
 		border-top-left-radius: 5px;
 		border-bottom-left-radius: 5px;
 	}
-	
+
 	.table_highlight td:last-child
 	{
 		border-top-right-radius: 5px;

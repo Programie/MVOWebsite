@@ -16,17 +16,7 @@ switch (Constants::$pagePath[2])
 				{
 					$endRepeat = null;
 				}
-				$queryData = array
-				(
-					":title" => $_POST["roomoccupancyplan_title"],
-					":reservedBy" => $_POST["roomoccupancyplan_reservedby"],
-					":date" => $date[2] . "-" . $date[1] . "-" . $date[0],
-					":startTime" => $_POST["roomoccupancyplan_starttime"],
-					":endTime" => $_POST["roomoccupancyplan_endtime"],
-					":weekly" => $_POST["roomoccupancyplan_weekly"],
-					":endRepeat" => $endRepeat,
-					":changeUserId" => Constants::$accountManager->getUserId()
-				);
+				$queryData = array(":title" => $_POST["roomoccupancyplan_title"], ":reservedBy" => $_POST["roomoccupancyplan_reservedby"], ":date" => $date[2] . "-" . $date[1] . "-" . $date[0], ":startTime" => $_POST["roomoccupancyplan_starttime"], ":endTime" => $_POST["roomoccupancyplan_endtime"], ":weekly" => $_POST["roomoccupancyplan_weekly"], ":endRepeat" => $endRepeat, ":changeUserId" => Constants::$accountManager->getUserId());
 				if ($_POST["roomoccupancyplan_eventid"])
 				{
 					$query = Constants::$pdo->prepare("
@@ -77,7 +67,7 @@ switch (Constants::$pagePath[2])
 					`weekly`
 				FROM `roomoccupancyplan`
 			");
-			
+
 			$data = array();
 			while ($row = $query->fetch())
 			{
@@ -88,7 +78,7 @@ switch (Constants::$pagePath[2])
 					$firstEvent = true;
 					while (true)
 					{
-						if ($firstEvent)// The first event have to be "this X" (e.g. This Monday) because today can be Monday and with "next" it would be the next week
+						if ($firstEvent) // The first event have to be "this X" (e.g. This Monday) because today can be Monday and with "next" it would be the next week
 						{
 							$dateTimestamp = strtotime("this " . $weekday, $dateTimestamp);
 							$firstEvent = false;
@@ -97,40 +87,24 @@ switch (Constants::$pagePath[2])
 						{
 							$dateTimestamp = strtotime("next " . $weekday, $dateTimestamp);
 						}
-						if ($dateTimestamp < strtotime($row->date))// This event would be before the defined start date
+						if ($dateTimestamp < strtotime($row->date)) // This event would be before the defined start date
 						{
 							continue;
 						}
-						if ($row->endRepeat and $dateTimestamp > strtotime($row->endRepeat))// This event would be after the defined repeating end (endRepeat = NULL means repeats forever)
+						if ($row->endRepeat and $dateTimestamp > strtotime($row->endRepeat)) // This event would be after the defined repeating end (endRepeat = NULL means repeats forever)
 						{
 							break;
 						}
-						if ($dateTimestamp < $_GET["start"] or $dateTimestamp > $_GET["end"])// This event is out of the visible range
+						if ($dateTimestamp < $_GET["start"] or $dateTimestamp > $_GET["end"]) // This event is out of the visible range
 						{
 							break;
 						}
-						$data[] = array
-						(
-							"id" => $row->id,
-							"title" => $row->title,
-							"reservedBy" => $row->reservedBy,
-							"start" => strtotime(date("Y-m-d", $dateTimestamp) . " " . $row->startTime),
-							"end" => strtotime(date("Y-m-d", $dateTimestamp) . " " . $row->endTime),
-							"endRepeat" => strtotime($row->endRepeat),
-							"weekly" => true
-						);
+						$data[] = array("id" => $row->id, "title" => $row->title, "reservedBy" => $row->reservedBy, "start" => strtotime(date("Y-m-d", $dateTimestamp) . " " . $row->startTime), "end" => strtotime(date("Y-m-d", $dateTimestamp) . " " . $row->endTime), "endRepeat" => strtotime($row->endRepeat), "weekly" => true);
 					}
 				}
 				else
 				{
-					$data[] = array
-					(
-						"id" => $row->id,
-						"title" => $row->title,
-						"reservedBy" => $row->reservedBy,
-						"start" => $row->date . "T" . $row->startTime . "Z",
-						"end" => $row->date . "T" . $row->endTime . "Z"
-					);
+					$data[] = array("id" => $row->id, "title" => $row->title, "reservedBy" => $row->reservedBy, "start" => $row->date . "T" . $row->startTime . "Z", "end" => $row->date . "T" . $row->endTime . "Z");
 				}
 			}
 			echo json_encode($data);
@@ -144,10 +118,7 @@ switch (Constants::$pagePath[2])
 				FROM `roomoccupancyplan`
 				WHERE `id` = :id
 			");
-			$query->execute(array
-			(
-				":id" => $_POST["roomoccupancyplan_eventid"]
-			));
+			$query->execute(array(":id" => $_POST["roomoccupancyplan_eventid"]));
 			$row = $query->fetch();
 			if ($row->id)
 			{
@@ -160,14 +131,7 @@ switch (Constants::$pagePath[2])
 						`changeUserId` = :changeUserId
 					WHERE `id` = :id
 				");
-				$queryData = array
-				(
-					":date" => date("Y-m-d", strtotime("+" . intval($_POST["roomoccupancyplan_daydelta"]) . " day", strtotime($row->date))),
-					":startTime" => date("H:i:s", strtotime($row->startTime) + 60 * $_POST["roomoccupancyplan_minutedelta"]),
-					":endTime" => date("H:i:s", strtotime($row->endTime) + 60 * $_POST["roomoccupancyplan_minutedelta"]),
-					":changeUserId" => Constants::$accountManager->getUserId(),
-					":id" => $_POST["roomoccupancyplan_eventid"]
-				);
+				$queryData = array(":date" => date("Y-m-d", strtotime("+" . intval($_POST["roomoccupancyplan_daydelta"]) . " day", strtotime($row->date))), ":startTime" => date("H:i:s", strtotime($row->startTime) + 60 * $_POST["roomoccupancyplan_minutedelta"]), ":endTime" => date("H:i:s", strtotime($row->endTime) + 60 * $_POST["roomoccupancyplan_minutedelta"]), ":changeUserId" => Constants::$accountManager->getUserId(), ":id" => $_POST["roomoccupancyplan_eventid"]);
 				if ($query->execute($queryData))
 				{
 					echo "ok";
@@ -183,10 +147,7 @@ switch (Constants::$pagePath[2])
 				FROM `roomoccupancyplan`
 				WHERE `id` = :id
 			");
-			$query->execute(array
-			(
-				":id" => $_POST["roomoccupancyplan_eventid"]
-			));
+			$query->execute(array(":id" => $_POST["roomoccupancyplan_eventid"]));
 			$row = $query->fetch();
 			if ($row->id)
 			{
@@ -197,12 +158,7 @@ switch (Constants::$pagePath[2])
 						`changeUserId` = :changeUserId
 					WHERE `id` = :id
 				");
-				$queryData = array
-				(
-					":endTime" => date("H:i:s", strtotime($row->endTime) + 60 * $_POST["roomoccupancyplan_minutedelta"]),
-					":changeUserId" => Constants::$accountManager->getUserId(),
-					":id" => $_POST["roomoccupancyplan_eventid"]
-				);
+				$queryData = array(":endTime" => date("H:i:s", strtotime($row->endTime) + 60 * $_POST["roomoccupancyplan_minutedelta"]), ":changeUserId" => Constants::$accountManager->getUserId(), ":id" => $_POST["roomoccupancyplan_eventid"]);
 				if ($query->execute($queryData))
 				{
 					echo "ok";

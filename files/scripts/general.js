@@ -1,72 +1,67 @@
 $(document).ready(function()
 {
 	// Colorbox
-	$(".colorbox-iframe").colorbox(
-	{
+	$(".colorbox-iframe").colorbox({
 		iframe : true,
 		returnFocus : false,
 		width : "80%",
 		height : "80%"
 	});
-	$("[rel='colorbox']").colorbox(
-	{
+	$("[rel='colorbox']").colorbox({
 		current : "",
 		picture : true,
 		returnFocus : false
 	});
-	
+
 	// "Back to top" button
 	$("#backtotop").css("display", "none");
 	$("#backtotop").click(function()
 	{
-		$("body,html").animate(
-		{
+		$("body,html").animate({
 			scrollTop : 0
 		}, 2000, "easeOutExpo");
 	});
-	
+
 	// Print button
 	$("#print").click(function()
 	{
 		window.print();
 	});
-	
+
 	// jQuery UI
 	$("button, input[type=submit]").button();
-	$(".date").datepicker(
-	{
+	$(".date").datepicker({
 		changeMonth : true,
 		changeYear : true,
 		showAnim : "slideDown",
 		showButtonPanel : true
 	});
-	$(".datetime").datetimepicker(
-	{
+	$(".datetime").datetimepicker({
 		changeMonth : true,
 		changeYear : true,
 		showAnim : "slideDown",
 		showButtonPanel : true
 	});
 	$(".menu").menu();
-	$(document).tooltip(
-	{
+	$(document).tooltip({
 		track : true
 	});
-	$(".time").timepicker(
-	{
+	$(".time").timepicker({
 		showAnim : "slideDown",
 		showButtonPanel : true
 	});
-	
+
 	// Tablesorter
-	$("table.table").tablesorter(
-	{
-		widgets : ["stickyHeaders"]
+	$("table.table").tablesorter({
+		widgets :
+		[
+			"stickyHeaders"
+		]
 	});
-	
+
 	$.noty.defaults.layout = "bottom";
 	$.noty.defaults.timeout = 10000;
-	
+
 	var htmlElement = document.getElementsByTagName("html")[0];
 	var unsupported = 0;
 	unsupported += typeof(htmlElement.style.borderRadius) == "undefined";
@@ -106,16 +101,14 @@ $(window).scroll(function()
 });
 
 $.fullCalendar.axisFormat = "HH:mm";
-$.fullCalendar.buttonText =
-{
+$.fullCalendar.buttonText = {
 	day : "Tag",
 	month : "Monat",
 	today : "Heute",
 	week : "Woche"
 };
 
-$.tablesorter.addParser(
-{
+$.tablesorter.addParser({
 	id : "number-attribute",
 	is : function(string)
 	{
@@ -128,8 +121,7 @@ $.tablesorter.addParser(
 	type : "numeric"
 });
 
-$.tablesorter.addParser(
-{
+$.tablesorter.addParser({
 	id : "text-attribute",
 	is : function(string)
 	{
