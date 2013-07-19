@@ -21,7 +21,7 @@ if ($userData->forcePasswordChange)
 		{
 			fax : "Fax",
 			mobile : "Mobil",
-			phone : "Telefon",
+			phone : "Telefon"
 		};
 		var subCategories =
 		{

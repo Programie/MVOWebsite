@@ -536,16 +536,18 @@ if (isset($_POST["usermanager_edituser_id"]))
 							{
 								if ($("#usermanager_edituser_birthdate").datepicker("getDate"))
 								{
-									var emailRegEx =/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-									if (!$("#usermanager_edituser_email").val() || emailRegEx.test($("#usermanager_edituser_email").val()))
+									var emailRegEx = /^([\w\-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+									var emailField = $("#usermanager_edituser_email");
+									if (!emailField.val() || emailRegEx.test(emailField.val()))
 									{
 										if (!$("#usermanager_edituser_sendcredentialsmail").prop("checked") || $("#usermanager_edituser_email").val())
 										{
 											if (!$("#usermanager_edituser_id").val() || !$("#usermanager_edituser_sendcredentialsmail").prop("checked") || ($("#usermanager_edituser_sendcredentialsmail").prop("checked") && confirm("Durch die Option 'Zugangsdaten versenden' wird ein neues Passwort generiert!\n\nWirklich fortfahren?")))
 											{
-												$("#usermanager_edituser_ok").button("disable");
+												var okButton = $("#usermanager_edituser_ok");
+												okButton.button("disable");
 												$("#usermanager_edituser_cancel").button("disable");
-												$("#usermanager_edituser_ok").text("Wird \u00fcbernommen...");
+												okButton.text("Wird \u00fcbernommen...");
 												$("#usermanager_edituser_form")[0].submit();
 											}
 										}
@@ -828,7 +830,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 		{
 			fax : "Fax",
 			mobile : "Mobil",
-			phone : "Telefon",
+			phone : "Telefon"
 		};
 		var subCategories =
 		{
