@@ -185,4 +185,14 @@ function resizeImage($sourceImage, $maxWidth, $maxHeight)
 	
 	return $destinationImage;
 }
+
+function setAdditionalHeader($header)
+{
+	if (defined("ADD_HTTP_HEADER"))
+	{
+		return false;
+	}
+
+	return define("ADD_HTTP_HEADER", $header);
+}
 ?>

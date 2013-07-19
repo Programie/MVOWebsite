@@ -71,11 +71,9 @@ class PageManager
 		{
 			if (!$data->hasPermission)
 			{
-				if (!$emptyNotFound)
-				{
-					require_once ROOT_PATH . "/includes/html/forbidden.php";
-					return false;
-				}
+				setAdditionalHeader("HTTP/1.1 403 Forbidden");
+				require_once ROOT_PATH . "/includes/html/forbidden.php";
+				return false;
 			}
 		}
 		
@@ -96,7 +94,8 @@ class PageManager
 			require_once $fullPath;
 			return true;
 		}
-		
+
+		setAdditionalHeader("HTTP/1.1 404 Not Found");
 		require_once ROOT_PATH . "/includes/html/errorpage.php";
 		return false;
 	}

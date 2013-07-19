@@ -106,5 +106,19 @@ if (!preg_match("/bot|spider|crawler|curl|^$/i", $_SERVER["HTTP_USER_AGENT"]))
 	}
 }
 
+ob_start(function()
+{
+	chdir(dirname($_SERVER["SCRIPT_FILENAME"]));
+});
+
 require_once "includes/html/main.php";
+
+$content = ob_get_flush();
+
+if (defined("ADD_HTTP_HEADER"))
+{
+	header(ADD_HTTP_HEADER);
+}
+
+echo $content;
 ?>
