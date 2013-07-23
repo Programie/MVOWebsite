@@ -48,7 +48,7 @@ if (Constants::$accountManager->getUserId())
 					$query = Constants::$pdo->prepare("UPDATE `dates` SET `enabled` = '0' WHERE `id` = :id");
 					$query->execute(array(":id" => $_POST["dates_edit_id"]));
 					$dates = Dates::getDates($year, $activeGroups);
-					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+					echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
 				}
 				else
 				{
@@ -118,17 +118,17 @@ if (Constants::$accountManager->getUserId())
 						}
 						$query->execute($queryData);
 						$dates = Dates::getDates($year, $activeGroups);
-						echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+						echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
 					}
 					else
 					{
-						echo "<div class='error'>Das eingegebene Datum ist ung&uuml;ltig!</div>";
+						echo "<p class='alert-error'>Das eingegebene Datum ist ung&uuml;ltig!</p>";
 					}
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
+				echo "<p class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</p>";
 			}
 		}
 		echo "<button type='button' id='dates_add_button'>Neuer Termin</button>";
@@ -289,11 +289,11 @@ else
 {
 	if (empty($userGroups))
 	{
-		echo "<div class='error'>Es sind keine Termine in dem ausgew&auml;hlten Jahr vorhanden!</div>";
+		echo "<p class='alert-error'>Es sind keine Termine in dem ausgew&auml;hlten Jahr vorhanden!</p>";
 	}
 	else
 	{
-		echo "<div class='error'>Es sind keine Termine in den ausgew&auml;hlten Gruppen sowie dem ausgew&auml;hlten Jahr vorhanden!</div>";
+		echo "<p class='alert-error'>Es sind keine Termine in den ausgew&auml;hlten Gruppen sowie dem ausgew&auml;hlten Jahr vorhanden!</p>";
 	}
 }
 
@@ -331,26 +331,38 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 				<input type='hidden' id='dates_edit_hide' name='dates_edit_hide' value='1'/>
 			</form>
 		</div>
-		
+
 		<div id='dates_edit'>
 			<form id='dates_edit_form' method='post' onsubmit='return false'>
-				<label for='dates_edit_title'>Titel</label>
-				<input type='text' id='dates_edit_title' name='dates_edit_title' placeholder='Titel von diesem Termin'/>
-				
-				<label for='dates_edit_date'>Datum</label>
-				<input type='text' id='dates_edit_date' name='dates_edit_date' class='date' placeholder='TT.MM.JJJJ'/>
-				
-				<label for='dates_edit_time_start'>Zeit</label>
-				<div>
-					<input type='text' class='time' id='dates_edit_time_start' name='dates_edit_time_start' placeholder='HH:MM'/>
-					<span>bis</span>
-					<input type='text' class='time' id='dates_edit_time_end' name='dates_edit_time_end' placeholder='HH:MM'/>
+				<label class='input-label' for='dates_edit_title'>Titel</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-pencil'></i></span>
+					<input class='input-field' type='text' id='dates_edit_title' name='dates_edit_title' placeholder='Titel von diesem Termin'/>
 				</div>
-				
-				<label for='dates_edit_location'>Ort</label>
-				<input type='text' id='dates_edit_location' name='dates_edit_location' placeholder='Ort, an welchem dieser Termin stattfindet'/>
-				
-				<label for='dates_edit_description'>Beschreibung</label>
+
+				<label class='input-label' for='dates_edit_date'>Datum</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-calendar'></i></span>
+					<input class='input-field date' type='text' id='dates_edit_date' name='dates_edit_date' placeholder='TT.MM.JJJJ'/>
+				</div>
+
+				<label class='input-label' for='dates_edit_time_start'>Zeit</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-time'></i></span>
+					<div class='input-field'>
+						<input type='text' class='time' id='dates_edit_time_start' name='dates_edit_time_start' placeholder='HH:MM'/>
+						<span>bis</span>
+						<input type='text' class='time' id='dates_edit_time_end' name='dates_edit_time_end' placeholder='HH:MM'/>
+					</div>
+				</div>
+
+				<label class='input-label' for='dates_edit_location'>Ort</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-globe'></i></span>
+					<input class='input-field' type='text' id='dates_edit_location' name='dates_edit_location' placeholder='Ort, an welchem dieser Termin stattfindet'/>
+				</div>
+
+				<label class='input-label' for='dates_edit_description'>Beschreibung</label>
 				<textarea id='dates_edit_description' name='dates_edit_description' rows='10' cols='10' placeholder='Weitere Beschreibung von diesem Termin'></textarea>
 				
 				<fieldset id='dates_edit_groups'>

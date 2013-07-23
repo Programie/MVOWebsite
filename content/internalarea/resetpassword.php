@@ -34,16 +34,16 @@ else
 
 								$showChangeForm = false;
 
-								echo "<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert. Du bist nun angemeldet.</div>";
+								echo "<p class='alert-success'>Das Passwort wurde erfolgreich ge&auml;ndert. Du bist nun angemeldet.</p>";
 							}
 							else
 							{
-								echo "<div class='error'>Die eigegebenen Passw&ouml;rter stimmen nicht &uuml;berein!</div>";
+								echo "<p class='alert-error'>Die eigegebenen Passw&ouml;rter stimmen nicht &uuml;berein!</p>";
 							}
 						}
 						else
 						{
-							echo "<div class='error'>Bitte verwende ein Passwort mit mindestens " . PASSWORDS_MINLENGTH . " Zeichen!</div>";
+							echo "<p class='alert-error'>Bitte verwende ein Passwort mit mindestens " . PASSWORDS_MINLENGTH . " Zeichen!</p>";
 						}
 					}
 
@@ -65,17 +65,17 @@ else
 				}
 				else
 				{
-					echo "<div class='error'>Die G&uuml;ltigkeit des Schl&uuml;ssels ist abgelaufen! Bitte versuche es erneut oder wende dich an den Webmaster.</div>";
+					echo "<p class='alert-error'>Die G&uuml;ltigkeit des Schl&uuml;ssels ist abgelaufen! Bitte versuche es erneut oder wende dich an den Webmaster.</p>";
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Ung&uuml;ltiger Schl&uuml;ssel!</div>";
+				echo "<p class='alert-error'>Ung&uuml;ltiger Schl&uuml;ssel!</p>";
 			}
 		}
 		else
 		{
-			echo "<div class='error'>Ung&uuml;ltiger Schl&uuml;ssel!</div>";
+			echo "<p class='alert-error'>Ung&uuml;ltiger Schl&uuml;ssel!</p>";
 		}
 	}
 
@@ -105,21 +105,21 @@ else
 				$mail->setTo($row->email);
 				if ($mail->send())
 				{
-					echo "<div class='info'>Es wurde eine Email mit dem Link zum Zur&uuml;cksetzen des Passworts an die im Benutzeraccount hinterlegte Email-Adresse gesendet.</div>";
+					echo "<p class='alert-info'>Es wurde eine Email mit dem Link zum Zur&uuml;cksetzen des Passworts an die im Benutzeraccount hinterlegte Email-Adresse gesendet.</p>";
 				}
 				else
 				{
 					echo "
-						<div class='error'>
+						<p class='alert-error'>
 							<p>Beim Senden der Email ist ein Fehler aufgetreten!</p>
 							<p>Bitte versuche es sp&auml;ter erneut oder wende dich an den Webmaster.</p>
-						</div>
+						</p>
 					";
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Der Benutzername existiert nicht!</div>";
+				echo "<p class='alert-error'>Der Benutzername existiert nicht!</p>";
 			}
 		}
 		echo "

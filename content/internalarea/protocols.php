@@ -77,7 +77,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 									$mail->send();
 								}
 
-								echo "<div class='ok'>Das Protokoll wurde erfolgreich hochgeladen.</div>";
+								echo "<p class='alert-success'>Das Protokoll wurde erfolgreich hochgeladen.</p>";
 
 								$error = "";
 							}
@@ -103,24 +103,33 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 		}
 		if ($error)
 		{
-			echo "<div class='error'>" . $error . "</div>";
+			echo "<p class='alert-error'>" . $error . "</p>";
 		}
 	}
 	echo "
 		<fieldset id='protocols_upload'>
 			<legend>Protokoll hochladen</legend>
-			
+
 			<form id='protocols_upload_form' action='/internalarea/protocols' method='post' enctype='multipart/form-data' onsubmit='protocols_confirmUpload(); return false;'>
-				<label for='protocols_upload_date'>Datum:</label>
-				<input type='text' class='date' id='protocols_upload_date' name='protocols_upload_date' placeholder='TT.MM.JJJJ'/>
-				
-				<label for='protocols_upload_file'>Datei:</label>
-				<input type='file' id='protocols_upload_file' name='protocols_upload_file'/>
-				
-				<label for='protocols_upload_name'>Name:</label>
-				<input type='text' id='protocols_upload_name' name='protocols_upload_name' placeholder='Titel oder Beschreibung' title='Ein beliebiger Titel oder eine Beschreibung von diesem Protokoll (Optional)'/>
-				
-				<label for='protocols_upload_groups'>Gruppen:</label>
+				<label class='input-label' for='protocols_upload_date'>Datum:</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-calendar'></i></span>
+					<input class='input-field date' type='text' id='protocols_upload_date' name='protocols_upload_date' placeholder='TT.MM.JJJJ'/>
+				</div>
+
+				<label class='input-label' for='protocols_upload_file'>Datei:</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-file'></i></span>
+					<input class='input-field' type='file' id='protocols_upload_file' name='protocols_upload_file'/>
+				</div>
+
+				<label class='input-label' for='protocols_upload_name'>Name:</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-pencil'></i></span>
+					<input class='input-field' type='text' id='protocols_upload_name' name='protocols_upload_name' placeholder='Titel oder Beschreibung' title='Ein beliebiger Titel oder eine Beschreibung von diesem Protokoll (Optional)'/>
+				</div>
+
+				<label class='input-label' for='protocols_upload_groups'>Gruppen:</label>
 				<div id='protocols_upload_groups'>
 	";
 	foreach ($userGroups as $name => $title)
@@ -130,7 +139,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 	echo "
 				</div>
 				
-				<label for='protocols_upload_miscoptions'>Sonstige Optionen:</label>
+				<label class='input-label' for='protocols_upload_miscoptions'>Sonstige Optionen:</label>
 				<div id='protocols_upload_miscoptions'>
 					<input type='checkbox' id='protocols_upload_sendmail' name='protocols_upload_sendmail' value='1' checked='checked'/>
 					<label for='protocols_upload_sendmail'>Email versenden</label>
@@ -139,7 +148,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 				<input type='hidden' id='protocols_upload_confirmed' name='protocols_upload_confirmed'/>
 				<input type='hidden' name='protocols_upload_sendtoken' value='" . TokenManager::getSendToken("protocols_upload", true) . "'/>
 				
-				<input type='submit' value='Hochladen'/>
+				<button type='submit'><i class='icon-upload'></i> Hochladen</button>
 			</form>
 		</fieldset>
 	";
@@ -162,7 +171,7 @@ while ($row = $query->fetch())
 
 if (empty($protocols))
 {
-	echo "<div class='error'>Keine Protokolle vorhanden!</div>";
+	echo "<p class='alert-error'>Keine Protokolle vorhanden!</p>";
 }
 else
 {

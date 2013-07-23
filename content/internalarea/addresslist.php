@@ -129,7 +129,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 					if ($mail->send())
 					{
 						$error = "";
-						echo "<div class='ok'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</div>";
+						echo "<p class='alert-success'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</p>";
 					}
 				}
 			}
@@ -141,7 +141,7 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 	}
 	if ($error)
 	{
-		echo "<div class='error'>" . $error . "</div>";
+		echo "<p class='alert-error'>" . $error . "</p>";
 	}
 }
 ?>

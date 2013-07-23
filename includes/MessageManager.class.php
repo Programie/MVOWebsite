@@ -74,11 +74,11 @@ class MessageManager
 				{
 					$query = Constants::$pdo->prepare("UPDATE `messages` SET `enabled` = '0' WHERE `id` = :id");
 					$query->execute(array(":id" => $_POST["messages_hide_id"]));
-					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+					echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
 				}
 				else
 				{
-					echo "<div class='error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
+					echo "<p class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</p>";
 				}
 			}
 		}
@@ -252,11 +252,11 @@ class MessageManager
 		{
 			if ($expired)
 			{
-				echo "<div class='error'>Die G&uuml;ltigkeit der Nachricht ist abgelaufen!</div>";
+				echo "<p class='alert-error'>Die G&uuml;ltigkeit der Nachricht ist abgelaufen!</p>";
 			}
 			else
 			{
-				echo "<div class='error'>Keine Nachricht gefunden!</div>";
+				echo "<p class='alert-error'>Keine Nachricht gefunden!</p>";
 			}
 
 			return false;

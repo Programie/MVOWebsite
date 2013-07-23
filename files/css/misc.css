@@ -13,6 +13,11 @@
 	clear: both;
 }
 
+.icon-black
+{
+	color: #000 !important;
+}
+
 .nowrap
 {
 	white-space: nowrap;

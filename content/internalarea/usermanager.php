@@ -174,11 +174,11 @@ if (isset($_POST["usermanager_edituser_id"]))
 
 				if ($newUser)
 				{
-					echo "<div class='ok'>Der Benutzer wurde erfolgreich erstellt.</div>";
+					echo "<p class='alert-success'>Der Benutzer wurde erfolgreich erstellt.</p>";
 				}
 				else
 				{
-					echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+					echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
 				}
 
 				if ($_FILES)
@@ -191,7 +191,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 						{
 							if ($file["size"] > 1024 * 1024 * MAX_UPLOAD_SIZE)
 							{
-								echo "<div class='error'>Die maximal erlaubte Dateigr&ouml;&szlig;e f&uuml;r das Profilbild ist " . MAX_UPLOAD_SIZE . " MB!</div>";
+								echo "<p class='alert-error'>Die maximal erlaubte Dateigr&ouml;&szlig;e f&uuml;r das Profilbild ist " . MAX_UPLOAD_SIZE . " MB!</p>";
 								$profilePictureUploadError = false;
 							}
 							else
@@ -223,12 +223,12 @@ if (isset($_POST["usermanager_edituser_id"]))
 						}
 						if (!$profilePictureUploaded)
 						{
-							echo "<div class='error'>Beim Hochladen des Profilbilds ist ein Fehler aufgetreten!</div>";
+							echo "<p class='alert-error'>Beim Hochladen des Profilbilds ist ein Fehler aufgetreten!</p>";
 						}
 					}
 				}
 
-				echo "<div class='info'>Eventuell ge&auml;nderte Berechtigungen m&uuml;ssen &uuml;ber den Button <b>Berechtigungen &uuml;bernehmen</b> auf der Seite <b>Berechtigungsgruppen</b> &uuml;bernommen werden!</div>";
+				echo "<p class='alert-info'>Eventuell ge&auml;nderte Berechtigungen m&uuml;ssen &uuml;ber den Button <b>Berechtigungen &uuml;bernehmen</b> auf der Seite <b>Berechtigungsgruppen</b> &uuml;bernommen werden!</p>";
 
 				if ($_POST["usermanager_edituser_sendcredentialsmail"])
 				{
@@ -253,23 +253,23 @@ if (isset($_POST["usermanager_edituser_id"]))
 					}
 					if ($emailError)
 					{
-						echo "<div class='error'>Die Email mit den Zugangsdaten konnte nicht versendet werden: " . $emailError . "</div>";
+						echo "<p class='alert-error'>Die Email mit den Zugangsdaten konnte nicht versendet werden: " . $emailError . "</p>";
 					}
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Beim Speichern ist ein Fehler aufgetreten!</div>";
+				echo "<p class='alert-error'>Beim Speichern ist ein Fehler aufgetreten!</p>";
 			}
 		}
 		else
 		{
-			echo "<div class='error'>Es wurde kein freier Benutzername gefunden!</div>";
+			echo "<p class='alert-error'>Es wurde kein freier Benutzername gefunden!</p>";
 		}
 	}
 	else
 	{
-		echo "<div class='error'>Das eingegebene Geburtsdatum ist ung&uuml;ltig!</div>";
+		echo "<p class='alert-error'>Das eingegebene Geburtsdatum ist ung&uuml;ltig!</p>";
 	}
 }
 ?>
@@ -337,8 +337,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 </div>
 
 <div id="usermanager_edituser">
-	<form id="usermanager_edituser_form" action="/internalarea/usermanager" method="post"
-	      enctype="multipart/form-data">
+	<form id="usermanager_edituser_form" action="/internalarea/usermanager" method="post" enctype="multipart/form-data">
 		<input type="hidden" id="usermanager_edituser_id" name="usermanager_edituser_id"/>
 
 		<div id="usermanager_edituser_tabs">
@@ -350,27 +349,34 @@ if (isset($_POST["usermanager_edituser_id"]))
 				<li><a href="#usermanager_edituser_tabs_permissions">Berechtigungen</a></li>
 			</ul>
 			<div id="usermanager_edituser_tabs_general">
-				<label for="usermanager_edituser_username">Benutzername:</label>
-				<input type="text" id="usermanager_edituser_username"
-				       name="usermanager_edituser_username" class="input-user"/>
+				<label class="input-label" for="usermanager_edituser_username">Benutzername:</label>
+				<div class="input-container">
+					<span class="input-addon"><i class="icon-user"></i></span>
+					<input class="input-field" type="text" id="usermanager_edituser_username" name="usermanager_edituser_username"/>
+				</div>
 
-				<label for="usermanager_edituser_firstname">Vorname:</label>
-				<input type="text" id="usermanager_edituser_firstname"
-				       name="usermanager_edituser_firstname"/>
+				<label class="input-label" for="usermanager_edituser_firstname">Vorname:</label>
+				<div class="input-container">
+					<span class="input-addon"><i class="icon-user"></i></span>
+					<input class="input-field" type="text" id="usermanager_edituser_firstname" name="usermanager_edituser_firstname"/>
+				</div>
 
-				<label for="usermanager_edituser_lastname">Nachname:</label>
-				<input type="text" id="usermanager_edituser_lastname"
-				       name="usermanager_edituser_lastname"/>
+				<label class="input-label" for="usermanager_edituser_lastname">Nachname:</label>
+				<div class="input-container">
+					<span class="input-addon"><i class="icon-user"></i></span>
+					<input class="input-field" type="text" id="usermanager_edituser_lastname" name="usermanager_edituser_lastname"/>
+				</div>
 
-				<label for="usermanager_edituser_birthdate">Geburtsdatum:</label>
-				<input type="text" id="usermanager_edituser_birthdate"
-				       name="usermanager_edituser_birthdate" class="date"/>
+				<label class="input-label" for="usermanager_edituser_birthdate">Geburtsdatum:</label>
+				<div class="input-container">
+					<span class="input-addon"><i class="icon-calendar"></i></span>
+					<input class="input-field date" type="text" id="usermanager_edituser_birthdate" name="usermanager_edituser_birthdate"/>
+				</div>
 			</div>
 			<div id="usermanager_edituser_tabs_profilepicture">
 				<fieldset id="usermanager_edituser_profilepicture_current_fieldset">
 					<legend>Aktuelles Profilbild</legend>
-					<img id="usermanager_edituser_profilepicture_current_image"
-					     class="profilepicture"/>
+					<img id="usermanager_edituser_profilepicture_current_image" class="profilepicture"/>
 				</fieldset>
 
 				<fieldset>
@@ -378,20 +384,13 @@ if (isset($_POST["usermanager_edituser_id"]))
 
 					<p><b>Maximale Dateigr&ouml;&szlig;e:</b> <?php echo MAX_UPLOAD_SIZE; ?> MB</p>
 
-					<input type="hidden" id="usermanager_edituser_profilepicture_x"
-					       name="usermanager_edituser_profilepicture_x"/>
-					<input type="hidden" id="usermanager_edituser_profilepicture_y"
-					       name="usermanager_edituser_profilepicture_y"/>
-					<input type="hidden" id="usermanager_edituser_profilepicture_width"
-					       name="usermanager_edituser_profilepicture_width"/>
-					<input type="hidden" id="usermanager_edituser_profilepicture_height"
-					       name="usermanager_edituser_profilepicture_height"/>
+					<input type="hidden" id="usermanager_edituser_profilepicture_x" name="usermanager_edituser_profilepicture_x"/>
+					<input type="hidden" id="usermanager_edituser_profilepicture_y" name="usermanager_edituser_profilepicture_y"/>
+					<input type="hidden" id="usermanager_edituser_profilepicture_width" name="usermanager_edituser_profilepicture_width"/>
+					<input type="hidden" id="usermanager_edituser_profilepicture_height" name="usermanager_edituser_profilepicture_height"/>
 
-					<input type="hidden" name="MAX_FILE_SIZE"
-					       value="<?php echo MAX_UPLOAD_SIZE * 1024 * 1024; ?>"/>
-					<input type="file" id="usermanager_edituser_profilepicture_file"
-					       name="usermanager_edituser_profilepicture_file"
-					       onchange="usermanager_edituser_profilepicture_fileSelectHandler();"/>
+					<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD_SIZE * 1024 * 1024; ?>"/>
+					<input type="file" id="usermanager_edituser_profilepicture_file" name="usermanager_edituser_profilepicture_file" onchange="usermanager_edituser_profilepicture_fileSelectHandler();"/>
 
 					<div id="usermanager_edituser_profilepicture_editarea">
 						<p>W&auml;hle den Bereich aus, welchen du als Profilbild verwenden m&ouml;chtest.</p>
@@ -400,23 +399,19 @@ if (isset($_POST["usermanager_edituser_id"]))
 				</fieldset>
 			</div>
 			<div id="usermanager_edituser_tabs_contact">
-				<label for="usermanager_edituser_email">Email-Adresse:</label>
-				<input type="text" id="usermanager_edituser_email" name="usermanager_edituser_email"
-				       class="input-email"/>
+				<label class="input-label" for="usermanager_edituser_email">Email-Adresse:</label>
+				<div class="input-container">
+					<span class="input-addon"><i class="icon-envelope"></i></span>
+					<input class="input-field" type="text" id="usermanager_edituser_email" name="usermanager_edituser_email"/>
+				</div>
 
 				<div id="usermanager_edituser_contact_div"></div>
 
-				<button id="usermanager_edituser_contact_addbutton" type="button">Hinzuf&uuml;gen
-				</button>
+				<button id="usermanager_edituser_contact_addbutton" type="button">Hinzuf&uuml;gen</button>
 			</div>
 			<div id="usermanager_edituser_tabs_options">
-				<div><input type="checkbox" id="usermanager_edituser_enabled"
-					    name="usermanager_edituser_enabled" value="1" checked="checked"/><label
-						for="usermanager_edituser_enabled">Aktiviert</label></div>
-				<div><input type="checkbox" id="usermanager_edituser_sendcredentialsmail"
-					    name="usermanager_edituser_sendcredentialsmail" value="1"/><label
-						for="usermanager_edituser_sendcredentialsmail">Zugangsdaten
-						versenden</label></div>
+				<div><input type="checkbox" id="usermanager_edituser_enabled" name="usermanager_edituser_enabled" value="1" checked="checked"/><label for="usermanager_edituser_enabled">Aktiviert</label></div>
+				<div><input type="checkbox" id="usermanager_edituser_sendcredentialsmail" name="usermanager_edituser_sendcredentialsmail" value="1"/><label for="usermanager_edituser_sendcredentialsmail">Zugangsdaten versenden</label></div>
 			</div>
 			<div id="usermanager_edituser_tabs_permissions">
 				<div id="usermanager_edituser_permissions_tree"></div>
@@ -776,77 +771,96 @@ $("#usermanager_permissiongroups_tree").jstree(
 		plugins: ["json_data", "themes", "types", "ui"]
 	});
 
-var userManagerEditUserContactNewFieldId = 0;
-function usermanager_edituser_contact_addPhoneNumber(category, subCategory, number, id)
-{
-	if (!id)
+	var userManagerEditUserContactNewFieldId = 0;
+	function usermanager_edituser_contact_addPhoneNumber(category, subCategory, number, id)
 	{
-		userManagerEditUserContactNewFieldId++;
-		id = "new_" + userManagerEditUserContactNewFieldId;
-	}
-	var categories =
-	{
-		fax: "Fax",
-		mobile: "Mobil",
-		phone: "Telefon"
-	};
-	var subCategories =
-	{
-		business: "Gesch\u00e4ftlich",
-		private: "Privat"
-	};
-
-	var div = $("<div/>");
-
-	var categorySelectBox = $("<select/>");
-	categorySelectBox.attr("id", "usermanager_edituser_contact_" + id + "_category");
-	categorySelectBox.attr("name", categorySelectBox.attr("id"));
-	for (var index in categories)
-	{
-		var option = $("<option/>");
-		option.attr("value", index);
-		option.text(categories[index]);
-		if (index == category)
+		if (!id)
 		{
-			option.prop("selected", true);
+			userManagerEditUserContactNewFieldId++;
+			id = "new_" + userManagerEditUserContactNewFieldId;
 		}
-		categorySelectBox.append(option);
-	}
-	div.append(categorySelectBox);
-
-	var subCategorySelectBox = $("<select/>");
-	subCategorySelectBox.attr("id", "usermanager_edituser_contact_" + id + "_subcategory");
-	subCategorySelectBox.attr("name", subCategorySelectBox.attr("id"));
-	for (var index in subCategories)
-	{
-		var option = $("<option/>");
-		option.attr("value", index);
-		option.text(subCategories[index]);
-		if (index == subCategory)
+		var categories =
 		{
-			option.prop("selected", true);
+			fax: "Fax",
+			mobile: "Mobil",
+			phone: "Telefon"
+		};
+		var subCategories =
+		{
+			business: "Gesch\u00e4ftlich",
+			private: "Privat"
+		};
+
+		var div = $("<div/>");
+		div.addClass("input-container");
+
+		var iconSpan = $("<span/>");
+		iconSpan.addClass("input-addon");
+		div.append(iconSpan);
+
+		var icon = $("<i/>");
+		icon.addClass("icon-phone");
+		iconSpan.append(icon);
+
+		var fieldContainer = $("<div/>");
+		fieldContainer.addClass("input-field");
+		div.append(fieldContainer);
+
+		var categorySelectBox = $("<select/>");
+		categorySelectBox.addClass("input-select");
+		categorySelectBox.attr("id", "usermanager_edituser_contact_" + id + "_category");
+		categorySelectBox.attr("name", categorySelectBox.attr("id"));
+		for (var index in categories)
+		{
+			var option = $("<option/>");
+			option.attr("value", index);
+			option.text(categories[index]);
+			if (index == category)
+			{
+				option.prop("selected", true);
+			}
+			categorySelectBox.append(option);
 		}
-		subCategorySelectBox.append(option);
+		fieldContainer.append(categorySelectBox);
+
+		var subCategorySelectBox = $("<select/>");
+		subCategorySelectBox.addClass("input-select");
+		subCategorySelectBox.attr("id", "usermanager_edituser_contact_" + id + "_subcategory");
+		subCategorySelectBox.attr("name", subCategorySelectBox.attr("id"));
+		for (var index in subCategories)
+		{
+			var option = $("<option/>");
+			option.attr("value", index);
+			option.text(subCategories[index]);
+			if (index == subCategory)
+			{
+				option.prop("selected", true);
+			}
+			subCategorySelectBox.append(option);
+		}
+		fieldContainer.append(subCategorySelectBox);
+
+		var inputField = $("<input/>");
+		inputField.attr("type", "text");
+		inputField.attr("id", "usermanager_edituser_contact_" + id + "_number");
+		inputField.attr("name", inputField.attr("id"));
+		inputField.val(number);
+		fieldContainer.append(inputField);
+
+		var removeIconSpan = $("<span/>");
+		removeIconSpan.addClass("input-addon");
+		removeIconSpan.css("cursor", "pointer");
+		removeIconSpan.attr("title", "Entfernen");
+		removeIconSpan.click(function ()
+		{
+			div.remove();
+		});
+		fieldContainer.append(removeIconSpan);
+
+		var removeIcon = $("<i/>");
+		removeIcon.addClass("icon-trash");
+		removeIconSpan.append(removeIcon);
+
+		$("#usermanager_edituser_contact_div").append(div);
 	}
-	div.append(subCategorySelectBox);
-
-	var inputField = $("<input/>");
-	inputField.attr("type", "text");
-	inputField.attr("id", "usermanager_edituser_contact_" + id + "_number");
-	inputField.attr("name", inputField.attr("id"));
-	inputField.val(number);
-	div.append(inputField);
-
-	var removeButton = $("<button/>");
-	removeButton.attr("type", "button");
-	removeButton.text("Entfernen");
-	removeButton.button();
-	removeButton.click(function ()
-	{
-		div.remove();
-	});
-	div.append(removeButton);
-
-	$("#usermanager_edituser_contact_div").append(div);
-}
 </script>

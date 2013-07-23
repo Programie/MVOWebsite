@@ -3,7 +3,7 @@
 <?php
 if (Constants::$pagePath[2])
 {
-	echo "<div class='error'>Die Datei <b>" . Constants::$pagePath[2] . "</b> wurde nicht gefunden oder du hast nicht die erforderlichen Rechte um diese Datei herunterzuladen!</div>";
+	echo "<p class='alert-error'>Die Datei <b>" . Constants::$pagePath[2] . "</b> wurde nicht gefunden oder du hast nicht die erforderlichen Rechte um diese Datei herunterzuladen!</p>";
 }
 
 $forms = array();
@@ -21,7 +21,7 @@ while ($row = $query->fetch())
 
 if (empty($forms))
 {
-	echo "<div class='error'>Keine Formulare vorhanden!</div>";
+	echo "<p class='alert-error'>Keine Formulare vorhanden!</p>";
 }
 else
 {

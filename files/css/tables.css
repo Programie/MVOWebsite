@@ -148,7 +148,7 @@ table.table tbody tr th
 
 	.table_highlight *
 	{
-		color: #fff !important;
+		color: #fff;
 	}
 
 	.table_highlight td:first-child

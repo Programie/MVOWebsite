@@ -124,10 +124,10 @@ if (isset($_POST["writemessage_confirmed"]))
 					if ($mail->send())
 					{
 						echo "
-							<div class='ok'>
+							<p class='alert-success'>
 								<p>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</p>
 								" . implode("\n", $attachmentsText) . "
-							</div>
+							</p>
 						";
 						$error = "";
 					}
@@ -145,7 +145,7 @@ if (isset($_POST["writemessage_confirmed"]))
 	}
 	if ($error)
 	{
-		echo "<div class='error'>" . $error . "</div>";
+		echo "<p class='alert-error'>" . $error . "</p>";
 	}
 }
 ?>

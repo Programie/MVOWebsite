@@ -1,7 +1,6 @@
-#usermanager_edituser_contact_div button, #usermanager_edituser_contact_div input, #usermanager_edituser_contact_div select
+#usermanager_edituser_email
 {
-	display: inline;
-	margin: 5px;
+	width: 425px;
 }
 
 #usermanager_edituser_tabs_options label

@@ -61,7 +61,7 @@ class NoteDirectory
 	public function createList()
 	{
 		echo "
-			<div class='info no-print'>Klicke auf einen Titel um weitere Details anzuzeigen.</div>
+			<div class='alert-info no-print'>Klicke auf einen Titel um weitere Details anzuzeigen.</div>
 			<table id='notedirectory_table' class='table {sortlist: [[0,0]]}'>
 		";
 		$this->createHeader();

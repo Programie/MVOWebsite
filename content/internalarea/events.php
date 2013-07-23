@@ -52,7 +52,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 							$query = Constants::$pdo->prepare("INSERT INTO `events` (`typeId`, `year`, `userId`, `uploadId`) VALUES(:typeId, :year, :userId, :uploadId)");
 							$query->execute(array(":typeId" => $typeId, ":year" => $year, ":userId" => Constants::$accountManager->getUserId(), ":uploadId" => $uploadId));
 
-							echo "<div class='ok'>Die Datei wurde erfolgreich hochgeladen.</div>";
+							echo "<p class='alert-success'>Die Datei wurde erfolgreich hochgeladen.</p>";
 
 							$error = "";
 						}
@@ -77,7 +77,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 		}
 		if ($error)
 		{
-			echo "<div class='error'>" . $error . "</div>";
+			echo "<p class='alert-error'>" . $error . "</p>";
 		}
 	}
 
@@ -86,8 +86,10 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 			<legend>Datei hochladen</legend>
 			
 			<form id='events_upload_form' action='/internalarea/events' method='post' enctype='multipart/form-data' onsubmit='events_confirmUpload(); return false;'>
-				<label for='events_upload_year'>Jahr:</label>
-				<select id='events_upload_year' name='events_upload_year'>
+				<label class='input-label' for='events_upload_year'>Jahr:</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-calendar'></i></span>
+					<select class='input-field' id='events_upload_year' name='events_upload_year'>
 	";
 	foreach ($years as $year)
 	{
@@ -104,20 +106,27 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 		echo "<option value='" . $year . "' " . $selected . ">" . $yearTitle . "</option>";
 	}
 	echo "
-				</select>
+					</select>
+				</div>
 				
-				<label for='events_upload_event'>Veranstaltung:</label>
-				<select id='events_upload_event' name='events_upload_event'>
+				<label class='input-label' for='events_upload_event'>Veranstaltung:</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-star'></i></span>
+					<select class='input-field' id='events_upload_event' name='events_upload_event'>
 	";
 	foreach ($events as $name => $title)
 	{
 		echo "<option value='" . $name . "'>" . $title . "</option>";
 	}
 	echo "
-				</select>
+					</select>
+				</div>
 				
-				<label for='events_upload_file'>Datei:</label>
-				<input type='file' id='events_upload_file' name='events_upload_file'/>
+				<label class='input-label' for='events_upload_file'>Datei:</label>
+				<div class='input-container'>
+					<span class='input-addon'><i class='icon-file'></i></span>
+					<input class='input-field' type='file' id='events_upload_file' name='events_upload_file'/>
+				</div>
 				
 				<input type='hidden' id='events_upload_confirmed' name='events_upload_confirmed'/>
 				<input type='hidden' name='events_upload_sendtoken' value='" . TokenManager::getSendToken("events_upload", true) . "'/>
@@ -149,7 +158,7 @@ while ($row = $query->fetch())
 
 if (empty($years))
 {
-	echo "<div class='error'>Keine Veranstaltungen vorhanden!</div>";
+	echo "<p class='alert-error'>Keine Veranstaltungen vorhanden!</p>";
 }
 else
 {
@@ -220,35 +229,35 @@ else
 
 <script type="text/javascript">
 	$("#events_upload_confirm").dialog(
-		{
-			resizable: false,
-			modal: true,
-			width: "auto",
-			autoOpen: false,
-			buttons: {
-				"Hochladen": function ()
-				{
-					$("#events_upload_confirmed").val(true);
-					document.getElementById("events_upload_form").submit();
-				},
-				"Abbrechen": function ()
-				{
-					$(this).dialog("close");
-				}
+	{
+		resizable: false,
+		modal: true,
+		width: "auto",
+		autoOpen: false,
+		buttons: {
+			"Hochladen": function ()
+			{
+				$("#events_upload_confirmed").val(true);
+				document.getElementById("events_upload_form").submit();
+			},
+			"Abbrechen": function ()
+			{
+				$(this).dialog("close");
 			}
-		});
+		}
+	});
 
 	function events_confirmUpload()
 	{
 		if ($("#events_upload_year").val() == null)
 		{
-			alert(unescape("Kein Jahr ausgew%E4lt!"));
+			alert("Kein Jahr ausgew\u00e4lt!");
 		}
 		else
 		{
 			if ($("#events_upload_event").val() == null)
 			{
-				alert(unescape("Keine Veranstaltung ausgew%E4hlt!"));
+				alert("Keine Veranstaltung ausgew\u00e4hlt!");
 			}
 			else
 			{
@@ -260,7 +269,7 @@ else
 				}
 				else
 				{
-					alert(unescape("Keine Datei ausgew%E4hlt!"));
+					alert("Keine Datei ausgew\u00e4hlt!");
 				}
 			}
 		}

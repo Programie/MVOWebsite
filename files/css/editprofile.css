@@ -1,7 +1,6 @@
-#editprofile_contact_div button, #editprofile_contact_div input, #editprofile_contact_div select
+#editprofile_changeemail_current, #editprofile_changeemail_new1, #editprofile_changeemail_new2
 {
-	display: inline;
-	margin: 5px;
+	width: 300px;
 }
 
 #editprofile_profilepicture_editarea, #editprofile_profilepicture_progressarea, #editprofile_profilepicture_upload

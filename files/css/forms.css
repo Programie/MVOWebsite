@@ -1,4 +1,4 @@
-button, label, input[type="checkbox"], input[type="file"], input[type="radio"]
+button, label, input[type="checkbox"], input[type="file"], input[type="radio"], input[type="submit"]
 {
 	cursor: pointer;
 }
@@ -8,102 +8,95 @@ legend
 	font-weight: bold;
 }
 
-form input[type="file"], form input[type="password"], form input[type="text"], form select, form textarea
-{
-	display: block;
-	margin-top: 10px;
-	margin-bottom: 15px;
-}
-
-form select
-{
-	padding: 5px;
-	font-size: 16px;
-	border-radius: 5px;
-	background-color: #eee;
-	border: 1px solid #ccc;
-}
-
 form textarea
 {
 	width: 100%;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
+	font-size: 14px;
+	padding: 4px 5px;
 	box-sizing: border-box;
 }
 
-input[type="password"], .date, .input-email, .input-fax, .input-mobile-phone, .input-phone, .input-search, .input-user, .time
+.input-addon
 {
-	padding-left: 30px !important;
-	background: no-repeat 5px center;
-}
-
-input[type="password"], input[type="text"], textarea
-{
-	padding: 10px;
-	font-size: 16px;
-	border-radius: 5px;
+	display: inline-block;
+	width: auto;
+	height: 20px;
+	min-width: 16px;
+	padding: 4px 5px;
+	font-size: 14px;
+	font-weight: normal;
+	line-height: 20px;
+	text-align: center;
+	text-shadow: 0 1px 0 #fff;
 	background-color: #eee;
 	border: 1px solid #ccc;
-	box-shadow: 0 0 5px #888;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	margin-right: -1px;
 }
 
-input[type="password"]
+.input-container
 {
-	background-image: url(/files/images/formfields/lock.png);
+	display: block;
+	font-size: 0;
+	margin: 10px 0 20px 0;
+	white-space: nowrap;
 }
 
-input[type="submit"]
+.input-container .input-field
 {
-	padding: 10px;
-	font-size: 16px;
-	cursor: pointer;
+	float: none;
+	margin-left: 0;
+	display: inline-block;
+	font-size: 14px;
+	padding: 4px 6px;
+	height: 30px;
+	box-sizing: border-box;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border: 1px solid #ccc;
 }
 
-.date
+.input-container div.input-field
 {
-	background-image: url(/files/images/formfields/date.png);
-	width: 100px;
+	padding: 0;
+	height: 30px;
+	font-size: 0;
 }
 
-.input-email
+.input-container .input-field *
 {
-	background-image: url(/files/images/formfields/email.png);
+	margin: 0;
+	padding: 4px 6px;
+	height: 20px;
+	border: 0;
+	border-left: 1px solid #ccc;
+	font-size: 14px;
+}
+
+.input-container .input-field *:first-child
+{
+	border-left: 0;
+}
+
+.input-container .input-field *:last-child
+{
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
+.input-container .input-field-long
+{
 	width: 300px;
 }
 
-.input-fax
-{
-	background-image: url(/files/images/formfields/fax.png);
-}
-
-.input-mobile-phone
-{
-	background-image: url(/files/images/formfields/mobile-phone.png);
-}
-
-.input-phone
-{
-	background-image: url(/files/images/formfields/phone.png);
-}
-
-.input-search
-{
-	background-image: url(/files/images/formfields/search.png);
-}
-
-.input-user
-{
-	background-image: url(/files/images/formfields/user.png);
-}
-
-.time
-{
-	background-image: url(/files/images/formfields/time.png);
-	width: 100px;
-}
-
-form label
+.input-label
 {
 	font-weight: bold;
+}
+
+.input-container .input-select
+{
+	height: 28px;
+	font-size: 14px;
 }

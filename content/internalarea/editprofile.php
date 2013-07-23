@@ -4,7 +4,7 @@
 $userData = Constants::$accountManager->getUserData();
 if ($userData->forcePasswordChange)
 {
-	echo "<div class='warning' id='editprofile_passwordchangeinfo'>Du musst dein Passwort &auml;ndern bevor du auf die anderen Bereiche des internen Bereichs zugreifen kannst.</div>";
+	echo "<p class='alert-warning' id='editprofile_passwordchangeinfo'>Du musst dein Passwort &auml;ndern bevor du auf die anderen Bereiche des internen Bereichs zugreifen kannst.</p>";
 }
 ?>
 
@@ -30,8 +30,22 @@ if ($userData->forcePasswordChange)
 		};
 
 		var div = $("<div/>");
+		div.addClass("input-container");
+
+		var iconSpan = $("<span/>");
+		iconSpan.addClass("input-addon");
+		div.append(iconSpan);
+
+		var icon = $("<i/>");
+		icon.addClass("icon-phone");
+		iconSpan.append(icon);
+
+		var fieldContainer = $("<div/>");
+		fieldContainer.addClass("input-field");
+		div.append(fieldContainer);
 
 		var categorySelectBox = $("<select/>");
+		categorySelectBox.addClass("input-select");
 		categorySelectBox.attr("id", "editprofile_contact_" + id + "_category");
 		categorySelectBox.attr("name", categorySelectBox.attr("id"));
 		for (var index in categories)
@@ -45,9 +59,10 @@ if ($userData->forcePasswordChange)
 			}
 			categorySelectBox.append(option);
 		}
-		div.append(categorySelectBox);
+		fieldContainer.append(categorySelectBox);
 
 		var subCategorySelectBox = $("<select/>");
+		subCategorySelectBox.addClass("input-select");
 		subCategorySelectBox.attr("id", "editprofile_contact_" + id + "_subcategory");
 		subCategorySelectBox.attr("name", subCategorySelectBox.attr("id"));
 		for (var index in subCategories)
@@ -61,24 +76,28 @@ if ($userData->forcePasswordChange)
 			}
 			subCategorySelectBox.append(option);
 		}
-		div.append(subCategorySelectBox);
+		fieldContainer.append(subCategorySelectBox);
 
 		var inputField = $("<input/>");
 		inputField.attr("type", "text");
 		inputField.attr("id", "editprofile_contact_" + id + "_number");
 		inputField.attr("name", inputField.attr("id"));
 		inputField.val(number);
-		div.append(inputField);
+		fieldContainer.append(inputField);
 
-		var removeButton = $("<button/>");
-		removeButton.attr("type", "button");
-		removeButton.text("Entfernen");
-		removeButton.button();
-		removeButton.click(function ()
+		var removeIconSpan = $("<span/>");
+		removeIconSpan.addClass("input-addon");
+		removeIconSpan.css("cursor", "pointer");
+		removeIconSpan.attr("title", "Entfernen");
+		removeIconSpan.click(function ()
 		{
 			div.remove();
 		});
-		div.append(removeButton);
+		fieldContainer.append(removeIconSpan);
+
+		var removeIcon = $("<i/>");
+		removeIcon.addClass("icon-trash");
+		removeIconSpan.append(removeIcon);
 
 		$("#editprofile_contact_div").append(div);
 	}
@@ -130,26 +149,26 @@ if ($userData->forcePasswordChange)
 							$mail->send();
 						}
 
-						echo "<div class='ok'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+						echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
 					}
 					else
 					{
-						echo "<div class='error'>Der Benutzername wird bereits verwendet!</div>";
+						echo "<p class='alert-error'>Der Benutzername wird bereits verwendet!</p>";
 					}
 				}
 				else
 				{
-					echo "<div class='error'>Der Nachname muss angegeben werden!</div>";
+					echo "<p class='alert-error'>Der Nachname muss angegeben werden!</p>";
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Der Vorname muss angegeben werden!</div>";
+				echo "<p class='alert-error'>Der Vorname muss angegeben werden!</p>";
 			}
 		}
 		else
 		{
-			echo "<div class='error'>Ein Benutzername muss angegeben werden!</div>";
+			echo "<p class='alert-error'>Ein Benutzername muss angegeben werden!</p>";
 		}
 	}
 	?>
@@ -157,18 +176,23 @@ if ($userData->forcePasswordChange)
 	<form action="/internalarea/editprofile#editprofile_account" method="post">
 		<input type="hidden" name="editprofile_tab" value="account"/>
 
-		<label for="editprofile_account_username">Benutzername:</label>
-		<input type="text" class="input-user" id="editprofile_account_username"
-		       name="editprofile_account_username" value="<?php echo escapeText($userData->username); ?>"
-		       required/>
+		<label class="input-label" for="editprofile_account_username">Benutzername:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-user"></i></span>
+			<input class="input-field" type="text" id="editprofile_account_username" name="editprofile_account_username" value="<?php echo escapeText($userData->username); ?>" required/>
+		</div>
 
-		<label for="editprofile_account_firstname">Vorname:</label>
-		<input type="text" id="editprofile_account_firstname" name="editprofile_account_firstname"
-		       value="<?php echo escapeText($userData->firstName); ?>" required/>
+		<label class="input-label" for="editprofile_account_firstname">Vorname:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-user"></i></span>
+			<input class="input-field" type="text" id="editprofile_account_firstname" name="editprofile_account_firstname" value="<?php echo escapeText($userData->firstName); ?>" required/>
+		</div>
 
-		<label for="editprofile_account_lastname">Nachname:</label>
-		<input type="text" id="editprofile_account_lastname" name="editprofile_account_lastname"
-		       value="<?php echo escapeText($userData->lastName); ?>" required/>
+		<label class="input-label" for="editprofile_account_lastname">Nachname:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-user"></i></span>
+			<input class="input-field" type="text" id="editprofile_account_lastname" name="editprofile_account_lastname" value="<?php echo escapeText($userData->lastName); ?>" required/>
+		</div>
 
 		<input type="submit" value="Speichern"/>
 	</form>
@@ -186,7 +210,7 @@ if ($userData->forcePasswordChange)
 			{
 				if ($file["size"] > 1024 * 1024 * 10)
 				{
-					echo "<div class='error'>Die maximal erlaubte Dateigr&ouml;&szlig;e ist 10 MB!</div>";
+					echo "<p class='alert-error'>Die maximal erlaubte Dateigr&ouml;&szlig;e ist 10 MB!</p>";
 					$showError = false;
 				}
 				else
@@ -210,7 +234,7 @@ if ($userData->forcePasswordChange)
 									{
 										if (imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userData->id . ".jpg"))
 										{
-											echo "<div class='ok'>Dein Profilbild wurde erfolgreich aktualisiert.</div>";
+											echo "<p class='alert-success'>Dein Profilbild wurde erfolgreich aktualisiert.</p>";
 											$showError = false;
 										}
 									}
@@ -223,7 +247,7 @@ if ($userData->forcePasswordChange)
 		}
 		if ($showError)
 		{
-			echo "<div class='error'>Beim Hochladen ist ein Fehler ausgetreten. Bitte versuche es erneut oder wende dich an den Webmaster.</div>";
+			echo "<p class='alert-error'>Beim Hochladen ist ein Fehler ausgetreten. Bitte versuche es erneut oder wende dich an den Webmaster.</p>";
 		}
 	}
 
@@ -244,27 +268,23 @@ if ($userData->forcePasswordChange)
 
 		<p><b>Maximale Dateigr&ouml;&szlig;e:</b> <?php echo MAX_UPLOAD_SIZE; ?> MB</p>
 
-		<form id="editprofile_profilepicture_form" action="/internalarea/editprofile#editprofile_profilepicture"
-		      method="post" enctype="multipart/form-data">
+		<form id="editprofile_profilepicture_form" action="/internalarea/editprofile#editprofile_profilepicture" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="editprofile_tab" value="profilepicture"/>
 
 			<input type="hidden" id="editprofile_profilepicture_x" name="editprofile_profilepicture_x"/>
 			<input type="hidden" id="editprofile_profilepicture_y" name="editprofile_profilepicture_y"/>
-			<input type="hidden" id="editprofile_profilepicture_width"
-			       name="editprofile_profilepicture_width"/>
-			<input type="hidden" id="editprofile_profilepicture_height"
-			       name="editprofile_profilepicture_height"/>
+			<input type="hidden" id="editprofile_profilepicture_width" name="editprofile_profilepicture_width"/>
+			<input type="hidden" id="editprofile_profilepicture_height" name="editprofile_profilepicture_height"/>
 
 			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_UPLOAD_SIZE * 1024 * 1024; ?>"/>
-			<input type="file" id="editprofile_profilepicture_file" name="editprofile_profilepicture_file"
-			       onchange="editprofile_profilePicture_FileSelectHandler();"/>
+			<input type="file" id="editprofile_profilepicture_file" name="editprofile_profilepicture_file" onchange="editprofile_profilePicture_FileSelectHandler();"/>
 
 			<div id="editprofile_profilepicture_editarea">
 				<p>W&auml;hle den Bereich aus, welchen du als Profilbild verwenden m&ouml;chtest.</p>
 				<img id="editprofile_profilepicture_preview"/>
 			</div>
 
-			<input id="editprofile_profilepicture_upload" type="submit" value="Hochladen"/>
+			<button id="editprofile_profilepicture_upload" type="submit"><i class='icon-upload'></i> Hochladen</button>
 		</form>
 
 		<div id="editprofile_profilepicture_progressarea">
@@ -290,7 +310,7 @@ if ($userData->forcePasswordChange)
 					if (Constants::$accountManager->changePassword($_POST["editprofile_changepassword_new1"], $_POST["editprofile_changepassword_current"]))
 					{
 						echo "
-								<div class='ok'>Das Passwort wurde erfolgreich ge&auml;ndert.</div>
+								<p class='alert-success'>Das Passwort wurde erfolgreich ge&auml;ndert.</p>
 								<script type='text/javascript'>
 									$('#editprofile_passwordchangeinfo').hide();
 								</script>
@@ -298,22 +318,22 @@ if ($userData->forcePasswordChange)
 					}
 					else
 					{
-						echo "<div class='error'>Das eingegebene Passwort ist falsch!</div>";
+						echo "<p class='alert-error'>Das eingegebene Passwort ist falsch!</p>";
 					}
 				}
 				else
 				{
-					echo "<div class='error'>Das neue Passwort stimmt nicht mit dem wiederholen Passwort &uuml;berein!</div>";
+					echo "<p class='alert-error'>Das neue Passwort stimmt nicht mit dem wiederholen Passwort &uuml;berein!</p>";
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Das neue Passwort muss mindestens " . PASSWORDS_MINLENGTH . " Zeichen haben!</div>";
+				echo "<p class='alert-error'>Das neue Passwort muss mindestens " . PASSWORDS_MINLENGTH . " Zeichen haben!</p>";
 			}
 		}
 		else
 		{
-			echo "<div class='error'>Das aktuelle Passwort muss angegeben werden!</div>";
+			echo "<p class='alert-error'>Das aktuelle Passwort muss angegeben werden!</p>";
 		}
 	}
 	?>
@@ -321,17 +341,23 @@ if ($userData->forcePasswordChange)
 	<form action="/internalarea/editprofile#editprofile_changepassword" method="post">
 		<input type="hidden" name="editprofile_tab" value="password"/>
 
-		<label for="editprofile_changepassword_current">Aktuelles Passwort:</label>
-		<input type="password" id="editprofile_changepassword_current" name="editprofile_changepassword_current"
-		       value="<?php echo escapeText($_POST["editprofile_changepassword_current"]); ?>" required/>
+		<label class="input-label" for="editprofile_changepassword_current">Aktuelles Passwort:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-key"></i></span>
+			<input class="input-field" type="password" id="editprofile_changepassword_current" name="editprofile_changepassword_current" value="<?php echo escapeText($_POST["editprofile_changepassword_current"]); ?>" required/>
+		</div>
 
-		<label for="editprofile_changepassword_new1">Neues Passwort:</label>
-		<input type="password" id="editprofile_changepassword_new1" name="editprofile_changepassword_new1"
-		       value="<?php echo escapeText($_POST["editprofile_changepassword_new1"]); ?>" required/>
+		<label class="input-label" for="editprofile_changepassword_new1">Neues Passwort:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-key"></i></span>
+			<input class="input-field" type="password" id="editprofile_changepassword_new1" name="editprofile_changepassword_new1" value="<?php echo escapeText($_POST["editprofile_changepassword_new1"]); ?>" required/>
+		</div>
 
-		<label for="editprofile_changepassword_new2">Neues Passwort wiederholen:</label>
-		<input type="password" id="editprofile_changepassword_new2" name="editprofile_changepassword_new2"
-		       value="<?php echo escapeText($_POST["editprofile_changepassword_new2"]); ?>" required/>
+		<label class="input-label" for="editprofile_changepassword_new2">Neues Passwort wiederholen:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-key"></i></span>
+			<input class="input-field" type="password" id="editprofile_changepassword_new2" name="editprofile_changepassword_new2" value="<?php echo escapeText($_POST["editprofile_changepassword_new2"]); ?>" required/>
+		</div>
 
 		<input type="submit" value="Speichern"/>
 	</form>
@@ -362,65 +388,70 @@ if ($userData->forcePasswordChange)
 							$mail->setTo($userData->newEmail);
 							if ($mail->send())
 							{
-								echo "<div class='info'>Es wurde eine Email mit dem Link zum Best&auml;tigen der Email-Adresse an die neue Email-Adresse gesendet.</div>";
+								echo "<p class='alert-info'>Es wurde eine Email mit dem Link zum Best&auml;tigen der Email-Adresse an die neue Email-Adresse gesendet.</p>";
 							}
 							else
 							{
 								echo "
-										<div class='error'>
-											<p>Beim Senden der Email ist ein Fehler aufgetreten!</p>
-											<p>Bitte versuchen Sie es sp&auml;ter erneut oder wenden Sie sich an den Webmaster.</p>
-										</div>
-									";
+									<p class='alert-error'>
+										<p>Beim Senden der Email ist ein Fehler aufgetreten!</p>
+										<p>Bitte versuche es sp&auml;ter erneut oder wende dich an den Webmaster.</p>
+									</p
+								";
 							}
 						}
 						else
 						{
-							echo "<div class='error'>Das eingegebene Passwort ist falsch!</div>";
+							echo "<p class='alert-error'>Das eingegebene Passwort ist falsch!</p>";
 						}
 					}
 					else
 					{
-						echo "<div class='error'>Die neue Email-Adresse stimmt nicht mit der wiederholen Email-Adresse &uuml;berein!</div>";
+						echo "<p class='alert-error'>Die neue Email-Adresse stimmt nicht mit der wiederholen Email-Adresse &uuml;berein!</p>";
 					}
 				}
 				else
 				{
-					echo "<div class='error'>Die neue Email-Adresse hat ein ung&uuml;tiges Format! Bitte verwende das Format <b>benutzername@domain.tld</b>.</div>";
+					echo "<p class='alert-error'>Die neue Email-Adresse hat ein ung&uuml;tiges Format! Bitte verwende das Format <b>benutzername@domain.tld</b>.</p>";
 				}
 			}
 			else
 			{
-				echo "<div class='error'>Es muss eine neue Email-Adresse angegeben werden!</div>";
+				echo "<p class='alert-error'>Es muss eine neue Email-Adresse angegeben werden!</p>";
 			}
 		}
 		else
 		{
-			echo "<div class='error'>Das aktuelle Passwort muss angegeben werden!</div>";
+			echo "<p class='alert-error'>Das aktuelle Passwort muss angegeben werden!</p>";
 		}
 	}
 	?>
 	<form action="/internalarea/editprofile#editprofile_changeemail" method="post">
 		<input type="hidden" name="editprofile_tab" value="email"/>
 
-		<label for="editprofile_changeemail_currentpassword">Aktuelles Passwort:</label>
-		<input type="password" id="editprofile_changeemail_currentpassword"
-		       name="editprofile_changeemail_currentpassword"
-		       value="<?php echo escapeText($_POST["editprofile_changeemail_currentpassword"]); ?>" required/>
+		<label class="input-label" for="editprofile_changeemail_currentpassword">Aktuelles Passwort:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-key"></i></span>
+			<input class="input-field" type="password" id="editprofile_changeemail_currentpassword" name="editprofile_changeemail_currentpassword" value="<?php echo escapeText($_POST["editprofile_changeemail_currentpassword"]); ?>" required/>
+		</div>
 
-		<label for="editprofile_changeemail_current">Aktuelle Email-Adresse:</label>
-		<input type="text" class="input-email" id="editprofile_changeemail_current"
-		       value="<?php echo $userData->email; ?>" disabled/>
+		<label class="input-label" for="editprofile_changeemail_current">Aktuelle Email-Adresse:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-envelope"></i></span>
+			<input class="input-field" type="text" id="editprofile_changeemail_current" value="<?php echo $userData->email; ?>" disabled/>
+		</div>
 
-		<label for="editprofile_changeemail_new1">Neue Email-Adresse:</label>
-		<input type="text" class="input-email" id="editprofile_changeemail_new1"
-		       name="editprofile_changeemail_new1"
-		       value="<?php echo escapeText($_POST["editprofile_changeemail_new1"]); ?>" required/>
+		<label class="input-label" for="editprofile_changeemail_new1">Neue Email-Adresse:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-envelope"></i></span>
+			<input class="input-field" type="text" id="editprofile_changeemail_new1" name="editprofile_changeemail_new1" value="<?php echo escapeText($_POST["editprofile_changeemail_new1"]); ?>" required/>
+		</div>
 
-		<label for="editprofile_changeemail_new2">Neue Email-Adresse wiederholen:</label>
-		<input type="text" class="input-email" id="editprofile_changeemail_new2"
-		       name="editprofile_changeemail_new2"
-		       value="<?php echo escapeText($_POST["editprofile_changeemail_new2"]); ?>" required/>
+		<label class="input-label" for="editprofile_changeemail_new2">Neue Email-Adresse wiederholen:</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="icon-envelope"></i></span>
+			<input class="input-field" type="text" id="editprofile_changeemail_new2" name="editprofile_changeemail_new2" value="<?php echo escapeText($_POST["editprofile_changeemail_new2"]); ?>" required/>
+		</div>
 
 		<input type="submit" value="Speichern"/>
 	</form>
@@ -459,7 +490,7 @@ if ($userData->forcePasswordChange)
 			$query = Constants::$pdo->prepare("DELETE FROM `phonenumbers` WHERE `userId` = :userId AND `id` NOT IN (" . implode(",", $entryIds) . ")");
 			$query->execute(array(":userId" => Constants::$accountManager->getUserId()));
 		}
-		echo "<div class='ok'>Deine &Auml;nderungen wurden gespeichert.</div>";
+		echo "<p class='alert-success'>Deine &Auml;nderungen wurden gespeichert.</p>";
 	}
 	?>
 	<form action="/internalarea/editprofile#editprofile_contact" method="post">
@@ -480,7 +511,10 @@ if ($userData->forcePasswordChange)
 			?>
 		</script>
 
-		<button id="editprofile_contact_addbutton" type="button">Hinzuf&uuml;gen</button>
+		<button id="editprofile_contact_addbutton" type="button">
+			<i class="icon-plus"></i>
+			<span>Hinzuf&uuml;gen</span>
+		</button>
 
 		<input type="submit" value="Speichern"/>
 	</form>
@@ -490,33 +524,33 @@ if ($userData->forcePasswordChange)
 <script type="text/javascript">
 	$("#editprofile_tabs").tabs();
 	$("#editprofile_profilepicture_progressbar").progressbar(
+	{
+		change: function ()
 		{
-			change: function ()
-			{
-				$("#editprofile_profilepicture_progressbar_label").text($("#editprofile_profilepicture_progressbar").progressbar("value") + "%");
-			}
-		});
+			$("#editprofile_profilepicture_progressbar_label").text($("#editprofile_profilepicture_progressbar").progressbar("value") + "%");
+		}
+	});
 
 	$("#editprofile_profilepicture_form").ajaxForm(
+	{
+		beforeSubmit: function ()
 		{
-			beforeSubmit: function ()
+			$("#editprofile_profilepicture_progressbar").progressbar("value", 0);
+			$("#editprofile_profilepicture_form").slideUp(1000, function ()
 			{
-				$("#editprofile_profilepicture_progressbar").progressbar("value", 0);
-				$("#editprofile_profilepicture_form").slideUp(1000, function ()
-				{
-					$("#editprofile_profilepicture_progressarea").slideDown(1000);
-				});
-			},
-			uploadProgress: function (event, position, total, percentComplete)
-			{
-				$("#editprofile_profilepicture_progressbar").progressbar("value", percentComplete);
-			},
-			complete: function (response)
-			{
-				window.location.href = $("#editprofile_profilepicture_form").attr("action");
-				window.location.reload();
-			}
-		});
+				$("#editprofile_profilepicture_progressarea").slideDown(1000);
+			});
+		},
+		uploadProgress: function (event, position, total, percentComplete)
+		{
+			$("#editprofile_profilepicture_progressbar").progressbar("value", percentComplete);
+		},
+		complete: function (response)
+		{
+			window.location.href = $("#editprofile_profilepicture_form").attr("action");
+			window.location.reload();
+		}
+	});
 
 	$("#editprofile_contact_addbutton").click(editprofile_contact_addPhoneNumber);
 
@@ -526,13 +560,13 @@ if ($userData->forcePasswordChange)
 
 		if (file.type != "image/jpeg")
 		{
-			alert(unescape("Das ausgew%E4hlte Bild hat einen ung%FCltigen Dateintyp!\n\nBitte ein Bild vom Typ 'JPEG' (.jpg oder .jpeg) ausw%E4hlen."));
+			alert("Das ausgew\u00e4hlte Bild hat einen ung\u00fcltigen Dateintyp!\n\nBitte ein Bild vom Typ 'JPEG' (.jpg oder .jpeg) ausw\u00e4hlen.");
 			return;
 		}
 
 		if (file.size > 1024 * 1024 * 10)// 10 MB
 		{
-			alert(unescape("Die maximal erlaubte Dateigr%F6%DFe ist 10 MB!"));
+			alert("Die maximal erlaubte Dateigr\u00f6\u00dfe ist 10 MB!");
 			return;
 		}
 

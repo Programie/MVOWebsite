@@ -9,16 +9,16 @@ if (isset($_POST["featurerequests_new_description"]))
 		{
 			$query = Constants::$pdo->prepare("INSERT INTO `featurerequests` (`userId`, `date`, `description`, `status`) VALUES(:userId, NOW(), :description, 'new')");
 			$query->execute(array(":userId" => Constants::$accountManager->getUserId(), ":description" => $_POST["featurerequests_new_description"]));
-			echo "<div class='ok'>Dein Verbesserungsvorschlag wurde erfolgreich eingetragen.</div>";
+			echo "<p class='alert-success'>Dein Verbesserungsvorschlag wurde erfolgreich eingetragen.</p>";
 		}
 		else
 		{
-			echo "<div class='error'>Keine Beschreibung angegeben!</div>";
+			echo "<p class='alert-error'>Keine Beschreibung angegeben!</p>";
 		}
 	}
 	else
 	{
-		echo "<div class='error'>Es wurde versucht, das Formular erneut zu senden!</div>";
+		echo "<p class='alert-error'>Es wurde versucht, das Formular erneut zu senden!</p>";
 	}
 }
 ?>
@@ -73,6 +73,6 @@ if ($query->rowCount())
 }
 else
 {
-	echo "<div class='error'>Keine Verbesserungsvorschl&auml;ge vorhanden!</div>";
+	echo "<p class='alert-error'>Keine Verbesserungsvorschl&auml;ge vorhanden!</p>";
 }
 ?>

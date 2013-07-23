@@ -10,7 +10,7 @@ else
 	echo "<p>Melde dich im internen Bereich mit deinem Benutzername und Passwort an um auf weitere Bereiche zugreifen zu k&ouml;nnen.</p>";
 	if (Constants::$accountManager->hasLoginFailed())
 	{
-		echo "<div class='error'>Login fehlgeschlagen: Benutzername oder Passwort falsch!</div>";
+		echo "<p class='alert-error'>Login fehlgeschlagen: Benutzername oder Passwort falsch!</p>";
 	}
 	echo "
 		<form action='" . $_SERVER["REQUEST_URI"] . "' method='post'>

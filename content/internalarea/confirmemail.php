@@ -21,16 +21,16 @@ if (Constants::$pagePath[2])
 			$mail->setTo($row->oldEmail);
 			$mail->send();
 
-			echo "<div class='info'>Die Email-Adresse wurde erfolgreich auf <b>" . $row->newEmail . "</b> ge&auml;ndert.</div>";
+			echo "<p class='alert-success'>Die Email-Adresse wurde erfolgreich auf <b>" . $row->newEmail . "</b> ge&auml;ndert.</p>";
 		}
 		else
 		{
-			echo "<div class='error'>Die G&uuml;ltigkeit des Schl&uuml;ssels ist abgelaufen! Bitte versuche es erneut oder wende dich an den Webmaster.</div>";
+			echo "<p class='alert-error'>Die G&uuml;ltigkeit des Schl&uuml;ssels ist abgelaufen! Bitte versuche es erneut oder wende dich an den Webmaster.</p>";
 		}
 	}
 	else
 	{
-		echo "<div class='error'>Ung&uuml;ltiger Schl&uuml;ssel!</div>";
+		echo "<p class='alert-error'>Ung&uuml;ltiger Schl&uuml;ssel!</p>";
 	}
 }
 ?>
