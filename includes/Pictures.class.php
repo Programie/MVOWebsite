@@ -67,7 +67,7 @@ class Pictures
 	 */
 	public static function getPictures($albumId)
 	{
-		$query = Constants::$pdo->prepare("SELECT `published`, `date`, `title`, `text` FROM `picturealbums` WHERE `id` = :id");
+		$query = Constants::$pdo->prepare("SELECT `published`, `date`, `isPublic`, `title`, `text` FROM `picturealbums` WHERE `id` = :id");
 		$query->execute(array(":id" => $albumId));
 
 		if (!$query->rowCount())

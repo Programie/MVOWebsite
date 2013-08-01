@@ -273,46 +273,53 @@ if (Constants::$accountManager->hasPermission("pictures.edit"))
 			}
 		});
 
-		$("#gallery > li > a").contextMenu("pictures_edit_contextmenu",
+		<?php
+		if (Constants::$pagePath[1] == "album" and Constants::$pagePath[2])
 		{
-			bindings:
+			?>
+			$("#gallery > li > a").contextMenu("pictures_edit_contextmenu",
 			{
-				pictures_edit_contextmenu_edittitle: function (trigger)
+				bindings:
 				{
-					var element = $(trigger);
-					var title = prompt("Gebe den Titel von dem Bild ein.", element.attr("caption"));
-					if (title != null)
+					pictures_edit_contextmenu_edittitle: function (trigger)
 					{
-						$.ajax(
+						var element = $(trigger);
+						var title = prompt("Gebe den Titel von dem Bild ein.", element.attr("caption"));
+						if (title != null)
 						{
-							type: "POST",
-							data:
+							$.ajax(
 							{
-								pictures_edittitle_albumId: <?php echo Constants::$pagePath[2];?>,
-								pictures_edittitle_number: element.attr("number"),
-								pictures_edittitle_title: title
-							},
-							url: "/pictures/setpicturetitle",
-							error: function (jqXhr, textStatus, errorThrown)
-							{
-								alert("Fehler beim Speichern des Titels!");
-							},
-							success: function (data, status, jqXhr)
-							{
-								if (data == "ok")
+								type: "POST",
+								data:
 								{
-									element.attr("caption", title);
-								}
-								else
+									pictures_edittitle_albumId: <?php echo Constants::$pagePath[2];?>,
+									pictures_edittitle_number: element.attr("number"),
+									pictures_edittitle_title: title
+								},
+								url: "/pictures/setpicturetitle",
+								error: function (jqXhr, textStatus, errorThrown)
 								{
 									alert("Fehler beim Speichern des Titels!");
+								},
+								success: function (data, status, jqXhr)
+								{
+									if (data == "ok")
+									{
+										element.attr("caption", title);
+									}
+									else
+									{
+										alert("Fehler beim Speichern des Titels!");
+									}
 								}
-							}
-						});
+							});
+						}
 					}
 				}
-			}
-		});
+			});
+			<?php
+		}
+ 		?>
 	</script>
 	<?php
 }
