@@ -57,7 +57,7 @@ if (!$albumId)
 	{
 		$month = $matches[1];
 		$day = $matches[2];
-		$title = trim($matches[3]);
+		$title = trim($matches[4]);
 	}
 	else
 	{
