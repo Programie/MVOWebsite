@@ -1,5 +1,6 @@
 <?php
 define("ROOT_PATH", __DIR__);
+define("PICTURES_PATH", ROOT_PATH . "/files/pictures");
 
 require_once ROOT_PATH . "/includes/config.inc.php";
 require_once ROOT_PATH . "/includes/Constants.class.php";
@@ -11,12 +12,13 @@ if (php_sapi_name() != "cli")
 	die("This script can only be invoked via the CLI!");
 }
 
-$path = @$argv[1];
-if (!$path)
+$albumFolderName = @$argv[1];
+if (!$albumFolderName)
 {
-	die("Usage: " . $argv[0] . " <path to album>");
+	die("Usage: " . $argv[0] . " <album folder name>");
 }
 
+$path = PICTURES_PATH . "/" . $albumFolderName;
 $albumXmlFile = $path . "/album.xml";
 
 if (!file_exists($albumXmlFile))
@@ -138,4 +140,10 @@ foreach ($pictures as $fileId => $picture)
 
 // Set this album as the album of the year if no album has been set yet
 Pictures::updateAlbumOfTheYear($year, $albumId, false);
+
+// Move the folder of this album if the name is not the id
+if ($albumFolderName != $albumId)
+{
+	rename($path, PICTURES_PATH . "/" . $albumId);
+}
 ?>
