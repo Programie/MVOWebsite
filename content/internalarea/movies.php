@@ -41,15 +41,15 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			$mail->send();
 
 			echo "
-				<p class='alert-success'>
+				<div class='alert-success'>
 					Deine Bestellung wurde storniert.<br />
 					Du erh&auml;lst in K&uuml;rze eine Email zur Best&auml;tigung deiner Stornierung.
-				</p>
+				</div>
 			";
 		}
 		else
 		{
-			echo "<p class='alert-error'>Die Bestellung wurde nicht gefunden!</p>";
+			echo "<div class='alert-error'>Die Bestellung wurde nicht gefunden!</div>";
 		}
 	}
 	else
@@ -64,15 +64,15 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			{
 				if ($row->borrowedTo == "userId:" . Constants::$accountManager->getUserId())
 				{
-					echo "<p class='alert-error'>Dieser Film ist bereits von dir ausgeliehen!</p>";
+					echo "<div class='alert-error'>Dieser Film ist bereits von dir ausgeliehen!</div>";
 				}
 				else
 				{
 					echo "
-						<p class='alert-error'>
+						<div class='alert-error'>
 							Dieser Film ist derzeit ausgeliehen!<br />
 							M&ouml;chtest du ihn stattdessen <a href='/internalarea/movies/buy/" . Constants::$pagePath[3] . "'>kaufen</a>?
-						</p>
+						</div>
 					";
 				}
 			}
@@ -103,16 +103,16 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 				$mail->send();
 
 				echo "
-					<p class='alert-success'>
+					<div class='alert-success'>
 						Deine Bestellung wurde eingetragen und wird in den n&auml;chsten Stunden oder Tagen bearbeitet.<br />
 						Du erh&auml;lst in K&uuml;rze eine Email zur Best&auml;tigung deiner Bestellung.
-					</p>
+					</div>
 				";
 			}
 		}
 		else
 		{
-			echo "<p class='alert-error'>Der Film wurde nicht gefunden!</p>";
+			echo "<div class='alert-error'>Der Film wurde nicht gefunden!</div>";
 		}
 	}
 }

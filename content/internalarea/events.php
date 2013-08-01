@@ -52,7 +52,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 							$query = Constants::$pdo->prepare("INSERT INTO `events` (`typeId`, `year`, `userId`, `uploadId`) VALUES(:typeId, :year, :userId, :uploadId)");
 							$query->execute(array(":typeId" => $typeId, ":year" => $year, ":userId" => Constants::$accountManager->getUserId(), ":uploadId" => $uploadId));
 
-							echo "<p class='alert-success'>Die Datei wurde erfolgreich hochgeladen.</p>";
+							echo "<div class='alert-success'>Die Datei wurde erfolgreich hochgeladen.</div>";
 
 							$error = "";
 						}
@@ -77,7 +77,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 		}
 		if ($error)
 		{
-			echo "<p class='alert-error'>" . $error . "</p>";
+			echo "<div class='alert-error'>" . $error . "</div>";
 		}
 	}
 
@@ -158,7 +158,7 @@ while ($row = $query->fetch())
 
 if (empty($years))
 {
-	echo "<p class='alert-error'>Keine Veranstaltungen vorhanden!</p>";
+	echo "<div class='alert-error'>Keine Veranstaltungen vorhanden!</div>";
 }
 else
 {

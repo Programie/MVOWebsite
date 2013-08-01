@@ -224,23 +224,23 @@ CREATE TABLE `phonenumbers` (
 
 CREATE TABLE `picturealbums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `published` tinyint(1) NOT NULL,
   `date` date NOT NULL,
-  `permission` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `isPublic` tinyint(1) NOT NULL,
   `coverPicture` int(11) NOT NULL,
-  `name` varchar(100) CHARACTER SET latin1 NOT NULL,
   `title` varchar(200) CHARACTER SET latin1 NOT NULL,
   `text` text CHARACTER SET latin1 NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `ALBUM` (`date`,`name`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pictures` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `albumId` int(11) NOT NULL,
+  `fileId` varchar(32) NOT NULL,
   `number` int(11) NOT NULL,
   `text` text CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `PICTURE` (`albumId`,`number`)
+  UNIQUE KEY `FILE` (`albumId`,`fileId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pictureyears` (
@@ -335,8 +335,8 @@ ALTER TABLE `dates`
   ADD CONSTRAINT `dates_location` FOREIGN KEY (`locationId`) REFERENCES `locations` (`id`);
 
 ALTER TABLE `events`
-  ADD CONSTRAINT `events_upload` FOREIGN KEY (`uploadId`) REFERENCES `uploads` (`id`),
   ADD CONSTRAINT `events_type` FOREIGN KEY (`typeId`) REFERENCES `eventtypes` (`id`),
+  ADD CONSTRAINT `events_upload` FOREIGN KEY (`uploadId`) REFERENCES `uploads` (`id`),
   ADD CONSTRAINT `events_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 ALTER TABLE `featurerequests`
@@ -346,8 +346,8 @@ ALTER TABLE `messages`
   ADD CONSTRAINT `messages_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 ALTER TABLE `movieorders`
-  ADD CONSTRAINT `movieorders_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
-  ADD CONSTRAINT `movieorders_movie` FOREIGN KEY (`movieId`) REFERENCES `movies` (`id`);
+  ADD CONSTRAINT `movieorders_movie` FOREIGN KEY (`movieId`) REFERENCES `movies` (`id`),
+  ADD CONSTRAINT `movieorders_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 ALTER TABLE `movies`
   ADD CONSTRAINT `movies_category` FOREIGN KEY (`categoryId`) REFERENCES `moviecategories` (`id`),
@@ -357,8 +357,8 @@ ALTER TABLE `notedirectory_programs`
   ADD CONSTRAINT `notedirectory_programs_type` FOREIGN KEY (`typeId`) REFERENCES `notedirectory_programtypes` (`id`);
 
 ALTER TABLE `notedirectory_programtitles`
-  ADD CONSTRAINT `notedirectory_programtitles_title` FOREIGN KEY (`titleId`) REFERENCES `notedirectory_titles` (`id`),
-  ADD CONSTRAINT `notedirectory_programtitles_program` FOREIGN KEY (`programId`) REFERENCES `notedirectory_programs` (`id`);
+  ADD CONSTRAINT `notedirectory_programtitles_program` FOREIGN KEY (`programId`) REFERENCES `notedirectory_programs` (`id`),
+  ADD CONSTRAINT `notedirectory_programtitles_title` FOREIGN KEY (`titleId`) REFERENCES `notedirectory_titles` (`id`);
 
 ALTER TABLE `notedirectory_titles`
   ADD CONSTRAINT `notedirectory_titles_category` FOREIGN KEY (`categoryId`) REFERENCES `notedirectory_categories` (`id`);

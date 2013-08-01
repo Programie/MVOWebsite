@@ -105,7 +105,7 @@ switch (Constants::$pagePath[2])
 		}
 		else
 		{
-			echo "<p class='alert-error'>Kein Titel vorhanden!</p>";
+			echo "<div class='alert-error'>Kein Titel vorhanden!</div>";
 		}
 		break;
 	case "details":
@@ -154,12 +154,12 @@ switch (Constants::$pagePath[2])
 			}
 			else
 			{
-				echo "<p class='alert-error'>Kein Programm gefunden!</p>";
+				echo "<div class='alert-error'>Kein Programm gefunden!</div>";
 			}
 		}
 		else
 		{
-			echo "<p class='alert-error'>Titel nicht gefunden!</p>";
+			echo "<div class='alert-error'>Titel nicht gefunden!</div>";
 		}
 		break;
 	case "program":
@@ -183,7 +183,7 @@ switch (Constants::$pagePath[2])
 		}
 		else
 		{
-			echo "<p class='alert-error'>Kein Titel vorhanden!</p>";
+			echo "<div class='alert-error'>Kein Titel vorhanden!</div>";
 		}
 		break;
 	case "search":

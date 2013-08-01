@@ -174,11 +174,11 @@ if (isset($_POST["usermanager_edituser_id"]))
 
 				if ($newUser)
 				{
-					echo "<p class='alert-success'>Der Benutzer wurde erfolgreich erstellt.</p>";
+					echo "<div class='alert-success'>Der Benutzer wurde erfolgreich erstellt.</div>";
 				}
 				else
 				{
-					echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
+					echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
 
 				if ($_FILES)
@@ -191,7 +191,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 						{
 							if ($file["size"] > 1024 * 1024 * MAX_UPLOAD_SIZE)
 							{
-								echo "<p class='alert-error'>Die maximal erlaubte Dateigr&ouml;&szlig;e f&uuml;r das Profilbild ist " . MAX_UPLOAD_SIZE . " MB!</p>";
+								echo "<div class='alert-error'>Die maximal erlaubte Dateigr&ouml;&szlig;e f&uuml;r das Profilbild ist " . MAX_UPLOAD_SIZE . " MB!</div>";
 								$profilePictureUploadError = false;
 							}
 							else
@@ -223,12 +223,12 @@ if (isset($_POST["usermanager_edituser_id"]))
 						}
 						if (!$profilePictureUploaded)
 						{
-							echo "<p class='alert-error'>Beim Hochladen des Profilbilds ist ein Fehler aufgetreten!</p>";
+							echo "<div class='alert-error'>Beim Hochladen des Profilbilds ist ein Fehler aufgetreten!</div>";
 						}
 					}
 				}
 
-				echo "<p class='alert-info'>Eventuell ge&auml;nderte Berechtigungen m&uuml;ssen &uuml;ber den Button <b>Berechtigungen &uuml;bernehmen</b> auf der Seite <b>Berechtigungsgruppen</b> &uuml;bernommen werden!</p>";
+				echo "<div class='alert-info'>Eventuell ge&auml;nderte Berechtigungen m&uuml;ssen &uuml;ber den Button <b>Berechtigungen &uuml;bernehmen</b> auf der Seite <b>Berechtigungsgruppen</b> &uuml;bernommen werden!</div>";
 
 				if ($_POST["usermanager_edituser_sendcredentialsmail"])
 				{
@@ -253,23 +253,23 @@ if (isset($_POST["usermanager_edituser_id"]))
 					}
 					if ($emailError)
 					{
-						echo "<p class='alert-error'>Die Email mit den Zugangsdaten konnte nicht versendet werden: " . $emailError . "</p>";
+						echo "<div class='alert-error'>Die Email mit den Zugangsdaten konnte nicht versendet werden: " . $emailError . "</div>";
 					}
 				}
 			}
 			else
 			{
-				echo "<p class='alert-error'>Beim Speichern ist ein Fehler aufgetreten!</p>";
+				echo "<div class='alert-error'>Beim Speichern ist ein Fehler aufgetreten!</div>";
 			}
 		}
 		else
 		{
-			echo "<p class='alert-error'>Es wurde kein freier Benutzername gefunden!</p>";
+			echo "<div class='alert-error'>Es wurde kein freier Benutzername gefunden!</div>";
 		}
 	}
 	else
 	{
-		echo "<p class='alert-error'>Das eingegebene Geburtsdatum ist ung&uuml;ltig!</p>";
+		echo "<div class='alert-error'>Das eingegebene Geburtsdatum ist ung&uuml;ltig!</div>";
 	}
 }
 ?>

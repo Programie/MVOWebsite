@@ -48,7 +48,7 @@ if (Constants::$accountManager->getUserId())
 					$query = Constants::$pdo->prepare("UPDATE `dates` SET `enabled` = '0' WHERE `id` = :id");
 					$query->execute(array(":id" => $_POST["dates_edit_id"]));
 					$dates = Dates::getDates($year, $activeGroups);
-					echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
+					echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
 				else
 				{
@@ -118,17 +118,17 @@ if (Constants::$accountManager->getUserId())
 						}
 						$query->execute($queryData);
 						$dates = Dates::getDates($year, $activeGroups);
-						echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
+						echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 					}
 					else
 					{
-						echo "<p class='alert-error'>Das eingegebene Datum ist ung&uuml;ltig!</p>";
+						echo "<div class='alert-error'>Das eingegebene Datum ist ung&uuml;ltig!</div>";
 					}
 				}
 			}
 			else
 			{
-				echo "<p class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</p>";
+				echo "<div class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
 			}
 		}
 		echo "<button type='button' id='dates_add_button'>Neuer Termin</button>";
@@ -289,11 +289,11 @@ else
 {
 	if (empty($userGroups))
 	{
-		echo "<p class='alert-error'>Es sind keine Termine in dem ausgew&auml;hlten Jahr vorhanden!</p>";
+		echo "<div class='alert-error'>Es sind keine Termine in dem ausgew&auml;hlten Jahr vorhanden!</div>";
 	}
 	else
 	{
-		echo "<p class='alert-error'>Es sind keine Termine in den ausgew&auml;hlten Gruppen sowie dem ausgew&auml;hlten Jahr vorhanden!</p>";
+		echo "<div class='alert-error'>Es sind keine Termine in den ausgew&auml;hlten Gruppen sowie dem ausgew&auml;hlten Jahr vorhanden!</div>";
 	}
 }
 

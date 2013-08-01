@@ -119,7 +119,7 @@ class MenuBuilder
 				foreach ($years as $year => $data)
 				{
 					$yearItem = new StdClass;
-					$yearItem->path = "/pictures/" . $year;
+					$yearItem->path = "/pictures/year/" . $year;
 					$yearItem->title = $year;
 					$items[] = $yearItem;
 				}

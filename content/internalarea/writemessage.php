@@ -124,10 +124,10 @@ if (isset($_POST["writemessage_confirmed"]))
 					if ($mail->send())
 					{
 						echo "
-							<p class='alert-success'>
+							<div class='alert-success'>
 								<p>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</p>
 								" . implode("\n", $attachmentsText) . "
-							</p>
+							</div>
 						";
 						$error = "";
 					}
@@ -145,7 +145,7 @@ if (isset($_POST["writemessage_confirmed"]))
 	}
 	if ($error)
 	{
-		echo "<p class='alert-error'>" . $error . "</p>";
+		echo "<div class='alert-error'>" . $error . "</div>";
 	}
 }
 ?>
@@ -165,10 +165,8 @@ if (isset($_POST["writemessage_confirmed"]))
 
 	<fieldset id="writemessage_validtill">
 		<legend>G&uuml;ltigkeit</legend>
-		<input type="checkbox" id="writemessage_validtill_enabled" name="writemessage_validtill_enabled"
-		       value="1"/><label for="writemessage_validtill_enabled">G&uuml;ltig bis:</label>
-		<input type="text" class="date" id="writemessage_validtill_date" name="writemessage_validtill_date"
-		       placeholder="TT.MM.JJJJ"/>
+		<input type="checkbox" id="writemessage_validtill_enabled" name="writemessage_validtill_enabled" value="1"/><label for="writemessage_validtill_enabled">G&uuml;ltig bis:</label>
+		<input type="text" class="date" id="writemessage_validtill_date" name="writemessage_validtill_date" placeholder="TT.MM.JJJJ"/>
 	</fieldset>
 
 	<fieldset id="writemessage_textfieldset">
@@ -182,8 +180,7 @@ if (isset($_POST["writemessage_confirmed"]))
 
 	<input type="hidden" id="writemessage_sendcopy" name="writemessage_sendcopy"/>
 	<input type="hidden" id="writemessage_confirmed" name="writemessage_confirmed"/>
-	<input type="hidden" name="writemessage_sendtoken"
-	       value="<?php echo TokenManager::getSendToken("writemessage", true); ?>"/>
+	<input type="hidden" name="writemessage_sendtoken" value="<?php echo TokenManager::getSendToken("writemessage", true); ?>"/>
 
 	<input type="submit" value="Senden"/>
 </form>
@@ -193,8 +190,7 @@ if (isset($_POST["writemessage_confirmed"]))
 	<ul id="writemessage_confirm_groups"></ul>
 	<p id="writemessage_confirm_text2"><b>Anh&auml;nge:</b></p>
 	<ul id="writemessage_confirm_attachments"></ul>
-	<input id="writemessage_confirm_sendcopy" type="checkbox"/><label for="writemessage_confirm_sendcopy">Eine Kopie
-		an mich senden</label>
+	<input id="writemessage_confirm_sendcopy" type="checkbox"/><label for="writemessage_confirm_sendcopy">Eine Kopie an mich senden</label>
 </div>
 
 <script type="text/javascript">
@@ -209,7 +205,8 @@ if (isset($_POST["writemessage_confirmed"]))
 			width: "auto",
 			maxHeight: 500,
 			autoOpen: false,
-			buttons: {
+			buttons:
+			{
 				"Senden": function ()
 				{
 					document.getElementById("writemessage_sendcopy").value = document.getElementById("writemessage_confirm_sendcopy").checked ? "1" : "0";
@@ -293,12 +290,12 @@ if (isset($_POST["writemessage_confirmed"]))
 			}
 			else
 			{
-				alert(unescape("Kein Datum ausgew%E4hlt!"));
+				alert("Kein Datum ausgew\u00e4hlt!");
 			}
 		}
 		else
 		{
-			alert(unescape("Keine Gruppe ausgew%E4hlt!"));
+			alert("Keine Gruppe ausgew\u00e4hlt!");
 		}
 	}
 </script>

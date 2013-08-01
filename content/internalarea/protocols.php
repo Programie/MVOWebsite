@@ -77,7 +77,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 									$mail->send();
 								}
 
-								echo "<p class='alert-success'>Das Protokoll wurde erfolgreich hochgeladen.</p>";
+								echo "<div class='alert-success'>Das Protokoll wurde erfolgreich hochgeladen.</div>";
 
 								$error = "";
 							}
@@ -103,7 +103,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 		}
 		if ($error)
 		{
-			echo "<p class='alert-error'>" . $error . "</p>";
+			echo "<div class='alert-error'>" . $error . "</div>";
 		}
 	}
 	echo "
@@ -171,7 +171,7 @@ while ($row = $query->fetch())
 
 if (empty($protocols))
 {
-	echo "<p class='alert-error'>Keine Protokolle vorhanden!</p>";
+	echo "<div class='alert-error'>Keine Protokolle vorhanden!</div>";
 }
 else
 {

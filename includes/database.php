@@ -1,6 +1,4 @@
 <?php
-require_once "config.inc.php";
-
 try
 {
 	Constants::$pdo = new PDO(MYSQL_DSN, MYSQL_USERNAME, MYSQL_PASSWORD);

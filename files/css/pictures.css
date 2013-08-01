@@ -1,3 +1,23 @@
+.pictures_unpublished
+{
+	color: #ff0000 !important;
+}
+
+#pictures_edit_contextmenu
+{
+	display: none;
+}
+
+#pictures_edit_options
+{
+	margin-bottom: 10px;
+}
+
+#pictures_edit_title
+{
+	width: calc(100% - 28px);
+}
+
 #pictures_text
 {
 	background-color: #fff;

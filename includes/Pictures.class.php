@@ -7,23 +7,34 @@ class Pictures
 	/**
 	 * Get all albums of the specified year
 	 * @param int $year The year of which the albums should be retrieved
-	 * @return array|null An array containing the rows of all found albums which the logged in user is able to see, null if there are no albums, an empty array if the user is unable to access any found album
+	 * @return array An array containing the rows of all found albums which the user can see
 	 */
 	public static function getAlbums($year)
 	{
-		$query = Constants::$pdo->prepare("SELECT * FROM `picturealbums` WHERE YEAR(`date`) = :year ORDER BY `date` DESC");
+		$query = Constants::$pdo->prepare("
+			SELECT
+				`picturealbums`.`id`,
+				`published`,
+				`isPublic`,
+				`title`,
+				`fileId` AS `coverPictureFileId`
+			FROM `picturealbums`
+			LEFT JOIN `pictures` ON `pictures`.`albumId` = `picturealbums`.`id` AND `pictures`.`number` = `picturealbums`.`coverPicture`
+			WHERE YEAR(`date`) = :year
+			ORDER BY `date` DESC
+		");
 		$query->execute(array(":year" => $year));
-
-		if (!$query->rowCount())
-		{
-			return null;
-		}
 
 		$albums = array();
 
 		while ($row = $query->fetch())
 		{
-			if (!Constants::$accountManager->hasPermission($row->permission))
+			if (!$row->published and !Constants::$accountManager->hasPermission("pictures.view.unpublished"))
+			{
+				continue;
+			}
+
+			if (!$row->isPublic and !Constants::$accountManager->getUserId())
 			{
 				continue;
 			}
@@ -36,21 +47,28 @@ class Pictures
 
 	/**
 	 * Get all pictures of the specified year and the specified album
-	 * @param int $year The year of the album
-	 * @param string $album The name of the album of which the pictures should be retrieved
+	 * @param int $albumId The ID of the album
 	 * @return null|StdClass A map containing the following properties:
 	 * <ul>
+	 *  <li>published: true if the album has been published, false if not</li>
 	 *  <li>date: The date of the album in ISO format (YYYY-MM-DD)</li>
-	 *  <li>pictures: An associated array containing an element for each picture in the album which contains additional information (Picture number is the key)</li>
+	 *  <li>
+	 *   pictures: An array containing an element of type StdClass for each picture in the album.
+	 *   The elements contain the following properties:
+	 *   <ul>
+	 *    <li>fileId: The ID of the file (File names are large_<fileId>.jpg and small_<fileId>.jpg)</li>
+	 *    <li>text: An additional text for the picture</li>
+	 *   </ul>
+	 *  </li>
 	 *  <li>text: The description of the album</li>
 	 *  <li>title: The title of the album</li>
 	 * </ul>
-	 * null is returned if the album does not exist or the user does not have required permission
+	 * null is returned if the album does not exist or the user does not have the permission to see the album (e.g. album not published or user not logged in)
 	 */
-	public static function getPictures($year, $album)
+	public static function getPictures($albumId)
 	{
-		$query = Constants::$pdo->prepare("SELECT `id`, `date`, `permission`, `name`, `title`, `text` FROM `picturealbums` WHERE YEAR(`date`) = :year AND `name` = :name");
-		$query->execute(array(":year" => $year, ":name" => $album));
+		$query = Constants::$pdo->prepare("SELECT `published`, `date`, `title`, `text` FROM `picturealbums` WHERE `id` = :id");
+		$query->execute(array(":id" => $albumId));
 
 		if (!$query->rowCount())
 		{
@@ -59,41 +77,28 @@ class Pictures
 
 		$albumRow = $query->fetch();
 
-		if (!Constants::$accountManager->hasPermission($albumRow->permission))
+		if (!$albumRow->published and !Constants::$accountManager->hasPermission("pictures.view.unpublished"))
 		{
 			return null;
 		}
 
-		$pictures = array();
-		$path = "files/pictures/" . basename($year) . "/" . basename($albumRow->name);
-
-		$dir = scandir(ROOT_PATH . "/" . $path);
-		foreach ($dir as $file)
+		if (!$albumRow->isPublic and !Constants::$accountManager->getUserId())
 		{
-			if (is_file($path . "/" . $file) and preg_match("/^large([0-9]+)/", $file, $fileParts))
-			{
-				$data = new StdClass;
-				$data->file = $fileParts[1];
-				$pictures[intval($fileParts[1])] = $data;
-			}
+			return null;
 		}
 
-		$query = Constants::$pdo->prepare("SELECT * FROM `pictures` WHERE `albumId` = :albumId");
-		$query->execute(array(":albumId" => $albumRow->id));
-		while ($row = $query->fetch())
-		{
-			if (@$pictures[$row->number])
-			{
-				$row->file = $pictures[$row->number]->file;
-				$pictures[$row->number] = $row;
-			}
-		}
+		$query = Constants::$pdo->prepare("SELECT `fileId`, `number`, `text` FROM `pictures` WHERE `albumId` = :albumId ORDER BY `number` ASC");
+		$query->execute(array(":albumId" => $albumId));
 
-		ksort($pictures);
+		if (!$query->rowCount())
+		{
+			return null;
+		}
 
 		$data = new StdClass;
+		$data->published = $albumRow->published;
 		$data->date = $albumRow->date;
-		$data->pictures = $pictures;
+		$data->pictures = $query->fetchAll();
 		$data->text = $albumRow->text;
 		$data->title = $albumRow->title;
 
@@ -102,22 +107,26 @@ class Pictures
 
 	/**
 	 * Get all available years
-	 * @return array|null An associated array (Key is the year, value is a map containing additional information)
+	 * @return array An associated array (Key is the year, value is a map containing additional information)
 	 * The maps in each element contain the following properties:
 	 * <ul>
 	 *  <li>year: The year (YYYY)</li>
 	 *  <li>coverAlbumId: The album ID which should be used as the cover of the year</li>
 	 * </ul>
-	 * null is returned if there are no albums
 	 */
 	public static function getYears()
 	{
-		$query = Constants::$pdo->query("SELECT `picturealbums`.`year`, `pictureyears`.`coverAlbumId` FROM (SELECT YEAR(`date`) AS `year` FROM `picturealbums` GROUP BY `year`) AS `picturealbums` LEFT JOIN `pictureyears` ON `pictureyears`.`year` = `picturealbums`.`year`");
-
-		if (!$query->rowCount())
+		$whereSql = "";
+		if (!Constants::$accountManager->hasPermission("pictures.view.unpublished"))
 		{
-			return null;
+			$whereSql = "WHERE `published`";
 		}
+
+		$query = Constants::$pdo->query("
+			SELECT `picturealbums`.`year`, `pictureyears`.`coverAlbumId`
+			FROM (SELECT YEAR(`date`) AS `year` FROM `picturealbums` " . $whereSql . " GROUP BY `year`) AS `picturealbums`
+			LEFT JOIN `pictureyears` ON `pictureyears`.`year` = `picturealbums`.`year`
+		");
 
 		$years = array();
 
@@ -127,6 +136,45 @@ class Pictures
 		}
 
 		return $years;
+	}
+
+	/**
+	 * Update the album of the year
+	 *
+	 * @param int $year The year for which the album should be set
+	 * @param int $albumId The ID of the album
+	 * @param bool $set true to set this album as the album of the year, false to only set this album if there is not already a valid album of the year
+	 */
+	public static function updateAlbumOfTheYear($year, $albumId, $set)
+	{
+		if (!$set)
+		{
+			$query = Constants::$pdo->prepare("
+				SELECT `picturealbums`.`id`
+				FROM `pictureyears`
+				LEFT JOIN `picturealbums` ON `picturealbums`.`id` = `pictureyears`.`coverAlbumId`
+				WHERE `year` = :year
+			");
+			$query->execute(array
+			(
+				":year" => $year
+			));
+			$row = $query->fetch();
+			if (@!$row->id)
+			{
+				$set = true;
+			}
+		}
+
+		if ($set)
+		{
+			$query = Constants::$pdo->prepare("INSERT INTO `pictureyears` (`year`, `coverAlbumId`) VALUES(:year, :coverAlbumId) ON DUPLICATE KEY UPDATE `coverAlbumId` = :coverAlbumId");
+			$query->execute(array
+			(
+				":year" => $year,
+				":coverAlbumId" => $albumId
+			));
+		}
 	}
 }
 ?>

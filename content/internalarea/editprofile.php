@@ -4,7 +4,7 @@
 $userData = Constants::$accountManager->getUserData();
 if ($userData->forcePasswordChange)
 {
-	echo "<p class='alert-warning' id='editprofile_passwordchangeinfo'>Du musst dein Passwort &auml;ndern bevor du auf die anderen Bereiche des internen Bereichs zugreifen kannst.</p>";
+	echo "<div class='alert-warning' id='editprofile_passwordchangeinfo'>Du musst dein Passwort &auml;ndern bevor du auf die anderen Bereiche des internen Bereichs zugreifen kannst.</div>";
 }
 ?>
 
@@ -149,26 +149,26 @@ if ($userData->forcePasswordChange)
 							$mail->send();
 						}
 
-						echo "<p class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</p>";
+						echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 					}
 					else
 					{
-						echo "<p class='alert-error'>Der Benutzername wird bereits verwendet!</p>";
+						echo "<div class='alert-error'>Der Benutzername wird bereits verwendet!</div>";
 					}
 				}
 				else
 				{
-					echo "<p class='alert-error'>Der Nachname muss angegeben werden!</p>";
+					echo "<div class='alert-error'>Der Nachname muss angegeben werden!</div>";
 				}
 			}
 			else
 			{
-				echo "<p class='alert-error'>Der Vorname muss angegeben werden!</p>";
+				echo "<div class='alert-error'>Der Vorname muss angegeben werden!</div>";
 			}
 		}
 		else
 		{
-			echo "<p class='alert-error'>Ein Benutzername muss angegeben werden!</p>";
+			echo "<div class='alert-error'>Ein Benutzername muss angegeben werden!</div>";
 		}
 	}
 	?>
@@ -210,7 +210,7 @@ if ($userData->forcePasswordChange)
 			{
 				if ($file["size"] > 1024 * 1024 * 10)
 				{
-					echo "<p class='alert-error'>Die maximal erlaubte Dateigr&ouml;&szlig;e ist 10 MB!</p>";
+					echo "<div class='alert-error'>Die maximal erlaubte Dateigr&ouml;&szlig;e ist 10 MB!</div>";
 					$showError = false;
 				}
 				else
@@ -234,7 +234,7 @@ if ($userData->forcePasswordChange)
 									{
 										if (imagejpeg($resizedImage, ROOT_PATH . "/files/profilepictures/" . $userData->id . ".jpg"))
 										{
-											echo "<p class='alert-success'>Dein Profilbild wurde erfolgreich aktualisiert.</p>";
+											echo "<div class='alert-success'>Dein Profilbild wurde erfolgreich aktualisiert.</div>";
 											$showError = false;
 										}
 									}
@@ -247,7 +247,7 @@ if ($userData->forcePasswordChange)
 		}
 		if ($showError)
 		{
-			echo "<p class='alert-error'>Beim Hochladen ist ein Fehler ausgetreten. Bitte versuche es erneut oder wende dich an den Webmaster.</p>";
+			echo "<div class='alert-error'>Beim Hochladen ist ein Fehler ausgetreten. Bitte versuche es erneut oder wende dich an den Webmaster.</div>";
 		}
 	}
 
@@ -310,7 +310,7 @@ if ($userData->forcePasswordChange)
 					if (Constants::$accountManager->changePassword($_POST["editprofile_changepassword_new1"], $_POST["editprofile_changepassword_current"]))
 					{
 						echo "
-								<p class='alert-success'>Das Passwort wurde erfolgreich ge&auml;ndert.</p>
+								<div class='alert-success'>Das Passwort wurde erfolgreich ge&auml;ndert.</div>
 								<script type='text/javascript'>
 									$('#editprofile_passwordchangeinfo').hide();
 								</script>
@@ -318,22 +318,22 @@ if ($userData->forcePasswordChange)
 					}
 					else
 					{
-						echo "<p class='alert-error'>Das eingegebene Passwort ist falsch!</p>";
+						echo "<div class='alert-error'>Das eingegebene Passwort ist falsch!</div>";
 					}
 				}
 				else
 				{
-					echo "<p class='alert-error'>Das neue Passwort stimmt nicht mit dem wiederholen Passwort &uuml;berein!</p>";
+					echo "<div class='alert-error'>Das neue Passwort stimmt nicht mit dem wiederholen Passwort &uuml;berein!</div>";
 				}
 			}
 			else
 			{
-				echo "<p class='alert-error'>Das neue Passwort muss mindestens " . PASSWORDS_MINLENGTH . " Zeichen haben!</p>";
+				echo "<div class='alert-error'>Das neue Passwort muss mindestens " . PASSWORDS_MINLENGTH . " Zeichen haben!</div>";
 			}
 		}
 		else
 		{
-			echo "<p class='alert-error'>Das aktuelle Passwort muss angegeben werden!</p>";
+			echo "<div class='alert-error'>Das aktuelle Passwort muss angegeben werden!</div>";
 		}
 	}
 	?>
@@ -388,41 +388,41 @@ if ($userData->forcePasswordChange)
 							$mail->setTo($userData->newEmail);
 							if ($mail->send())
 							{
-								echo "<p class='alert-info'>Es wurde eine Email mit dem Link zum Best&auml;tigen der Email-Adresse an die neue Email-Adresse gesendet.</p>";
+								echo "<div class='alert-info'>Es wurde eine Email mit dem Link zum Best&auml;tigen der Email-Adresse an die neue Email-Adresse gesendet.</div>";
 							}
 							else
 							{
 								echo "
-									<p class='alert-error'>
+									<div class='alert-error'>
 										<p>Beim Senden der Email ist ein Fehler aufgetreten!</p>
 										<p>Bitte versuche es sp&auml;ter erneut oder wende dich an den Webmaster.</p>
-									</p
+									</div>
 								";
 							}
 						}
 						else
 						{
-							echo "<p class='alert-error'>Das eingegebene Passwort ist falsch!</p>";
+							echo "<div class='alert-error'>Das eingegebene Passwort ist falsch!</div>";
 						}
 					}
 					else
 					{
-						echo "<p class='alert-error'>Die neue Email-Adresse stimmt nicht mit der wiederholen Email-Adresse &uuml;berein!</p>";
+						echo "<div class='alert-error'>Die neue Email-Adresse stimmt nicht mit der wiederholen Email-Adresse &uuml;berein!</div>";
 					}
 				}
 				else
 				{
-					echo "<p class='alert-error'>Die neue Email-Adresse hat ein ung&uuml;tiges Format! Bitte verwende das Format <b>benutzername@domain.tld</b>.</p>";
+					echo "<div class='alert-error'>Die neue Email-Adresse hat ein ung&uuml;tiges Format! Bitte verwende das Format <b>benutzername@domain.tld</b>.</div>";
 				}
 			}
 			else
 			{
-				echo "<p class='alert-error'>Es muss eine neue Email-Adresse angegeben werden!</p>";
+				echo "<div class='alert-error'>Es muss eine neue Email-Adresse angegeben werden!</div>";
 			}
 		}
 		else
 		{
-			echo "<p class='alert-error'>Das aktuelle Passwort muss angegeben werden!</p>";
+			echo "<div class='alert-error'>Das aktuelle Passwort muss angegeben werden!</div>";
 		}
 	}
 	?>
@@ -490,7 +490,7 @@ if ($userData->forcePasswordChange)
 			$query = Constants::$pdo->prepare("DELETE FROM `phonenumbers` WHERE `userId` = :userId AND `id` NOT IN (" . implode(",", $entryIds) . ")");
 			$query->execute(array(":userId" => Constants::$accountManager->getUserId()));
 		}
-		echo "<p class='alert-success'>Deine &Auml;nderungen wurden gespeichert.</p>";
+		echo "<div class='alert-success'>Deine &Auml;nderungen wurden gespeichert.</div>";
 	}
 	?>
 	<form action="/internalarea/editprofile#editprofile_contact" method="post">
