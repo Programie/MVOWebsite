@@ -146,4 +146,7 @@ if ($albumFolderName != $albumId)
 {
 	rename($path, PICTURES_PATH . "/" . $albumId);
 }
+
+// Return album ID (Required by PHP client script)
+echo $albumId;
 ?>
