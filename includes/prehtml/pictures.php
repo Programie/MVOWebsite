@@ -27,6 +27,25 @@ switch (Constants::$pagePath[1])
 			));
 		}
 		exit;
+	case "setalbumcover":
+		if (Constants::$accountManager->hasPermission("pictures.edit"))
+		{
+			$queryData = array
+			(
+				":coverPicture" => $_POST["pictures_setcover_number"],
+				":id" => $_POST["pictures_setcover_albumId"]
+			);
+			$query = Constants::$pdo->prepare("UPDATE `picturealbums` SET `coverPicture` = :coverPicture WHERE `id` = :id");
+			if ($query->execute($queryData))
+			{
+				echo "ok";
+			}
+			else
+			{
+				echo "error";
+			}
+		}
+		exit;
 	case "setpicturetitle":
 		if (Constants::$accountManager->hasPermission("pictures.edit"))
 		{

@@ -89,6 +89,7 @@ switch (Constants::$pagePath[1])
 				<div id='pictures_edit_contextmenu'>
 					<ul>
 						<li id='pictures_edit_contextmenu_edittitle'><i class='icon-pencil'></i> Titel bearbeiten</li>
+						<li id='pictures_edit_contextmenu_setcover'><i class='icon-picture'></i> Als Cover verwenden</li>
 					</ul>
 				</div>
 
@@ -281,7 +282,7 @@ if (Constants::$accountManager->hasPermission("pictures.edit"))
 			{
 				bindings:
 				{
-					pictures_edit_contextmenu_edittitle: function (trigger)
+					pictures_edit_contextmenu_edittitle: function(trigger)
 					{
 						var element = $(trigger);
 						var title = prompt("Gebe den Titel von dem Bild ein.", element.attr("caption"));
@@ -299,17 +300,74 @@ if (Constants::$accountManager->hasPermission("pictures.edit"))
 								url: "/pictures/setpicturetitle",
 								error: function (jqXhr, textStatus, errorThrown)
 								{
-									alert("Fehler beim Speichern des Titels!");
+									noty(
+									{
+										type: "error",
+										text: "Fehler beim Speichern des Titels!"
+									});
 								},
 								success: function (data, status, jqXhr)
 								{
 									if (data == "ok")
 									{
 										element.attr("caption", title);
+										noty(
+										{
+											type: "success",
+											text: "Der Titel wurde ge\u00e4ndert."
+										});
 									}
 									else
 									{
-										alert("Fehler beim Speichern des Titels!");
+										noty(
+										{
+											type: "error",
+											text: "Fehler beim Speichern des Titels!"
+										});
+									}
+								}
+							});
+						}
+					},
+					pictures_edit_contextmenu_setcover: function(trigger)
+					{
+						var element = $(trigger);
+						if (confirm("Soll das Bild als Cover verwendet werden?"))
+						{
+							$.ajax(
+							{
+								type: "POST",
+								data:
+								{
+									pictures_setcover_albumId: <?php echo Constants::$pagePath[2];?>,
+									pictures_setcover_number: element.attr("number")
+								},
+								url: "/pictures/setalbumcover",
+								error: function (jqXhr, textStatus, errorThrown)
+								{
+									noty(
+									{
+										type: "error",
+										text: "Fehler beim Speichern des Albumcovers!"
+									});
+								},
+								success: function (data, status, jqXhr)
+								{
+									if (data = "ok")
+									{
+										noty(
+										{
+											type: "success",
+											text: "Das Albumcover wurde festgelegt."
+										});
+									}
+									else
+									{
+										noty(
+										{
+											type: "error",
+											text: "Fehler beim Speichern des Albumcovers!"
+										});
 									}
 								}
 							});
