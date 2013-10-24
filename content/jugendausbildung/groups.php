@@ -84,6 +84,16 @@
 					<td colspan="2">&nbsp;</td>
 				</tr>
 				<tr>
+					<td colspan="2"><h3>Tenorhorn</h3></td>
+				</tr>
+				<tr>
+					<td valign="top" style="text-decoration:underline;">Michael Klumpp</td>
+					<td valign="top">Johannes Zapf</td>
+				</tr>
+				<tr>
+					<td colspan="2">&nbsp;</td>
+				</tr>
+				<tr>
 					<td colspan="2"><h3>Trompete</h3></td>
 				</tr>
 				<tr>
