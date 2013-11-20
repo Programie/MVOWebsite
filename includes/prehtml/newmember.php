@@ -1,14 +1,14 @@
 <?php
-if (Constants::$pagePath[1] == "agreement")
+if (Constants::$pagePath[1] == "form")
 {
-	$filename = ROOT_PATH . "/files/forms/Ausbildungsvereinbarung.pdf";
+	$filename = ROOT_PATH . "/files/forms/Beitrittserklaerung.pdf";
 	if (file_exists($filename))
 	{
 		$file = fopen($filename, "r");
 		{
 			header("Content-Description: Formular herunterladen");
 			header("Content-Type: application/octet-stream");
-			header("Content-Disposition: attachment; filename=\"Ausbildungsvereinbarung.pdf\"");
+			header("Content-Disposition: attachment; filename=\"Beitrittserklaerung.pdf\"");
 			header("Content-Length: " . filesize($filename));
 			header("Content-Transfer-Encoding: chunked");
 			header("Expires: 0");

@@ -55,7 +55,7 @@ function getCurrentSeason()
 	$day = date("z");
 
 	// Days of spring
-	$spring_starts = date("z", strtotime("March 21"));
+	$spring_starts = date("z", strtotime("March 1"));
 	$spring_ends = date("z", strtotime("June 20"));
 
 	// Days of summer
@@ -64,7 +64,7 @@ function getCurrentSeason()
 
 	// Days of autumn
 	$autumn_starts = date("z", strtotime("September 23"));
-	$autumn_ends = date("z", strtotime("December 20"));
+	$autumn_ends = date("z", strtotime("November 30"));
 
 	if ($day >= $spring_starts and $day <= $spring_ends)
 	{
