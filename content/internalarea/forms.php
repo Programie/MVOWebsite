@@ -31,17 +31,25 @@ else
 				<tr>
 					<th>Name</th>
 					<th>Typ</th>
+					<th class=\"{sorter: 'number-attribute'}\">&Auml;nderungsdatum</th>
 				</tr>
 			</thead>
 			<tbody>
 	";
 	foreach ($forms as $row)
 	{
+		$filename = ROOT_PATH . "/files/forms/" . $row->filename;
 		$fileInfo = pathinfo($row->filename);
+		$fileTime = 0;
+		if (file_exists($filename))
+		{
+			$fileTime = filemtime($filename);
+		}
 		echo "
 			<tr>
 				<td><a href='/internalarea/forms/" . $row->filename . "'>" . escapeText($row->title) . "</a></td>
 				<td>" . getFileType($fileInfo["extension"]) . "</td>
+				<td number='" . $fileTime . "'>" . ($fileTime ? date("d.m.Y", $fileTime) : "Datei nicht gefunden!"). "</td>
 			</tr>
 		";
 	}
