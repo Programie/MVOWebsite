@@ -4,9 +4,9 @@ RewriteRule ^database.sql - [F,L]
 RewriteRule ^addAlbum.php - [F,L]
 RewriteRule album.xml$ - [F,L]
 
+Redirect /favicon.ico /files/images/favicon.ico
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-
-Redirect /favicon.ico /files/images/favicon.ico
 
 RewriteRule ^(.*)$ index.php?path=$1 [QSA]
