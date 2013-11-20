@@ -1,3 +1,49 @@
+<?php
+$contacts = array
+(
+	"vorstand" => array
+	(
+		"name" => "Vorstand (Gleichberechtigt)",
+		"text" => "Erhard Klumpp (07224 65 26 83)<br/>Birgit Gerweck (07224 99 69 822)"
+	),
+	"musikervorstand" => array
+	(
+		"name" => "Musikervorstand",
+		"text" => "Karl Fortenbacher<br/>Daniela Zapf"
+	),
+	"kassier" => array
+	(
+		"name" => "Kassenverwalterin",
+		"text" => "Katrin H&ouml;rth"
+	),
+	"schriftfuehrer" => array
+	(
+		"name" => "Schriftf&uuml;hrerin",
+		"text" => "Heike Kast"
+	),
+	"jugendleiter" => array
+	(
+		"name" => "Jugendleiterin",
+		"text" => "Gisela Wieland"
+	),
+	"oeffentlichkeitsarbeit" => array
+	(
+		"name" => "&Ouml;ffentlichkeitsarbeit",
+		"text" => "Edith Wieland"
+	),
+	"webmaster" => array
+	(
+		"name" => "Webmaster",
+		"text" => "Michael Wieland"
+	)
+);
+
+$contactNames = array();
+foreach ($contacts as $name => $data)
+{
+	$contactNames[] = $name;
+}
+?>
 <div class="center">
 	<h1>Kontakt</h1>
 
@@ -10,53 +56,25 @@
 		76593 Gernsbach - Reichental
 	</p>
 
-	<h3>Vorstand (Gleichberechtigt) <a href="mailto:vorstand@musikverein-reichental.de">vorstand@musikverein-reichental.de</a>
-	</h3>
-
-	<p>
-		Erhard Klumpp (07224 65 26 83)<br/>
-		Birgit Gerweck (07224 99 69 822)
-	</p>
-
-	<h3>Musikervorstand <a href="mailto:musikervorstand@musikverein-reichental.de">musikervorstand@musikverein-reichental.de</a>
-	</h3>
-
-	<p>
-		Karl Fortenbacher<br/>
-		Daniela Zapf
-	</p>
-
-	<h3>Kassenverwalterin <a href="mailto:kassier@musikverein-reichental.de">kassier@musikverein-reichental.de</a>
-	</h3>
-
-	<p>
-		Katrin H&ouml;rth
-	</p>
-
-	<h3>Schriftf&uuml;hrerin <a href="mailto:schriftfuehrer@musikverein-reichental.de">schriftfuehrer@musikverein-reichental.de</a>
-	</h3>
-
-	<p>
-		Heike Kast
-	</p>
-
-	<h3>Jugendleiterin <a href="mailto:jugendleiter@musikverein-reichental.de">jugendleiter@musikverein-reichental.de</a>
-	</h3>
-
-	<p>
-		Gisela Wieland
-	</p>
-
-	<h3>&Ouml;ffentlichkeitsarbeit <a href="mailto:oeffentlichkeitsarbeit@musikverein-reichental.de">oeffentlichkeitsarbeit@musikverein-reichental.de</a>
-	</h3>
-
-	<p>
-		Edith Wieland
-	</p>
-
-	<h3>Webmaster <a href="mailto:webmaster@musikverein-reichental.de">webmaster@musikverein-reichental.de</a></h3>
-
-	<p>
-		Michael Wieland
-	</p>
+	<?php
+	foreach ($contacts as $name => $data)
+	{
+		echo "
+			<h3>" . $data["name"] . " <a href='#' id='contact-mail-" . $name . "'></a></h3>
+			<p>" . $data["text"] . "</p>
+		";
+	}
+	?>
 </div>
+
+<script type="text/javascript">
+	var contactNames = <?php echo json_encode($contactNames);?>;
+	for (var index in contactNames)
+	{
+		var name = contactNames[index];
+		var element = document.getElementById("contact-mail-" + name);
+		var uMail = name + decodeURIComponent("<?php echo jsEscape("@" . CONTACT_MAIL_DOMAIN);?>");
+		element.innerText = uMail;
+		element.href = "mailto:" + uMail;
+	}
+</script>

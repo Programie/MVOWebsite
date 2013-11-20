@@ -148,6 +148,21 @@ function getWeekdayName($weekday, $long)
 }
 
 /**
+ * Escape the given string in the JavaScript-way
+ * @param string $string The string which should be escaped
+ * @return string The escaped string
+ */
+function jsEscape($string)
+{
+	$hexString = "";
+	for ($index = 0; $index < strlen($string); $index++)
+	{
+		$hexString .= '%' . bin2hex($string[$index]);
+	}
+	return $hexString;
+}
+
+/**
  * Resize the specified image to fit in the specified target size
  * The source image will not be modified, a copy is created instead!
  * @param resource $sourceImage The source image which should be resized

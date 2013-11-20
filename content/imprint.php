@@ -1,8 +1,7 @@
 <h1>Impressum</h1>
 <p>
 	Diese Seiten wurden erstellt vom Musikverein "Orgelfels" Reichental e.V.<br/>
-	Hinweise und Fragen k&ouml;nnen Sie gerne an <a href="mailto:webmaster@musikverein-reichental.de">webmaster@musikverein-reichental.de</a>
-	richten.
+	Hinweise und Fragen k&ouml;nnen Sie gerne an <a href="#" id="contact-mail">den Webmaster (Bitte JavaScript aktivieren um die Email-Adresse zu sehen!)</a> richten.
 </p>
 
 <h2>Haftungsausschluss</h2>
@@ -34,3 +33,10 @@ In einigen Bereichen werden Cookies benutzt, die Informationen auf Ihrer Festpla
 Die gespeicherten Informationen erh&ouml;hen den Bedienungskomfort der Webseite.
 Wenn Sie dies nicht m&ouml;chten, k&ouml;nnen Sie die Cookies in Ihrem Browser verbieten.
 Dadurch k&ouml;nnen eventuell Einschr&auml;nkungen der Bedienbarkeit entstehen.
+
+<script type="text/javascript">
+	var element = document.getElementById("contact-mail");
+	var uMail = decodeURIComponent("<?php echo jsEscape(WEBMASTER_EMAIL);?>");
+	element.innerText = uMail;
+	element.href = "mailto:" + uMail;
+</script>
