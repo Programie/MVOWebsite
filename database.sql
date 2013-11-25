@@ -47,16 +47,6 @@ CREATE TABLE `eventtypes` (
   UNIQUE KEY `NAME` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `featurerequests` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `userId` int(11) NOT NULL,
-  `date` datetime NOT NULL,
-  `description` text NOT NULL,
-  `status` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
 CREATE TABLE `forms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `filename` varchar(100) CHARACTER SET latin1 NOT NULL,
@@ -338,9 +328,6 @@ ALTER TABLE `events`
   ADD CONSTRAINT `events_type` FOREIGN KEY (`typeId`) REFERENCES `eventtypes` (`id`),
   ADD CONSTRAINT `events_upload` FOREIGN KEY (`uploadId`) REFERENCES `uploads` (`id`),
   ADD CONSTRAINT `events_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `featurerequests`
-  ADD CONSTRAINT `featurerequests_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
 
 ALTER TABLE `messages`
   ADD CONSTRAINT `messages_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
