@@ -1,6 +1,6 @@
 <h1>Ausbildungsgruppen</h1>
 
-<p>Stand: 17.09.2013</p>
+<p>Stand: 08.01.2014</p>
 
 <table cellpadding="10" width="100%">
 	<tr>
@@ -26,6 +26,15 @@
 						Jonas Magfelder<br/>
 						Carina Wieland<br/>
 						Luca Wieland
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" style="text-decoration:underline;">Meike Klumpp und Paula Sieb</td>
+					<td valid="top">
+						Vitus Balensiefen<br/>
+						Tizian Gottschalk<br/>
+						Silas Magfelder<br/>
+						Jonas Melcher
 					</td>
 				</tr>
 			</table>
