@@ -109,7 +109,8 @@
 					<td valign="top" style="text-decoration:underline;">Thomas Oefler</td>
 					<td valign="top">
 						Moritz Balensiefen<br/>
-						Vincent Kast
+						Vincent Kast<br/>
+						Celine Schmitt
 					</td>
 				</tr>
 				<tr>
