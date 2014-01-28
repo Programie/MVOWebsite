@@ -42,18 +42,18 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 					foreach ($years as $year => $programs)
 					{
 						echo "
-						<li>
-							<a href='#'>" . $year . "</a>
-							<ul>
-					";
+							<li>
+								<a href='#'>" . $year . "</a>
+								<ul>
+						";
 						foreach ($programs as $id => $title)
 						{
 							echo "<li><a href='/internalarea/notedirectory/program/" . $id . "'>" . escapeText($title) . "</a></li>";
 						}
 						echo "
-							</ul>
-						</li>
-					";
+								</ul>
+							</li>
+						";
 					}
 				}
 				?>
