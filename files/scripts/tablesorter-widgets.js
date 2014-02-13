@@ -20,10 +20,10 @@ $.tablesorter.themes = {
 		header     : 'bootstrap-header', // give the header a gradient background
 		footerRow  : '',
 		footerCells: '',
-		icons      : '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
+		icons      : '', // add "el-icon-white" to make them white; this icon class is added to the <i> in the header
 		sortNone   : 'bootstrap-icon-unsorted',
-		sortAsc    : 'icon-chevron-up',
-		sortDesc   : 'icon-chevron-down',
+		sortAsc    : 'el-icon-chevron-up',
+		sortDesc   : 'el-icon-chevron-down',
 		active     : '', // applied when column is sorted
 		hover      : '', // use custom css here - bootstrap class may not override it
 		filterRow  : '', // filter row class

@@ -351,25 +351,25 @@ if (isset($_POST["usermanager_edituser_id"]))
 			<div id="usermanager_edituser_tabs_general">
 				<label class="input-label" for="usermanager_edituser_username">Benutzername:</label>
 				<div class="input-container">
-					<span class="input-addon"><i class="icon-user"></i></span>
+					<span class="input-addon"><i class="el-icon-user"></i></span>
 					<input class="input-field" type="text" id="usermanager_edituser_username" name="usermanager_edituser_username"/>
 				</div>
 
 				<label class="input-label" for="usermanager_edituser_firstname">Vorname:</label>
 				<div class="input-container">
-					<span class="input-addon"><i class="icon-user"></i></span>
+					<span class="input-addon"><i class="el-icon-user"></i></span>
 					<input class="input-field" type="text" id="usermanager_edituser_firstname" name="usermanager_edituser_firstname"/>
 				</div>
 
 				<label class="input-label" for="usermanager_edituser_lastname">Nachname:</label>
 				<div class="input-container">
-					<span class="input-addon"><i class="icon-user"></i></span>
+					<span class="input-addon"><i class="el-icon-user"></i></span>
 					<input class="input-field" type="text" id="usermanager_edituser_lastname" name="usermanager_edituser_lastname"/>
 				</div>
 
 				<label class="input-label" for="usermanager_edituser_birthdate">Geburtsdatum:</label>
 				<div class="input-container">
-					<span class="input-addon"><i class="icon-calendar"></i></span>
+					<span class="input-addon"><i class="el-icon-calendar"></i></span>
 					<input class="input-field date" type="text" id="usermanager_edituser_birthdate" name="usermanager_edituser_birthdate"/>
 				</div>
 			</div>
@@ -401,7 +401,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 			<div id="usermanager_edituser_tabs_contact">
 				<label class="input-label" for="usermanager_edituser_email">Email-Adresse:</label>
 				<div class="input-container">
-					<span class="input-addon"><i class="icon-envelope"></i></span>
+					<span class="input-addon"><i class="el-icon-envelope"></i></span>
 					<input class="input-field" type="text" id="usermanager_edituser_email" name="usermanager_edituser_email"/>
 				</div>
 
@@ -799,7 +799,7 @@ $("#usermanager_permissiongroups_tree").jstree(
 		div.append(iconSpan);
 
 		var icon = $("<i/>");
-		icon.addClass("icon-phone");
+		icon.addClass("el-icon-phone");
 		iconSpan.append(icon);
 
 		var fieldContainer = $("<div/>");
@@ -858,7 +858,7 @@ $("#usermanager_permissiongroups_tree").jstree(
 		fieldContainer.append(removeIconSpan);
 
 		var removeIcon = $("<i/>");
-		removeIcon.addClass("icon-trash");
+		removeIcon.addClass("el-icon-trash");
 		removeIconSpan.append(removeIcon);
 
 		$("#usermanager_edituser_contact_div").append(div);

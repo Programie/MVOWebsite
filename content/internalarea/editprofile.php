@@ -37,7 +37,7 @@ if ($userData->forcePasswordChange)
 		div.append(iconSpan);
 
 		var icon = $("<i/>");
-		icon.addClass("icon-phone");
+		icon.addClass("el-icon-phone");
 		iconSpan.append(icon);
 
 		var fieldContainer = $("<div/>");
@@ -96,7 +96,7 @@ if ($userData->forcePasswordChange)
 		fieldContainer.append(removeIconSpan);
 
 		var removeIcon = $("<i/>");
-		removeIcon.addClass("icon-trash");
+		removeIcon.addClass("el-icon-trash");
 		removeIconSpan.append(removeIcon);
 
 		$("#editprofile_contact_div").append(div);
@@ -178,19 +178,19 @@ if ($userData->forcePasswordChange)
 
 		<label class="input-label" for="editprofile_account_username">Benutzername:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-user"></i></span>
+			<span class="input-addon"><i class="el-icon-user"></i></span>
 			<input class="input-field" type="text" id="editprofile_account_username" name="editprofile_account_username" value="<?php echo escapeText($userData->username); ?>" required/>
 		</div>
 
 		<label class="input-label" for="editprofile_account_firstname">Vorname:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-user"></i></span>
+			<span class="input-addon"><i class="el-icon-user"></i></span>
 			<input class="input-field" type="text" id="editprofile_account_firstname" name="editprofile_account_firstname" value="<?php echo escapeText($userData->firstName); ?>" required/>
 		</div>
 
 		<label class="input-label" for="editprofile_account_lastname">Nachname:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-user"></i></span>
+			<span class="input-addon"><i class="el-icon-user"></i></span>
 			<input class="input-field" type="text" id="editprofile_account_lastname" name="editprofile_account_lastname" value="<?php echo escapeText($userData->lastName); ?>" required/>
 		</div>
 
@@ -284,7 +284,7 @@ if ($userData->forcePasswordChange)
 				<img id="editprofile_profilepicture_preview"/>
 			</div>
 
-			<button id="editprofile_profilepicture_upload" type="submit"><i class='icon-upload'></i> Hochladen</button>
+			<button id="editprofile_profilepicture_upload" type="submit"><i class='el-icon-upload'></i> Hochladen</button>
 		</form>
 
 		<div id="editprofile_profilepicture_progressarea">
@@ -343,19 +343,19 @@ if ($userData->forcePasswordChange)
 
 		<label class="input-label" for="editprofile_changepassword_current">Aktuelles Passwort:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-key"></i></span>
+			<span class="input-addon"><i class="el-icon-key"></i></span>
 			<input class="input-field" type="password" id="editprofile_changepassword_current" name="editprofile_changepassword_current" value="<?php echo escapeText($_POST["editprofile_changepassword_current"]); ?>" required/>
 		</div>
 
 		<label class="input-label" for="editprofile_changepassword_new1">Neues Passwort:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-key"></i></span>
+			<span class="input-addon"><i class="el-icon-key"></i></span>
 			<input class="input-field" type="password" id="editprofile_changepassword_new1" name="editprofile_changepassword_new1" value="<?php echo escapeText($_POST["editprofile_changepassword_new1"]); ?>" required/>
 		</div>
 
 		<label class="input-label" for="editprofile_changepassword_new2">Neues Passwort wiederholen:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-key"></i></span>
+			<span class="input-addon"><i class="el-icon-key"></i></span>
 			<input class="input-field" type="password" id="editprofile_changepassword_new2" name="editprofile_changepassword_new2" value="<?php echo escapeText($_POST["editprofile_changepassword_new2"]); ?>" required/>
 		</div>
 
@@ -431,25 +431,25 @@ if ($userData->forcePasswordChange)
 
 		<label class="input-label" for="editprofile_changeemail_currentpassword">Aktuelles Passwort:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-key"></i></span>
+			<span class="input-addon"><i class="el-icon-key"></i></span>
 			<input class="input-field" type="password" id="editprofile_changeemail_currentpassword" name="editprofile_changeemail_currentpassword" value="<?php echo escapeText($_POST["editprofile_changeemail_currentpassword"]); ?>" required/>
 		</div>
 
 		<label class="input-label" for="editprofile_changeemail_current">Aktuelle Email-Adresse:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-envelope"></i></span>
+			<span class="input-addon"><i class="el-icon-envelope"></i></span>
 			<input class="input-field" type="text" id="editprofile_changeemail_current" value="<?php echo $userData->email; ?>" disabled/>
 		</div>
 
 		<label class="input-label" for="editprofile_changeemail_new1">Neue Email-Adresse:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-envelope"></i></span>
+			<span class="input-addon"><i class="el-icon-envelope"></i></span>
 			<input class="input-field" type="text" id="editprofile_changeemail_new1" name="editprofile_changeemail_new1" value="<?php echo escapeText($_POST["editprofile_changeemail_new1"]); ?>" required/>
 		</div>
 
 		<label class="input-label" for="editprofile_changeemail_new2">Neue Email-Adresse wiederholen:</label>
 		<div class="input-container">
-			<span class="input-addon"><i class="icon-envelope"></i></span>
+			<span class="input-addon"><i class="el-icon-envelope"></i></span>
 			<input class="input-field" type="text" id="editprofile_changeemail_new2" name="editprofile_changeemail_new2" value="<?php echo escapeText($_POST["editprofile_changeemail_new2"]); ?>" required/>
 		</div>
 
@@ -512,7 +512,7 @@ if ($userData->forcePasswordChange)
 		</script>
 
 		<button id="editprofile_contact_addbutton" type="button">
-			<i class="icon-plus"></i>
+			<i class="el-icon-plus"></i>
 			<span>Hinzuf&uuml;gen</span>
 		</button>
 

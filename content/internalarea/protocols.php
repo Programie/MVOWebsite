@@ -113,19 +113,19 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 			<form id='protocols_upload_form' action='/internalarea/protocols' method='post' enctype='multipart/form-data' onsubmit='protocols_confirmUpload(); return false;'>
 				<label class='input-label' for='protocols_upload_date'>Datum:</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-calendar'></i></span>
+					<span class='input-addon'><i class='el-icon-calendar'></i></span>
 					<input class='input-field date' type='text' id='protocols_upload_date' name='protocols_upload_date' placeholder='TT.MM.JJJJ'/>
 				</div>
 
 				<label class='input-label' for='protocols_upload_file'>Datei:</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-file'></i></span>
+					<span class='input-addon'><i class='el-icon-file'></i></span>
 					<input class='input-field' type='file' id='protocols_upload_file' name='protocols_upload_file'/>
 				</div>
 
 				<label class='input-label' for='protocols_upload_name'>Name:</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-pencil'></i></span>
+					<span class='input-addon'><i class='el-icon-pencil'></i></span>
 					<input class='input-field' type='text' id='protocols_upload_name' name='protocols_upload_name' placeholder='Titel oder Beschreibung' title='Ein beliebiger Titel oder eine Beschreibung von diesem Protokoll (Optional)'/>
 				</div>
 
@@ -148,7 +148,7 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 				<input type='hidden' id='protocols_upload_confirmed' name='protocols_upload_confirmed'/>
 				<input type='hidden' name='protocols_upload_sendtoken' value='" . TokenManager::getSendToken("protocols_upload", true) . "'/>
 				
-				<button type='submit'><i class='icon-upload'></i> Hochladen</button>
+				<button type='submit'><i class='el-icon-upload'></i> Hochladen</button>
 			</form>
 		</fieldset>
 	";

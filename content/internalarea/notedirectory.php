@@ -89,25 +89,63 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 		<div id="notedirectory_options_div2">
 			<form id="notedirectory_searchform" action="/internalarea/notedirectory" method="get">
 				<div class="input-container">
-					<span class="input-addon"><i class="icon-search"></i></span>
+					<span class="input-addon"><i class="el-icon-search"></i></span>
 					<input class="input-field" type="text" id="notedirectory_searchstring" name="notedirectory_searchstring" placeholder="Suchbegriff" value="<?php echo escapeText($_POST["notedirectory_searchstring"]); ?>"/>
 				</div>
 			</form>
 		</div>
 	</div>
-
-	<script type="text/javascript">
-		$("#notedirectory_searchform").submit(function()
-		{
-			var searchString = $("#notedirectory_searchstring").val();
-			if (searchString)
-			{
-				document.location = "/internalarea/notedirectory/search/" + encodeURIComponent(searchString);
-			}
-			return false;
-		});
-	</script>
 <?php
+if (Constants::$accountManager->hasPermission("notedirectory.edit"))
+{
+	$sendToken = TokenManager::getSendToken("notedirectory_edittitle", true);
+?>
+	<div id="notedirectory_edittitle">
+		<form id="notedirectory_edittitle_form" method="post" onsubmit="return false;">
+			<label class="input-label" for="notedirectory_edittitle_title">Titel</label>
+			<div class='input-container'>
+				<span class='input-addon'><i class='el-icon-pencil'></i></span>
+				<input class='input-field' type='text' id='notedirectory_edittitle_title' name='notedirectory_edittitle_title' placeholder='Der Name von dem Titel'/>
+			</div>
+
+			<label class="input-label" for="notedirectory_edittitle_composer">Komponist</label>
+			<div class='input-container'>
+				<span class='input-addon'><i class='el-icon-pencil'></i></span>
+				<input class='input-field' type='text' id='notedirectory_edittitle_composer' name='notedirectory_edittitle_composer' placeholder='Der Komponist von dem Titel'/>
+			</div>
+
+			<label class="input-label" for="notedirectory_edittitle_arranger">Bearbeiter</label>
+			<div class='input-container'>
+				<span class='input-addon'><i class='el-icon-pencil'></i></span>
+				<input class='input-field' type='text' id='notedirectory_edittitle_arranger' name='notedirectory_edittitle_arranger' placeholder='Der Bearbeiter von dem Titel'/>
+			</div>
+
+			<label class="input-label" for="notedirectory_edittitle_publisher">Verleger</label>
+			<div class='input-container'>
+				<span class='input-addon'><i class='el-icon-pencil'></i></span>
+				<input class='input-field' type='text' id='notedirectory_edittitle_publisher' name='notedirectory_edittitle_publisher' placeholder='Der Verleger von dem Titel'/>
+			</div>
+
+			<label class="input-label" for="notedirectory_edittitle_category">Kategorie</label>
+			<div class='input-container'>
+				<span class='input-addon'><i class='el-icon-pencil'></i></span>
+				<select class='input-field' id='events_upload_event' name='events_upload_event'>
+					<?php
+					$query = Constants::$pdo->query("SELECT `id`, `title` FROM `notedirectory_categories` ORDER BY `title` ASC");
+					while ($row = $query->fetch())
+					{
+						echo "<option value='" . $row->id . "'>" . escapeText($row->title) . "</option>";
+					}
+					?>
+				</select>
+			</div>
+
+			<input type='hidden' id='notedirectory_edittitle_form_sendtoken' name='notedirectory_edittitle_form_sendtoken' value='<?php echo $sendToken;?>'/>
+			<input type='hidden' id='notedirectory_edittitle_form_id' name='notedirectory_edittitle_form_id'/>
+		</form>
+	</div>
+<?php
+}
 switch (Constants::$pagePath[2])
 {
 	case "all":
@@ -149,11 +187,25 @@ switch (Constants::$pagePath[2])
 		}
 		break;
 	case "details":
-		$query = Constants::$pdo->prepare("SELECT `title` FROM `notedirectory_titles` WHERE `id` = :id");
+		$query = Constants::$pdo->prepare("SELECT `id`, `categoryId`, `title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` WHERE `id` = :id");
 		$query->execute(array(":id" => Constants::$pagePath[3]));
 		if ($query->rowCount())
 		{
 			$row = $query->fetch();
+			if (Constants::$accountManager->hasPermission("notedirectory.edit"))
+			{
+				echo "
+					<button id='notedirectory_edittitle_button'>Titel bearbeiten</button>
+					<div id='notedirectory_hiddeninfo'>
+						<id>" . escapeText($row->id) . "</id>
+						<categoryId>" . escapeText($row->categoryId) . "</categoryId>
+						<title>" . escapeText($row->title) . "</title>
+						<composer>" . escapeText($row->composer) . "</composer>
+						<arranger>" . escapeText($row->arranger) . "</arranger>
+						<publisher>" . escapeText($row->publisher) . "</publisher>
+					</div>
+				";
+			}
 			echo "<h2>Programme welche den Titel <i>" . escapeText($row->title) . "</i> enthalten</h2>";
 			$query = Constants::$pdo->prepare("
 				SELECT `notedirectory_programs`.`id`, `year`, `title`, `number`
@@ -256,3 +308,58 @@ switch (Constants::$pagePath[2])
 		break;
 }
 ?>
+
+<script type="text/javascript">
+	$("#notedirectory_searchform").submit(function()
+	{
+		var searchString = $("#notedirectory_searchstring").val();
+		if (searchString)
+		{
+			document.location = "/internalarea/notedirectory/search/" + encodeURIComponent(searchString);
+		}
+		return false;
+	});
+<?php
+if (Constants::$accountManager->hasPermission("notedirectory.edit"))
+{
+?>
+	$("#notedirectory_edittitle").dialog(
+	{
+		autoOpen: false,
+		closeText: "Schlie&szlig;en",
+		height: 600,
+		minWidth: 500,
+		modal: true,
+		width: 800,
+		buttons:
+		{
+			"OK": function ()
+			{
+				if ($("#notedirectory_edittitle_title").val())
+				{
+					$("#notedirectory_edittitle_form")[0].submit();
+				}
+				else
+				{
+					alert("Kein Titel angegeben!");
+				}
+			},
+			"Abbrechen": function ()
+			{
+				$(this).dialog("close");
+			}
+		}
+	});
+
+	$("#notedirectory_edittitle_button").click(function ()
+	{
+		$("#notedirectory_edittitle_form")[0].reset();
+		$("#notedirectory_edittitle_id").val($("#notedirectory_hiddeninfo").find("id").text());
+		$("#notedirectory_edittitle_title").val($("#notedirectory_hiddeninfo").find("title").text());
+		$("#notedirectory_edittitle").dialog("option", "title", $("#notedirectory_edittitle_button").text());
+		$("#notedirectory_edittitle").dialog("open");
+	});
+<?php
+}
+?>
+</script>

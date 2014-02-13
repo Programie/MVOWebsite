@@ -336,19 +336,19 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 			<form id='dates_edit_form' method='post' onsubmit='return false'>
 				<label class='input-label' for='dates_edit_title'>Titel</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-pencil'></i></span>
+					<span class='input-addon'><i class='el-icon-pencil'></i></span>
 					<input class='input-field' type='text' id='dates_edit_title' name='dates_edit_title' placeholder='Titel von diesem Termin'/>
 				</div>
 
 				<label class='input-label' for='dates_edit_date'>Datum</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-calendar'></i></span>
+					<span class='input-addon'><i class='el-icon-calendar'></i></span>
 					<input class='input-field date' type='text' id='dates_edit_date' name='dates_edit_date' placeholder='TT.MM.JJJJ'/>
 				</div>
 
 				<label class='input-label' for='dates_edit_time_start'>Zeit</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-time'></i></span>
+					<span class='input-addon'><i class='el-icon-time'></i></span>
 					<div class='input-field'>
 						<input type='text' class='time' id='dates_edit_time_start' name='dates_edit_time_start' placeholder='HH:MM'/>
 						<span>bis</span>
@@ -358,7 +358,7 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 
 				<label class='input-label' for='dates_edit_location'>Ort</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-globe'></i></span>
+					<span class='input-addon'><i class='el-icon-globe'></i></span>
 					<input class='input-field' type='text' id='dates_edit_location' name='dates_edit_location' placeholder='Ort, an welchem dieser Termin stattfindet'/>
 				</div>
 

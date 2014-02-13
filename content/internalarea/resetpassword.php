@@ -54,11 +54,11 @@ else
 							
 							<form action='/internalarea/resetpassword/" . Constants::$pagePath[2] . "' method='post'>
 								<div class='input-container'>
-									<span class='input-addon'><i class='icon-key'></i></span>
+									<span class='input-addon'><i class='el-icon-key'></i></span>
 									<input class='input-field' type='password' name='resetpassword_password1' placeholder='Neues Passwort' required/>
 								</div>
 								<div class='input-container'>
-									<span class='input-addon'><i class='icon-key'></i></span>
+									<span class='input-addon'><i class='el-icon-key'></i></span>
 									<input class='input-field' type='password' name='resetpassword_password2' placeholder='Passwort wiederholen' required/>
 								</div>
 
@@ -131,7 +131,7 @@ else
 		echo "
 			<form action='/internalarea/resetpassword' method='post'>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-user'></i></span>
+					<span class='input-addon'><i class='el-icon-user'></i></span>
 					<input class='input-field' type='text' id='resetpassword_username' name='resetpassword_username' placeholder='Benutzername' required/>
 				</div>
 

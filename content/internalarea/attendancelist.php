@@ -104,7 +104,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 							<div class='no-print'>
 								<input type='radio' state='1' title='Anwesend' name='" . $name . "' id='" . $name . "_yes' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "1" ? "checked='checked'" : "") . "/><label for='" . $name . "_yes' title='Anwesend'>Ja</label>
 								<input type='radio' state='0' title='Nicht anwesend' name='" . $name . "' id='" . $name . "_no' onclick='attendancelist_changeState(this);' " . ($attendanceRow->status == "0" ? "checked='checked'" : "") . "/><label for='" . $name . "_no' title='Nicht anwesend'>Nein</label>
-								<button type='button' title='Auswahl entfernen' onclick='attendancelist_changeState(this);'><i class='icon-black icon-trash'></i></button>
+								<button type='button' title='Auswahl entfernen' onclick='attendancelist_changeState(this);'><i class='el-icon-black icon-trash'></i></button>
 							</div>
 							<div class='print-only'>" . $statusText . "</div>
 						</td>

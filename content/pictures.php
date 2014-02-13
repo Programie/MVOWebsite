@@ -88,8 +88,8 @@ switch (Constants::$pagePath[1])
 
 				<div id='pictures_edit_contextmenu'>
 					<ul>
-						<li id='pictures_edit_contextmenu_edittitle'><i class='icon-pencil'></i> Titel bearbeiten</li>
-						<li id='pictures_edit_contextmenu_setcover'><i class='icon-picture'></i> Als Cover verwenden</li>
+						<li id='pictures_edit_contextmenu_edittitle'><i class='el-icon-pencil'></i> Titel bearbeiten</li>
+						<li id='pictures_edit_contextmenu_setcover'><i class='el-icon-picture'></i> Als Cover verwenden</li>
 					</ul>
 				</div>
 
@@ -201,13 +201,13 @@ if (Constants::$accountManager->hasPermission("pictures.edit"))
 			<input type="hidden" id="pictures_edit_id" name="pictures_edit_id"/>
 			<label class="input-label" for="pictures_edit_title">Titel</label>
 			<div class="input-container">
-				<span class="input-addon"><i class="icon-pencil"></i></span>
+				<span class="input-addon"><i class="el-icon-pencil"></i></span>
 				<input class="input-field" type="text" id="pictures_edit_title" name="pictures_edit_title" required/>
 			</div>
 
 			<label class="input-label" for="pictures_edit_date">Datum</label>
 			<div class="input-container">
-				<span class="input-addon"><i class="icon-calendar"></i></span>
+				<span class="input-addon"><i class="el-icon-calendar"></i></span>
 				<input class="input-field date" type="text" id="pictures_edit_date" name="pictures_edit_date" required/>
 			</div>
 

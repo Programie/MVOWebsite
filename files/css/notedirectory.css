@@ -1,3 +1,18 @@
+#notedirectory_edittitle
+{
+	display: none;
+}
+
+#notedirectory_edittitle_form input
+{
+	width: calc(100% - 28px);
+}
+
+#notedirectory_hiddeninfo
+{
+	display: none;
+}
+
 #notedirectory_options_div1
 {
 	position: relative;

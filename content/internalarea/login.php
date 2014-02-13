@@ -15,11 +15,11 @@ else
 	echo "
 		<form action='" . $_SERVER["REQUEST_URI"] . "' method='post'>
 			<div class='input-container'>
-				<span class='input-addon'><i class='icon-user'></i></span>
+				<span class='input-addon'><i class='el-icon-user'></i></span>
 				<input class='input-field' type='text' id='loginform_username' name='username' placeholder='Benutzername' required/>
 			</div>
 			<div class='input-container'>
-				<span class='input-addon'><i class='icon-key'></i></span>
+				<span class='input-addon'><i class='el-icon-key'></i></span>
 				<input class='input-field' type='password' name='password' placeholder='Passwort' required/>
 			</div>
 			

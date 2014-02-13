@@ -88,7 +88,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 			<form id='events_upload_form' action='/internalarea/events' method='post' enctype='multipart/form-data' onsubmit='events_confirmUpload(); return false;'>
 				<label class='input-label' for='events_upload_year'>Jahr:</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-calendar'></i></span>
+					<span class='input-addon'><i class='el-icon-calendar'></i></span>
 					<select class='input-field' id='events_upload_year' name='events_upload_year'>
 	";
 	foreach ($years as $year)
@@ -111,7 +111,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 				
 				<label class='input-label' for='events_upload_event'>Veranstaltung:</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-star'></i></span>
+					<span class='input-addon'><i class='el-icon-star'></i></span>
 					<select class='input-field' id='events_upload_event' name='events_upload_event'>
 	";
 	foreach ($events as $name => $title)
@@ -124,7 +124,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 				
 				<label class='input-label' for='events_upload_file'>Datei:</label>
 				<div class='input-container'>
-					<span class='input-addon'><i class='icon-file'></i></span>
+					<span class='input-addon'><i class='el-icon-file'></i></span>
 					<input class='input-field' type='file' id='events_upload_file' name='events_upload_file'/>
 				</div>
 				
