@@ -37,7 +37,7 @@ Constants::$pagePath = array();
 $pagePath = explode("/", $_GET["path"]);
 foreach ($pagePath as $page)
 {
-	if ($page and $page[0] != ".")
+	if ($page != "" and $page[0] != ".")
 	{
 		Constants::$pagePath[] = $page;
 	}

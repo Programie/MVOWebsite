@@ -6,6 +6,15 @@ switch (Constants::$pagePath[2])
 	case "all":
 		$title[] = "Alle Titel";
 		break;
+	case "category":
+		$query = Constants::$pdo->prepare("SELECT `title` FROM `notedirectory_categories` WHERE `id` = :id");
+		$query->execute(array(":id" => Constants::$pagePath[3]));
+		if ($query->rowCount())
+		{
+			$row = $query->fetch();
+			$title[] = escapeText($row->title);
+		}
+		break;
 	case "details":
 		$title[] = "Titeldetails";
 		break;
@@ -30,33 +39,47 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 		<li>
 			<a href="#">Auswahl</a>
 			<ul>
-				<?php
-				if (Constants::$accountManager->hasPermission("notedirectory.view.programs"))
-				{
-					$years = array();
-					$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id`, `year`, `title` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`");
-					while ($row = $query->fetch())
-					{
-						$years[$row->year][$row->id] = $row->title;
-					}
-					foreach ($years as $year => $programs)
-					{
-						echo "
-							<li>
-								<a href='#'>" . $year . "</a>
-								<ul>
-						";
-						foreach ($programs as $id => $title)
+				<li>
+					<a href='#'>Programme</a>
+					<ul>
+						<?php
+						$years = array();
+						$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id`, `year`, `title` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`");
+						while ($row = $query->fetch())
 						{
-							echo "<li><a href='/internalarea/notedirectory/program/" . $id . "'>" . escapeText($title) . "</a></li>";
+							$years[$row->year][$row->id] = $row->title;
 						}
-						echo "
-								</ul>
-							</li>
-						";
-					}
-				}
-				?>
+						foreach ($years as $year => $programs)
+						{
+							echo "
+								<li>
+									<a href='#'>" . $year . "</a>
+									<ul>
+							";
+							foreach ($programs as $id => $title)
+							{
+								echo "<li><a href='/internalarea/notedirectory/program/" . $id . "'>" . escapeText($title) . "</a></li>";
+							}
+							echo "
+									</ul>
+								</li>
+							";
+						}
+						?>
+					</ul>
+				</li>
+				<li>
+					<a href='#'>Kategorien</a>
+					<ul>
+						<?php
+						$query = Constants::$pdo->query("SELECT `id`, `title` FROM `notedirectory_categories` ORDER BY `title` ASC");
+						while ($row = $query->fetch())
+						{
+							echo "<li><a href='/internalarea/notedirectory/category/" . $row->id . "'>" . escapeText($row->title) . "</a></li>";
+						}
+						?>
+					</ul>
+				</li>
 				<li><a href="/internalarea/notedirectory/all">Alle Titel</a></li>
 			</ul>
 		</li>
@@ -101,6 +124,23 @@ switch (Constants::$pagePath[2])
 			$noteDirectory->setColumns($columns);
 			$noteDirectory->setTitles($query->fetchAll());
 			$noteDirectory->setShowInGroups(true);
+			$noteDirectory->createList();
+		}
+		else
+		{
+			echo "<div class='alert-error'>Kein Titel vorhanden!</div>";
+		}
+		break;
+	case "category":
+		$query = Constants::$pdo->prepare("SELECT `id`, `title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` WHERE `categoryId` = :categoryId");
+		$query->execute(array(":categoryId" => Constants::$pagePath[3]));
+		if ($query->rowCount())
+		{
+			$columns = array("title" => "Titel", "composer" => "Komponist", "arranger" => "Bearbeiter", "publisher" => "Verleger");
+			$noteDirectory = new NoteDirectory();
+			$noteDirectory->setColumns($columns);
+			$noteDirectory->setTitles($query->fetchAll());
+			$noteDirectory->setShowInGroups(false);
 			$noteDirectory->createList();
 		}
 		else
