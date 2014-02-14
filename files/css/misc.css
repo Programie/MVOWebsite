@@ -13,6 +13,11 @@
 	clear: both;
 }
 
+.dialog
+{
+	display: none;
+}
+
 .icon-black
 {
 	color: #000 !important;
@@ -31,4 +36,9 @@
 .profilepicture
 {
 	height: 160px;
+}
+
+.toolbar
+{
+	margin-bottom: 20px;
 }

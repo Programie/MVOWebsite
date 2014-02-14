@@ -1,12 +1,3 @@
-#notedirectory_edittitle, #notedirectory_edittitle_contextmenu
-{
-	display: none;
-}
-
-#notedirectory_edittitle_form input
-{
-	width: calc(100% - 28px);
-}
 #notedirectory_options_div1
 {
 	position: relative;

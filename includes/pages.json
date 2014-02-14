@@ -156,6 +156,11 @@
 				"title" : "Notenverzeichnis",
 				"permissions" : "notedirectory"
 			},
+			"notedirectoryeditor" :
+			{
+				"title" : "Notenverzeichniseditor",
+				"permissions" : "notedirectory.edit"
+			},
 			"protocols" :
 			{
 				"title" : "Protokolle",

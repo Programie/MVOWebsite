@@ -324,7 +324,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 			$query = Constants::$pdo->query("SELECT `id`, `title` FROM `usergroups`");
 			while ($row = $query->fetch())
 			{
-				echo "<li class='ui-state-default'>" . htmlspecialchars($row->title) . "</li>";
+				echo "<li class='ui-state-default'>" . escapeText($row->title) . "</li>";
 			}
 			?>
 		</ul>

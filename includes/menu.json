@@ -119,6 +119,9 @@
 				"path" : "/internalarea/notedirectory"
 			},
 			{
+				"path" : "/internalarea/notedirectoryeditor"
+			},
+			{
 				"path" : "/internalarea/roomoccupancyplan"
 			},
 			{

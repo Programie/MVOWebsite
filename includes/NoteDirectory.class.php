@@ -67,38 +67,6 @@ class NoteDirectory
 		$this->createHeader();
 		$this->createBody();
 		echo "</table>";
-
-		if (Constants::$accountManager->hasPermission("notedirectory.edit"))
-		{
-			?>
-			<div id="notedirectory_edittitle_contextmenu">
-				<ul>
-					<li id="notedirectory_edittitle_contextmenu_edit"><img src="/files/images/contextmenu/edit.png"/> Bearbeiten</li>
-				</ul>
-			</div>
-
-			<script type="text/javascript">
-				$("#notedirectory_table").find("tbody").not(".tablesorter-infoOnly").find("tr").contextMenu("notedirectory_edittitle_contextmenu",
-				{
-					bindings:
-					{
-						notedirectory_edittitle_contextmenu_edit: function (trigger)
-						{
-							$("#notedirectory_edittitle_form")[0].reset();
-							$("#notedirectory_edittitle_id").val($(trigger).attr("titleid"));
-							$("#notedirectory_edittitle_category").find("option[value=" + $(trigger).attr("categoryid") + "]").prop("selected", true);
-							$("#notedirectory_edittitle_title").val($(trigger).find("td[columnname=title]").text());
-							$("#notedirectory_edittitle_composer").val($(trigger).find("td[columnname=composer]").text());
-							$("#notedirectory_edittitle_arranger").val($(trigger).find("td[columnname=arranger]").text());
-							$("#notedirectory_edittitle_publisher").val($(trigger).find("td[columnname=publisher]").text());
-							$("#notedirectory_edittitle").dialog("option", "title", "Titel bearbeiten");
-							$("#notedirectory_edittitle").dialog("open");
-						}
-					}
-				});
-			</script>
-			<?php
-		}
 	}
 
 	/**
@@ -159,7 +127,7 @@ class NoteDirectory
 		echo "<tbody>";
 		foreach ($titles as $row)
 		{
-			echo "<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/details/" . $row->id . "';\" titleid='" . $row->id . "' categoryid='" . $row->categoryId . "'>";
+			echo "<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/details/" . $row->id . "';\">";
 			foreach ($this->columns as $columnName => $columnTitle)
 			{
 				echo "<td columnname='" . $columnName . "'>" . $this->formatString($row->{$columnName}) . "</td>";
