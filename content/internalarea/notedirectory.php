@@ -69,7 +69,7 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 					</ul>
 				</li>
 				<li>
-					<a href=""#">Kategorien</a>
+					<a href="#">Kategorien</a>
 					<ul>
 						<?php
 						$query = Constants::$pdo->query("SELECT `id`, `title` FROM `notedirectory_categories` ORDER BY `title` ASC");
