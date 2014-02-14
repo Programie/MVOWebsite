@@ -98,7 +98,56 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 <?php
 if (Constants::$accountManager->hasPermission("notedirectory.edit"))
 {
-	$previousEditSendToken = TokenManager::getSendToken("notedirectory_edit");
+	if (isset($_POST["notedirectory_edittitle_id"]))
+	{
+		if ($_POST["notedirectory_edittitle_sendtoken"] == TokenManager::getSendToken("notedirectory_edit"))
+		{
+			if ($_POST["notedirectory_edittitle_id"])
+			{
+				$query = Constants::$pdo->prepare("
+					UPDATE `notedirectory_titles`
+					SET
+						`categoryId` = :categoryId,
+						`title` = :title,
+						`composer` = :composer,
+						`arranger` = :arranger,
+						`publisher` = :publisher
+					WHERE `id` = :id
+				");
+				$query->execute(array
+				(
+					":id" => $_POST["notedirectory_edittitle_id"],
+					":categoryId" => $_POST["notedirectory_edittitle_category"],
+					":title" => $_POST["notedirectory_edittitle_title"],
+					":composer" => $_POST["notedirectory_edittitle_composer"],
+					":arranger" => $_POST["notedirectory_edittitle_arranger"],
+					":publisher" => $_POST["notedirectory_edittitle_publisher"],
+				));
+			}
+			else
+			{
+				$query = Constants::$pdo->prepare("
+					INSERT INTO `notedirectory_titles`
+					(`categoryId`, `title`, `composer`, `arranger`, `publisher`)
+					VALUES(:categoryId, :title, :composer, :arranger, :publisher)
+				");
+				$query->execute(array
+				(
+					":categoryId" => $_POST["notedirectory_edittitle_category"],
+					":title" => $_POST["notedirectory_edittitle_title"],
+					":composer" => $_POST["notedirectory_edittitle_composer"],
+					":arranger" => $_POST["notedirectory_edittitle_arranger"],
+					":publisher" => $_POST["notedirectory_edittitle_publisher"],
+				));
+			}
+			echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+		}
+		else
+		{
+			echo "<div class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
+		}
+	}
+
 	$newEditSendToken = TokenManager::getSendToken("notedirectory_edit", true);
 ?>
 	<div id="notedirectory_edittitle">
@@ -151,8 +200,13 @@ if (Constants::$accountManager->hasPermission("notedirectory.edit"))
 switch (Constants::$pagePath[2])
 {
 	case "all":
+		if (Constants::$accountManager->hasPermission("notedirectory.edit"))
+		{
+			echo "<button id='notedirectory_addtitle_button'>Titel hinzuf&uuml;gen</button>";
+		}
+
 		$query = Constants::$pdo->query("
-			SELECT `notedirectory_titles`.`id`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher`
+			SELECT `notedirectory_titles`.`id`, `notedirectory_titles`.`categoryId`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher`
 			FROM `notedirectory_titles`
 			LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`
 			ORDER BY `notedirectory_titles`.`categoryId` ASC
@@ -172,7 +226,12 @@ switch (Constants::$pagePath[2])
 		}
 		break;
 	case "category":
-		$query = Constants::$pdo->prepare("SELECT `id`, `title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` WHERE `categoryId` = :categoryId");
+		if (Constants::$accountManager->hasPermission("notedirectory.edit"))
+		{
+			echo "<button id='notedirectory_addtitle_button' categoryid='" . Constants::$pagePath[3] . "'>Titel hinzuf&uuml;gen</button>";
+		}
+
+		$query = Constants::$pdo->prepare("SELECT `id`, `categoryId`, `title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` WHERE `categoryId` = :categoryId");
 		$query->execute(array(":categoryId" => Constants::$pagePath[3]));
 		if ($query->rowCount())
 		{
@@ -189,75 +248,11 @@ switch (Constants::$pagePath[2])
 		}
 		break;
 	case "details":
-		if (isset($_POST["notedirectory_edittitle_id"]) and Constants::$accountManager->hasPermission("notedirectory.edit"))
-		{
-			if ($_POST["notedirectory_edittitle_sendtoken"] == $previousEditSendToken)
-			{
-				if ($_POST["notedirectory_edittitle_id"])
-				{
-					$query = Constants::$pdo->prepare("
-						UPDATE `notedirectory_titles`
-						SET
-							`categoryId` = :categoryId,
-							`title` = :title,
-							`composer` = :composer,
-							`arranger` = :arranger,
-							`publisher` = :publisher
-						WHERE `id` = :id
-					");
-					$query->execute(array
-					(
-						":id" => $_POST["notedirectory_edittitle_id"],
-						":categoryId" => $_POST["notedirectory_edittitle_category"],
-						":title" => $_POST["notedirectory_edittitle_title"],
-						":composer" => $_POST["notedirectory_edittitle_composer"],
-						":arranger" => $_POST["notedirectory_edittitle_arranger"],
-						":publisher" => $_POST["notedirectory_edittitle_publisher"],
-					));
-				}
-				else
-				{
-					$query = Constants::$pdo->prepare("
-						INSERT INTO `notedirectory_titles`
-						(`categoryId`, `title`, `composer`, `arranger`, `publisher`)
-						VALUES(:categoryId, :title, :composer, :arranger, :publisher)
-					");
-					$query->execute(array
-					(
-						":categoryId" => $_POST["notedirectory_edittitle_category"],
-						":title" => $_POST["notedirectory_edittitle_title"],
-						":composer" => $_POST["notedirectory_edittitle_composer"],
-						":arranger" => $_POST["notedirectory_edittitle_arranger"],
-						":publisher" => $_POST["notedirectory_edittitle_publisher"],
-					));
-				}
-				echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
-			}
-			else
-			{
-				echo "<div class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
-			}
-		}
-
 		$query = Constants::$pdo->prepare("SELECT `id`, `categoryId`, `title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` WHERE `id` = :id");
 		$query->execute(array(":id" => Constants::$pagePath[3]));
 		if ($query->rowCount())
 		{
 			$row = $query->fetch();
-			if (Constants::$accountManager->hasPermission("notedirectory.edit"))
-			{
-				echo "
-					<button id='notedirectory_edittitle_button'>Titel bearbeiten</button>
-					<div id='notedirectory_hiddeninfo'>
-						<id>" . escapeText($row->id) . "</id>
-						<categoryId>" . escapeText($row->categoryId) . "</categoryId>
-						<title>" . escapeText($row->title) . "</title>
-						<composer>" . escapeText($row->composer) . "</composer>
-						<arranger>" . escapeText($row->arranger) . "</arranger>
-						<publisher>" . escapeText($row->publisher) . "</publisher>
-					</div>
-				";
-			}
 			echo "<h2>Programme welche den Titel <i>" . escapeText($row->title) . "</i> enthalten</h2>";
 			$query = Constants::$pdo->prepare("
 				SELECT `notedirectory_programs`.`id`, `year`, `title`, `number`
@@ -308,7 +303,7 @@ switch (Constants::$pagePath[2])
 		break;
 	case "program":
 		$query = Constants::$pdo->prepare("
-			SELECT `notedirectory_titles`.`id`, `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher`
+			SELECT `notedirectory_titles`.`id`, `notedirectory_titles`.`categoryId`, `number`, `notedirectory_categories`.`title` AS `category`, `notedirectory_titles`.`title`, `composer`, `arranger`, `publisher`
 			FROM `notedirectory_programtitles`
 			LEFT JOIN `notedirectory_titles` ON `notedirectory_titles`.`id` = `notedirectory_programtitles`.`titleId`
 			LEFT JOIN `notedirectory_categories` ON `notedirectory_categories`.`id` = `notedirectory_titles`.`categoryId`
@@ -334,6 +329,7 @@ switch (Constants::$pagePath[2])
 		$query = Constants::$pdo->prepare("
 			SELECT
 				`notedirectory_titles`.`id`,
+				`notedirectory_titles`.`categoryId`,
 				`notedirectory_categories`.`title` AS `category`,
 				`notedirectory_titles`.`title`,
 				`composer`,
@@ -403,17 +399,14 @@ if (Constants::$accountManager->hasPermission("notedirectory.edit"))
 		}
 	});
 
-	$("#notedirectory_edittitle_button").click(function ()
+	$("#notedirectory_addtitle_button").click(function ()
 	{
-		var hiddenInfoElement = $("#notedirectory_hiddeninfo");
 		$("#notedirectory_edittitle_form")[0].reset();
-		$("#notedirectory_edittitle_id").val(hiddenInfoElement.find("id").text());
-		$("#notedirectory_edittitle_category").find("option[value=" + hiddenInfoElement.find("categoryId").text() + "]").prop("selected", true);
-		$("#notedirectory_edittitle_title").val(hiddenInfoElement.find("title").text());
-		$("#notedirectory_edittitle_composer").val(hiddenInfoElement.find("composer").text());
-		$("#notedirectory_edittitle_arranger").val(hiddenInfoElement.find("arranger").text());
-		$("#notedirectory_edittitle_publisher").val(hiddenInfoElement.find("publisher").text());
-		$("#notedirectory_edittitle").dialog("option", "title", $("#notedirectory_edittitle_button").text());
+		$("#notedirectory_edittitle_id").val(0);
+
+		$("#notedirectory_edittitle_category").find("option[value=" + $("#notedirectory_addtitle_button").attr("categoryid") + "]").prop("selected", true);
+
+		$("#notedirectory_edittitle").dialog("option", "title", $("#notedirectory_addtitle_button").text());
 		$("#notedirectory_edittitle").dialog("open");
 	});
 <?php
