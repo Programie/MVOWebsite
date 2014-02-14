@@ -37,6 +37,10 @@
 
 #notedirectory_selectionmenu
 {
-	width: 100px;
 	margin-bottom: 20px;
+}
+
+#notedirectory_selectionmenu, #notedirectory_selectionmenu .ui-menu
+{
+	width: 150px;
 }

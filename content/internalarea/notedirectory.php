@@ -40,7 +40,7 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 			<a href="#">Auswahl</a>
 			<ul>
 				<li>
-					<a href='#'>Programme</a>
+					<a href="#">Programme</a>
 					<ul>
 						<?php
 						$years = array();
@@ -69,7 +69,7 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 					</ul>
 				</li>
 				<li>
-					<a href='#'>Kategorien</a>
+					<a href=""#">Kategorien</a>
 					<ul>
 						<?php
 						$query = Constants::$pdo->query("SELECT `id`, `title` FROM `notedirectory_categories` ORDER BY `title` ASC");
@@ -98,38 +98,39 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 <?php
 if (Constants::$accountManager->hasPermission("notedirectory.edit"))
 {
-	$sendToken = TokenManager::getSendToken("notedirectory_edittitle", true);
+	$previousEditSendToken = TokenManager::getSendToken("notedirectory_edit");
+	$newEditSendToken = TokenManager::getSendToken("notedirectory_edit", true);
 ?>
 	<div id="notedirectory_edittitle">
 		<form id="notedirectory_edittitle_form" method="post" onsubmit="return false;">
 			<label class="input-label" for="notedirectory_edittitle_title">Titel</label>
-			<div class='input-container'>
-				<span class='input-addon'><i class='el-icon-pencil'></i></span>
-				<input class='input-field' type='text' id='notedirectory_edittitle_title' name='notedirectory_edittitle_title' placeholder='Der Name von dem Titel'/>
+			<div class="input-container">
+				<span class="input-addon"><i class="el-icon-pencil"></i></span>
+				<input class="input-field" type="text" id="notedirectory_edittitle_title" name="notedirectory_edittitle_title"/>
 			</div>
 
 			<label class="input-label" for="notedirectory_edittitle_composer">Komponist</label>
-			<div class='input-container'>
-				<span class='input-addon'><i class='el-icon-pencil'></i></span>
-				<input class='input-field' type='text' id='notedirectory_edittitle_composer' name='notedirectory_edittitle_composer' placeholder='Der Komponist von dem Titel'/>
+			<div class="input-container">
+				<span class="input-addon"><i class="el-icon-person"></i></span>
+				<input class="input-field" type="text" id="notedirectory_edittitle_composer" name="notedirectory_edittitle_composer"/>
 			</div>
 
 			<label class="input-label" for="notedirectory_edittitle_arranger">Bearbeiter</label>
-			<div class='input-container'>
-				<span class='input-addon'><i class='el-icon-pencil'></i></span>
-				<input class='input-field' type='text' id='notedirectory_edittitle_arranger' name='notedirectory_edittitle_arranger' placeholder='Der Bearbeiter von dem Titel'/>
+			<div class="input-container">
+				<span class="input-addon"><i class="el-icon-person"></i></span>
+				<input class="input-field" type="text" id="notedirectory_edittitle_arranger" name="notedirectory_edittitle_arranger"/>
 			</div>
 
 			<label class="input-label" for="notedirectory_edittitle_publisher">Verleger</label>
-			<div class='input-container'>
-				<span class='input-addon'><i class='el-icon-pencil'></i></span>
-				<input class='input-field' type='text' id='notedirectory_edittitle_publisher' name='notedirectory_edittitle_publisher' placeholder='Der Verleger von dem Titel'/>
+			<div class="input-container">
+				<span class="input-addon"><i class="el-icon-group"></i></span>
+				<input class="input-field" type="text" id="notedirectory_edittitle_publisher" name="notedirectory_edittitle_publisher"/>
 			</div>
 
 			<label class="input-label" for="notedirectory_edittitle_category">Kategorie</label>
-			<div class='input-container'>
-				<span class='input-addon'><i class='el-icon-pencil'></i></span>
-				<select class='input-field' id='events_upload_event' name='events_upload_event'>
+			<div class="input-container">
+				<span class="input-addon"><i class="el-icon-folder-open"></i></span>
+				<select class="input-field" id="notedirectory_edittitle_category" name="notedirectory_edittitle_category">
 					<?php
 					$query = Constants::$pdo->query("SELECT `id`, `title` FROM `notedirectory_categories` ORDER BY `title` ASC");
 					while ($row = $query->fetch())
@@ -140,12 +141,13 @@ if (Constants::$accountManager->hasPermission("notedirectory.edit"))
 				</select>
 			</div>
 
-			<input type='hidden' id='notedirectory_edittitle_form_sendtoken' name='notedirectory_edittitle_form_sendtoken' value='<?php echo $sendToken;?>'/>
-			<input type='hidden' id='notedirectory_edittitle_form_id' name='notedirectory_edittitle_form_id'/>
+			<input type="hidden" id="notedirectory_edittitle_sendtoken" name="notedirectory_edittitle_sendtoken" value="<?php echo $newEditSendToken;?>"/>
+			<input type="hidden" id="notedirectory_edittitle_id" name="notedirectory_edittitle_id"/>
 		</form>
 	</div>
 <?php
 }
+
 switch (Constants::$pagePath[2])
 {
 	case "all":
@@ -187,6 +189,56 @@ switch (Constants::$pagePath[2])
 		}
 		break;
 	case "details":
+		if (isset($_POST["notedirectory_edittitle_id"]) and Constants::$accountManager->hasPermission("notedirectory.edit"))
+		{
+			if ($_POST["notedirectory_edittitle_sendtoken"] == $previousEditSendToken)
+			{
+				if ($_POST["notedirectory_edittitle_id"])
+				{
+					$query = Constants::$pdo->prepare("
+						UPDATE `notedirectory_titles`
+						SET
+							`categoryId` = :categoryId,
+							`title` = :title,
+							`composer` = :composer,
+							`arranger` = :arranger,
+							`publisher` = :publisher
+						WHERE `id` = :id
+					");
+					$query->execute(array
+					(
+						":id" => $_POST["notedirectory_edittitle_id"],
+						":categoryId" => $_POST["notedirectory_edittitle_category"],
+						":title" => $_POST["notedirectory_edittitle_title"],
+						":composer" => $_POST["notedirectory_edittitle_composer"],
+						":arranger" => $_POST["notedirectory_edittitle_arranger"],
+						":publisher" => $_POST["notedirectory_edittitle_publisher"],
+					));
+				}
+				else
+				{
+					$query = Constants::$pdo->prepare("
+						INSERT INTO `notedirectory_titles`
+						(`categoryId`, `title`, `composer`, `arranger`, `publisher`)
+						VALUES(:categoryId, :title, :composer, :arranger, :publisher)
+					");
+					$query->execute(array
+					(
+						":categoryId" => $_POST["notedirectory_edittitle_category"],
+						":title" => $_POST["notedirectory_edittitle_title"],
+						":composer" => $_POST["notedirectory_edittitle_composer"],
+						":arranger" => $_POST["notedirectory_edittitle_arranger"],
+						":publisher" => $_POST["notedirectory_edittitle_publisher"],
+					));
+				}
+				echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+			}
+			else
+			{
+				echo "<div class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
+			}
+		}
+
 		$query = Constants::$pdo->prepare("SELECT `id`, `categoryId`, `title`, `composer`, `arranger`, `publisher` FROM `notedirectory_titles` WHERE `id` = :id");
 		$query->execute(array(":id" => Constants::$pagePath[3]));
 		if ($query->rowCount())
@@ -353,9 +405,14 @@ if (Constants::$accountManager->hasPermission("notedirectory.edit"))
 
 	$("#notedirectory_edittitle_button").click(function ()
 	{
+		var hiddenInfoElement = $("#notedirectory_hiddeninfo");
 		$("#notedirectory_edittitle_form")[0].reset();
-		$("#notedirectory_edittitle_id").val($("#notedirectory_hiddeninfo").find("id").text());
-		$("#notedirectory_edittitle_title").val($("#notedirectory_hiddeninfo").find("title").text());
+		$("#notedirectory_edittitle_id").val(hiddenInfoElement.find("id").text());
+		$("#notedirectory_edittitle_category").find("option[value=" + hiddenInfoElement.find("categoryId").text() + "]").prop("selected", true);
+		$("#notedirectory_edittitle_title").val(hiddenInfoElement.find("title").text());
+		$("#notedirectory_edittitle_composer").val(hiddenInfoElement.find("composer").text());
+		$("#notedirectory_edittitle_arranger").val(hiddenInfoElement.find("arranger").text());
+		$("#notedirectory_edittitle_publisher").val(hiddenInfoElement.find("publisher").text());
 		$("#notedirectory_edittitle").dialog("option", "title", $("#notedirectory_edittitle_button").text());
 		$("#notedirectory_edittitle").dialog("open");
 	});
