@@ -154,6 +154,7 @@ CREATE TABLE `musiciangroups` (
 CREATE TABLE `notedirectory_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) CHARACTER SET latin1 NOT NULL,
+  `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
