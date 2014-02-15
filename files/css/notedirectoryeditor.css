@@ -1,24 +1,28 @@
-#notedirectoryeditor_categories_list
+#notedirectoryeditor_categories_list, #notedirectoryeditor_editprogram_titles
 {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
-	width: 60%;
 }
 
-#notedirectoryeditor_categories_list li
+#notedirectoryeditor_categories_list li, #notedirectoryeditor_editprogram_titles li
 {
 	cursor: move;
 	margin: 0 5px 5px 5px;
 	padding: 5px;
 }
 
-#notedirectoryeditor_editcategory form input, #notedirectoryeditor_edittitle form input
+#notedirectoryeditor_editcategory form input, #notedirectoryeditor_editprogram form input, #notedirectoryeditor_edittitle form input
 {
 	width: calc(100% - 28px);
 }
 
-.notedirectoryeditor_titles_row
+#notedirectoryeditor_editprogram_addtitle
+{
+	cursor: pointer;
+}
+
+.notedirectoryeditor_programs_row, .notedirectoryeditor_titles_row
 {
 	cursor: pointer;
 }

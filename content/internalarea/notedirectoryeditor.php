@@ -186,12 +186,13 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 					<th>Anzahl Titel</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="notedirectoryeditor_programs_list">
 				<?php
 				$query = Constants::$pdo->query("
 					SELECT
 						`notedirectory_programs`.`id`,
 						`notedirectory_programs`.`year`,
+						`notedirectory_programs`.`typeId`,
 						`notedirectory_programtypes`.`title` AS `type`,
 						COUNT(`notedirectory_programtitles`.`id`) AS `titleCount`
 					FROM `notedirectory_programs`
@@ -202,8 +203,8 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 				while ($row = $query->fetch())
 				{
 					echo "
-						<tr programid='" . $row->id . "'>
-							<td>" . $row->year . "</td>
+						<tr class='notedirectoryeditor_programs_row' programid='" . $row->id . "' typeid='" . $row->typeId . "'>
+							<td class='notedirectoryeditor_programs_row_year'>" . $row->year . "</td>
 							<td>" . escapeText($row->type) . "</td>
 							<td>" . $row->titleCount . "</td>
 						</tr>
@@ -291,6 +292,55 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 	</form>
 </div>
 
+<div id="notedirectoryeditor_editprogram" class="dalog">
+	<form id="notedirectoryeditor_editprogram_form" action="#notedirectoryeditor_tabs_programs" method="post">
+		<label class="input-label" for="notedirectoryeditor_editprogram_year">Jahr</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="el-icon-pencil"></i></span>
+			<input class="input-field" type="text" id="notedirectoryeditor_editprogram_year" name="notedirectoryeditor_form_year"/>
+		</div>
+
+		<label class="input-label" for="notedirectoryeditor_editprogram_type">Typ</label>
+		<div class="input-container">
+			<span class="input-addon"><i class="el-icon-folder-open"></i></span>
+			<select class="input-field" id="notedirectoryeditor_editprogram_type" name="notedirectoryeditor_form_type">
+				<?php
+				$query = Constants::$pdo->query("SELECT `id`, `title` FROM `notedirectory_programtypes` ORDER BY `title` ASC");
+				while ($row = $query->fetch())
+				{
+					echo "<option value='" . $row->id . "'>" . escapeText($row->title) . "</option>";
+				}
+				?>
+			</select>
+		</div>
+
+		<fieldset>
+			<legend>Titel</legend>
+
+			<label class="input-label" for="notedirectoryeditor_editprogram_titleselection">Titel hinzuf&uuml;gen</label>
+			<div class="input-container">
+				<span class="input-addon"><i class="el-icon-chevron-right"></i></span>
+				<select class="input-field" id="notedirectoryeditor_editprogram_titleselection">
+					<?php
+					$query = Constants::$pdo->query("SELECT `id`, `title` FROM `notedirectory_titles` ORDER BY `title` ASC");
+					while ($row = $query->fetch())
+					{
+						echo "<option value='" . $row->id . "'>" . escapeText($row->title) . "</option>";
+					}
+					?>
+				</select>
+				<span id="notedirectoryeditor_editprogram_addtitle" class="input-addon"><i class="el-icon-plus"></i></span>
+			</div>
+
+			<ul id="notedirectoryeditor_editprogram_titles"></ul>
+		</fieldset>
+
+		<input type="hidden" name="notedirectoryeditor_formtype" value="editprogram"/>
+		<input type="hidden" name="notedirectoryeditor_form_sendtoken" value="<?php echo $newSendToken;?>"/>
+		<input type="hidden" id="notedirectoryeditor_editprogram_id" name="notedirectoryeditor_form_id"/>
+	</form>
+</div>
+
 <div id="notedirectoryeditor_edittitle" class="dialog">
 	<form id="notedirectoryeditor_edittitle_form" action="#notedirectoryeditor_tabs_titles" method="post">
 		<label class="input-label" for="notedirectoryeditor_edittitle_title">Titel</label>
@@ -371,6 +421,32 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 		$("#notedirectoryeditor_categories_form").submit();
 	});
 
+	$("#notedirectoryeditor_programs_list").find("tr").click(function()
+	{
+		$("#notedirectoryeditor_editprogram_form")[0].reset();
+
+		$("#notedirectoryeditor_editprogram_id").val($(this).attr("programid"));
+		$("#notedirectoryeditor_editprogram_year").val($(this).find(".notedirectoryeditor_programs_row_year").text());
+		$("#notedirectoryeditor_editprogram_type").find("option[value=" + $(this).attr("typeid") + "]").prop("selected", true);
+
+		loadProgramDetails();
+
+		$("#notedirectoryeditor_editprogram").dialog("option", "title", "Programm bearbeiten");
+		$("#notedirectoryeditor_editprogram").dialog("open");
+	});
+
+	$("#notedirectoryeditor_programs_newbutton").click(function()
+	{
+		$("#notedirectoryeditor_editprogram_form")[0].reset();
+
+		$("#notedirectoryeditor_editprogram_id").val(0);
+
+		loadProgramDetails();
+
+		$("#notedirectoryeditor_editprogram").dialog("option", "title", $("#notedirectoryeditor_programs_newbutton").text());
+		$("#notedirectoryeditor_editprogram").dialog("open");
+	});
+
 	$("#notedirectoryeditor_titles_newbutton").click(function()
 	{
 		$("#notedirectoryeditor_edittitle_form")[0].reset();
@@ -423,14 +499,43 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 		}
 	});
 
+	$("#notedirectoryeditor_editprogram").dialog(
+	{
+		autoOpen: false,
+		closeText: "Schlie&szlig;en",
+		height: 500,
+		minWidth: 300,
+		modal: true,
+		width: 800,
+		buttons:
+		{
+			"OK": function ()
+			{
+				if ($("#notedirectoryeditor_editprogram_year").val())
+				{
+					$("#notedirectoryeditor_editprogram_form").submit();
+				}
+				else
+				{
+					alert("Kein Jahr angegeben!");
+				}
+			},
+			"Abbrechen": function ()
+			{
+				$(this).dialog("close");
+			}
+		}
+	});
+
+	$("#notedirectoryeditor_editprogram_titles").sortable();
+
 	$("#notedirectoryeditor_edittitle").dialog(
 	{
 		autoOpen: false,
 		closeText: "Schlie&szlig;en",
-		//height: 600,
-		minWidth: 500,
+		minWidth: 300,
 		modal: true,
-		width: 800,
+		width: 500,
 		buttons:
 		{
 			"OK": function ()
@@ -450,4 +555,52 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 			}
 		}
 	});
+
+	function loadProgramDetails()
+	{
+		var list = $("#notedirectoryeditor_editprogram_titles");
+		list.empty();
+
+		var programId = parseInt($("#notedirectoryeditor_editprogram_id").val());
+		if (programId)
+		{
+			$.ajax(
+			{
+				type: "GET",
+				dataType: "json",
+				url: "/internalarea/notedirectoryeditor/getprogramtitles/" + programId,
+				error: function (jqXhr, textStatus, errorThrown)
+				{
+					alert("Fehler beim Laden der Programmtitel!");
+				},
+				success: function (data, status, jqXhr)
+				{
+					for (var index = 0; index < data.length; index++)
+					{
+						var listItem = $("<li>");
+						listItem.addClass("ui-state-default");
+						listItem.attr("titleid", data[index].id);
+						listItem.attr("number", data[index].number);
+						listItem.text(data[index].title);
+						list.append(listItem);
+					}
+
+					if (!data.length)
+					{
+						var info = $("<div>");
+						info.addClass("alert-info");
+						info.text("Keine Titel vorhanden.");
+						list.append(info);
+					}
+				}
+			});
+		}
+		else
+		{
+			var info = $("<div>");
+			info.addClass("alert-info");
+			info.text("Keine Titel vorhanden.");
+			list.append(info);
+		}
+	}
 </script>
