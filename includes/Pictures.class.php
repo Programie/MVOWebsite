@@ -21,7 +21,7 @@ class Pictures
 			FROM `picturealbums`
 			LEFT JOIN `pictures` ON `pictures`.`albumId` = `picturealbums`.`id` AND `pictures`.`number` = `picturealbums`.`coverPicture`
 			WHERE YEAR(`date`) = :year
-			ORDER BY `date` DESC
+			ORDER BY `date` DESC, `id` DESC
 		");
 		$query->execute(array(":year" => $year));
 
