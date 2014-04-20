@@ -161,6 +161,11 @@
 				"title" : "Notenverzeichniseditor",
 				"permissions" : "notedirectory.edit"
 			},
+			"picturebox" :
+			{
+				"title" : "Bilder hochladen",
+				"permissions" : "picturebox"
+			},
 			"protocols" :
 			{
 				"title" : "Protokolle",
