@@ -1,3 +1,5 @@
+Dropzone.autoDiscover = false;// Disable Dropzone auto discover -> It is done in the jQuery way
+
 $(document).ready(function()
 {
 	// Colorbox
@@ -26,6 +28,20 @@ $(document).ready(function()
 	$("#print").click(function()
 	{
 		window.print();
+	});
+
+	$(".dropzone").dropzone({
+		dictDefaultMessage: "Ziehe die Dateien hier her um sie hochzuladen (Oder klicke hier).",
+		dictFallbackMessage: "Dein Browser unterst\u00fctzt Drag 'n Drop nicht!",
+		dictFallbackText: "Bitte verwende das folgende Formular um die Dateien hochzuladen.",
+		dictFileTooBig: "Die Datei ist zu gro\u00df ({{filesize}} MB)! Maximale Dateigr\u00f6\u00dfe: {{maxFilesize}} MB",
+		dictInvalidFileType: "Dateien von diesem Typ werden nicht unterst\u00fctzt!",
+		dictResponseError: "Der Server antwortete mit Statuscode {{statusCode}}.",
+		dictCancelUpload: "Upload abbrechen",
+		dictCancelUploadConfirmation: "Bist du dir sicher, dass du den Upload abbrechen m\u00f6chtest?",
+		dictRemoveFile: "Datei entfernen",
+		dictRemoveFileConfirmation: null,
+		dictMaxFilesExceeded: "Du kannst nicht mehr Dateien hochladen!"
 	});
 
 	// jQuery UI
