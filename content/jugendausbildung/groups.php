@@ -1,6 +1,6 @@
 <h1>Ausbildungsgruppen</h1>
 
-<p>Stand: 08.01.2014</p>
+<p>Stand: Mai 2014</p>
 
 <table cellpadding="10" width="100%">
 	<tr>
@@ -49,8 +49,8 @@
 					<td valign="top" style="text-decoration:underline;">Gisela Wieland</td>
 					<td valign="top">
 						Julia Knapp<br/>
-						Lisa Kozlevcar<br/>
-						Judith Merkel
+						Judith Merkel<br/>
+						Paula Sieb
 					</td>
 				</tr>
 				<tr>
@@ -109,6 +109,7 @@
 					<td valign="top" style="text-decoration:underline;">Thomas Oefler</td>
 					<td valign="top">
 						Moritz Balensiefen<br/>
+						Eva Bender<br/>
 						Vincent Kast<br/>
 						Celine Schmitt
 					</td>
@@ -116,9 +117,9 @@
 				<tr>
 					<td valign="top" style="text-decoration:underline;">Wolfgang St&ouml;rtzer</td>
 					<td valign="top">
-						Eva Bender<br/>
 						Julian Gottschalk<br/>
-						Mark Knapp
+						Mark Knapp<br/>
+						Jakob Sieb
 					</td>
 				</tr>
 			</table>
