@@ -19,40 +19,47 @@ if (!$albumFolderName)
 }
 
 $path = PICTURES_PATH . "/" . $albumFolderName;
-$albumXmlFile = $path . "/album.xml";
+$albumFile = $path . "/album.json";
 
-if (!file_exists($albumXmlFile))
+if (!file_exists($albumFile))
 {
-	die("No album.xml found in '" . $path . "'!");
+	die("No album.json found in '" . $path . "'!");
 }
 
+$albumData = json_decode(file_get_contents($albumFile));
+
 /*
- * Expected XML structure:
+ * Expected JSON structure:
  *
- * <?xml version="1.0" encoding="utf-8"?>
- * <album id="id-in-picturealbums-table"><!-- id can be set to 0 or omitted to insert a new album instead of updating an existing one -->
- *   <year>2013</year>
- *   <foldername>01.01 The title of the album</foldername>
- *   <pictures>
- *     <picture name="md5-of-original-file-1" number="1"/>
- *     <picture name="md5-of-original-file-2" number="2"/>
- *     <picture name="md5-of-original-file-3" number="3"/>
- *     <!-- More pictures -->
- *   </pictures>
- * </album>
+ * {
+ *     "id" : <id-in-picturealbums-table>,
+ *     "year" : 2014,
+ *     "folderName" : "01.01 The title of the album",
+ *     "pictures" :
+ *     [
+ *         {
+ *             "name" : "md5-of-original-file-1",
+ *             "number" : 1
+ *         },
+ *         {
+ *             "name" : "md5-of-original-file-2",
+ *             "number" : 2
+ *         },
+ *         {
+ *             "name" : "md5-of-original-file-3",
+ *             "number" : 3
+ *         }
+ *     ]
+ * }
  */
 
-$document = new DOMDocument;
-$document->load($albumXmlFile);
-$root = $document->getElementsByTagName("album")->item(0);
-
-$albumId = $root->getAttribute("id");
-$year = $root->getElementsByTagName("year")->item(0)->nodeValue;
+$albumId = $albumData->id;
+$year = $albumData->year;
 
 // Insert as a new album if no albumId specified
 if (!$albumId)
 {
-	$folderName = $root->getElementsByTagName("foldername")->item(0)->nodeValue;
+	$folderName = $albumData->folderName;
 	if (preg_match("/^([0-9][0-9]).([0-9][0-9])(.*?) (.*)/", $folderName, $matches))
 	{
 		$month = $matches[1];
@@ -65,6 +72,7 @@ if (!$albumId)
 		$day = 1;
 		$title = $folderName;
 	}
+
 	$query = Constants::$pdo->prepare("
 		INSERT INTO `picturealbums`
 		(`published`, `date`, `isPublic`, `coverPicture`, `title`, `text`)
@@ -75,18 +83,21 @@ if (!$albumId)
 		":date" => $year . "-" . $month . "-" . $day,
 		":title" => $title
 	));
+
 	$albumId = Constants::$pdo->lastInsertId();
-	$root->setAttribute("id", $albumId);
-	$document->save($albumXmlFile);
+
+	$albumData->id = $albumId;
+
+	file_put_contents($albumFile, json_encode($albumData, JSON_PRETTY_PRINT));
 }
 
-// Read pictures from XML
-$pictureElements = $root->getElementsByTagName("pictures")->item(0)->getElementsByTagName("picture");
-foreach ($pictureElements as $picture)
+// Read pictures
+$pictures = array();
+foreach ($albumData->pictures as $picture)
 {
-	$pictures[$picture->getAttribute("name")] = array
+	$pictures[$picture->name] = array
 	(
-		"number" => $picture->getAttribute("number"),
+		"number" => $picture->number,
 		"id" => 0
 	);
 }
@@ -106,7 +117,7 @@ while ($row = $query->fetch())
 	}
 	else
 	{
-		// Delete if no longer in XML
+		// Delete if no longer existing
 		$deleteQuery->execute(array
 		(
 			":id" => $row->id
