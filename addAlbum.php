@@ -60,11 +60,11 @@ $year = $albumData->year;
 if (!$albumId)
 {
 	$folderName = $albumData->folderName;
-	if (preg_match("/^([0-9][0-9]).([0-9][0-9])(.*?) (.*)/", $folderName, $matches))
+	if (preg_match("/^([0-9][0-9]).([0-9][0-9])[0-9\.\-]+? ?(.*)/", $folderName, $matches))
 	{
 		$month = $matches[1];
 		$day = $matches[2];
-		$title = trim($matches[4]);
+		$title = trim($matches[3]);
 	}
 	else
 	{
