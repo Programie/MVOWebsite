@@ -1,5 +1,14 @@
 <h1>Links</h1>
 
+<?php
+if (Constants::$pagePath[1])
+{
+	echo "<p class='alert-error'>Der angeforderte Link wurde nicht gefunden!</p>";
+
+	setAdditionalHeader("HTTP/1.1 404 Not Found");
+}
+?>
+
 <table id="links_table" class="table tablesorter {sortlist: [[1,0],[0,0]]}">
 	<thead>
 	<tr>
