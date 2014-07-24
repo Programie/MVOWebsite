@@ -204,5 +204,9 @@
 	"uploads" :
 	{
 		"title" : "Datei herunterladen"
+	},
+	"youtube" :
+	{
+		"title" : "YouTube"
 	}
 }
