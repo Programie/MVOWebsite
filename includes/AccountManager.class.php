@@ -262,11 +262,6 @@ class AccountManager
 
 	public function hasPermissionInArray($permissionArray, $prefix = "")
 	{
-		if ($prefix and $this->hasPermission($prefix))
-		{
-			return true;
-		}
-
 		foreach ($permissionArray as $permission)
 		{
 			if (!$permission)
