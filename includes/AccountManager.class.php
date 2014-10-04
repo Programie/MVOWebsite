@@ -8,6 +8,24 @@ class AccountManager
 
 	public function __construct()
 	{
+		if (isset($_SERVER["HTTP_AUTHORIZATION"]))
+		{
+			$authHeader = $_SERVER["HTTP_AUTHORIZATION"];
+		}
+		elseif (isset($_SERVER["REDIRECT_HTTP_AUTHORIZATION"]))
+		{
+			$authHeader = $_SERVER["REDIRECT_HTTP_AUTHORIZATION"];
+		}
+		else
+		{
+			$authHeader = null;
+		}
+
+		if ($authHeader)
+		{
+			list($_SERVER["PHP_AUTH_USER"], $_SERVER["PHP_AUTH_PW"]) = explode(":", base64_decode(substr($authHeader, 6)));
+		}
+
 		if (isset($_POST["username"]) and isset($_POST["password"]))
 		{
 			$this->login($_POST["username"], $_POST["password"]);

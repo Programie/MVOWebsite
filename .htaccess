@@ -6,6 +6,8 @@ RewriteRule album.xml$ - [F,L]
 
 Redirect /favicon.ico /files/images/favicon.ico
 
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 
