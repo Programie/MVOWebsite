@@ -1,22 +1,12 @@
 <h1>Ausbildungsgruppen</h1>
 
-<p>Stand: Mai 2014</p>
+<p>Stand: 15.10.2014</p>
 
 <table cellpadding="10" width="100%">
 	<tr>
 		<td valign="top">
 			<h2>Blockfl&ouml;tengruppen</h2>
 			<table cellpadding="5">
-				<tr>
-					<td valign="top" style="text-decoration:underline;">Jasmin Melcher</td>
-					<td valign="top">
-						Annika Knapp<br/>
-						Lea Knapp<br/>
-						Liana Knapp<br/>
-						Jana Wagenbrenner<br/>
-						Leon Wagenbrenner
-					</td>
-				</tr>
 				<tr>
 					<td valign="top" style="text-decoration:underline;">Andreas Wieland</td>
 					<td valign="top">
@@ -48,6 +38,7 @@
 				<tr>
 					<td valign="top" style="text-decoration:underline;">Gisela Wieland</td>
 					<td valign="top">
+						Annika Knapp<br/>
 						Julia Knapp<br/>
 						Judith Merkel<br/>
 						Paula Sieb
@@ -73,6 +64,7 @@
 					<td valign="top" style="text-decoration:underline;">Musikschule</td>
 					<td valign="top">
 						Leonie Knapp<br/>
+						Liana Knapp<br/>
 						Maria Merkel
 					</td>
 				</tr>
@@ -94,6 +86,10 @@
 				</tr>
 				<tr>
 					<td colspan="2"><h3>Trompete</h3></td>
+				</tr>
+				<tr>
+					<td valign="top" style="text-decoration:underline;">David Brasseru</td>
+					<td valid="top">Lea Knapp</td>
 				</tr>
 				<tr>
 					<td valign="top" style="text-decoration:underline;">Thomas Oefler</td>
