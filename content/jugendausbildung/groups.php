@@ -88,7 +88,7 @@
 					<td colspan="2"><h3>Trompete</h3></td>
 				</tr>
 				<tr>
-					<td valign="top" style="text-decoration:underline;">David Brasseru</td>
+					<td valign="top" style="text-decoration:underline;">David Brasseur</td>
 					<td valid="top">Lea Knapp</td>
 				</tr>
 				<tr>
