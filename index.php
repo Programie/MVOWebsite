@@ -29,7 +29,15 @@ require_once ROOT_PATH . "/includes/AccountManager.class.php";
 require_once ROOT_PATH . "/includes/TokenManager.class.php";
 require_once ROOT_PATH . "/includes/MessageManager.class.php";
 require_once ROOT_PATH . "/includes/NoteDirectory.class.php";
+require_once ROOT_PATH . "/includes/DBSessionHandler.class.php";
 
+// 10% (1/10) session garbage collection probability
+ini_set("session.gc_probability", 1);
+ini_set("session.gc_divisor", 10);
+
+$dbSessionHandler = new DBSessionHandler(Constants::$pdo);
+
+session_set_save_handler($dbSessionHandler, true);
 session_start();
 
 Constants::$pagePath = array();

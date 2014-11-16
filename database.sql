@@ -267,6 +267,13 @@ CREATE TABLE `roomoccupancyplan` (
   KEY `changeUserId` (`changeUserId`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE `sessions` (
+	`id` varchar(50) NOT NULL,
+	`date` datetime NOT NULL,
+	`data` text,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `uploads` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) CHARACTER SET latin1 NOT NULL,
