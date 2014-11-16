@@ -3,139 +3,130 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
-	if ($_POST["notedirectoryeditor_form_sendtoken"] == TokenManager::getSendToken("notedirectoryeditor"))
+	switch ($_POST["notedirectoryeditor_formtype"])
 	{
-		switch ($_POST["notedirectoryeditor_formtype"])
-		{
-			case "editcategory":
-				$queryData = array
-				(
-					":title" => $_POST["notedirectoryeditor_form_title"]
-				);
+		case "editcategory":
+			$queryData = array
+			(
+				":title" => $_POST["notedirectoryeditor_form_title"]
+			);
 
-				if ($_POST["notedirectoryeditor_form_id"])
-				{
-					$queryData[":id"] = $_POST["notedirectoryeditor_form_id"];
+			if ($_POST["notedirectoryeditor_form_id"])
+			{
+				$queryData[":id"] = $_POST["notedirectoryeditor_form_id"];
 
-					$query = Constants::$pdo->prepare("
-						UPDATE `notedirectory_categories`
-						SET `title` = :title
-						WHERE `id` = :id
-					");
-				}
-				else
-				{
-					$query = Constants::$pdo->prepare("
-						INSERT INTO `notedirectory_categories`
-						(`title`, `order`)
-						SELECT :title, MAX(`order`) + 1 FROM `notedirectory_categories`
-					");
-				}
-
-				$query->execute($queryData);
-
-				echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
-				break;
-			case "editprogram":
-				$queryData = array
-				(
-					":typeId" => $_POST["notedirectoryeditor_form_type"],
-					":year" => $_POST["notedirectoryeditor_form_year"]
-				);
-
-				if ($_POST["notedirectoryeditor_form_id"])
-				{
-					$queryData[":id"] = $_POST["notedirectoryeditor_form_id"];
-
-					$query = Constants::$pdo->prepare("
-						UPDATE `notedirectory_programs`
-						SET
-							`typeId` = :typeId,
-							`year` = :year
-						WHERE `id` = :id
-					");
-				}
-				else
-				{
-					$query = Constants::$pdo->prepare("
-						INSERT INTO `notedirectory_programs`
-						(`typeId`, `year`)
-						VALUES(:typeId, :year)
-					");
-				}
-
-				$query->execute($queryData);
-
-				echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
-				break;
-			case "edittitle":
-				$queryData = array
-				(
-					":categoryId" => $_POST["notedirectoryeditor_form_category"],
-					":title" => $_POST["notedirectoryeditor_form_title"],
-					":composer" => $_POST["notedirectoryeditor_form_composer"],
-					":arranger" => $_POST["notedirectoryeditor_form_arranger"],
-					":publisher" => $_POST["notedirectoryeditor_form_publisher"]
-				);
-
-				if ($_POST["notedirectoryeditor_form_id"])
-				{
-					$queryData[":id"] = $_POST["notedirectoryeditor_form_id"];
-
-					$query = Constants::$pdo->prepare("
-						UPDATE `notedirectory_titles`
-						SET
-							`categoryId` = :categoryId,
-							`title` = :title,
-							`composer` = :composer,
-							`arranger` = :arranger,
-							`publisher` = :publisher
-						WHERE `id` = :id
-					");
-				}
-				else
-				{
-					$query = Constants::$pdo->prepare("
-						INSERT INTO `notedirectory_titles`
-						(`categoryId`, `title`, `composer`, `arranger`, `publisher`)
-						VALUES(:categoryId, :title, :composer, :arranger, :publisher)
-					");
-				}
-
-				$query->execute($queryData);
-
-				echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
-				break;
-			case "sortcategories":
 				$query = Constants::$pdo->prepare("
 					UPDATE `notedirectory_categories`
-					SET `order` = :order
+					SET `title` = :title
 					WHERE `id` = :id
 				");
+			}
+			else
+			{
+				$query = Constants::$pdo->prepare("
+					INSERT INTO `notedirectory_categories`
+					(`title`, `order`)
+					SELECT :title, MAX(`order`) + 1 FROM `notedirectory_categories`
+				");
+			}
 
-				foreach ($_POST as $key => $order)
+			$query->execute($queryData);
+
+			echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+			break;
+		case "editprogram":
+			$queryData = array
+			(
+				":typeId" => $_POST["notedirectoryeditor_form_type"],
+				":year" => $_POST["notedirectoryeditor_form_year"]
+			);
+
+			if ($_POST["notedirectoryeditor_form_id"])
+			{
+				$queryData[":id"] = $_POST["notedirectoryeditor_form_id"];
+
+				$query = Constants::$pdo->prepare("
+					UPDATE `notedirectory_programs`
+					SET
+						`typeId` = :typeId,
+						`year` = :year
+					WHERE `id` = :id
+				");
+			}
+			else
+			{
+				$query = Constants::$pdo->prepare("
+					INSERT INTO `notedirectory_programs`
+					(`typeId`, `year`)
+					VALUES(:typeId, :year)
+				");
+			}
+
+			$query->execute($queryData);
+
+			echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+			break;
+		case "edittitle":
+			$queryData = array
+			(
+				":categoryId" => $_POST["notedirectoryeditor_form_category"],
+				":title" => $_POST["notedirectoryeditor_form_title"],
+				":composer" => $_POST["notedirectoryeditor_form_composer"],
+				":arranger" => $_POST["notedirectoryeditor_form_arranger"],
+				":publisher" => $_POST["notedirectoryeditor_form_publisher"]
+			);
+
+			if ($_POST["notedirectoryeditor_form_id"])
+			{
+				$queryData[":id"] = $_POST["notedirectoryeditor_form_id"];
+
+				$query = Constants::$pdo->prepare("
+					UPDATE `notedirectory_titles`
+					SET
+						`categoryId` = :categoryId,
+						`title` = :title,
+						`composer` = :composer,
+						`arranger` = :arranger,
+						`publisher` = :publisher
+					WHERE `id` = :id
+				");
+			}
+			else
+			{
+				$query = Constants::$pdo->prepare("
+					INSERT INTO `notedirectory_titles`
+					(`categoryId`, `title`, `composer`, `arranger`, `publisher`)
+					VALUES(:categoryId, :title, :composer, :arranger, :publisher)
+				");
+			}
+
+			$query->execute($queryData);
+
+			echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+			break;
+		case "sortcategories":
+			$query = Constants::$pdo->prepare("
+				UPDATE `notedirectory_categories`
+				SET `order` = :order
+				WHERE `id` = :id
+			");
+
+			foreach ($_POST as $key => $order)
+			{
+				if (substr($key, 0, 31) == "notedirectoryeditor_form_order_")
 				{
-					if (substr($key, 0, 31) == "notedirectoryeditor_form_order_")
-					{
-						$query->execute(array
-						(
-							":id" => substr($key, 31),
-							":order" => $order
-						));
-					}
+					$query->execute(array
+					(
+						":id" => substr($key, 31),
+						":order" => $order
+					));
 				}
+			}
 
-				echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
-				break;
-		}
-	}
-	else
-	{
-		echo "<div class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
+			echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+			break;
 	}
 }
-
-$newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 ?>
 
 <div id="notedirectoryeditor_tabs">
@@ -152,7 +143,6 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 
 		<form id="notedirectoryeditor_categories_form" method="post">
 			<input type="hidden" name="notedirectoryeditor_formtype" value="sortcategories"/>
-			<input type="hidden" name="notedirectoryeditor_form_sendtoken" value="<?php echo $newSendToken;?>"/>
 
 			<?php
 			$categories = array();
@@ -287,7 +277,6 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 		</div>
 
 		<input type="hidden" name="notedirectoryeditor_formtype" value="editcategory"/>
-		<input type="hidden" name="notedirectoryeditor_form_sendtoken" value="<?php echo $newSendToken;?>"/>
 		<input type="hidden" id="notedirectoryeditor_editcategory_id" name="notedirectoryeditor_form_id"/>
 	</form>
 </div>
@@ -336,7 +325,6 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 		</fieldset>
 
 		<input type="hidden" name="notedirectoryeditor_formtype" value="editprogram"/>
-		<input type="hidden" name="notedirectoryeditor_form_sendtoken" value="<?php echo $newSendToken;?>"/>
 		<input type="hidden" id="notedirectoryeditor_editprogram_id" name="notedirectoryeditor_form_id"/>
 	</form>
 </div>
@@ -382,7 +370,6 @@ $newSendToken = TokenManager::getSendToken("notedirectoryeditor", true);
 		</div>
 
 		<input type="hidden" name="notedirectoryeditor_formtype" value="edittitle"/>
-		<input type="hidden" name="notedirectoryeditor_form_sendtoken" value="<?php echo $newSendToken;?>"/>
 		<input type="hidden" id="notedirectoryeditor_edittitle_id" name="notedirectoryeditor_form_id"/>
 	</form>
 </div>

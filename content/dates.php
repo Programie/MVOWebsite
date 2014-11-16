@@ -40,95 +40,88 @@ if (Constants::$accountManager->getUserId())
 	{
 		if (isset($_POST["dates_edit_id"]))
 		{
-			if ($_POST["dates_edit_sendtoken"] == TokenManager::getSendToken("dates_edit"))
+			$id = intval($_POST["dates_edit_id"]);
+			if ($id and $_POST["dates_edit_hide"])
 			{
-				$id = intval($_POST["dates_edit_id"]);
-				if ($id and $_POST["dates_edit_hide"])
+				$query = Constants::$pdo->prepare("UPDATE `dates` SET `enabled` = '0' WHERE `id` = :id");
+				$query->execute(array(":id" => $_POST["dates_edit_id"]));
+				$dates = Dates::getDates($year, $activeGroups);
+				echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
+			}
+			else
+			{
+				$date = explode(".", $_POST["dates_edit_date"]);
+				if (@checkdate($date[1], $date[0], $date[2]))
 				{
-					$query = Constants::$pdo->prepare("UPDATE `dates` SET `enabled` = '0' WHERE `id` = :id");
-					$query->execute(array(":id" => $_POST["dates_edit_id"]));
+					$locationId = null;
+					if ($_POST["dates_edit_location"])
+					{
+						$query = Constants::$pdo->prepare("SELECT `id` FROM `locations` WHERE `name` = :name");
+						$query->execute(array(":name" => $_POST["dates_edit_location"]));
+						$row = $query->fetch();
+						$locationId = $row->id;
+						if (!$locationId)
+						{
+							$query = Constants::$pdo->prepare("INSERT INTO `locations` (`name`) VALUES(:name)");
+							$query->execute(array(":name" => $_POST["dates_edit_location"]));
+							$locationId = Constants::$pdo->lastInsertId();
+						}
+					}
+
+					$startTime = $_POST["dates_edit_time_start"];
+					$endTime = $_POST["dates_edit_time_end"];
+
+					$endDate = null;
+					if ($startTime and $endTime)
+					{
+						$endDate = $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $endTime;
+					}
+					$groups = array();
+					foreach ($_POST as $key => $value)
+					{
+						if (substr($key, 0, 18) == "dates_edit_groups_")
+						{
+							$groups[] = substr($key, 18);
+						}
+					}
+					if (empty($groups))
+					{
+						$groups[] = "public";
+					}
+
+					$queryData = array(":startDate" => $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $startTime, ":endDate" => $endDate, ":groups" => implode(",", $groups), ":title" => $_POST["dates_edit_title"], ":description" => $_POST["dates_edit_description"], ":locationId" => $locationId, ":showInAttendanceList" => !!$_POST["dates_edit_options_showinattendancelist"], ":bold" => !!$_POST["dates_edit_options_bold"]);
+					if ($id)
+					{
+						$query = Constants::$pdo->prepare("
+							UPDATE `dates`
+							SET
+								`startDate` = :startDate,
+								`endDate` = :endDate,
+								`groups` = :groups,
+								`title` = :title,
+								`description` = :description,
+								`locationId` = :locationId,
+								`showInAttendanceList` = :showInAttendanceList,
+								`bold` = :bold
+							WHERE `id` = :id
+						");
+						$queryData["id"] = $id;
+					}
+					else
+					{
+						$query = Constants::$pdo->prepare("
+							INSERT INTO `dates` (`startDate`, `enddate`, `groups`, `title`, `description`, `locationId`, `showInAttendanceList`, `bold`)
+							VALUES(:startDate, :endDate, :groups, :title, :description, :locationId, :showInAttendanceList, :bold)
+						");
+					}
+					$query->execute($queryData);
 					$dates = Dates::getDates($year, $activeGroups);
 					echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
 				}
 				else
 				{
-					$date = explode(".", $_POST["dates_edit_date"]);
-					if (@checkdate($date[1], $date[0], $date[2]))
-					{
-						$locationId = null;
-						if ($_POST["dates_edit_location"])
-						{
-							$query = Constants::$pdo->prepare("SELECT `id` FROM `locations` WHERE `name` = :name");
-							$query->execute(array(":name" => $_POST["dates_edit_location"]));
-							$row = $query->fetch();
-							$locationId = $row->id;
-							if (!$locationId)
-							{
-								$query = Constants::$pdo->prepare("INSERT INTO `locations` (`name`) VALUES(:name)");
-								$query->execute(array(":name" => $_POST["dates_edit_location"]));
-								$locationId = Constants::$pdo->lastInsertId();
-							}
-						}
-
-						$startTime = $_POST["dates_edit_time_start"];
-						$endTime = $_POST["dates_edit_time_end"];
-
-						$endDate = null;
-						if ($startTime and $endTime)
-						{
-							$endDate = $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $endTime;
-						}
-						$groups = array();
-						foreach ($_POST as $key => $value)
-						{
-							if (substr($key, 0, 18) == "dates_edit_groups_")
-							{
-								$groups[] = substr($key, 18);
-							}
-						}
-						if (empty($groups))
-						{
-							$groups[] = "public";
-						}
-
-						$queryData = array(":startDate" => $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $startTime, ":endDate" => $endDate, ":groups" => implode(",", $groups), ":title" => $_POST["dates_edit_title"], ":description" => $_POST["dates_edit_description"], ":locationId" => $locationId, ":showInAttendanceList" => !!$_POST["dates_edit_options_showinattendancelist"], ":bold" => !!$_POST["dates_edit_options_bold"]);
-						if ($id)
-						{
-							$query = Constants::$pdo->prepare("
-								UPDATE `dates`
-								SET
-									`startDate` = :startDate,
-									`endDate` = :endDate,
-									`groups` = :groups,
-									`title` = :title,
-									`description` = :description,
-									`locationId` = :locationId,
-									`showInAttendanceList` = :showInAttendanceList,
-									`bold` = :bold
-								WHERE `id` = :id
-							");
-							$queryData["id"] = $id;
-						}
-						else
-						{
-							$query = Constants::$pdo->prepare("
-								INSERT INTO `dates` (`startDate`, `enddate`, `groups`, `title`, `description`, `locationId`, `showInAttendanceList`, `bold`)
-								VALUES(:startDate, :endDate, :groups, :title, :description, :locationId, :showInAttendanceList, :bold)
-							");
-						}
-						$query->execute($queryData);
-						$dates = Dates::getDates($year, $activeGroups);
-						echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
-					}
-					else
-					{
-						echo "<div class='alert-error'>Das eingegebene Datum ist ung&uuml;ltig!</div>";
-					}
+					echo "<div class='alert-error'>Das eingegebene Datum ist ung&uuml;ltig!</div>";
 				}
-			}
-			else
-			{
-				echo "<div class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
 			}
 		}
 		echo "<button type='button' id='dates_add_button'>Neuer Termin</button>";
@@ -299,7 +292,6 @@ else
 
 if (Constants::$accountManager->hasPermission("dates.edit"))
 {
-	$sendToken = TokenManager::getSendToken("dates_edit", true);
 	echo "
 		<div id='dates_hide'>
 			<p>Soll der ausgew&auml;hlte Termin wirklich ausgeblendet werden?</p>
@@ -326,7 +318,6 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 			<p><b>Hinweis:</b> Der Termin kann nur &uuml;ber die Datenbank wiederhergestellt werden!</p>
 			
 			<form id='dates_hide_form' method='post' onsubmit='return false'>
-				<input type='hidden' id='dates_edit_sendtoken' name='dates_edit_sendtoken' value='" . $sendToken . "'/>
 				<input type='hidden' id='dates_hide_id' name='dates_edit_id'/>
 				<input type='hidden' id='dates_edit_hide' name='dates_edit_hide' value='1'/>
 			</form>
@@ -383,7 +374,6 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 					<div><input type='checkbox' id='dates_edit_options_bold' name='dates_edit_options_bold'/><label for='dates_edit_options_bold'>Fett</label></div>
 				</fieldset>
 				
-				<input type='hidden' id='dates_edit_sendtoken' name='dates_edit_sendtoken' value='" . $sendToken . "'/>
 				<input type='hidden' id='dates_edit_id' name='dates_edit_id'/>
 			</form>
 		</div>
