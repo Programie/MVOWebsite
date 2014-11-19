@@ -1,3 +1,4 @@
+
 CREATE TABLE `attendancelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `dateId` int(11) DEFAULT NULL,
@@ -9,8 +10,11 @@ CREATE TABLE `attendancelist` (
   UNIQUE KEY `unique` (`dateId`,`userId`),
   KEY `dateId` (`dateId`),
   KEY `userId` (`userId`),
-  KEY `changeUserId` (`changeUserId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `changeUserId` (`changeUserId`),
+  CONSTRAINT `attendancelist_changeUser` FOREIGN KEY (`changeUserId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `attendancelist_date` FOREIGN KEY (`dateId`) REFERENCES `dates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `attendancelist_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `dates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -24,8 +28,9 @@ CREATE TABLE `dates` (
   `bold` tinyint(1) NOT NULL DEFAULT '0',
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
-  KEY `locationId` (`locationId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `locationId` (`locationId`),
+  CONSTRAINT `dates_location` FOREIGN KEY (`locationId`) REFERENCES `locations` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -36,8 +41,11 @@ CREATE TABLE `events` (
   PRIMARY KEY (`id`),
   KEY `typeId` (`typeId`),
   KEY `userId` (`userId`),
-  KEY `uploadId` (`uploadId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `uploadId` (`uploadId`),
+  CONSTRAINT `events_type` FOREIGN KEY (`typeId`) REFERENCES `eventtypes` (`id`),
+  CONSTRAINT `events_upload` FOREIGN KEY (`uploadId`) REFERENCES `uploads` (`id`),
+  CONSTRAINT `events_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `eventtypes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -45,7 +53,7 @@ CREATE TABLE `eventtypes` (
   `title` varchar(100) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `NAME` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `forms` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -53,7 +61,7 @@ CREATE TABLE `forms` (
   `name` varchar(100) CHARACTER SET latin1 NOT NULL,
   `title` varchar(200) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `jserrors` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -66,7 +74,7 @@ CREATE TABLE `jserrors` (
   `userAgent` varchar(200) CHARACTER SET latin1 NOT NULL,
   `userId` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -76,7 +84,7 @@ CREATE TABLE `links` (
   `clicks` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `url` (`url`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `locations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -85,7 +93,7 @@ CREATE TABLE `locations` (
   `name` varchar(200) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQUENAME` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -97,14 +105,15 @@ CREATE TABLE `messages` (
   `text` text CHARACTER SET latin1 NOT NULL,
   `attachedFiles` text CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `userId` (`userId`),
+  CONSTRAINT `messages_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `moviecategories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `movieorders` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -114,7 +123,9 @@ CREATE TABLE `movieorders` (
   `userId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
-  KEY `movieId` (`movieId`)
+  KEY `movieId` (`movieId`),
+  CONSTRAINT `movieorders_movie` FOREIGN KEY (`movieId`) REFERENCES `movies` (`id`),
+  CONSTRAINT `movieorders_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `movies` (
@@ -131,8 +142,10 @@ CREATE TABLE `movies` (
   `comment` text CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `discTypeId` (`discTypeId`),
-  KEY `categoryId` (`categoryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `categoryId` (`categoryId`),
+  CONSTRAINT `movies_category` FOREIGN KEY (`categoryId`) REFERENCES `moviecategories` (`id`),
+  CONSTRAINT `movies_type` FOREIGN KEY (`discTypeId`) REFERENCES `movietypes` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `movietypes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -140,7 +153,7 @@ CREATE TABLE `movietypes` (
   `title` varchar(100) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `musiciangroups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -149,22 +162,23 @@ CREATE TABLE `musiciangroups` (
   `title` varchar(100) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `notedirectory_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) CHARACTER SET latin1 NOT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `notedirectory_programs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `typeId` int(11) NOT NULL,
   `year` year(4) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `typeId` (`typeId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `typeId` (`typeId`),
+  CONSTRAINT `notedirectory_programs_type` FOREIGN KEY (`typeId`) REFERENCES `notedirectory_programtypes` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `notedirectory_programtitles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -173,8 +187,10 @@ CREATE TABLE `notedirectory_programtitles` (
   `number` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `programId` (`programId`),
-  KEY `titleId` (`titleId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `titleId` (`titleId`),
+  CONSTRAINT `notedirectory_programtitles_program` FOREIGN KEY (`programId`) REFERENCES `notedirectory_programs` (`id`),
+  CONSTRAINT `notedirectory_programtitles_title` FOREIGN KEY (`titleId`) REFERENCES `notedirectory_titles` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `notedirectory_programtypes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -182,7 +198,7 @@ CREATE TABLE `notedirectory_programtypes` (
   `showInGroups` tinyint(1) NOT NULL,
   `showNoSelection` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `notedirectory_titles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -192,16 +208,18 @@ CREATE TABLE `notedirectory_titles` (
   `arranger` varchar(200) NOT NULL DEFAULT '',
   `publisher` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
-  KEY `categoryId` (`categoryId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `categoryId` (`categoryId`),
+  CONSTRAINT `notedirectory_titles_category` FOREIGN KEY (`categoryId`) REFERENCES `notedirectory_categories` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `permission` varchar(200) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `PERMISSION` (`userId`,`permission`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  UNIQUE KEY `PERMISSION` (`userId`,`permission`),
+  CONSTRAINT `permissions_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `phonenumbers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -210,8 +228,9 @@ CREATE TABLE `phonenumbers` (
   `subCategory` set('business','private') NOT NULL,
   `number` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `userId` (`userId`),
+  CONSTRAINT `phonenumbers_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `picturealbums` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -222,7 +241,7 @@ CREATE TABLE `picturealbums` (
   `title` varchar(200) CHARACTER SET latin1 NOT NULL,
   `text` text CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pictures` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -231,14 +250,16 @@ CREATE TABLE `pictures` (
   `number` int(11) NOT NULL,
   `text` text CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `FILE` (`albumId`,`fileId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  UNIQUE KEY `FILE` (`albumId`,`fileId`),
+  CONSTRAINT `pictures_album` FOREIGN KEY (`albumId`) REFERENCES `picturealbums` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `pictureyears` (
   `year` year(4) NOT NULL,
   `coverAlbumId` int(11) NOT NULL,
   PRIMARY KEY (`year`),
-  UNIQUE KEY `coverAlbumId` (`coverAlbumId`)
+  UNIQUE KEY `coverAlbumId` (`coverAlbumId`),
+  CONSTRAINT `pictureyears_album` FOREIGN KEY (`coverAlbumId`) REFERENCES `picturealbums` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `protocols` (
@@ -250,8 +271,10 @@ CREATE TABLE `protocols` (
   `name` varchar(200) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uploadId` (`uploadId`),
-  KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `userId` (`userId`),
+  CONSTRAINT `protocols_upload` FOREIGN KEY (`uploadId`) REFERENCES `uploads` (`id`),
+  CONSTRAINT `protocols_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `roomoccupancyplan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -264,14 +287,15 @@ CREATE TABLE `roomoccupancyplan` (
   `weekly` tinyint(1) NOT NULL DEFAULT '0',
   `changeUserId` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `changeUserId` (`changeUserId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `changeUserId` (`changeUserId`),
+  CONSTRAINT `roomoccupancyplan_user` FOREIGN KEY (`changeUserId`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `sessions` (
-	`id` varchar(50) NOT NULL,
-	`date` datetime NOT NULL,
-	`data` text,
-	PRIMARY KEY (`id`)
+  `id` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `date` datetime NOT NULL,
+  `data` text CHARACTER SET latin1,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `uploads` (
@@ -279,7 +303,7 @@ CREATE TABLE `uploads` (
   `name` varchar(32) CHARACTER SET latin1 NOT NULL,
   `title` varchar(200) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `usergroups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -287,7 +311,7 @@ CREATE TABLE `usergroups` (
   `title` varchar(100) CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQUENAME` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -307,7 +331,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `calendarToken` (`calendarToken`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `visits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -320,62 +344,7 @@ CREATE TABLE `visits` (
   `userId` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `visit` (`ip`,`date`),
-  KEY `userId` (`userId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+  KEY `userId` (`userId`),
+  CONSTRAINT `visits_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-ALTER TABLE `attendancelist`
-  ADD CONSTRAINT `attendancelist_changeUser` FOREIGN KEY (`changeUserId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `attendancelist_date` FOREIGN KEY (`dateId`) REFERENCES `dates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `attendancelist_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `dates`
-  ADD CONSTRAINT `dates_location` FOREIGN KEY (`locationId`) REFERENCES `locations` (`id`);
-
-ALTER TABLE `events`
-  ADD CONSTRAINT `events_type` FOREIGN KEY (`typeId`) REFERENCES `eventtypes` (`id`),
-  ADD CONSTRAINT `events_upload` FOREIGN KEY (`uploadId`) REFERENCES `uploads` (`id`),
-  ADD CONSTRAINT `events_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `messages`
-  ADD CONSTRAINT `messages_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `movieorders`
-  ADD CONSTRAINT `movieorders_movie` FOREIGN KEY (`movieId`) REFERENCES `movies` (`id`),
-  ADD CONSTRAINT `movieorders_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `movies`
-  ADD CONSTRAINT `movies_category` FOREIGN KEY (`categoryId`) REFERENCES `moviecategories` (`id`),
-  ADD CONSTRAINT `movies_type` FOREIGN KEY (`discTypeId`) REFERENCES `movietypes` (`id`);
-
-ALTER TABLE `notedirectory_programs`
-  ADD CONSTRAINT `notedirectory_programs_type` FOREIGN KEY (`typeId`) REFERENCES `notedirectory_programtypes` (`id`);
-
-ALTER TABLE `notedirectory_programtitles`
-  ADD CONSTRAINT `notedirectory_programtitles_program` FOREIGN KEY (`programId`) REFERENCES `notedirectory_programs` (`id`),
-  ADD CONSTRAINT `notedirectory_programtitles_title` FOREIGN KEY (`titleId`) REFERENCES `notedirectory_titles` (`id`);
-
-ALTER TABLE `notedirectory_titles`
-  ADD CONSTRAINT `notedirectory_titles_category` FOREIGN KEY (`categoryId`) REFERENCES `notedirectory_categories` (`id`);
-
-ALTER TABLE `permissions`
-  ADD CONSTRAINT `permissions_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `phonenumbers`
-  ADD CONSTRAINT `phonenumbers_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `pictures`
-  ADD CONSTRAINT `pictures_album` FOREIGN KEY (`albumId`) REFERENCES `picturealbums` (`id`);
-
-ALTER TABLE `pictureyears`
-  ADD CONSTRAINT `pictureyears_album` FOREIGN KEY (`coverAlbumId`) REFERENCES `picturealbums` (`id`);
-
-ALTER TABLE `protocols`
-  ADD CONSTRAINT `protocols_upload` FOREIGN KEY (`uploadId`) REFERENCES `uploads` (`id`),
-  ADD CONSTRAINT `protocols_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `roomoccupancyplan`
-  ADD CONSTRAINT `roomoccupancyplan_user` FOREIGN KEY (`changeUserId`) REFERENCES `users` (`id`);
-
-ALTER TABLE `visits`
-  ADD CONSTRAINT `visits_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
