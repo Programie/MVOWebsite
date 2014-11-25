@@ -104,7 +104,14 @@ else
 
 				$key = $row->id . "-" . $time;
 
-				$replacements = array("FIRSTNAME" => $row->firstName, "LASTNAME" => $row->lastName, "URL" => BASE_URL . "/internalarea/resetpassword/" . $key, "KEY" => $key, "TIMEOUT" => date("d.m.Y H:i:s", $time + TIMEOUT_CONFIRMLINK));
+				$replacements = array
+				(
+					"firstName" => $row->firstName,
+					"lastName" => $row->lastName,
+					"url" => BASE_URL . "/internalarea/resetpassword/" . $key,
+					"key" => $key,
+					"timeout" => date("d.m.Y H:i:s", $time + TIMEOUT_CONFIRMLINK)
+				);
 
 				$mail = new Mail("Passwort zurücksetzen", $replacements);
 				$mail->setTemplate("resetpassword");

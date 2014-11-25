@@ -15,7 +15,12 @@ if (Constants::$pagePath[2])
 
 			$userData = Constants::$accountManager->getUserData();
 
-			$replacements = array("FIRSTNAME" => $userData->firstName, "NEWEMAILADDRESS" => $userData->email);
+			$replacements = array
+			(
+				"firstName" => $userData->firstName,
+				"newEmailAddress" => $userData->email
+			);
+
 			$mail = new Mail("Email-Adresse geändert", $replacements);
 			$mail->setTemplate("email-changed");
 			$mail->setTo($row->oldEmail);

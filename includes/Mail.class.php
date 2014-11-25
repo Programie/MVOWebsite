@@ -1,13 +1,31 @@
 <?php
-require_once "swift/swift_required.php";
+require_once ROOT_PATH . "/vendor/autoload.php";
 
 class Mail
 {
+	/**
+	 * @var Swift_Mailer
+	 */
 	private $mailer;
+	/**
+	 * @var Swift_Message
+	 */
 	private $message;
+	/**
+	 * @var StdClass
+	 */
 	private $recipients;
+	/**
+	 * @var array
+	 */
 	private $replacements;
+	/**
+	 * @var array|string
+	 */
 	private $replyTo;
+	/**
+	 * @var string
+	 */
 	private $templateName;
 
 	public function __construct($subject = null, $replacements = null)
@@ -97,8 +115,8 @@ class Mail
 	public function send()
 	{
 		// Default replacements
-		$this->addReplacement("BASE_URL", BASE_URL);
-		$this->addReplacement("WEBMASTER_EMAIL", WEBMASTER_EMAIL);
+		$this->addReplacement("baseUrl", BASE_URL);
+		$this->addReplacement("webmasterEmail", WEBMASTER_EMAIL);
 
 		$body = @file_get_contents(ROOT_PATH . "/includes/mails/" . $this->templateName . ".html");
 
@@ -107,13 +125,9 @@ class Mail
 			return false;
 		}
 
-		if ($this->replacements)
-		{
-			foreach ($this->replacements as $search => $replace)
-			{
-				$body = str_replace("%" . $search . "%", $replace, $body);
-			}
-		}
+		$mustache = new Mustache_Engine();
+
+		$body = $mustache->render($body, $this->replacements);
 
 		$this->message->setBody($body, "text/html");
 

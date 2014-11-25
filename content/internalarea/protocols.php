@@ -69,7 +69,15 @@ if (Constants::$accountManager->hasPermission("protocols.upload"))
 
 								if ($_POST["protocols_upload_sendmail"])
 								{
-									$replacements = array("FIRSTNAME" => $userData->firstName, "LASTNAME" => $userData->lastName, "DATE" => $_POST["protocols_upload_date"], "NAME" => $_POST["protocols_upload_name"], "URL" => BASE_URL . "/uploads/" . $uploadId . "/" . $fileName);
+									$replacements = array
+									(
+										"firstName" => $userData->firstName,
+										"lastName" => $userData->lastName,
+										"date" => $_POST["protocols_upload_date"],
+										"name" => $_POST["protocols_upload_name"],
+										"url" => BASE_URL . "/uploads/" . $uploadId . "/" . $fileName
+									);
+
 									$mail = new Mail("Protokoll hochgeladen", $replacements);
 									$mail->setTemplate("protocol-uploaded");
 									$mail->setTo($mailRecipients);

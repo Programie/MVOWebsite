@@ -1,16 +1,23 @@
 <html>
-<body>
-<p>%FIRSTNAME% %LASTNAME% hat im internen Bereich des Musikvereins "Orgelfels" Reichental e.V. eine neue Nachricht
-	geschrieben.</p>
+	<body>
+		<p>{{firstName}} {{lastName}} hat im internen Bereich des Musikvereins "Orgelfels" Reichental e.V. eine neue Nachricht geschrieben.</p>
 
-<hr/>
+		<hr/>
 
-<p>%CONTENT%</p>
+		<p>{{content}}</p>
 
-<p>%ATTACHMENTS%</p>
+		{{#attachments.length}}
+			<p>
+				<ul>
+					{{#attachments}}
+						<li><a href="{{baseUrl}}/uploads/{{id}}/{{name}}">{{title}}</a></li>
+					{{/attachments}}
+				</ul>
+			</p>
+		{{/attachments.length}}
 
-<hr/>
+		<hr/>
 
-<p>Du findest diese Nachricht im <a href="%BASE_URL%/internalarea/messages/%MESSAGEID%">internen Bereich</a>.</p>
-</body>
+		<p>Du findest diese Nachricht im <a href="{{baseUrl}}/internalarea/messages/{{messageId}}">internen Bereich</a>.</p>
+	</body>
 </html>

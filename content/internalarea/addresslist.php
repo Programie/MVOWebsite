@@ -102,16 +102,18 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 					$query->execute(array(":targetGroups" => implode(",", $targetUsers), ":userId" => Constants::$accountManager->getUserId(), ":text" => $text, ":attachedFiles" => implode(",", $attachedFiles)));
 					$messageId = Constants::$pdo->lastInsertId();
 
-					$attachmentsText = array();
+					$attachments = array();
 					if (!empty($uploadedFiles))
 					{
-						$attachmentsText[] = "<p><b>Anh&auml;nge:</b></p>";
-						$attachmentsText[] = "<ul>";
 						foreach ($uploadedFiles as $name => $title)
 						{
-							$attachmentsText[] = "<li><a href='" . BASE_URL . "/uploads/" . $attachedFiles[$name] . "/" . $name . "'>" . $title . "</a></li>";
+							$attachments[] = array
+							(
+								"id" => $attachedFiles[$name],
+								"name" => $name,
+								"title" => $title
+							);
 						}
-						$attachmentsText[] = "</ul>";
 					}
 
 					$ccMail = null;
@@ -120,12 +122,21 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 						$ccMail = array($userData->email => $userData->firstName . " " . $userData->lastName);
 					}
 
-					$replacements = array("ATTACHMENTS" => implode("\n", $attachmentsText), "CONTENT" => formatText($text), "FIRSTNAME" => $userData->firstName, "LASTNAME" => $userData->lastName, "MESSAGEID" => $messageId);
+					$replacements = array
+					(
+						"attachments" => $attachments,
+						"content" => formatText($text),
+						"firstName" => $userData->firstName,
+						"lastName" => $userData->lastName,
+						"messageId" => $messageId
+					);
+
 					$mail = new Mail("Nachricht vom Internen Bereich", $replacements);
 					$mail->setTemplate("writemessage");
 					$mail->setTo($mailRecipients);
 					$mail->setCc($ccMail);
 					$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
+
 					if ($mail->send())
 					{
 						$error = "";

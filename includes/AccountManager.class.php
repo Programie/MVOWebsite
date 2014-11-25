@@ -60,7 +60,7 @@ class AccountManager
 
 		$mail = new Mail("Passwort geändert");
 		$mail->setTemplate("password-changed");
-		$mail->addReplacement("FIRSTNAME", $userData->firstName);
+		$mail->addReplacement("firstName", $userData->firstName);
 		$mail->setTo($userData->email);
 		$mail->send();
 

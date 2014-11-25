@@ -1,20 +1,19 @@
 <html>
-<body>
-<p>Hallo %FIRSTNAME%,</p>
+	<body>
+		<p>Hallo {{firstName}},</p>
 
-<p>du hast auf der Website vom Musikverein "Orgelfels" Reichental e.V. den folgenden Film bestellt:</p>
+		<p>du hast auf der Website vom Musikverein "Orgelfels" Reichental e.V. den folgenden Film bestellt:</p>
 
-<p><b>Titel:</b> %TITLE% (%YEAR%)</p>
+		<p><b>Titel:</b> {{title}} ({{year}})</p>
 
-<p><b>Medium:</b> %MEDIA%</p>
+		<p><b>Medium:</b> {{media}}</p>
 
-<p><b>Bestellart:</b> %ORDERTYPE%</p>
+		<p><b>Bestellart:</b> {{orderType}}</p>
 
-<p><b>Preis:</b> %PRICE%</p>
+		<p><b>Preis:</b> {{price}}</p>
 
-<p>Du kannst &uuml;ber <a href="%CANCELURL%">diesen Link</a> bis zur Bearbeitung der Bestellung die Bestellung noch
-	stornieren.</p>
+		<p>Du kannst &uuml;ber <a href="{{cancelUrl}}">diesen Link</a> bis zur Bearbeitung der Bestellung die Bestellung noch stornieren.</p>
 
-<p>Bei Fragen kannst du dich auch an den <a href="mailto:%WEBMASTER_EMAIL%">Webmaster</a> wenden.</p>
-</body>
+		<p>Bei Fragen kannst du dich auch an den <a href="mailto:{{webmasterEmail}}">Webmaster</a> wenden.</p>
+	</body>
 </html>

@@ -103,30 +103,40 @@ if (isset($_POST["writemessage_confirmed"]))
 					$query->execute(array(":validTill" => $validTill, ":targetGroups" => implode(",", $groups), ":userId" => Constants::$accountManager->getUserId(), ":text" => $text, ":attachedFiles" => implode(",", $attachedFiles)));
 					$messageId = Constants::$pdo->lastInsertId();
 
-					$attachmentsText = array();
+					$attachments = array();
 					if (!empty($uploadedFiles))
 					{
-						$attachmentsText[] = "<p><b>Anh&auml;nge:</b></p>";
-						$attachmentsText[] = "<ul>";
 						foreach ($uploadedFiles as $name => $title)
 						{
-							$attachmentsText[] = "<li><a href='" . BASE_URL . "/uploads/" . $attachedFiles[$name] . "/" . $name . "'>" . escapeText($title) . "</a></li>";
+							$attachments[] = array
+							(
+							"id" => $attachedFiles[$name],
+							"name" => $name,
+							"title" => $title
+							);
 						}
-						$attachmentsText[] = "</ul>";
 					}
 
-					$replacements = array("ATTACHMENTS" => implode("\n", $attachmentsText), "CONTENT" => formatText($text), "FIRSTNAME" => $userData->firstName, "LASTNAME" => $userData->lastName, "MESSAGEID" => $messageId);
+					$replacements = array
+					(
+						"attachments" => $attachments,
+						"content" => formatText($text),
+						"firstName" => $userData->firstName,
+						"lastName" => $userData->lastName,
+						"messageId" => $messageId
+					);
+
 					$mail = new Mail("Neue Nachricht im Internen Bereich", $replacements);
 					$mail->setTemplate("writemessage");
 					$mail->setTo($mailRecipients);
 					$mail->setCc($ccMail);
 					$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
+
 					if ($mail->send())
 					{
 						echo "
 							<div class='alert-success'>
 								<p>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</p>
-								" . implode("\n", $attachmentsText) . "
 							</div>
 						";
 						$error = "";

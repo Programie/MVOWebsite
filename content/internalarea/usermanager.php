@@ -240,9 +240,9 @@ if (isset($_POST["usermanager_edituser_id"]))
 						$query->execute(array(":password" => Constants::$accountManager->encrypt($userId, $password), ":id" => $userId));
 
 						$mail = new Mail("Zugangsdaten für den internen Bereich");
-						$mail->addReplacement("FIRSTNAME", $firstName);
-						$mail->addReplacement("USERNAME", $username);
-						$mail->addReplacement("PASSWORD", $password);
+						$mail->addReplacement("firstName", $firstName);
+						$mail->addReplacement("username", $username);
+						$mail->addReplacement("password", $password);
 						$mail->setTemplate("credentialsmail");
 						$mail->setTo(array($_POST["usermanager_edituser_email"] => $firstName . " " . $lastName));
 						$mail->send();

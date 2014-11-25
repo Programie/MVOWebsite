@@ -26,7 +26,17 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 			$query->execute(array(":id" => $row->movieId));
 			$movieRow = $query->fetch();
 
-			$replacements = array("USERNAME" => $userData->username, "FIRSTNAME" => $userData->firstName, "LASTNAME" => $userData->lastName, "TITLE" => $movieRow->title, "YEAR" => $movieRow->eventYear, "MEDIA" => $movieRow->discs . " " . $movieRow->discType . ($movieRow->discs == 1 ? "" : "s"), "ORDERTYPE" => $row->buy ? "Kaufen" : "Ausleihen", "PRICE" => $row->buy ? ($movieRow->price == null ? "Auf Anfrage" : (number_format($movieRow->price, 2, ",", ".") . " &euro;")) : "Kostenlos",);
+			$replacements = array
+			(
+				"username" => $userData->username,
+				"firstName" => $userData->firstName,
+				"lastName" => $userData->lastName,
+				"title" => $movieRow->title,
+				"year" => $movieRow->eventYear,
+				"media" => $movieRow->discs . " " . $movieRow->discType . ($movieRow->discs == 1 ? "" : "s"),
+				"orderType" => $row->buy ? "Kaufen" : "Ausleihen",
+				"price" => $row->buy ? ($movieRow->price == null ? "Auf Anfrage" : (number_format($movieRow->price, 2, ",", ".") . " &euro;")) : "Kostenlos"
+			);
 
 			$mail = new Mail(null, $replacements);
 
@@ -88,7 +98,18 @@ if (Constants::$pagePath[2] and Constants::$pagePath[3])
 					$query->execute(array(":borrowedTo" => "userId:" . Constants::$accountManager->getUserId(), ":id" => Constants::$pagePath[3]));
 				}
 
-				$replacements = array("USERNAME" => $userData->username, "FIRSTNAME" => $userData->firstName, "LASTNAME" => $userData->lastName, "TITLE" => $row->title, "YEAR" => $row->eventYear, "MEDIA" => $row->discs . " " . $row->discType . ($row->discs == 1 ? "" : "s"), "ORDERTYPE" => Constants::$pagePath[2] == "buy" ? "Kaufen" : "Ausleihen", "PRICE" => Constants::$pagePath[2] == "buy" ? ($row->price == null ? "Auf Anfrage" : (number_format($row->price, 2, ",", ".") . " &euro;")) : "Kostenlos", "CANCELURL" => BASE_URL . "/internalarea/movies/cancel/" . $orderId);
+				$replacements = array
+				(
+					"username" => $userData->username,
+					"firstName" => $userData->firstName,
+					"lastName" => $userData->lastName,
+					"title" => $row->title,
+					"year" => $row->eventYear,
+					"media" => $row->discs . " " . $row->discType . ($row->discs == 1 ? "" : "s"),
+					"orderType" => Constants::$pagePath[2] == "buy" ? "Kaufen" : "Ausleihen",
+					"price" => Constants::$pagePath[2] == "buy" ? ($row->price == null ? "Auf Anfrage" : (number_format($row->price, 2, ",", ".") . " &euro;")) : "Kostenlos",
+					"cancelUrl" => BASE_URL . "/internalarea/movies/cancel/" . $orderId
+				);
 
 				$mail = new Mail(null, $replacements);
 

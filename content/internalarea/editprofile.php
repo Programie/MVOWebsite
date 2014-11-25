@@ -142,7 +142,13 @@ if ($userData->forcePasswordChange)
 
 						if ($usernameChanged)
 						{
-							$replacements = array("FIRSTNAME" => $userData->firstName, "OLDUSERNAME" => $oldUserData->username, "NEWUSERNAME" => $userData->username);
+							$replacements = array
+							(
+								"firstName" => $userData->firstName,
+								"oldUsername" => $oldUserData->username,
+								"newUsername" => $userData->username
+							);
+
 							$mail = new Mail("Benutzername geändert", $replacements);
 							$mail->setTemplate("username-changed");
 							$mail->setTo($userData->email);
