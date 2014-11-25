@@ -1,0 +1,15 @@
+{
+    "name": "programie/mvo",
+    "description": "MVO Website",
+    "require": {
+        "mustache/mustache": "~2.7",
+        "swiftmailer/swiftmailer": "~5.3"
+    },
+    "authors": [
+        {
+            "name": "Michael Wieland",
+            "email": "mvo@selfcoders.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
