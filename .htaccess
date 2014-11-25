@@ -3,6 +3,7 @@ RewriteEngine On
 RewriteRule ^database.sql - [F,L]
 RewriteRule ^addAlbum.php - [F,L]
 RewriteRule album.xml$ - [F,L]
+RewriteRule ^tools - [F,L]
 
 Redirect /favicon.ico /files/images/favicon.ico
 
