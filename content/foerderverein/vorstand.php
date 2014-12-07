@@ -1,5 +1,5 @@
 <?php
-$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName` FROM `users` WHERE `enabled` ORDER BY `lastname` ASC, `firstName` ASC");
+$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName` FROM `users` WHERE `enabled` ORDER BY `lastName` ASC, `firstName` ASC");
 while ($row = $query->fetch())
 {
 	$users[] = $row;
