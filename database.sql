@@ -109,52 +109,6 @@ CREATE TABLE `messages` (
   CONSTRAINT `messages_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `moviecategories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) CHARACTER SET latin1 NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `movieorders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date` datetime NOT NULL,
-  `movieId` int(11) NOT NULL,
-  `buy` tinyint(1) NOT NULL,
-  `userId` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userId` (`userId`),
-  KEY `movieId` (`movieId`),
-  CONSTRAINT `movieorders_movie` FOREIGN KEY (`movieId`) REFERENCES `movies` (`id`),
-  CONSTRAINT `movieorders_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `movies` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `eventYear` year(4) NOT NULL,
-  `releaseDate` date NOT NULL,
-  `discTypeId` int(11) NOT NULL,
-  `discs` int(11) NOT NULL DEFAULT '1',
-  `price` decimal(5,2) DEFAULT NULL,
-  `borrowable` tinyint(1) NOT NULL DEFAULT '1',
-  `borrowed` tinyint(1) NOT NULL DEFAULT '0',
-  `borrowedTo` varchar(100) CHARACTER SET latin1 NOT NULL,
-  `categoryId` int(11) NOT NULL,
-  `comment` text CHARACTER SET latin1 NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `discTypeId` (`discTypeId`),
-  KEY `categoryId` (`categoryId`),
-  CONSTRAINT `movies_category` FOREIGN KEY (`categoryId`) REFERENCES `moviecategories` (`id`),
-  CONSTRAINT `movies_type` FOREIGN KEY (`discTypeId`) REFERENCES `movietypes` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE `movietypes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) CHARACTER SET latin1 NOT NULL,
-  `title` varchar(100) CHARACTER SET latin1 NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `musiciangroups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `orderIndex` int(11) NOT NULL,
