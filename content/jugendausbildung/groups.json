@@ -1,0 +1,142 @@
+{
+	"date" : "03.12.2014",
+	"rows" :
+	[
+		{
+			"title" : "Blockfl\u00f6tengruppen",
+			"types" :
+			[
+				{
+					"groups" :
+					[
+						{
+							"trainer" : "Andreas Wieland",
+							"students" :
+							[
+								"Lola Kern",
+								"Oliver Kern",
+								"Hannah Klumpp",
+								"Jonas Magfelder",
+								"Carina Wieland",
+								"Luca Wieland"
+							]
+						},
+						{
+							"trainer" : "Paula Sieb",
+							"students" :
+							[
+								"Vitus Balensiefen",
+								"Tizian Gottschalk",
+								"Silas Magfelder",
+								"Jonas Melcher"
+							]
+						},
+						{
+							"trainer" : "Meike Klumpp",
+							"students" :
+							[
+								"Marie Merkel",
+								"Alena Knapp"
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"title" : "Instrumentalausbildung",
+			"types" :
+			[
+				{
+					"name" : "Klarinette",
+					"groups" :
+					[
+						{
+							"trainer" : "Gisela Wieland",
+							"students" :
+							[
+								"Annika Knapp",
+								"Julia Knapp",
+								"Judith Merkel"
+							]
+						}
+					]
+				},
+				{
+					"name" : "Posaune",
+					"groups" :
+					[
+						{
+							"trainer" : "Thomas W\u00e4ldele",
+							"students" :
+							[
+								"Moritz Kast"
+							]
+						}
+					]
+				},
+				{
+					"name" : "Querfl\u00f6te",
+					"groups" :
+					[
+						{
+							"trainer" : "Musikschule",
+							"students" :
+							[
+								"Leonie Knapp",
+								"Liana Knapp",
+								"Maria Merkel"
+							]
+						}
+					]
+				},
+				{
+					"name" : "Schlagzeug",
+					"groups" :
+					[
+						{
+							"trainer" : "Jonathan Friedel",
+							"students" :
+							[
+								"Maximilian Merkel",
+								"Luisa Sieb"
+							]
+						}
+					]
+				},
+				{
+					"name" : "Trompete",
+					"groups" :
+					[
+						{
+							"trainer" : "David Brasseur",
+							"students" :
+							[
+								"Lea Knapp"
+							]
+						},
+						{
+							"trainer" : "Thomas Oefler",
+							"students" :
+							[
+								"Moritz Balensiefen",
+								"Eva Bender",
+								"Vincent Kast",
+								"Celine Schmitt"
+							]
+						},
+						{
+							"trainer" : "Wolfgang St\u00f6rtzer",
+							"students" :
+							[
+								"Julian Gottschalk",
+								"Mark Knapp",
+								"Jakob Sieb"
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

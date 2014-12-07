@@ -1,0 +1,32 @@
+<h1>Ausbildungsgruppen</h1>
+
+<p>Stand: {{date}}</p>
+
+<table cellpadding="10" width="100%">
+	<tr>
+		{{#rows}}
+			<td valign="top">
+				<h2>{{title}}</h2>
+				<table cellpadding="5">
+					{{#types}}
+						{{#name}}
+							<tr>
+								<td colspan="2"><h3>{{.}}</h3></td>
+							</tr>
+						{{/name}}
+						{{#groups}}
+							<tr>
+								<td valign="top" style="text-decoration:underline;">{{trainer}}</td>
+								<td valign="top">
+									{{#students}}
+										<div>{{.}}</div>
+									{{/students}}
+								</td>
+							</tr>
+						{{/groups}}
+					{{/types}}
+				</table>
+			</td>
+		{{/rows}}
+	</tr>
+</table>
