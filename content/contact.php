@@ -60,8 +60,11 @@ foreach ($contacts as $name => $data)
 	foreach ($contacts as $name => $data)
 	{
 		echo "
-			<h3>" . $data["name"] . " <a href='#' id='contact-mail-" . $name . "'></a></h3>
-			<p>" . $data["text"] . "</p>
+			<h3>" . $data["name"] . "</h3>
+			<div>
+				<p>" . $data["text"] . "</p>
+				<p><a href='#' id='contact-mail-" . $name . "'></a></p>
+			</div>
 		";
 	}
 	?>
