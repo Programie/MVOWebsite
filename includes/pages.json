@@ -146,11 +146,6 @@
 				"title" : "Nachrichten",
 				"permissions" : "messages.view"
 			},
-			"movies" :
-			{
-				"title" : "Fastnachtsfilme",
-				"permissions" : "movies"
-			},
 			"notedirectory" :
 			{
 				"title" : "Notenverzeichnis",
@@ -160,11 +155,6 @@
 			{
 				"title" : "Notenverzeichniseditor",
 				"permissions" : "notedirectory.edit"
-			},
-			"picturebox" :
-			{
-				"title" : "Bilder hochladen",
-				"permissions" : "picturebox"
 			},
 			"protocols" :
 			{
