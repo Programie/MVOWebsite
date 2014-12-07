@@ -11,22 +11,22 @@
 
 	<h3>Vorstand (Gleichberechtigt)</h3>
 	<div>
-		<p><a href="mailto:vorstand-fv@musikverein-reichental.de">vorstand-fv@musikverein-reichental.de</a></p>
 		<p>
 			Ulrike Brasseur (07224 67274)<br/>
 			Guido Wieland (07224 40749)
 		</p>
+		<p><a href="mailto:vorstand-fv@musikverein-reichental.de">vorstand-fv@musikverein-reichental.de</a></p>
 	</div>
 
 	<h3>Kassenverwalter</h3>
 	<div>
-		<p><a href="mailto:kassier-fv@musikverein-reichental.de">kassier-fv@musikverein-reichental.de</a></p>
 		<p>Karl Wannenmacher</p>
+		<p><a href="mailto:kassier-fv@musikverein-reichental.de">kassier-fv@musikverein-reichental.de</a></p>
 	</div>
 
 	<h3>Schriftf&uuml;hrer</h3>
 	<div>
-		<p><a href="mailto:schriftfuehrer-fv@musikverein-reichental.de">schriftfuehrer-fv@musikverein-reichental.de</a></p>
 		<p>Patrick Wieland</p>
+		<p><a href="mailto:schriftfuehrer-fv@musikverein-reichental.de">schriftfuehrer-fv@musikverein-reichental.de</a></p>
 	</div>
 </div>
