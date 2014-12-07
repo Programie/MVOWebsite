@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>Musikverein Orgelfels Reichental - Fehler</title>
+
+		<link rel="stylesheet" href="/files/css/bootstrap.css" type="text/css"/>
+
+		<script type="text/javascript">
+			window.onload = function()
+			{
+				var address = "webmaster" + decodeURIComponent("%40%6d%75%73%69%6b%76%65%72%65%69%6e%2d%72%65%69%63%68%65%6e%74%61%6c%2e%64%65");
+				document.getElementById("mail-link").setAttribute("href", "mailto:" + address);
+			};
+		</script>
+
+		<style type="text/css">
+			body
+			{
+				padding-top: 20px;
+			}
+
+			.body-content
+			{
+				padding-left: 15px;
+				padding-right: 15px;
+			}
+
+			.jumbotron
+			{
+				text-align: center;
+				background-color: transparent;
+			}
+
+			.jumbotron .btn
+			{
+				font-size: 21px;
+				padding: 14px 24px;
+			}
+
+			.red
+			{
+				color:#d9534f;
+			}
+
+			.jumbotron
+			{
+				font-size: 21px;
+				font-weight: 200;
+				line-height: 2.1428571435;
+				color: inherit;
+				padding: 10px 60px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="jumbotron">
+				<h1><span class="glyphicon glyphicon-fire red"></span> 500 Internal Server Error</h1>
+				<p class="lead">Ein Fehler ist beim Aufrufen der Seite aufgetreten.</p>
+				<a href="javascript:document.location.reload(true);"><button class="btn btn-success btn-lg" role="button">Erneut versuchen</button></a>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="body-content">
+
+				<div class="row">
+					<div class="col-md-6">
+						<h2>Was ist passiert?</h2>
+						<p class="lead">Ein serverseitiger Fehler ist aufgetreten wodurch die angeforderte Seite nicht dargestellt werden kann.</p>
+					</div>
+					<div class="col-md-6">
+						<h2>Was kann ich tun?</h2>
+						<p class="lead">Versuchen Sie die Seite erneut aufzurufen.</p>
+						<p>Sollte das Problem erneut auftreten versuchen Sie es sp&auml;ter noch einmal oder wenden Sie sich an den <a href="#" id="mail-link">Webmaster</a>.</p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</body>
+</html>

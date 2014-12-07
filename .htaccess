@@ -1,3 +1,5 @@
+ErrorDocument 500 /error500.html
+
 RewriteEngine On
 
 RewriteRule ^database.sql - [F,L]
