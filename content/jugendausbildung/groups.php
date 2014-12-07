@@ -1,6 +1,6 @@
 <h1>Ausbildungsgruppen</h1>
 
-<p>Stand: 15.10.2014</p>
+<p>Stand: 03.12.2014</p>
 
 <table cellpadding="10" width="100%">
 	<tr>
@@ -19,12 +19,19 @@
 					</td>
 				</tr>
 				<tr>
-					<td valign="top" style="text-decoration:underline;">Meike Klumpp und Paula Sieb</td>
-					<td valid="top">
+					<td valign="top" style="text-decoration:underline;">Paula Sieb</td>
+					<td valign="top">
 						Vitus Balensiefen<br/>
 						Tizian Gottschalk<br/>
 						Silas Magfelder<br/>
 						Jonas Melcher
+					</td>
+				</tr>
+				<tr>
+					<td valign="top" style="text-decoration:underline;">Meike Klumpp</td>
+					<td valid="top">
+						Marie Merkel<br/>
+						Alena Knapp
 					</td>
 				</tr>
 			</table>
@@ -40,8 +47,7 @@
 					<td valign="top">
 						Annika Knapp<br/>
 						Julia Knapp<br/>
-						Judith Merkel<br/>
-						Paula Sieb
+						Judith Merkel
 					</td>
 				</tr>
 				<tr>
