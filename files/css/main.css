@@ -1,0 +1,111 @@
+/**
+ * Dates
+ */
+
+#dates_edit, #dates_edit_contextmenu, #dates_hide
+{
+	display: none;
+}
+
+#dates_edit_groups
+{
+	margin-bottom: 10px;
+}
+
+#dates_edit_groups div label, #dates_edit_options div label
+{
+	font-weight: normal;
+}
+
+#dates_edit_location, #dates_edit_title
+{
+	width: calc(100% - 28px);
+}
+
+#dates_add_button, #dates_groups
+{
+	margin-bottom: 20px;
+}
+
+#dates_groups label
+{
+	margin-right: 10px;
+	font-weight: normal;
+}
+
+#dates_tabs
+{
+	margin-bottom: 20px;
+}
+
+#dates_tabs_ics
+{
+	background: url(/files/icons/ics.png) no-repeat;
+	padding-left: 70px;
+	min-height: 64px;
+}
+
+#dates_tabs_pdf
+{
+	background: url(/files/icons/pdf.png) no-repeat;
+	padding-left: 70px;
+	min-height: 64px;
+}
+
+/**
+ * Home
+ */
+
+#home_picture
+{
+	margin: 80px auto;
+	width: 1000px;
+	height: 600px;
+	background: url(/files/images/home.jpg) no-repeat;
+	border-radius: 10px;
+	box-shadow: 0 0 20px 2px #000;
+}
+
+/**
+ * New Member
+ */
+
+#newmember_pdf
+{
+	background: url(/files/icons/pdf.png) no-repeat;
+	width: 64px;
+	height: 64px;
+	cursor: pointer;
+}
+
+/**
+ * Pictures
+ */
+
+.pictures_unpublished
+{
+	color: #ff0000 !important;
+}
+
+#pictures_edit_contextmenu
+{
+	display: none;
+}
+
+#pictures_edit_options
+{
+	margin-bottom: 10px;
+}
+
+#pictures_edit_title
+{
+	width: calc(100% - 28px);
+}
+
+#pictures_text
+{
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	padding: 5px;
+}

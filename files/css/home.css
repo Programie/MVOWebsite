@@ -1,9 +1,0 @@
-#home_picture
-{
-	margin: 80px auto;
-	width: 1000px;
-	height: 600px;
-	background: url(/files/images/home.jpg) no-repeat;
-	border-radius: 10px;
-	box-shadow: 0 0 20px 2px #000;
-}

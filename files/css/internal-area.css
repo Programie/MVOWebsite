@@ -1,0 +1,310 @@
+/**
+ * Address List
+ */
+
+#addresslist_groups, #addresslist_sendmessage_attachments, #addresslist_table
+{
+	margin-bottom: 20px;
+}
+
+#addresslist_sendmessage_text
+{
+	width: 100%;
+}
+
+.attendancelist_date
+{
+	font-size: 10px;
+	font-weight: normal;
+}
+
+/**
+ * Attendance List
+ */
+
+.attendancelist_title
+{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+#attendancelist_table
+{
+	table-layout: fixed;
+}
+
+/**
+ * Birthdays
+ */
+
+#birthdays_groups
+{
+	margin-bottom: 20px;
+}
+
+/**
+ * Edit Profile
+ */
+
+#editprofile_changeemail_current, #editprofile_changeemail_new1, #editprofile_changeemail_new2
+{
+	width: 300px;
+}
+
+#editprofile_profilepicture_editarea, #editprofile_profilepicture_progressarea, #editprofile_profilepicture_upload
+{
+	display: none;
+}
+
+#editprofile_profilepicture_progressbar
+{
+	position: relative;
+}
+
+#editprofile_profilepicture_progressbar_label
+{
+	position: absolute;
+	left: 50%;
+	top: 4px;
+	font-weight: bold;
+	text-shadow: 1px 1px 0 #fff;
+}
+
+#editprofile_profilepicture_upload
+{
+	margin-top: 20px;
+}
+
+/**
+ * Messages
+ */
+
+.messages_attachments
+{
+	padding: 10px;
+	border-top: 1px solid #aaa;
+}
+
+.messages_container
+{
+	margin-top: 20px;
+	border: 1px solid #aaa;
+	border-radius: 10px;
+	transition: box-shadow 1s;
+}
+
+.messages_container:hover
+{
+	background-color: rgba(255, 255, 255, 0.5);
+	box-shadow: 1px 1px 20px #000;
+}
+
+a.messages_header
+{
+	text-decoration: none;
+}
+
+div.messages_header
+{
+	padding: 10px;
+	border-bottom: 1px solid #aaa;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	color: #000;
+	min-height: 100px;
+}
+
+.messages_header_avatar
+{
+	height: 100px;
+	float: left;
+	border-radius: 5px;
+	box-shadow: 0 0 10px #000;
+}
+
+.messages_header_container
+{
+	margin-left: 110px;
+}
+
+.messages_text
+{
+	padding: 10px;
+}
+
+#messages_edit_contextmenu, #messages_hide
+{
+	display: none;
+}
+
+/**
+ * Note Directory
+ */
+
+#notedirectory_options_div1
+{
+	position: relative;
+}
+
+#notedirectory_options_div2
+{
+	position: absolute;
+	right: 0;
+	top: -75px;
+}
+
+#notedirectory_searchform, #notedirectory_searchstring
+{
+	display: inline;
+}
+
+#notedirectory_selectionmenu
+{
+	margin-bottom: 20px;
+}
+
+#notedirectory_selectionmenu, #notedirectory_selectionmenu .ui-menu
+{
+	width: 150px;
+}
+
+/**
+ * Note Directory Editor
+ */
+
+#notedirectoryeditor_categories_list, #notedirectoryeditor_editprogram_titles
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#notedirectoryeditor_categories_list li, #notedirectoryeditor_editprogram_titles li
+{
+	cursor: move;
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+}
+
+#notedirectoryeditor_editcategory form input, #notedirectoryeditor_editprogram form input, #notedirectoryeditor_edittitle form input
+{
+	width: calc(100% - 28px);
+}
+
+#notedirectoryeditor_editprogram_addtitle
+{
+	cursor: pointer;
+}
+
+.notedirectoryeditor_programs_row, .notedirectoryeditor_titles_row
+{
+	cursor: pointer;
+}
+
+/**
+ * Protocols
+ */
+
+#protocols_upload
+{
+	margin-bottom: 20px;
+}
+
+#protocols_upload_groups
+{
+	margin: 10px;
+}
+
+#protocols_upload_groups label, #protocols_upload_miscoptions label
+{
+	margin-right: 10px;
+	font-weight: normal;
+}
+
+#protocols_upload_miscoptions
+{
+	margin: 10px;
+}
+
+#protocols_upload_name
+{
+	width: 500px;
+}
+
+/**
+ * Room occupancy plan
+ */
+
+#roomoccupancyplan_edit
+{
+	display: none;
+}
+
+#roomoccupancyplan_edit_time_start, #roomoccupancyplan_edit_time_end
+{
+	display: inline;
+}
+
+#roomoccupancyplan_edit_title, #roomoccupancyplan_edit_reservedby
+{
+	width: 300px;
+}
+
+/**
+ * User Manager
+ */
+
+#usermanager_edituser_email
+{
+	width: 425px;
+}
+
+#usermanager_edituser_tabs_options label
+{
+	font-weight: normal;
+}
+
+#usermanager_groups
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#usermanager_groups li
+{
+	cursor: move;
+	margin: 0 5px 5px 5px;
+	padding: 5px;
+}
+
+#usermanager_permissiongroups_applybutton, #usermanager_users_addbutton
+{
+	margin-bottom: 20px;
+}
+
+#usermanager_users_table tbody tr
+{
+	cursor: pointer;
+}
+
+/**
+ * Write Message
+ */
+
+#writemessage_attachments, #writemessage_groups, #writemessage_textfieldset, #writemessage_validtill
+{
+	margin-bottom: 20px;
+}
+
+#writemessage_groups label, #writemessage_validtill label
+{
+	margin-right: 10px;
+	font-weight: normal;
+}
+
+#writemessage_validtill_date
+{
+	display: inline;
+}
