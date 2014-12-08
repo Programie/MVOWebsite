@@ -1,0 +1,19 @@
+<nav>
+	<ul>
+		{{#menus}}
+			<li>
+				<a href="{{path}}">{{title}}</a>
+				<ul>
+					{{#items}}
+						{{#separator}}
+							<li class="menu_separator"></li>
+						{{/separator}}
+						{{^separator}}
+							<li><a href="{{path}}">{{title}}</a></li>
+						{{/separator}}
+					{{/items}}
+				</ul>
+			</li>
+		{{/menus}}
+	</ul>
+</nav>

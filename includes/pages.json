@@ -61,13 +61,13 @@
 	},
 	"foerderverein" :
 	{
-		"title" : "F&ouml;rderverein",
+		"title" : "F\u00f6rderverein",
 		"index" : "why",
 		"subpages" :
 		{
 			"why" :
 			{
-				"title" : "Warum F&ouml;rderverein?"
+				"title" : "Warum F\u00f6rderverein?"
 			},
 			"vorstand" :
 			{
@@ -109,7 +109,7 @@
 			},
 			"confirmemail" :
 			{
-				"title" : "Email-Adresse best&auml;tigen",
+				"title" : "Email-Adresse best\u00e7tigen",
 				"permissions" : true
 			},
 			"editprofile" :
@@ -163,7 +163,7 @@
 			},
 			"resetpassword" :
 			{
-				"title" : "Passwort zur&uuml;cksetzen"
+				"title" : "Passwort zur\u00fccksetzen"
 			},
 			"roomoccupancyplan" :
 			{
