@@ -56,20 +56,43 @@ $backgroundFile = "/files/backgrounds/" . $backgroundType . "/" . $backgroundFil
 		<script type="text/javascript" src="/files/script.js?md5=<?php echo md5($md5); ?>"></script>
 		<link rel="icon" href="/files/images/favicon.ico"/>
 	</head>
+
 	<body style="background-image: url(<?php echo $backgroundFile; ?>);">
 		<div id="unsupported_browser_warning">
 			<p><b>Warnung: Ihr Browser ist nicht auf dem aktuellsten Stand!</b></p>
 
-			<p>Der von Ihnen verwendete Internetbrowser ist veraltet bzw. unterst&uuml;tzt nicht alle auf dieser Seite
-				verwendeten Eigenschaften.</p>
+			<p>Der von Ihnen verwendete Internetbrowser ist veraltet bzw. unterst&uuml;tzt nicht alle auf dieser Seite verwendeten Eigenschaften.</p>
 
 			<p><a href="/update_browser" target="_blank">Klicken Sie hier um weitere Informationen zu erhalten.</a></p>
 		</div>
+
 		<div id="container">
-			<?php require_once "header.php"; ?>
-			<?php require_once "body.php"; ?>
-			<?php require_once "footer.php"; ?>
+			<div id="header">
+				<div id="header_logo"></div>
+				<div id="header_image"></div>
+				<?php require_once "menu.php"; ?>
+			</div>
+
+			<div id="body">
+				<div id="bodycontent_div1">
+					<div id="bodycontent_div2">
+						<?php Constants::$pageManager->includePage(0); ?>
+					</div>
+				</div>
+			</div>
+
+			<div id="footer">
+				<div id="footercontent">
+					<p>&copy; <?php echo date("Y"); ?> Musikverein "Orgelfels" Reichental e.V.</p>
+
+					<p id="footerlinks">
+						<a href="/home">Home</a>
+						<a href="/imprint">Impressum</a>
+					</p>
+				</div>
+			</div>
 		</div>
+
 		<div id="overlay_container">
 			<div id="backtotop" title="Nach oben"></div>
 			<div id="print" title="Drucken"></div>
