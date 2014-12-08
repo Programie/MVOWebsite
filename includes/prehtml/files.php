@@ -48,7 +48,6 @@ switch (Constants::$pagePath[1])
 
 		$files = array
 		(
-			"errorreport",
 			"jquery",
 			"jquery-ui",
 			"globalize",

@@ -63,19 +63,6 @@ CREATE TABLE `forms` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `jserrors` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date` datetime NOT NULL,
-  `ip` varchar(50) CHARACTER SET latin1 NOT NULL,
-  `message` varchar(200) CHARACTER SET latin1 NOT NULL,
-  `file` varchar(200) CHARACTER SET latin1 NOT NULL,
-  `line` int(11) NOT NULL,
-  `url` varchar(200) CHARACTER SET latin1 NOT NULL,
-  `userAgent` varchar(200) CHARACTER SET latin1 NOT NULL,
-  `userId` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 CREATE TABLE `links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(200) CHARACTER SET latin1 NOT NULL,
