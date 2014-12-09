@@ -17,6 +17,7 @@ define("BASE_URL", (@$_SERVER["HTTPS"] ? "https" : "http") . "://" . $_SERVER["S
 define("MAX_UPLOAD_SIZE", min(intval(ini_get("upload_max_filesize")), intval(ini_get("post_max_size")), intval(ini_get("memory_limit"))));
 
 require_once ROOT_PATH . "/includes/config.inc.php";
+require_once ROOT_PATH . "/vendor/autoload.php";
 require_once ROOT_PATH . "/includes/Constants.class.php";
 require_once ROOT_PATH . "/includes/database.php";
 require_once ROOT_PATH . "/includes/functions.php";

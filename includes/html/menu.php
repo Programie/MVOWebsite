@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . "/../../vendor/autoload.php";
-
 $navbarData = json_decode(file_get_contents(ROOT_PATH . "/includes/menu.json"));
 
 $mustache = new Mustache_Engine();
