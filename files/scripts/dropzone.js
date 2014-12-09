@@ -1827,4 +1827,4 @@ if (typeof exports == "object") {
 } else {
   this["Dropzone"] = require("dropzone");
 }
-})()
+})();
