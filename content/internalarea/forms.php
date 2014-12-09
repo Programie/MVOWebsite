@@ -46,7 +46,7 @@ else
 			$fileTime = filemtime($filename);
 		}
 		echo "
-			<tr>
+			<tr class='odd-even'>
 				<td><a href='/internalarea/forms/" . $row->filename . "'>" . escapeText($row->title) . "</a></td>
 				<td>" . getFileType($fileInfo["extension"]) . "</td>
 				<td number='" . $fileTime . "'>" . ($fileTime ? date("d.m.Y", $fileTime) : "Datei nicht gefunden!"). "</td>

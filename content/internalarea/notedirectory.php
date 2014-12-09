@@ -168,7 +168,7 @@ switch (Constants::$pagePath[2])
 				while ($row = $query->fetch())
 				{
 					echo "
-						<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/program/" . $row->id . "';\">
+						<tr class='odd-even pointer' onclick=\"document.location.href='/internalarea/notedirectory/program/" . $row->id . "';\">
 							<td>" . $row->year . "</td>
 							<td>" . escapeText($row->title) . "</td>
 							<td>" . $row->number . "</td>

@@ -127,7 +127,7 @@ class NoteDirectory
 		echo "<tbody>";
 		foreach ($titles as $row)
 		{
-			echo "<tr class='pointer' onclick=\"document.location.href='/internalarea/notedirectory/details/" . $row->id . "';\">";
+			echo "<tr class='odd-even pointer' onclick=\"document.location.href='/internalarea/notedirectory/details/" . $row->id . "';\">";
 			foreach ($this->columns as $columnName => $columnTitle)
 			{
 				echo "<td columnname='" . $columnName . "'>" . $this->formatString($row->{$columnName}) . "</td>";

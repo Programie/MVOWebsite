@@ -3,23 +3,27 @@ Dropzone.autoDiscover = false;// Disable Dropzone auto discover -> It is done in
 $(document).ready(function()
 {
 	// Colorbox
-	$(".colorbox-iframe").colorbox({
+	$(".colorbox-iframe").colorbox(
+	{
 		iframe : true,
 		returnFocus : false,
 		width : "80%",
 		height : "80%"
 	});
-	$("[rel='colorbox']").colorbox({
+	$("[rel='colorbox']").colorbox(
+	{
 		current : "",
 		picture : true,
 		returnFocus : false
 	});
 
 	// "Back to top" button
-	$("#backtotop").css("display", "none");
-	$("#backtotop").click(function()
+	var backToTopButton = $("#backtotop");
+	backToTopButton.css("display", "none");
+	backToTopButton.click(function()
 	{
-		$("body,html").animate({
+		$("body,html").animate(
+		{
 			scrollTop : 0
 		}, 2000, "easeOutExpo");
 	});
@@ -30,7 +34,8 @@ $(document).ready(function()
 		window.print();
 	});
 
-	$(".dropzone").dropzone({
+	$(".dropzone").dropzone(
+	{
 		dictDefaultMessage: "Ziehe die Dateien hier her um sie hochzuladen (Oder klicke hier).",
 		dictFallbackMessage: "Dein Browser unterst\u00fctzt Drag 'n Drop nicht!",
 		dictFallbackText: "Bitte verwende das folgende Formular um die Dateien hochzuladen.",
@@ -46,34 +51,35 @@ $(document).ready(function()
 
 	// jQuery UI
 	$("button, input[type=submit]").button();
-	$(".date").datepicker({
+	$(".date").datepicker(
+	{
 		changeMonth : true,
 		changeYear : true,
 		showAnim : "slideDown",
 		showButtonPanel : true
 	});
-	$(".datetime").datetimepicker({
+	$(".datetime").datetimepicker(
+	{
 		changeMonth : true,
 		changeYear : true,
 		showAnim : "slideDown",
 		showButtonPanel : true
 	});
 	$(".menu").menu();
-	$(document).tooltip({
+	$(document).tooltip(
+	{
 		track : true
 	});
-	$(".time").timepicker({
+	$(".time").timepicker(
+	{
 		showAnim : "slideDown",
 		showButtonPanel : true
 	});
 
+	$.tablesorter.defaults.widgets = ["stickyHeaders"];
+
 	// Tablesorter
-	$("table.table").tablesorter({
-		widgets :
-		[
-			"stickyHeaders"
-		]
-	});
+	$("table.table").tablesorter();
 
 	$.noty.defaults.layout = "bottom";
 	$.noty.defaults.timeout = 10000;

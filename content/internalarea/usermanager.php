@@ -284,13 +284,13 @@ if (isset($_POST["usermanager_edituser_id"]))
 		<button type="button" id="usermanager_users_addbutton" class="no-print">Benutzer erstellen</button>
 		<table id="usermanager_users_table" class="table tablesorter {sortlist: [[2,0],[1,0]]}">
 			<thead>
-			<tr>
-				<th>Status</th>
-				<th>Vorname</th>
-				<th>Nachname</th>
-				<th>Email</th>
-				<th class="{sorter: 'number-attribute'}">Zuletzt Online</th>
-			</tr>
+				<tr>
+					<th>Status</th>
+					<th>Vorname</th>
+					<th>Nachname</th>
+					<th>Email</th>
+					<th class="{sorter: 'number-attribute'}">Zuletzt Online</th>
+				</tr>
 			</thead>
 			<tbody>
 			<?php
@@ -305,7 +305,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 					$lastOnline = $lastOnlineDate[2] . "." . $lastOnlineDate[1] . "." . $lastOnlineDate[0] . " " . $lastOnline[1];
 				}
 				echo "
-						<tr userid='" . $row->id . "'>
+						<tr class='odd-even' userid='" . $row->id . "'>
 							<td><img src='/files/images/alerts/" . ($row->enabled ? "ok" : "error") . ".png' title='" . ($row->enabled ? "Aktiviert" : "Deaktiviert") . "'/></td>
 							<td>" . escapeText($row->firstName) . "</td>
 							<td>" . escapeText($row->lastName) . "</td>

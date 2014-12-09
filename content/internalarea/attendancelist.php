@@ -38,28 +38,28 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 
 <table id="attendancelist_table" class="table {sortlist: [[0,0]]}">
 	<thead>
-	<tr>
-		<th class="{sorter: 'text-attribute'}">Name</th>
-		<?php
-		foreach ($dates as $date)
-		{
-			$startDateTime = strtotime($date->startDate);
-			$startDate = date("d.m.Y", $startDateTime);
-			$startTime = date("H:i", $startDateTime);
-			$startDateTime = array(getWeekdayName(date("N", $startDateTime), false), $startDate);
-			if ($startTime != "00:00")
+		<tr>
+			<th class="{sorter: 'text-attribute'}">Name</th>
+			<?php
+			foreach ($dates as $date)
 			{
-				$startDateTime[] = $startTime . " Uhr";
+				$startDateTime = strtotime($date->startDate);
+				$startDate = date("d.m.Y", $startDateTime);
+				$startTime = date("H:i", $startDateTime);
+				$startDateTime = array(getWeekdayName(date("N", $startDateTime), false), $startDate);
+				if ($startTime != "00:00")
+				{
+					$startDateTime[] = $startTime . " Uhr";
+				}
+				echo "
+						<th dateid='" . $date->id . "' class='{sorter: \"number-attribute\"}'>
+							<div class='attendancelist_title' title='" . escapeText($date->title) . "'>" . escapeText($date->title) . "</div>
+							<div class='attendancelist_date'>" . implode(" ", $startDateTime) . "</div>
+						</th>
+					";
 			}
-			echo "
-					<th dateid='" . $date->id . "' class='{sorter: \"number-attribute\"}'>
-						<div class='attendancelist_title' title='" . escapeText($date->title) . "'>" . escapeText($date->title) . "</div>
-						<div class='attendancelist_date'>" . implode(" ", $startDateTime) . "</div>
-					</th>
-				";
-		}
-		?>
-	</tr>
+			?>
+		</tr>
 	</thead>
 	<?php
 	foreach ($groups as $groupRow)
@@ -82,7 +82,7 @@ $getAttendanceQuery = Constants::$pdo->prepare("SELECT `status` FROM `attendance
 				{
 					$attributes = "class='table_highlight'";
 				}
-				echo "<tr userid='" . $userRow->id . "' " . $attributes . ">";
+				echo "<tr userid='" . $userRow->id . "' " . $attributes . " class='odd-even'>";
 				echo "<td sorttext='" . escapeText($userRow->lastName) . " " . escapeText($userRow->firstName) . "'>" . escapeText($userRow->firstName) . " " . escapeText($userRow->lastName) . "</td>";
 				foreach ($dates as $dateRow)
 				{

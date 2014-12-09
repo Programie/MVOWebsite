@@ -217,7 +217,7 @@ if ($dates)
 	";
 	foreach ($dates as $date)
 	{
-		$rowClasses = array();
+		$rowClasses = array("odd-even");
 		if ($date->nextEvent)
 		{
 			$rowClasses[] = "table_highlight";

@@ -205,7 +205,7 @@ else
 		$date = strtotime($row->date);
 
 		echo "
-			<tr class='pointer' onclick='document.location=\"/uploads/" . $row->uploadId . "/" . $row->uploadName . "\";'>
+			<tr class='odd-even pointer' onclick='document.location=\"/uploads/" . $row->uploadId . "/" . $row->uploadName . "\";'>
 				<td number='" . $date . "'>" . date("d.m.Y", $date) . "</td>
 				<td>" . escapeText($row->name) . "</td>
 				<td>" . implode(", ", $groupTitles) . "</td>

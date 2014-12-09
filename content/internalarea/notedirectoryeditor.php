@@ -193,7 +193,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 				while ($row = $query->fetch())
 				{
 					echo "
-						<tr class='notedirectoryeditor_programs_row' programid='" . $row->id . "' typeid='" . $row->typeId . "'>
+						<tr class='odd-even notedirectoryeditor_programs_row' programid='" . $row->id . "' typeid='" . $row->typeId . "'>
 							<td class='notedirectoryeditor_programs_row_year'>" . $row->year . "</td>
 							<td>" . escapeText($row->type) . "</td>
 							<td>" . $row->titleCount . "</td>
@@ -252,7 +252,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 				foreach ($titles as $row)
 				{
 					echo "
-						<tr class='notedirectoryeditor_titles_row' categoryid='" . $row->categoryId . "' titleid='" . $row->id . "'>
+						<tr class='odd-even notedirectoryeditor_titles_row' categoryid='" . $row->categoryId . "' titleid='" . $row->id . "'>
 							<td class='notedirectoryeditor_titles_row_title'>" . escapeText($row->title) . "</td>
 							<td class='notedirectoryeditor_titles_row_composer'>" . escapeText($row->composer) . "</td>
 							<td class='notedirectoryeditor_titles_row_arranger'>" . escapeText($row->arranger) . "</td>

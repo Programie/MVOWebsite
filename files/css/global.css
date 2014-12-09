@@ -480,12 +480,12 @@ table.table tbody tr th
 		cursor: pointer;
 	}
 
-	table.table tbody tr:nth-child(even)
+	table.table tbody tr.odd-even:nth-child(even), tr.even
 	{
 		background-color: #dfdfdf;
 	}
 
-	table.table tbody tr:nth-child(odd)
+	table.table tbody tr.odd-even:nth-child(odd), tr.odd
 	{
 		background-color: #efefef;
 	}

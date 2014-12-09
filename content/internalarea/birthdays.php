@@ -89,44 +89,37 @@ echo "<h1>" . $title . "</h1>";
 
 <table id="birthdays_table" class="table {sortlist: [[2,0]]}">
 	<thead>
-	<tr>
-		<th>Vorname</th>
-		<th>Nachname</th>
-		<th class="{sorter: 'number-attribute'}">Geburtstag</th>
-		<th>Geburtsjahr</th>
-		<th>Alter</th>
-	</tr>
+		<tr>
+			<th>Vorname</th>
+			<th>Nachname</th>
+			<th class="{sorter: 'number-attribute'}">Geburtstag</th>
+			<th>Geburtsjahr</th>
+			<th>Alter</th>
+		</tr>
 	</thead>
 	<tbody>
-	<?php
-	foreach ($users as $user)
-	{
-		$rowClasses = array();
-
-		if (date("Y-m-d", $user->nextBirthDay) == date("Y-m-d", $nextBirthDay))
+		<?php
+		foreach ($users as $user)
 		{
-			$rowClasses[] = "table_highlight";
+			$rowClasses = array("odd-even");
+
+			if (date("Y-m-d", $user->nextBirthDay) == date("Y-m-d", $nextBirthDay))
+			{
+				$rowClasses[] = "table_highlight";
+			}
+
+			$birthDate = explode("-", $user->birthDate);
+
+			echo "
+					<tr class='" . implode(" ", $rowClasses) . "'>
+						<td>" . escapeText($user->firstName) . "</td>
+						<td>" . escapeText($user->lastName) . "</td>
+						<td number='" . $birthDate[1] . $birthDate[2] . "'>" . $birthDate[2] . "." . $birthDate[1] . ".</td>
+						<td>" . $birthDate[0] . "</td>
+						<td>" . $user->age . "</td>
+					</tr>
+				";
 		}
-
-		$rowAttributes = array();
-
-		if (!empty($rowClasses))
-		{
-			$rowAttributes[] = "class='" . implode(" ", $rowClasses) . "'";
-		}
-
-		$birthDate = explode("-", $user->birthDate);
-
-		echo "
-				<tr " . implode(" ", $rowAttributes) . ">
-					<td>" . escapeText($user->firstName) . "</td>
-					<td>" . escapeText($user->lastName) . "</td>
-					<td number='" . $birthDate[1] . $birthDate[2] . "'>" . $birthDate[2] . "." . $birthDate[1] . ".</td>
-					<td>" . $birthDate[0] . "</td>
-					<td>" . $user->age . "</td>
-				</tr>
-			";
-	}
-	?>
+		?>
 	</tbody>
 </table>
