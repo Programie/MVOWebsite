@@ -1,245 +1,58 @@
-<?php
-$row = new StdClass;
-$row->name = "all";
-$row->title = "Alle";
-$row->active = true;
-$groups = array($row->name => $row);
+<script type="text/html" id="addresslist_groupbox_template">
+	{{#.}}
+		<input type="checkbox" id="addresslist_groupcheckbox_{{name}}" data-name="{{name}}" checked/><label for="addresslist_groupcheckbox_{{name}}">{{title}}</label>
+	{{/.}}
+</script>
 
-$activeGroup = "all";
+<script type="text/html" id="addresslist_tbody_template">
+	{{#.}}
+		<tr class="addresslist-row {{#groups}}addresslist-group-{{.}} {{/groups}}" data-id="{{id}}">
+			<td class="no-print"><input type="checkbox"/></td>
+			<td>{{firstName}}</td>
+			<td>{{lastName}}</td>
+			<td><a href="mailto:{{email}}">{{email}}</a></td>
+			<td>
+				{{#phoneNumbers}}
+					<div>{{category}} ({{subCategory}}): {{number}}</div>
+				{{/phoneNumbers}}
+			</td>
+		</tr>
+	{{/.}}
+</script>
 
-$query = Constants::$pdo->query("SELECT `name`, `title` FROM `usergroups` WHERE `id`");
-while ($row = $query->fetch())
-{
-	if ($row->name == Constants::$pagePath[2])
-	{
-		$row->active = true;
-		$groups["all"]->active = false;
-		$activeGroup = $row->name;
-	}
-	$groups[$row->name] = $row;
-}
+<h1>Adressenliste</h1>
 
-$title = "Adressenliste";
-
-if ($activeGroup != "all")
-{
-	$title .= " - " . $groups[$activeGroup]->title;
-}
-echo "<h1>" . $title . "</h1>";
-
-if (isset($_POST["addresslist_sendmessage_confirmed"]))
-{
-	$error = "Beim Senden der Nachricht ist ein Fehler aufgetreten!";
-	if ($_POST["addresslist_sendmessage_confirmed"])
-	{
-		$userData = Constants::$accountManager->getUserData();
-		if ($_POST["addresslist_sendmessage_sendtoken"] == TokenManager::getSendToken("addresslist_sendmessage"))
-		{
-			$targetUsers = array();
-			$recipients = explode(",", $_POST["addresslist_sendmessage_recipients"]);
-			if (!empty($recipients))
-			{
-				$mailRecipients = array();
-				$query = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id AND `enabled`");
-				foreach ($recipients as $index => $recipientUserId)
-				{
-					$query->execute(array(":id" => $recipientUserId));
-					$row = $query->fetch();
-
-					if ($row->email)
-					{
-						$mailRecipients[$row->email] = $row->firstName . " " . $row->lastName;
-						$targetUsers[] = "uid:" . $recipientUserId;
-					}
-				}
-
-				$send = true;
-
-				$uploadedFiles = array();
-				foreach ($_FILES as $fileData)
-				{
-					$uploadError = false;
-					if ($fileData["error"] == UPLOAD_ERR_OK)
-					{
-						$fileName = md5_file($fileData["tmp_name"]);
-						if (move_uploaded_file($fileData["tmp_name"], UPLOAD_PATH . "/" . $fileName))
-						{
-							$uploadedFiles[$fileName] = $fileData["name"];
-						}
-						else
-						{
-							$uploadError = true;
-						}
-					}
-					else
-					{
-						if ($fileData["error"] != UPLOAD_ERR_NO_FILE) // One file field is always empty
-						{
-							$uploadError = true;
-						}
-					}
-					if ($uploadError)
-					{
-						$error = "Beim Hochladen der Datei <b>" . $fileData["name"] . "</b> ist ein Fehler aufgetreten!";
-						$send = false;
-						break;
-					}
-				}
-
-				if ($send)
-				{
-					$attachedFiles = array();
-					$addFileQuery = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
-					foreach ($uploadedFiles as $name => $title)
-					{
-						$addFileQuery->execute(array(":name" => $name, ":title" => $title));
-						$attachedFiles[$name] = Constants::$pdo->lastInsertId();
-					}
-
-					$text = $_POST["addresslist_sendmessage_text"];
-
-					$query = Constants::$pdo->prepare("INSERT INTO `messages` (`date`, `targetGroups`, `userId`, `text`, `attachedFiles`) VALUES(NOW(), :targetGroups, :userId, :text, :attachedFiles)");
-					$query->execute(array(":targetGroups" => implode(",", $targetUsers), ":userId" => Constants::$accountManager->getUserId(), ":text" => $text, ":attachedFiles" => implode(",", $attachedFiles)));
-					$messageId = Constants::$pdo->lastInsertId();
-
-					$attachments = array();
-					if (!empty($uploadedFiles))
-					{
-						foreach ($uploadedFiles as $name => $title)
-						{
-							$attachments[] = array
-							(
-								"id" => $attachedFiles[$name],
-								"name" => $name,
-								"title" => $title
-							);
-						}
-					}
-
-					$ccMail = null;
-					if ($_POST["addresslist_sendmessage_sendcopy"])
-					{
-						$ccMail = array($userData->email => $userData->firstName . " " . $userData->lastName);
-					}
-
-					$replacements = array
-					(
-						"attachments" => $attachments,
-						"content" => formatText($text),
-						"firstName" => $userData->firstName,
-						"lastName" => $userData->lastName,
-						"messageId" => $messageId
-					);
-
-					$mail = new Mail("Nachricht vom Internen Bereich", $replacements);
-					$mail->setTemplate("writemessage");
-					$mail->setTo($mailRecipients);
-					$mail->setCc($ccMail);
-					$mail->setReplyTo(array($userData->email => $userData->firstName . " " . $userData->lastName));
-
-					if ($mail->send())
-					{
-						$error = "";
-						echo "<div class='alert-success'>Die Nachricht wurde erfolgreich an <b>" . count($mailRecipients) . " Empf&auml;nger</b> gesendet.</div>";
-					}
-				}
-			}
-		}
-		else
-		{
-			$error = "Es wurde versucht dieselbe Email erneut zu versenden!";
-		}
-	}
-	if ($error)
-	{
-		echo "<div class='alert-error'>" . $error . "</div>";
-	}
-}
-?>
-
-<fieldset id="addresslist_groups" class="no-print">
+<fieldset>
 	<legend>Gruppen</legend>
-	<?php
-	foreach ($groups as $name => $row)
-	{
-		$buttonStyle = "";
-		if ($row->active)
-		{
-			$buttonStyle = "style='font-weight: bold;'";
-		}
-		echo "<a href='/internalarea/addresslist/" . $name . "'><button type='button' " . $buttonStyle . ">" . $row->title . "</button></a>";
-	}
-	?>
+	<div id="addresslist_groupbox"></div>
 </fieldset>
 
 <table id="addresslist_table" class="table {sortlist: [[2,0],[1,0]]}">
 	<thead>
-	<tr>
-		<th class="no-print"></th>
-		<th>Vorname</th>
-		<th>Nachname</th>
-		<th>Email</th>
-		<th>Telefon</th>
-	</tr>
+		<tr>
+			<th class="no-print" data-sorter="false"><input type="checkbox" id="addresslist_table_checkall"/></th>
+			<th>Vorname</th>
+			<th>Nachname</th>
+			<th>Email</th>
+			<th>Telefon</th>
+		</tr>
 	</thead>
-	<tbody>
-	<?php
-	$phoneNumberCategories = array("fax" => "Fax", "mobile" => "Mobil", "phone" => "Telefon");
-	$phoneNumberSubCategories = array("business" => "Gesch&auml;ftlich", "private" => "Privat");
-	$permissionCheckQuery = Constants::$pdo->prepare("SELECT `id` FROM `permissions` WHERE `userId` = :userId AND `permission` = :permission");
-	$phoneNumbersQuery = Constants::$pdo->prepare("SELECT `category`, `subCategory`, `number` FROM `phonenumbers` WHERE `userId` = :userId");
-	$query = Constants::$pdo->query("SELECT `id`, `firstName`, `lastName`, `email` FROM `users` WHERE `enabled`");
-	while ($row = $query->fetch())
-	{
-		if ($activeGroup == "all")
-		{
-			$show = true;
-		}
-		else
-		{
-			$permissionCheckQuery->execute(array(":userId" => $row->id, ":permission" => "groups." . $activeGroup));
-			$show = $permissionCheckQuery->rowCount();
-		}
-		if ($show)
-		{
-			$phoneNumbersQuery->execute(array(":userId" => $row->id));
-			$phoneNumbers = array();
-			while ($phoneNumberRow = $phoneNumbersQuery->fetch())
-			{
-				$phoneNumbers[] = $phoneNumberCategories[$phoneNumberRow->category] . " (" . $phoneNumberSubCategories[$phoneNumberRow->subCategory] . "): " . escapeText($phoneNumberRow->number);
-			}
-			echo "
-					<tr userid='" . $row->id . "'>
-						<td class='no-print'><input type='checkbox'/></td>
-						<td>" . escapeText($row->firstName) . "</td>
-						<td>" . escapeText($row->lastName) . "</td>
-						<td><a href='mailto:" . escapeText($row->email) . "'>" . escapeText($row->email) . "</a></td>
-						<td>" . implode("<br />", $phoneNumbers) . "</td>
-					</tr>
-				";
-		}
-	}
-	?>
-	</tbody>
+	<tbody id="addresslist_tbody"></tbody>
 </table>
 
 <fieldset id="addresslist_sendmessage" class="no-print">
 	<legend>Nachricht senden</legend>
 
-	<form id="addresslist_sendmessage_form" action="/internalarea/addresslist" method="post"
-	      enctype="multipart/form-data" onsubmit="addresslist_sendMessageConfirm(); return false;">
-		<textarea id="addresslist_sendmessage_text" name="addresslist_sendmessage_text" rows="15"
-			  cols="15"></textarea>
+	<form action="/internalarea/addresslist" method="post" enctype="multipart/form-data">
+		<textarea id="addresslist_sendmessage_text" name="addresslist_sendmessage_text" rows="15" cols="15"></textarea>
 
 		<fieldset id="addresslist_sendmessage_attachments">
 			<legend>Anh&auml;nge</legend>
 		</fieldset>
 
-		<input type="hidden" id="addresslist_sendmessage_sendcopy" name="addresslist_sendmessage_sendcopy"/>
-		<input type="hidden" id="addresslist_sendmessage_confirmed" name="addresslist_sendmessage_confirmed"/>
-		<input type="hidden" id="addresslist_sendmessage_recipients" name="addresslist_sendmessage_recipients"/>
-		<input type="hidden" name="addresslist_sendmessage_sendtoken"
-		       value="<?php echo TokenManager::getSendToken("addresslist_sendmessage", true); ?>"/>
+		<input type="hidden" id="addresslist_sendmessage_sendcopy" name="sendCopy"/>
+		<input type="hidden" id="addresslist_sendmessage_recipients" name="recipients"/>
+		<input type="hidden" name="sendToken" value="<?php echo TokenManager::getSendToken("addresslist_sendmessage", true); ?>"/>
 		<input type="submit" value="Senden"/>
 	</form>
 </fieldset>
@@ -247,110 +60,9 @@ if (isset($_POST["addresslist_sendmessage_confirmed"]))
 <div id="addresslist_sendmessage_confirm" title="Nachricht senden">
 	<p id="addresslist_sendmessage_confirm_text1"></p>
 	<ul id="addresslist_sendmessage_confirm_recipients"></ul>
+
 	<p id="addresslist_sendmessage_confirm_text2"><b>Anh&auml;nge:</b></p>
 	<ul id="addresslist_sendmessage_confirm_attachments"></ul>
-	<input id="addresslist_sendmessage_confirm_sendcopy" type="checkbox"/><label
-		for="addresslist_sendmessage_confirm_sendcopy">Eine Kopie an mich senden</label>
+
+	<input id="addresslist_sendmessage_confirm_sendcopy" type="checkbox"/><label for="addresslist_sendmessage_confirm_sendcopy">Eine Kopie an mich senden</label>
 </div>
-
-<script type="text/javascript">
-	addresslist_sendmessage_attachments_file = 0;
-	addresslist_sendMessageAddAttachmentFile();
-
-	$("#addresslist_sendmessage_confirm").dialog(
-		{
-			closeText: "Schlie&szlig;en",
-			resizable: false,
-			modal: true,
-			width: "auto",
-			maxHeight: 500,
-			autoOpen: false,
-			buttons: {
-				"Senden": function ()
-				{
-					document.getElementById("addresslist_sendmessage_sendcopy").value = document.getElementById("addresslist_sendmessage_confirm_sendcopy").checked ? "1" : "0";
-					document.getElementById("addresslist_sendmessage_confirmed").value = true;
-					document.getElementById("addresslist_sendmessage_form").submit();
-				},
-				"Abbrechen": function ()
-				{
-					$(this).dialog("close");
-				}
-			}
-		});
-
-	$("#addresslist_table tbody tr").click(function (event)
-	{
-		if (event.target.type != "checkbox")
-		{
-			$(":checkbox", this).trigger("click");
-		}
-	});
-
-	function addresslist_sendMessageAddAttachmentFile()
-	{
-		addresslist_sendmessage_attachments_file++;
-		$("#addresslist_sendmessage_attachments").append("<input type='file' class='addresslist_sendmessage_attachments_file' id='addresslist_sendmessage_attachments_file_" + addresslist_sendmessage_attachments_file + "' name='addresslist_sendmessage_attachments_file_" + addresslist_sendmessage_attachments_file + "' onchange='addresslist_sendMessageCheckAttachmentFields();'/>");
-	}
-
-	function addresslist_sendMessageCheckAttachmentFields()
-	{
-		var addNew = true;
-		$(".addresslist_sendmessage_attachments_file").each(function ()
-		{
-			if (!$(this)[0].files.length)
-			{
-				if (!addNew)// Another field is already empty -> Remove this one
-				{
-					$(this).remove();
-				}
-				addNew = false;
-			}
-		});
-		if (addNew)
-		{
-			addresslist_sendMessageAddAttachmentFile();
-		}
-	}
-
-	function addresslist_sendMessageConfirm()
-	{
-		var recipients = [];
-
-		$("#addresslist_sendmessage_confirm_recipients").html("");
-
-		$("#addresslist_table tbody:first tr").each(function ()
-		{
-			var cells = $(this).find("td");
-			if (cells.eq(0).find("input:checkbox").is(":checked"))
-			{
-				recipients.push($(this).attr("userid"));
-				$("#addresslist_sendmessage_confirm_recipients").append("<li>" + cells.eq(1).html() + " " + cells.eq(2).html() + "</li>");
-			}
-		});
-
-		if (recipients.length)
-		{
-			document.getElementById("addresslist_sendmessage_recipients").value = recipients.join(",");
-			$("#addresslist_sendmessage_confirm_text1").html("Soll die Nachricht jetzt an die folgenden " + recipients.length + " Emp&auml;nger gesendet werden?");
-
-			var attachments = 0;
-			$("#addresslist_sendmessage_confirm_attachments").html("");
-			$(".addresslist_sendmessage_attachments_file").each(function ()
-			{
-				if ($(this)[0].files.length)
-				{
-					attachments++;
-					$("#addresslist_sendmessage_confirm_attachments").append("<li>" + $(this)[0].files[0].name + "</li>");
-				}
-			});
-			attachments ? $("#addresslist_sendmessage_confirm_text2").show() : $("#addresslist_sendmessage_confirm_text2").hide();
-
-			$("#addresslist_sendmessage_confirm").dialog("open");
-		}
-		else
-		{
-			alert(unescape("Kein Emp%E4nger ausgew%E4hlt!"));
-		}
-	}
-</script>

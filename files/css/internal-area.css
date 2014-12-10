@@ -2,8 +2,14 @@
  * Address List
  */
 
-#addresslist_groups, #addresslist_sendmessage_attachments, #addresslist_table
+#addresslist_sendmessage_confirm
 {
+	display: none;
+}
+
+#addresslist_table
+{
+	margin-top: 20px;
 	margin-bottom: 20px;
 }
 

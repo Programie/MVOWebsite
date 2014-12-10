@@ -69,8 +69,10 @@ switch (Constants::$pagePath[1])
 			"jstree",
 			"fullcalendar",
 			"dropzone",
+			"mustache",
 			"google-analytics",
-			"general"
+			"general",
+			"internal-area"
 		);
 
 		foreach ($files as $file)
