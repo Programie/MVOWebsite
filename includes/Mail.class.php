@@ -116,7 +116,7 @@ class Mail
 		$this->addReplacement("baseUrl", BASE_URL);
 		$this->addReplacement("webmasterEmail", WEBMASTER_EMAIL);
 
-		$body = @file_get_contents(ROOT_PATH . "/includes/mails/" . $this->templateName . ".html");
+		$body = @file_get_contents(ROOT_PATH . "/includes/templates/mails/" . $this->templateName . ".html");
 
 		if (!$body)
 		{
