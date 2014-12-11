@@ -1,0 +1,27 @@
+<div class="message-container" data-messageid="{{id}}">
+	<div class="message-header">
+		<img class="message-header-avatar" src="{{avatarUrl}}"/>
+		<div class="message-header-container">
+			<div><b>Erstellt von:</b> {{firstName}} {{lastName}} [{{email}}]</div>
+			<div><b>Zeit:</b> {{date}}</div>
+			<div><b>Gesendet an:</b>
+				{{#recipients}}
+					<span>{{firstName}} {{lastName}}</span>
+				{{/recipients}}
+			</div>
+		</div>
+	</div>
+
+	<div class="message-text">{{text}}</div>
+
+	{{#attachments.0}}
+		<div class="message-attachments">
+			<b>Anh&auml;nge</b>
+			<ul>
+				{{#attachments}}
+					<li><a href="/uploads/{{id}}/{{name}}/{{title}}">{{title}}</a></li>
+				{{/attachments}}
+			</ul>
+		</div>
+	{{/attachments.0}}
+</div>

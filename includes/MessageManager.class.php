@@ -6,27 +6,26 @@ class MessageManager
 		if (Constants::$accountManager->hasPermission("messages.delete"))
 		{
 			echo "
-				<div id='messages_hide'>
+				<div id='message-hide'>
 					<p>Soll die ausgew&auml;hlte Nachricht wirklich ausgeblendet werden?</p>
 					
-					<div id='messages_hide_info'></div>
+					<div id='messages-hide-info'></div>
 					
 					<p><b>Hinweis:</b> Die Nachricht kann nur &uuml;ber die Datenbank wiederhergestellt werden!</p>
 					
-					<form id='messages_hide_form' method='post' onsubmit='return false'>
-						<input type='hidden' id='messages_hide_sendtoken' name='messages_hide_sendtoken' value='" . TokenManager::getSendToken("messages_hide", true) . "'/>
-						<input type='hidden' id='messages_hide_id' name='messages_hide_id'/>
+					<form id='message-hide-form' method='post' onsubmit='return false'>
+						<input type='hidden' id='message-hide-id' name='hideMessageId'/>
 					</form>
 				</div>
 				
-				<div id='messages_edit_contextmenu'>
+				<div id='message-edit-contextmenu'>
 					<ul>
-						<li id='messages_edit_contextmenu_hide'><img src='/files/images/contextmenu/trash.png'/> Ausblenden</li>
+						<li id='message-edit-contextmenu-hide'><img src='/files/images/contextmenu/trash.png'/> Ausblenden</li>
 					</ul>
 				</div>
 				
 				<script type='text/javascript'>
-					$('#messages_hide').dialog(
+					$('#message-hide').dialog(
 					{
 						autoOpen : false,
 						closeText : 'Schlie&szlig;en',
@@ -38,7 +37,7 @@ class MessageManager
 						{
 							'OK' : function()
 							{
-								$('#messages_hide_form')[0].submit();
+								$('#message-hide-form')[0].submit();
 							},
 							'Abbrechen' : function()
 							{
@@ -47,15 +46,15 @@ class MessageManager
 						}
 					});
 					
-					$('.messages_container').contextMenu('messages_edit_contextmenu',
+					$('.message-container').contextMenu('message-edit-contextmenu',
 					{
 						bindings :
 						{
-							messages_edit_contextmenu_hide : function(trigger)
+							'message-edit-contextmenu-hide' : function(trigger)
 							{
-								$('#messages_hide_info').html($(trigger).find('.messages_header_container').html());
-								$('#messages_hide_id').val($(trigger).attr('msgid'));
-								$('#messages_hide').dialog('open');
+								$('#message-hide-info').html($(trigger).find('.message-header-container').html());
+								$('#message-hide-id').val($(trigger).data('messageid'));
+								$('#message-hide').dialog('open');
 							}
 						}
 					});
@@ -68,84 +67,78 @@ class MessageManager
 	{
 		if (Constants::$accountManager->hasPermission("messages.delete"))
 		{
-			if ($_POST["messages_hide_id"])
+			if ($_POST["hideMessageId"])
 			{
-				if ($_POST["messages_hide_sendtoken"] == TokenManager::getSendToken("messages_hide"))
-				{
-					$query = Constants::$pdo->prepare("UPDATE `messages` SET `enabled` = '0' WHERE `id` = :id");
-					$query->execute(array(":id" => $_POST["messages_hide_id"]));
-					echo "<div class='alert-success'>Die &Auml;nderungen wurden erfolgreich gespeichert.</div>";
-				}
-				else
-				{
-					echo "<div class='alert-error'>Es wurde versucht, die &Auml;nderungen erneut zu &uuml;bernehmen!</div>";
-				}
+				$query = Constants::$pdo->prepare("UPDATE `messages` SET `enabled` = '0' WHERE `id` = :id");
+				$query->execute(array
+				(
+					":id" => $_POST["hideMessageId"]
+				));
+
+				echo "<div class='alert-success'>Die Nachricht wurde erfolgreich ausgeblendet.</div>";
 			}
 		}
 	}
 
-	public function showMessage($id)
+	public function showMessage($id = null)
 	{
-		$uploadedFileQuery = Constants::$pdo->prepare("SELECT `name`, `title` FROM `uploads` WHERE `id` = :id");
-		$userGroupsQuery = Constants::$pdo->prepare("SELECT `title` FROM `usergroups` WHERE `name` = :name");
-		$userQuery = Constants::$pdo->prepare("SELECT `id`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
+		$messageTargetQuery = Constants::$pdo->prepare("
+			SELECT `users`.`id`, `firstName`, `lastName`
+			FROM `messagetargets`
+			LEFT JOIN `users` ON `users`.`id` = `messagetargets`.`userId`
+			WHERE `messageId` = :messageId
+		");
 
-		$sql = array();
+		$attachmentsQuery = Constants::$pdo->prepare("
+			SELECT `uploads`.`id`, `name`, `title`
+			FROM `messagefiles`
+			LEFT JOIN `uploads` ON `uploads`.`id` = `messagefiles`.`fileId`
+			WHERE `messageId` = :messageId
+		");
 
-		$sql[] = "SELECT `messages`.`id`, `messages`.`date`, `messages`.`validTill`, `messages`.`targetGroups`, `messages`.`text`, `messages`.`attachedFiles`, `users`.`id` AS `userId`, `users`.`firstName`, `users`.`lastName`, `users`.`email` FROM `messages`";
-		$sql[] = "LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`";
-		$sql[] = "WHERE `messages`.`enabled`";
-		if ($id == null or $id == -1)
-		{
-			$sql[] = "AND (`validTill` IS NULL OR `validTill` >= CURDATE()) ORDER BY `messages`.`id` DESC";
-			$query = Constants::$pdo->query(implode(" ", $sql));
-		}
-		else
-		{
-			$sql[] = "AND `messages`.`id` = :id";
-			$query = Constants::$pdo->prepare(implode(" ", $sql));
-			$query->execute(array(":id" => $id));
-		}
+		$query = Constants::$pdo->prepare("
+			SELECT
+				`messages`.`id`,
+				`messages`.`date`,
+				`messages`.`text`,
+				`users`.`id` AS `userId`,
+				`users`.`firstName`,
+				`users`.`lastName`,
+				`users`.`email`
+			FROM `messages`
+			LEFT JOIN `users` ON `users`.`id` = `messages`.`userId`
+			WHERE
+				`messages`.`enabled` AND
+				(:id IS NULL OR :id = -1 OR `messages`.`id` = :id)
+			ORDER BY `messages`.`id` DESC
+		");
 
-		$messageCount = 0;
-		$expired = false;
+		$query->execute(array
+		(
+			":id" => $id
+		));
+
+		$mustache = new Mustache_Engine;
+
+		$found = false;
 
 		while ($row = $query->fetch())
 		{
-			if ($id > 0 and strtotime($row->validTill . " 23:59:59") < time())
-			{
-				$expired = true;
-				break;
-			}
-
-			$targetGroups = explode(",", $row->targetGroups);
-			$attachedFiles = explode(",", $row->attachedFiles);
+			$messageTargetQuery->execute(array
+			(
+				":messageId" => $row->id
+			));
 
 			$allowed = false;
 
-			if ($row->userId == Constants::$accountManager->getUserId())
+			while ($targetRow = $messageTargetQuery->fetch())
 			{
-				$allowed = true;
-			}
-
-			if (!$allowed)
-			{
-				foreach ($targetGroups as $groupName)
+				if ($targetRow->id == Constants::$accountManager->getUserId())
 				{
-					if (substr($groupName, 0, 4) == "uid:")
-					{
-						if (substr($groupName, 4) == Constants::$accountManager->getUserId())
-						{
-							$allowed = true;
-							break;
-						}
-					}
+					$allowed = true;
 				}
-			}
 
-			if (!$allowed and Constants::$accountManager->hasPermissionInArray($targetGroups, "messages.view"))
-			{
-				$allowed = true;
+				$row->recipients[] = $targetRow;
 			}
 
 			if (!$allowed)
@@ -153,117 +146,36 @@ class MessageManager
 				continue;
 			}
 
-			$targets = array();
-			foreach ($targetGroups as $groupName)
-			{
-				if (substr($groupName, 0, 4) == "uid:")
-				{
-					$userQuery->execute(array(":id" => substr($groupName, 4)));
-					$userRow = $userQuery->fetch();
-					if ($userRow->id)
-					{
-						$targets[] = escapeText($userRow->firstName) . " " . escapeText($userRow->lastName);
-					}
-				}
-				else
-				{
-					$userGroupsQuery->execute(array(":name" => $groupName));
-					$userGroupsRow = $userGroupsQuery->fetch();
-					$targets[] = $userGroupsRow->title ? escapeText($userGroupsRow->title) : $groupName;
-				}
-			}
+			$attachmentsQuery->execute(array
+			(
+				":messageId" => $row->id
+			));
 
-			echo "<div class='messages_container' msgid='" . $row->id . "'>";
-			$headerContainerAttributes = "";
-			if ($id == null) // Only show link for single message in multi message view
-			{
-				$headerContainerAttributes = "title='Klicken um nur diese Nachricht anzuzeigen'";
-				echo "<a href='/internalarea/messages/" . $row->id . "' class='messages_header'>";
-			}
+			$row->attachments = $attachmentsQuery->fetchAll();
+
 			if (file_exists(ROOT_PATH . "/files/profilepictures/" . $row->userId . ".jpg"))
 			{
-				$avatarPath = "/getprofilepicture/" . $row->userId . "/" . md5_file(ROOT_PATH . "/files/profilepictures/" . $row->userId . ".jpg");
+				$row->avatarUrl = "/getprofilepicture/" . $row->userId . "/" . md5_file(ROOT_PATH . "/files/profilepictures/" . $row->userId . ".jpg");
 			}
 			else
 			{
-				$avatarPath = "/getprofilepicture/default/" . md5_file(ROOT_PATH . "/files/profilepictures/default.png");
+				$row->avatarUrl = "/getprofilepicture/default/" . md5_file(ROOT_PATH . "/files/profilepictures/default.png");
 			}
-			echo "
-				<div class='messages_header' " . $headerContainerAttributes . ">
-					<img class='messages_header_avatar' src='" . $avatarPath . "'/>
-					<div class='messages_header_container'>
-						<div><b>Erstellt von:</b> " . escapeText($row->firstName) . " " . escapeText($row->lastName) . " [" . escapeText($row->email) . "]</div>
-						<div><b>Zeit:</b> " . date("d.m.Y H:i:s", strtotime($row->date)) . "</div>
-			";
-			if ($row->validTill)
-			{
-				echo "<div><b>G&uuml;ltig bis:</b> " . date("d.m.Y", strtotime($row->validTill)) . "</div>";
-			}
-			echo "
-						<div><b>Gesendet an:</b> " . implode(", ", $targets) . "</div>
-					</div>
-				</div>
-			";
-			if ($id == null) // Only show link for single message in multi message view
-			{
-				echo "</a>";
-			}
-			echo "<div class='messages_text'>" . formatText($row->text) . "</div>";
-			$firstFile = true;
-			foreach ($attachedFiles as $file)
-			{
-				if ($file)
-				{
-					$uploadedFileQuery->execute(array(":id" => $file));
-					$uploadedFileRow = $uploadedFileQuery->fetch();
-					if ($uploadedFileRow)
-					{
-						if ($firstFile)
-						{
-							$firstFile = false;
-							echo "
-								<div class='messages_attachments'>
-									<b>Anh&auml;nge:</b>
-									<ul>
-							";
-						}
-						echo "<li><a href='/uploads/" . $file . "/" . $uploadedFileRow->name . "'>" . escapeText($uploadedFileRow->title) . "</a></li>";
-					}
-				}
-			}
-			if (!$firstFile)
-			{
-				echo "
-						</ul>
-					</div>
-				";
-			}
-			echo "</div>";
 
-			$messageCount++;
+			echo $mustache->render(file_get_contents(__DIR__ . "/templates/message.html"), $row);
 
-			if ($messageCount == 1 and $id == -1)
+			$found = true;
+
+			// -1 means show only the last message
+			if ($id == -1)
 			{
 				break;
 			}
 		}
 
-		if (!$messageCount)
+		if (!$found)
 		{
-			if ($expired)
-			{
-				echo "<div class='alert-error'>Die G&uuml;ltigkeit der Nachricht ist abgelaufen!</div>";
-			}
-			else
-			{
-				echo "<div class='alert-error'>Keine Nachricht gefunden!</div>";
-			}
-
-			return false;
+			echo "<div class='alert-error'>Keine Nachrichten verf&uuml;gbar!</div>";
 		}
-
-		return true;
 	}
 }
-
-?>

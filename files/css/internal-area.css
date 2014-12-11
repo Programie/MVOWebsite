@@ -2,7 +2,7 @@
  * Address List
  */
 
-#addresslist_sendmessage_confirm
+#addresslist_writemessage_error, #addresslist_writemessage_success, #addresslist_sendmessage_confirm
 {
 	display: none;
 }
@@ -86,13 +86,13 @@
  * Messages
  */
 
-.messages_attachments
+.message-attachments
 {
 	padding: 10px;
 	border-top: 1px solid #aaa;
 }
 
-.messages_container
+.message-container
 {
 	margin-top: 20px;
 	border: 1px solid #aaa;
@@ -100,18 +100,13 @@
 	transition: box-shadow 1s;
 }
 
-.messages_container:hover
+.message-container:hover
 {
 	background-color: rgba(255, 255, 255, 0.5);
 	box-shadow: 1px 1px 20px #000;
 }
 
-a.messages_header
-{
-	text-decoration: none;
-}
-
-div.messages_header
+div.message-header
 {
 	padding: 10px;
 	border-bottom: 1px solid #aaa;
@@ -121,7 +116,7 @@ div.messages_header
 	min-height: 100px;
 }
 
-.messages_header_avatar
+.message-header-avatar
 {
 	height: 100px;
 	float: left;
@@ -129,17 +124,17 @@ div.messages_header
 	box-shadow: 0 0 10px #000;
 }
 
-.messages_header_container
+.message-header-container
 {
 	margin-left: 110px;
 }
 
-.messages_text
+.message-text
 {
 	padding: 10px;
 }
 
-#messages_edit_contextmenu, #messages_hide
+#message-edit-contextmenu, #message-hide
 {
 	display: none;
 }

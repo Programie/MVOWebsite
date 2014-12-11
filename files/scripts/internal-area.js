@@ -66,7 +66,7 @@ $(function()
 			var cells = $(this).find("td");
 			if ($(this).find(":checkbox").is(":checked"))
 			{
-				recipients.push($(this).attr("userid"));
+				recipients.push($(this).data("userid"));
 				$("#addresslist_sendmessage_confirm_recipients").append("<li>" + cells.eq(1).html() + " " + cells.eq(2).html() + "</li>");
 			}
 		});
@@ -77,7 +77,7 @@ $(function()
 			return;
 		}
 
-		$("#addresslist_sendmessage_recipients").text(recipients.join(","));
+		$("#addresslist_sendmessage_recipients").val(recipients.join(","));
 		$("#addresslist_sendmessage_confirm_text1").text("Soll die Nachricht jetzt an die folgenden " + recipients.length + " Emp\u00e4nger gesendet werden?");
 
 
@@ -124,10 +124,13 @@ function addAttachmentFieldToAddresslistSendMessage()
 {
 	var element = $("<input>");
 	element.attr("type", "file");
+	element.attr("name", "files[]");
 	element.addClass("addresslist_sendmessage_attachments_file");
 	element.attr("id", "addresslist_sendmessage_attachments_file_" + addresslistSendMessageAttachmentFile);
 
 	$("#addresslist_sendmessage_attachments").append(element);
+
+	addresslistSendMessageAttachmentFile++;
 }
 
 function checkAddressListSendMessageAttachmentFields()
@@ -188,6 +191,14 @@ function updateAddressListCheckAllState()
 			checkAllCheckbox.prop("checked", false);
 		}
 	}
+}
+
+function setAddressListSelection(userIds)
+{
+	$(".addresslist-row").each(function()
+	{
+		$(this).find(":checkbox").prop("checked", userIds.indexOf($(this).data("userid")) != -1);
+	});
 }
 
 function updateAddressList()

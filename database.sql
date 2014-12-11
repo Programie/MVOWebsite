@@ -82,19 +82,36 @@ CREATE TABLE `locations` (
   UNIQUE KEY `UNIQUENAME` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE `messagefiles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `messageId` int(11) NOT NULL,
+  `fileId` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `message_file` (`messageId`,`fileId`),
+  CONSTRAINT `messagefiles_ibfk_1` FOREIGN KEY (`messageId`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date` datetime NOT NULL,
-  `validTill` date DEFAULT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `targetGroups` text CHARACTER SET latin1 NOT NULL,
   `userId` int(11) NOT NULL,
   `text` text CHARACTER SET latin1 NOT NULL,
-  `attachedFiles` text CHARACTER SET latin1 NOT NULL,
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`),
-  CONSTRAINT `messages_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`)
+  CONSTRAINT `messages_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `messagetargets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `messageId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `messageId` (`messageId`),
+  KEY `userId` (`userId`),
+  CONSTRAINT `messagetargets_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `messagetargets_ibfk_1` FOREIGN KEY (`messageId`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `musiciangroups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
