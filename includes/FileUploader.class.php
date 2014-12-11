@@ -7,6 +7,9 @@
  */
 class FileUploader
 {
+	/**
+	 * @var array
+	 */
 	private $files;
 
 	public function __construct()
@@ -30,26 +33,26 @@ class FileUploader
 
 				foreach ($files as $file)
 				{
-					$fileId = $this->processFile($file);
+					$fileData = $this->processFile($file);
 
-					if ($fileId === null or $fileId === false)
+					if ($fileData === null)
 					{
 						continue;
 					}
 
-					$this->files[] = $fileId;
+					$this->files[] = $fileData;
 				}
 			}
 			else
 			{
-				$fileId = $this->processFile($fileField);
+				$fileData = $this->processFile($fileField);
 
-				if ($fileId === null or $fileId === false)
+				if ($fileData === null)
 				{
 					continue;
 				}
 
-				$this->files[] = $fileId;
+				$this->files[] = $fileData;
 			}
 		}
 	}
@@ -59,7 +62,7 @@ class FileUploader
 	 *
 	 * @param array $file The element from the $_FILES array
 	 * @throws Exception if an error occurred
-	 * @return null|int the ID of the uploaded file or null if there is no file
+	 * @return null|StdClass A map containing the ID, filename and title or null if there is no file
 	 */
 	private function processFile($file)
 	{
@@ -81,6 +84,8 @@ class FileUploader
 			throw new Exception("Unable to move uploaded file");
 		}
 
+		$title = basename($file["name"]);
+
 		$query = Constants::$pdo->prepare("
 			INSERT INTO `uploads`
 			SET
@@ -91,17 +96,25 @@ class FileUploader
 		$query->execute(array
 		(
 			":name" => $filename,
-			":title" => basename($file["name"])
+			":title" => $title
 		));
 
-		return (int) Constants::$pdo->lastInsertId();
+		$data = new StdClass;
+
+		$data->id = (int) Constants::$pdo->lastInsertId();
+		$data->name = $filename;
+		$data->title = $title;
+
+		return $data;
 	}
 
 	/**
-	 * Get the list of IDs of successfully uploaded files
+	 * Get a list of successfully uploaded files.
+	 * Each array element is a map containing the ID, filename and title of the file.
+	 *
 	 * @return array
 	 */
-	public function getFileIds()
+	public function getFiles()
 	{
 		return $this->files;
 	}

@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		try
 		{
 			$fileUploader = new FileUploader();
-			$attachedFiles = $fileUploader->getFileIds();
+			$attachedFiles = $fileUploader->getFiles();
 
 			$query = Constants::$pdo->prepare("
 				INSERT INTO `messages`
@@ -77,13 +77,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 					`fileId` = :fileId
 			");
 
-			foreach ($attachedFiles as $fileId)
+			foreach ($attachedFiles as $file)
 			{
 				$query->execute(array
 				(
 					":messageId" => $messageId,
-					":fileId" => $fileId
+					":fileId" => $file->id
 				));
+			}
+
+			$userData = Constants::$accountManager->getUserData();
+
+			$userAddress = array($userData->email => $userData->firstName . " " . $userData->lastName);
+
+			$mail = new Mail("Neue Nachricht im Internen Bereich", array
+			(
+				"firstName" => $userData->firstName,
+				"lastName" => $userData->lastName,
+				"content" => $_POST["text"],
+				"attachments" => $attachedFiles
+			));
+			$mail->setTemplate("message");
+			$mail->setTo($mailRecipients);
+
+			if ($_POST["sendCopy"])
+			{
+				$mail->setCc($userAddress);
+			}
+
+			$mail->setReplyTo($userAddress);
+
+			if (!$mail->send())
+			{
+				throw new Exception("Unable to send mail");
 			}
 
 			$error = null;
