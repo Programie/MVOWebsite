@@ -179,11 +179,6 @@
 			{
 				"title" : "Besucherstatistik",
 				"permissions" : "visitstats"
-			},
-			"writemessage" :
-			{
-				"title" : "Nachricht verfassen",
-				"permissions" : "messages.write"
 			}
 		}
 	},
