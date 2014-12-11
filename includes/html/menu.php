@@ -90,5 +90,5 @@ foreach ($navbarData->menus as &$menu)
 	}
 }
 
-echo $mustache->render(file_get_contents(__DIR__ . "/menu.html"), $navbarData);
+echo $mustache->render(file_get_contents(__DIR__ . "/../templates/menu.html"), $navbarData);
 ?>
