@@ -32,7 +32,7 @@ $(function()
 			$("#addresslist_groupbox").html(Mustache.render($("#addresslist_groupbox_template").html(), data.groups));
 			$("#addresslist_tbody").html(Mustache.render($("#addresslist_tbody_template").html(), data.users));
 
-			$("#addresslist_table").tablesorter();
+			$("#addresslist_table").trigger("update");
 
 			updateAddressList();
 		}, url : "?json"
