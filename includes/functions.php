@@ -31,11 +31,27 @@ function formatText($text)
 {
 	$text = escapeText($text);
 
-	$find = array("@\n@", "@[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]@is", "@[^<>\\\/[:space:]]+\@[^<>\\\/[:space:]]+@is", "/\[b\](.+?)\[\/b\]/is", "/\[hl\](.+?)\[\/hl\]/is", "/\[i\](.+?)\[\/i\]/is", "/\[u\](.+?)\[\/u\]/is");
+	$patternReplacementList = array
+	(
+		"@\n@" => "<br/>",
+		"@[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]@is" => "<a href='\\0' target='_blank'>\\0</a>",
+		"@[^<>\\\/[:space:]]+\@[^<>\\\/[:space:]]+@is" => "<a href='mailto:\\0' target='_blank'>\\0</a>",
+		"/\[b\](.+?)\[\/b\]/is" => "<b>$1</b>",
+		"/\[hl\](.+?)\[\/hl\]/is" =>  "<span class='highlight'>$1</span>",
+		"/\[i\](.+?)\[\/i\]/is" => "<i>$1</i>",
+		"/\[u\](.+?)\[\/u\]/is" => "<span style='text-decoration: underline;'>$1</span>"
+	);
 
-	$replace = array("<br />", "<a href='\\0' target='_blank'>\\0</a>", "<a href='mailto:\\0' target='_blank'>\\0</a>", "<b>$1</b>", "<span class='highlight'>$1</span>", "<i>$1</i>", "<span style='text-decoration: underline;'>$1</span>", "<em>$1</em>");
+	$patternList = array();
+	$replacementList = array();
 
-	$text = preg_replace($find, $replace, $text);
+	foreach ($patternReplacementList as $pattern => $replacement)
+	{
+		$patternList[] = $pattern;
+		$replacementList[] = $replacement;
+	}
+
+	$text = preg_replace($patternList, $replacementList, $text);
 
 	return $text;
 }
