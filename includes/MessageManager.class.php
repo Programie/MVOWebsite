@@ -211,6 +211,8 @@ class MessageManager
 				$row->avatarUrl = "/getprofilepicture/default/" . md5_file(ROOT_PATH . "/files/profilepictures/default.jpg");
 			}
 
+			$row->text = formatText($row->text);
+
 			echo $mustache->render(file_get_contents(__DIR__ . "/templates/message.html"), $row);
 
 			$found = true;

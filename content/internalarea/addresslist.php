@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 			(
 				"firstName" => $userData->firstName,
 				"lastName" => $userData->lastName,
-				"content" => $_POST["text"],
+				"content" => formatText($_POST["text"]),
 				"attachments" => $attachedFiles
 			));
 			$mail->setTemplate("message");
