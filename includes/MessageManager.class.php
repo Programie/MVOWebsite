@@ -131,6 +131,11 @@ class MessageManager
 
 			$allowed = false;
 
+			if (Constants::$accountManager->hasPermission("messages.view.all"))
+			{
+				$allowed = true;
+			}
+
 			// The user is the sending user -> Allow to see the message
 			if ($row->userId == Constants::$accountManager->getUserId())
 			{
