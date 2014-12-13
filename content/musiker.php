@@ -38,7 +38,7 @@ foreach ($groups as $groupRow)
 				}
 				else
 				{
-					$avatarPath = "/getprofilepicture/default/" . md5_file(ROOT_PATH . "/files/profilepictures/default.png");
+					$avatarPath = "/getprofilepicture/default/" . md5_file(ROOT_PATH . "/files/profilepictures/default.jpg");
 				}
 				echo "
 					<li>
