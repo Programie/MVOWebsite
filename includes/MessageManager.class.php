@@ -131,10 +131,17 @@ class MessageManager
 
 			$allowed = false;
 
+			// The user is the sending user -> Allow to see the message
+			if ($row->userId == Constants::$accountManager->getUserId())
+			{
+				$allowed = true;
+			}
+
 			$recipients = array();
 
 			while ($targetRow = $messageTargetQuery->fetch())
 			{
+				// The user is the receiving user -> Allow to see the message
 				if ($targetRow->id == Constants::$accountManager->getUserId())
 				{
 					$allowed = true;
