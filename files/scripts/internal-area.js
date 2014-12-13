@@ -43,6 +43,8 @@ $(function()
 		$(".addresslist-row").find(":visible :checkbox").prop("checked", this.checked);
 	});
 
+	$("#addresslist_table").bind("sortEnd", updateAddressList);
+
 	$("#addresslist_tbody").on("change", ".addresslist-row :checkbox", updateAddressListCheckAllState);
 
 	$("#addresslist_groupbox_checkall").on("change", function()
