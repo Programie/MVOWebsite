@@ -45,7 +45,13 @@ $(function()
 
 	$("#addresslist_tbody").on("change", ".addresslist-row :checkbox", updateAddressListCheckAllState);
 
-	$("#addresslist_groupbox").on("change", ":checkbox", updateAddressList);
+	$("#addresslist_groupbox_checkall").on("change", function()
+	{
+		$("#addresslist_groupbox").find(":checkbox").prop("checked", this.checked);
+		updateAddressList();
+	});
+
+	$("#addresslist_groupbox").on("change", ":checkbox", updateAddressListGroupBoxSelection);
 
 	$("#addresslist_sendmessage").find("form").submit(function(event)
 	{
@@ -159,6 +165,46 @@ function checkAddressListSendMessageAttachmentFields()
 	{
 		addAttachmentFieldToAddresslistSendMessage();
 	}
+}
+
+function updateAddressListGroupBoxSelection()
+{
+	var checkAllCheckbox = $("#addresslist_groupbox_checkall");
+
+	var checked = 0;
+	var unchecked = 0;
+
+	$("#addresslist_groupbox").find(":checkbox").each(function()
+	{
+		if (this.checked)
+		{
+			checked++;
+		}
+		else
+		{
+			unchecked++;
+		}
+	});
+
+	if (checked && unchecked)
+	{
+		checkAllCheckbox.prop("indeterminate", true);
+	}
+	else
+	{
+		checkAllCheckbox.prop("indeterminate", false);
+
+		if (checked && !unchecked)
+		{
+			checkAllCheckbox.prop("checked", true);
+		}
+		else
+		{
+			checkAllCheckbox.prop("checked", false);
+		}
+	}
+
+	updateAddressList();
 }
 
 function updateAddressListCheckAllState()

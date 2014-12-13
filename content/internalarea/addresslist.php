@@ -175,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 <div class="alert-success" id="addresslist_writemessage_success">Die Nachricht wurde erfolgreich gesendet.</div>
 
 <fieldset>
-	<legend>Gruppen</legend>
+	<legend><input type="checkbox" id="addresslist_groupbox_checkall" checked/><label for="addresslist_groupbox_checkall">Gruppen</label></legend>
 	<div id="addresslist_groupbox"></div>
 </fieldset>
 
