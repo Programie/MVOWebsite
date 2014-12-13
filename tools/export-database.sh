@@ -3,7 +3,6 @@
 set -e
 
 TOOLSPATH=$(dirname $0)
-ROOTPATH="$TOOLSPATH/.."
 
 function require()
 {
@@ -54,4 +53,4 @@ echo "Using username '${USERNAME}'"
 
 echo "Getting dump..."
 
-mysqldump ${PARAMETERS[@]} -u ${USERNAME} -p${PASSWORD} --no-data --skip-lock-tables --skip-add-drop-table ${DATABASE} | grep -ve '^\/\*' | grep -ve '^--' | sed -E 's/AUTO_INCREMENT=[0-9]+([ ]+)?//' | cat -s | sed ':a;N;$!ba;s/^\n\+//g' | sed ':a;N;$!ba;s/\n\+$//g' | tee ${ROOTPATH}/database.sql | grep "CREATE TABLE" -c | sed -E 's/([0-9]+)/Exported \1 tables/g'
+mysqldump ${PARAMETERS[@]} -u ${USERNAME} -p${PASSWORD} --no-data --skip-lock-tables --skip-add-drop-table ${DATABASE} | grep -ve '^\/\*' | grep -ve '^--' | sed -E 's/AUTO_INCREMENT=[0-9]+([ ]+)?//' | cat -s | sed ':a;N;$!ba;s/^\n\+//g' | sed ':a;N;$!ba;s/\n\+$//g' | tee ${TOOLSPATH}/database.sql | grep "CREATE TABLE" -c | sed -E 's/([0-9]+)/Exported \1 tables/g'
