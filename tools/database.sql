@@ -89,7 +89,7 @@ CREATE TABLE `messagefiles` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `message_file` (`messageId`,`fileId`),
   CONSTRAINT `messagefiles_ibfk_1` FOREIGN KEY (`messageId`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -109,9 +109,9 @@ CREATE TABLE `messagetargets` (
   PRIMARY KEY (`id`),
   KEY `messageId` (`messageId`),
   KEY `userId` (`userId`),
-  CONSTRAINT `messagetargets_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `messagetargets_ibfk_1` FOREIGN KEY (`messageId`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  CONSTRAINT `messagetargets_ibfk_1` FOREIGN KEY (`messageId`) REFERENCES `messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `messagetargets_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `musiciangroups` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
