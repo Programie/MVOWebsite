@@ -216,6 +216,8 @@ class MessageManager
 				$row->avatarUrl = "/getprofilepicture/default/" . md5_file(ROOT_PATH . "/files/profilepictures/default.jpg");
 			}
 
+			$row->date = date("d.m.Y H:i:s", strtotime($row->date));
+
 			$row->text = formatText($row->text);
 
 			echo $mustache->render(file_get_contents(__DIR__ . "/templates/message.html"), $row);
