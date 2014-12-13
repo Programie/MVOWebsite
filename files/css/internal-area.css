@@ -139,6 +139,17 @@ div.message-header
 	display: none;
 }
 
+.message-recipients-showall
+{
+	color: #a00000;
+	cursor: pointer;
+}
+
+.message-recipients-showall:hover
+{
+	color: #000;
+}
+
 .message-text
 {
 	padding: 10px;

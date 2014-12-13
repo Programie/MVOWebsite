@@ -190,8 +190,8 @@ class MessageManager
 			// TODO: Find a better way instead usage of implode()
 			$row->recipients = array
 			(
-				"limited" => implode(", ", array_slice($recipients, 0, 10)) . (empty($hiddenRecipients) ? "" : ","),
-				"hidden" => implode(", ", $hiddenRecipients),
+				"limited" => implode(", ", array_slice($recipients, 0, 10)),
+				"hidden" => (empty($hiddenRecipients) ? "" : ", ") . implode(", ", $hiddenRecipients),
 				"hiddenCount" => count($hiddenRecipients)
 			);
 
