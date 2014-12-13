@@ -131,6 +131,8 @@ class MessageManager
 
 			$allowed = false;
 
+			$recipients = array();
+
 			while ($targetRow = $messageTargetQuery->fetch())
 			{
 				if ($targetRow->id == Constants::$accountManager->getUserId())
@@ -138,13 +140,53 @@ class MessageManager
 					$allowed = true;
 				}
 
-				$row->recipients[] = $targetRow;
+				$recipients[] = $targetRow;
 			}
 
 			if (!$allowed)
 			{
 				continue;
 			}
+
+			usort($recipients, function($item1, $item2)
+			{
+				if ($item1->lastName > $item2->lastName)
+				{
+					return 1;
+				}
+
+				if ($item1->lastName < $item2->lastName)
+				{
+					return -1;
+				}
+
+				if ($item1->firstName > $item2->firstName)
+				{
+					return 1;
+				}
+
+				if ($item1->firstName < $item2->firstName)
+				{
+					return -1;
+				}
+
+				return 0;
+			});
+
+			foreach ($recipients as &$recipient)
+			{
+				$recipient = $recipient->firstName . " " . $recipient->lastName;
+			}
+
+			$hiddenRecipients = array_slice($recipients, 10);
+
+			// TODO: Find a better way instead usage of implode()
+			$row->recipients = array
+			(
+				"limited" => implode(", ", array_slice($recipients, 0, 10)) . (empty($hiddenRecipients) ? "" : ","),
+				"hidden" => implode(", ", $hiddenRecipients),
+				"hiddenCount" => count($hiddenRecipients)
+			);
 
 			$attachmentsQuery->execute(array
 			(

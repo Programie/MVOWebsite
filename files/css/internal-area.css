@@ -129,6 +129,16 @@ div.message-header
 	margin-left: 110px;
 }
 
+.message-recipients
+{
+	display: inline;
+}
+
+.message-recipient-hidden
+{
+	display: none;
+}
+
 .message-text
 {
 	padding: 10px;

@@ -118,6 +118,12 @@ $(function()
 	$("#addresslist_sendmessage_attachments").on("change", ".addresslist_sendmessage_attachments_file", checkAddressListSendMessageAttachmentFields);
 
 	checkAddressListSendMessageAttachmentFields();
+
+	$(".message-recipients-showall").on("click", function()
+	{
+		var siblings = $(this).siblings(".message-recipient-hidden").show();
+		$(this).hide();
+	});
 });
 
 function addAttachmentFieldToAddresslistSendMessage()

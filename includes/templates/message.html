@@ -5,9 +5,17 @@
 			<div><b>Erstellt von:</b> {{firstName}} {{lastName}} [{{email}}]</div>
 			<div><b>Zeit:</b> {{date}}</div>
 			<div><b>Gesendet an:</b>
-				{{#recipients}}
-					<span>{{firstName}} {{lastName}}</span>
-				{{/recipients}}
+				<div class="message-recipients">
+					{{#recipients.limited}}
+						<span class="message-recipient-limited">{{.}}</span>
+					{{/recipients.limited}}
+					{{#recipients.hidden}}
+						<span class="message-recipient-hidden">{{.}}</span>
+					{{/recipients.hidden}}
+					{{#recipients.hiddenCount}}
+						<a href="#" class="message-recipients-showall">und {{recipients.hiddenCount}} weitere</a>
+					{{/recipients.hiddenCount}}
+				</div>
 			</div>
 		</div>
 	</div>
