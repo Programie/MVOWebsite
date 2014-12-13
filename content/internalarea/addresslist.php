@@ -152,7 +152,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 <script type="text/html" id="addresslist_tbody_template">
 	{{#.}}
 		<tr class="addresslist-row {{#groups}}addresslist-group-{{.}} {{/groups}}" data-userid="{{id}}">
-			<td class="no-print"><input type="checkbox"/></td>
+			<td class="no-print">{{#email}}<input type="checkbox"/>{{/email}}</td>
 			<td>{{firstName}}</td>
 			<td>{{lastName}}</td>
 			<td><a href="mailto:{{email}}">{{email}}</a></td>
