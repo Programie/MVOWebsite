@@ -112,7 +112,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 				throw new Exception("Unable to send mail");
 			}
 
-			$error = null;
+			header("Location: " . BASE_URL . "/internalarea/messages/" . $messageId . "?sendinfo");
+			exit;
 		}
 		catch (Exception $exception)
 		{
@@ -124,20 +125,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		<script type='text/javascript'>
 			$(function()
 			{
-				// Server side injected error code
-				var error = " . json_encode($error) . ";
-				if (error)
-				{
-					$('#addresslist_writemessage_error_message').text(error);
-					$('#addresslist_writemessage_error').show();
+				$('#addresslist_writemessage_error_message').text(" . json_encode($error) . ");
+				$('#addresslist_writemessage_error').show();
 
-					setAddressListSelection(" . json_encode($targetUsers) . ");
-					$('#addresslist_sendmessage_text').val(" . json_encode($_POST["text"]) . ");
-				}
-				else
-				{
-					$('#addresslist_writemessage_success').show();
-				}
+				setAddressListSelection(" . json_encode($targetUsers) . ");
+				$('#addresslist_sendmessage_text').val(" . json_encode($_POST["text"]) . ");
 			});
 		</script>
 	";
@@ -171,8 +163,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	Die Nachricht konnte nicht gesendet werden! Bitte versuche es erneut oder wende dich an den <a href="mailto:<?php echo WEBMASTER_EMAIL;?>">Webmaster</a>.
 	<p>Fehler: <span id="addresslist_writemessage_error_message"></span></p>
 </div>
-
-<div class="alert-success" id="addresslist_writemessage_success">Die Nachricht wurde erfolgreich gesendet.</div>
 
 <fieldset>
 	<legend><input type="checkbox" id="addresslist_groupbox_checkall" checked/><label for="addresslist_groupbox_checkall">Gruppen</label></legend>
