@@ -25,59 +25,58 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 
 		if ($events[$_POST["events_upload_event"]])
 		{
-			if ($_POST["events_upload_sendtoken"] == TokenManager::getSendToken("events_upload"))
+			$file = $_FILES["events_upload_file"];
+			switch ($file["error"])
 			{
-				$file = $_FILES["events_upload_file"];
-				switch ($file["error"])
-				{
-					case UPLOAD_ERR_OK:
-						$fileName = md5_file($file["tmp_name"]);
-						if (move_uploaded_file($file["tmp_name"], UPLOAD_PATH . "/" . $fileName))
+				case UPLOAD_ERR_OK:
+					$fileName = md5_file($file["tmp_name"]);
+					if (move_uploaded_file($file["tmp_name"], UPLOAD_PATH . "/" . $fileName))
+					{
+						$query = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
+						$query->execute(array(":name" => $fileName, ":title" => $file["name"]));
+						$uploadId = Constants::$pdo->lastInsertId();
+
+						$query = Constants::$pdo->prepare("SELECT `id` FROM `eventtypes` WHERE `name` = :name");
+						$query->execute(array(":name" => $_POST["events_upload_event"]));
+						$row = $query->fetch();
+						$typeId = $row->id;
+
+						$year = $_POST["events_upload_year"];
+						if (!$year)
 						{
-							$query = Constants::$pdo->prepare("INSERT INTO `uploads` (`name`, `title`) VALUES(:name, :title)");
-							$query->execute(array(":name" => $fileName, ":title" => $file["name"]));
-							$uploadId = Constants::$pdo->lastInsertId();
-
-							$query = Constants::$pdo->prepare("SELECT `id` FROM `eventtypes` WHERE `name` = :name");
-							$query->execute(array(":name" => $_POST["events_upload_event"]));
-							$row = $query->fetch();
-							$typeId = $row->id;
-
-							$year = $_POST["events_upload_year"];
-							if (!$year)
-							{
-								$year = null;
-							}
-
-							$query = Constants::$pdo->prepare("INSERT INTO `events` (`typeId`, `year`, `userId`, `uploadId`) VALUES(:typeId, :year, :userId, :uploadId)");
-							$query->execute(array(":typeId" => $typeId, ":year" => $year, ":userId" => Constants::$accountManager->getUserId(), ":uploadId" => $uploadId));
-
-							echo "<div class='alert-success'>Die Datei wurde erfolgreich hochgeladen.</div>";
-
-							$error = "";
+							$year = null;
 						}
-						break;
-					case UPLOAD_ERR_INI_SIZE:
-					case UPLOAD_ERR_FORM_SIZE:
-						$error = "Die ausgew&auml;hlte Datei ist zu Gro&szlig;!";
-						break;
-					case UPLOAD_ERR_NO_FILE:
-						$error = "Es wurde keine Datei angegeben!";
-						break;
-				}
-			}
-			else
-			{
-				$error = "Es wurde versucht, das Formular erneut abzuschicken!";
+
+						$query = Constants::$pdo->prepare("INSERT INTO `events` (`typeId`, `year`, `userId`, `uploadId`) VALUES(:typeId, :year, :userId, :uploadId)");
+						$query->execute(array(":typeId" => $typeId, ":year" => $year, ":userId" => Constants::$accountManager->getUserId(), ":uploadId" => $uploadId));
+
+						echo "<div class='alert-success'>Die Datei wurde erfolgreich hochgeladen.</div>";
+
+						$error = "";
+					}
+					break;
+				case UPLOAD_ERR_INI_SIZE:
+				case UPLOAD_ERR_FORM_SIZE:
+					$error = "Die ausgew&auml;hlte Datei ist zu Gro&szlig;!";
+					break;
+				case UPLOAD_ERR_NO_FILE:
+					$error = "Es wurde keine Datei angegeben!";
+					break;
 			}
 		}
 		else
 		{
 			$error = "Du hast nicht die notwendigen Rechte um eine Datei von dieser Veranstaltung hochzuladen!";
 		}
+
 		if ($error)
 		{
 			echo "<div class='alert-error'>" . $error . "</div>";
+		}
+		else
+		{
+			header("Location: " . BASE_URL . "/" . implode("/", Constants::$pagePath));
+			exit;
 		}
 	}
 
@@ -129,8 +128,7 @@ if (Constants::$accountManager->hasPermission("events.upload"))
 				</div>
 				
 				<input type='hidden' id='events_upload_confirmed' name='events_upload_confirmed'/>
-				<input type='hidden' name='events_upload_sendtoken' value='" . TokenManager::getSendToken("events_upload", true) . "'/>
-				
+
 				<input type='submit' value='Hochladen'/>
 			</form>
 		</fieldset>
@@ -221,9 +219,9 @@ else
 	<p>Soll die ausgew&auml;hlte Datei nun hochgeladen werden?</p>
 
 	<p>
-		<p><b>Jahr:</b> <span id="events_upload_confirm_year"/></p>
+		<p><b>Jahr:</b> <span id="events_upload_confirm_year"></span></p>
 
-		<p><b>Veranstaltung:</b> <span id="events_upload_confirm_event"/></p>
+		<p><b>Veranstaltung:</b> <span id="events_upload_confirm_event"></span></p>
 	</p>
 </div>
 

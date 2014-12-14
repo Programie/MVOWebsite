@@ -194,7 +194,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
 		<input type="hidden" id="addresslist_sendmessage_sendcopy" name="sendCopy"/>
 		<input type="hidden" id="addresslist_sendmessage_recipients" name="recipients"/>
-		<input type="hidden" name="sendToken" value="<?php echo TokenManager::getSendToken("addresslist_sendmessage", true); ?>"/>
 		<input type="submit" value="Senden"/>
 	</form>
 </fieldset>

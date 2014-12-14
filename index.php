@@ -26,7 +26,6 @@ require_once ROOT_PATH . "/includes/Mail.class.php";
 require_once ROOT_PATH . "/includes/Dates.class.php";
 require_once ROOT_PATH . "/includes/Pictures.class.php";
 require_once ROOT_PATH . "/includes/AccountManager.class.php";
-require_once ROOT_PATH . "/includes/TokenManager.class.php";
 require_once ROOT_PATH . "/includes/MessageManager.class.php";
 require_once ROOT_PATH . "/includes/NoteDirectory.class.php";
 require_once ROOT_PATH . "/includes/DBSessionHandler.class.php";

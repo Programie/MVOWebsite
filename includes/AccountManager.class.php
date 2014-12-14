@@ -139,7 +139,7 @@ class AccountManager
 
 		if (!$token or $generateNew)
 		{
-			$token = TokenManager::generateToken();
+			$token = md5(time() . "-" . rand());
 			$query = Constants::$pdo->prepare("SELECT `id` FROM `users` WHERE `calendarToken` = :calendarToken AND `id` != :id");
 			$query->execute(array(":calendarToken" => $token, ":id" => $this->userId));
 			if ($query->rowCount())
