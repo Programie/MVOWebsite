@@ -7,117 +7,104 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 
 	$targetUsers = array();
 
-	if (isset($_POST["text"]) and $_POST["text"])
+	if (isset($_POST["text"]))
 	{
-		$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
-
-		foreach (explode(",", $_POST["recipients"]) as $userId)
+		$text = trim($_POST["text"]);
+		if ($text)
 		{
-			$userQuery->execute(array
-			(
-				":id" => $userId
-			));
+			$userQuery = Constants::$pdo->prepare("SELECT `email`, `firstName`, `lastName` FROM `users` WHERE `id` = :id");
 
-			if (!$userQuery->rowCount())
+			foreach (explode(",", $_POST["recipients"]) as $userId)
 			{
-				continue;
+				$userQuery->execute(array(":id" => $userId));
+
+				if (!$userQuery->rowCount())
+				{
+					continue;
+				}
+
+				$userRow = $userQuery->fetch();
+
+				$targetUsers[] = (int)$userId;
+
+				if ($userRow->email)
+				{
+					$mailRecipients[$userRow->email] = $userRow->firstName . " " . $userRow->lastName;
+				}
 			}
 
-			$userRow = $userQuery->fetch();
-
-			$targetUsers[] = (int) $userId;
-
-			if ($userRow->email)
+			try
 			{
-				$mailRecipients[$userRow->email] = $userRow->firstName . " " . $userRow->lastName;
+				$fileUploader = new FileUploader();
+				$attachedFiles = $fileUploader->getFiles();
+
+				$query = Constants::$pdo->prepare("
+					INSERT INTO `messages`
+					SET
+						`date` = NOW(),
+						`userId` = :userId,
+						`text` = :text
+				");
+
+				$query->execute(array(":userId" => Constants::$accountManager->getUserId(), ":text" => $text));
+
+				$messageId = Constants::$pdo->lastInsertId();
+
+				$query = Constants::$pdo->prepare("
+					INSERT INTO `messagetargets`
+					SET
+						`messageId` = :messageId,
+						`userId` = :userId
+				");
+
+				foreach ($targetUsers as $userId)
+				{
+					$query->execute(array(":messageId" => $messageId, ":userId" => $userId));
+				}
+
+				$query = Constants::$pdo->prepare("
+					INSERT INTO `messagefiles`
+					SET
+						`messageId` = :messageId,
+						`fileId` = :fileId
+				");
+
+				foreach ($attachedFiles as $file)
+				{
+					$query->execute(array(":messageId" => $messageId, ":fileId" => $file->id));
+				}
+
+				$userData = Constants::$accountManager->getUserData();
+
+				$userAddress = array($userData->email => $userData->firstName . " " . $userData->lastName);
+
+				$mail = new Mail("Neue Nachricht im Internen Bereich", array("firstName" => $userData->firstName, "lastName" => $userData->lastName, "content" => formatText($text), "attachments" => $attachedFiles));
+				$mail->setTemplate("message");
+				$mail->setTo($mailRecipients);
+
+				if ($_POST["sendCopy"])
+				{
+					$mail->setCc($userAddress);
+				}
+
+				$mail->setReplyTo($userAddress);
+
+				if (!$mail->send())
+				{
+					throw new Exception("Unable to send mail");
+				}
+
+				header("Location: " . BASE_URL . "/internalarea/messages/" . $messageId . "?sendinfo");
+				exit;
+			}
+			catch (Exception $exception)
+			{
+				$error = $exception->getMessage() . " (Code " . $exception->getCode() . ")";
 			}
 		}
-
-		try
+		else
 		{
-			$fileUploader = new FileUploader();
-			$attachedFiles = $fileUploader->getFiles();
-
-			$query = Constants::$pdo->prepare("
-				INSERT INTO `messages`
-				SET
-					`date` = NOW(),
-					`userId` = :userId,
-					`text` = :text
-			");
-
-			$query->execute(array
-			(
-				":userId" => Constants::$accountManager->getUserId(),
-				":text" => $_POST["text"]
-			));
-
-			$messageId = Constants::$pdo->lastInsertId();
-
-			$query = Constants::$pdo->prepare("
-				INSERT INTO `messagetargets`
-				SET
-					`messageId` = :messageId,
-					`userId` = :userId
-			");
-
-			foreach ($targetUsers as $userId)
-			{
-				$query->execute(array
-				(
-					":messageId" => $messageId,
-					":userId" => $userId
-				));
-			}
-
-			$query = Constants::$pdo->prepare("
-				INSERT INTO `messagefiles`
-				SET
-					`messageId` = :messageId,
-					`fileId` = :fileId
-			");
-
-			foreach ($attachedFiles as $file)
-			{
-				$query->execute(array
-				(
-					":messageId" => $messageId,
-					":fileId" => $file->id
-				));
-			}
-
-			$userData = Constants::$accountManager->getUserData();
-
-			$userAddress = array($userData->email => $userData->firstName . " " . $userData->lastName);
-
-			$mail = new Mail("Neue Nachricht im Internen Bereich", array
-			(
-				"firstName" => $userData->firstName,
-				"lastName" => $userData->lastName,
-				"content" => formatText($_POST["text"]),
-				"attachments" => $attachedFiles
-			));
-			$mail->setTemplate("message");
-			$mail->setTo($mailRecipients);
-
-			if ($_POST["sendCopy"])
-			{
-				$mail->setCc($userAddress);
-			}
-
-			$mail->setReplyTo($userAddress);
-
-			if (!$mail->send())
-			{
-				throw new Exception("Unable to send mail");
-			}
-
-			header("Location: " . BASE_URL . "/internalarea/messages/" . $messageId . "?sendinfo");
-			exit;
-		}
-		catch (Exception $exception)
-		{
-			$error = $exception->getMessage() . " (Code " . $exception->getCode() . ")";
+			$error = "Kein Text eingegeben";
 		}
 	}
 
