@@ -85,6 +85,12 @@ $(function()
 			return;
 		}
 
+		if (!$("#addresslist_sendmessage_text").val())
+		{
+			alert("Kein Text eingegeben!");
+			return;
+		}
+
 		$("#addresslist_sendmessage_recipients").val(recipients.join(","));
 		$("#addresslist_sendmessage_confirm_text1").text("Soll die Nachricht jetzt an die folgenden " + recipients.length + " Emp\u00e4nger gesendet werden?");
 
