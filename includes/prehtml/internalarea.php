@@ -3,11 +3,11 @@ if (isset($_POST["username"]) and isset($_POST["password"]) and Constants::$acco
 {
 	if ($_GET["jumpto"])
 	{
-		header("Location: /" . $_GET["jumpto"]);
+		header("Location: " . BASE_URL . "/" . $_GET["jumpto"]);
 	}
 	else
 	{
-		header("Location: /internalarea");
+		header("Location: " . BASE_URL . "/internalarea");
 	}
 	exit;
 }
@@ -18,7 +18,7 @@ if ($userData->id and $userData->forcePasswordChange)
 	$validPages = array("confirmemail", "editprofile", "logout");
 	if (!in_array(Constants::$pagePath[1], $validPages))
 	{
-		header("Location: /internalarea/editprofile#editprofile_changepassword");
+		header("Location: " . BASE_URL . "/internalarea/editprofile#editprofile_changepassword");
 		exit;
 	}
 }

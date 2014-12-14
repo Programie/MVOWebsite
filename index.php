@@ -86,6 +86,7 @@ if (!empty($pageData))
 		{
 			$redirect = BASE_URL . $redirect;
 		}
+
 		header("Location: " . $redirect);
 		exit;
 	}

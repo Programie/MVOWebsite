@@ -24,7 +24,7 @@ if (!$_POST["notedirectory_searchstring"])
 
 		if (Constants::$pagePath[3])
 		{
-			header("Location: /" . implode("/", Constants::$pagePath));
+			header("Location: " . BASE_URL . "/" . implode("/", Constants::$pagePath));
 			exit;
 		}
 	}
