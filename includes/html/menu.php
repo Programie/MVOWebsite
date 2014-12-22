@@ -7,7 +7,10 @@ foreach ($navbarData->menus as &$menu)
 {
 	$pagesData = Constants::$pageManager->getPageData(explode("/", $menu->path));
 
-	$menu->title = end($pagesData)->title;
+	if (!$menu->title)
+	{
+		$menu->title = end($pagesData)->title;
+	}
 
 	if (is_array($menu->items))
 	{
