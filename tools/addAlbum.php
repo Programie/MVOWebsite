@@ -1,5 +1,5 @@
 <?php
-define("ROOT_PATH", __DIR__);
+define("ROOT_PATH", __DIR__ . "/..");
 define("PICTURES_PATH", ROOT_PATH . "/files/pictures");
 
 require_once ROOT_PATH . "/includes/config.inc.php";
