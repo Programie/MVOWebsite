@@ -170,7 +170,7 @@ if (isset($_POST["usermanager_edituser_id"]))
 						sort($nodes[0]->users, SORT_NUMERIC);
 					}
 				}
-				file_put_contents(ROOT_PATH . "/includes/permissions.json", json_encode($permissionData));
+				file_put_contents(ROOT_PATH . "/includes/permissions.json", json_encode($permissionData, JSON_PRETTY_PRINT));
 
 				if ($newUser)
 				{
