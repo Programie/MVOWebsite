@@ -20,7 +20,7 @@
 
 	<h3>Kassenverwalter</h3>
 	<div>
-		<p>Karl Wannenmacher</p>
+		<p>Florian Wieland</p>
 		<p><a href="mailto:kassier-fv@musikverein-reichental.de">kassier-fv@musikverein-reichental.de</a></p>
 	</div>
 
