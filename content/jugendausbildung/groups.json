@@ -1,5 +1,5 @@
 {
-	"date" : "03.12.2014",
+	"date" : "01.03.2015",
 	"rows" :
 	[
 		{
@@ -112,16 +112,10 @@
 							"trainer" : "David Brasseur",
 							"students" :
 							[
-								"Lea Knapp"
-							]
-						},
-						{
-							"trainer" : "Thomas Oefler",
-							"students" :
-							[
 								"Moritz Balensiefen",
 								"Eva Bender",
 								"Vincent Kast",
+								"Lea Knapp",
 								"Celine Schmitt"
 							]
 						},
