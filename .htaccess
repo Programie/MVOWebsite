@@ -2,7 +2,7 @@ ErrorDocument 500 /error500.html
 
 RewriteEngine On
 
-RewriteRule album.xml$ - [F,L]
+RewriteRule album.json$ - [F,L]
 RewriteRule ^composer.* [F,L]
 RewriteRule ^vendor - [F,L]
 

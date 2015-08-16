@@ -34,21 +34,12 @@ $albumData = json_decode(file_get_contents($albumFile));
  * {
  *     "id" : <id-in-picturealbums-table>,
  *     "year" : 2014,
- *     "folderName" : "01.01 The title of the album",
+ *     "album" : "01.01 The title of the album",
  *     "pictures" :
  *     [
- *         {
- *             "name" : "md5-of-original-file-1",
- *             "number" : 1
- *         },
- *         {
- *             "name" : "md5-of-original-file-2",
- *             "number" : 2
- *         },
- *         {
- *             "name" : "md5-of-original-file-3",
- *             "number" : 3
- *         }
+ *         "md5-of-original-file-1",
+ *         "md5-of-original-file-2",
+ *         "md5-of-original-file-3"
  *     ]
  * }
  */
@@ -59,7 +50,7 @@ $year = $albumData->year;
 // Insert as a new album if no albumId specified
 if (!$albumId)
 {
-	$folderName = $albumData->folderName;
+	$folderName = $albumData->album;
 	if (preg_match("/^([0-9][0-9]).([0-9][0-9])([0-9\.\-]+)? ?(.*)/", $folderName, $matches))
 	{
 		$month = $matches[1];
@@ -93,11 +84,11 @@ if (!$albumId)
 
 // Read pictures
 $pictures = array();
-foreach ($albumData->pictures as $picture)
+foreach (array_values($albumData->pictures) as $index => $picture)
 {
-	$pictures[$picture->name] = array
+	$pictures[$picture] = array
 	(
-		"number" => $picture->number,
+		"number" => $index + 1,
 		"id" => 0
 	);
 }
