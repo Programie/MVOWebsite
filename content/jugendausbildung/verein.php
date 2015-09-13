@@ -28,6 +28,18 @@
 </p>
 
 <p>
+	<b>Jugendkapelle</b><br/>
+
+	Unser Verein hat 2011 nach mehrj&auml;hriger Pause wieder eine Jugendkapelle gegr&uuml;ndet, die ihren ersten Auftritt beim Muttertagskonzert absolvierte.<br/>
+	<br/>
+	Auf Anfrage des Jugenddirigenten Thomas Oefler aus Obertsrot im Jahr 2013 haben wir uns entschieden, uns mit den  Musikvereinen Obertsrot und Hilpertsau zusammenzutun, um eine gemeinsame Jugendkapelle zu gr&uuml;nden.  Diese bietet nun hinsichtlich des Repertoires und der Klangvielfalt mehr M&ouml;glichkeiten.<br/>
+	<br/>
+	Die Jugendlichen im Alter von 11 bis 17 Jahren treffen sich samstags vormittags im Abstand von ein bis zwei Wochen, um zusammen zu proben. Sie haben Auftritte bei Festen oder Konzerten unserer Vereine oder auch bei befreundeten Vereinen.<br/>
+	<br/>
+	Im Sommer 2015 gab Thomas Oefler das Dirigat an Stefan We&szlig;becher aus Hilpertsau, der die gemeinsame Jugendkapelle nun weiterf&uuml;hrt.
+</p>
+
+<p>
 	<b>Folgende Instrumente k&ouml;nnen erlernt werden:</b><br/>
 	Bariton, Tenorhorn, Tuba, Posaune, Trompete, Fl&uuml;gelhorn, Klarinette, Saxophon, Querfl&ouml;te, Schlagzeug
 </p>
