@@ -1,5 +1,5 @@
 {
-	"date" : "01.07.2015",
+	"date" : "01.10.2015",
 	"rows" :
 	[
 		{
@@ -9,18 +9,6 @@
 				{
 					"groups" :
 					[
-						{
-							"trainer" : "Andreas Wieland",
-							"students" :
-							[
-								"Lola Kern",
-								"Oliver Kern",
-								"Hannah Klumpp",
-								"Jonas Magfelder",
-								"Carina Wieland",
-								"Luca Wieland"
-							]
-						},
 						{
 							"trainer" : "Paula Sieb",
 							"students" :
@@ -55,8 +43,10 @@
 							"trainer" : "Gisela Wieland",
 							"students" :
 							[
+								"Lola Kern",
 								"Annika Knapp",
 								"Julia Knapp",
+								"Lisa Kozlevcar",
 								"Judith Merkel"
 							]
 						}
@@ -98,8 +88,7 @@
 							"trainer" : "Jonathan Friedel",
 							"students" :
 							[
-								"Maximilian Merkel",
-								"Luisa Sieb"
+								"Maximilian Merkel"
 							]
 						}
 					]
@@ -124,6 +113,13 @@
 								"Julian Gottschalk",
 								"Mark Knapp",
 								"Jakob Sieb"
+							]
+						},
+						{
+							"trainer" : "Musikschule",
+							"students" :
+							[
+								"Jonas Magfelder"
 							]
 						}
 					]
