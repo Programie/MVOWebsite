@@ -89,7 +89,7 @@ if (Constants::$accountManager->getUserId())
 						$groups[] = "public";
 					}
 
-					$queryData = array(":startDate" => $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $startTime, ":endDate" => $endDate, ":groups" => implode(",", $groups), ":title" => $_POST["dates_edit_title"], ":description" => $_POST["dates_edit_description"], ":locationId" => $locationId, ":showInAttendanceList" => !!$_POST["dates_edit_options_showinattendancelist"], ":bold" => !!$_POST["dates_edit_options_bold"]);
+					$queryData = array(":startDate" => $date[2] . "-" . $date[1] . "-" . $date[0] . " " . $startTime, ":endDate" => $endDate, ":groups" => implode(",", $groups), ":title" => $_POST["dates_edit_title"], ":description" => $_POST["dates_edit_description"], ":locationId" => $locationId, ":showInAttendanceList" => (int) !!$_POST["dates_edit_options_showinattendancelist"], ":bold" => (int) !!$_POST["dates_edit_options_bold"]);
 					if ($id)
 					{
 						$query = Constants::$pdo->prepare("
@@ -275,7 +275,7 @@ if ($dates)
 	echo "
 			</tbody>
 		</table>
-		
+
 	";
 }
 else
@@ -295,7 +295,7 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 	echo "
 		<div id='dates_hide'>
 			<p>Soll der ausgew&auml;hlte Termin wirklich ausgeblendet werden?</p>
-			
+
 			<table>
 				<tr>
 					<td><b>Datum:</b></td>
@@ -314,9 +314,9 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 					<td><span></span></td>
 				</tr>
 			</table>
-			
+
 			<p><b>Hinweis:</b> Der Termin kann nur &uuml;ber die Datenbank wiederhergestellt werden!</p>
-			
+
 			<form id='dates_hide_form' method='post' onsubmit='return false'>
 				<input type='hidden' id='dates_hide_id' name='dates_edit_id'/>
 				<input type='hidden' id='dates_edit_hide' name='dates_edit_hide' value='1'/>
@@ -355,7 +355,7 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 
 				<label class='input-label' for='dates_edit_description'>Beschreibung</label>
 				<textarea id='dates_edit_description' name='dates_edit_description' rows='10' cols='10' placeholder='Weitere Beschreibung von diesem Termin'></textarea>
-				
+
 				<fieldset id='dates_edit_groups'>
 					<legend>Gruppen</legend>
 	";
@@ -366,18 +366,18 @@ if (Constants::$accountManager->hasPermission("dates.edit"))
 	}
 	echo "
 				</fieldset>
-				
+
 				<fieldset id='dates_edit_options'>
 					<legend>Optionen</legend>
-					
+
 					<div><input type='checkbox' id='dates_edit_options_showinattendancelist' name='dates_edit_options_showinattendancelist'/><label for='dates_edit_options_showinattendancelist'>In Anwesenheitsliste anzeigen</label></div>
 					<div><input type='checkbox' id='dates_edit_options_bold' name='dates_edit_options_bold'/><label for='dates_edit_options_bold'>Fett</label></div>
 				</fieldset>
-				
+
 				<input type='hidden' id='dates_edit_id' name='dates_edit_id'/>
 			</form>
 		</div>
-		
+
 		<div id='dates_edit_contextmenu'>
 			<ul>
 				<li id='dates_edit_contextmenu_edit'><img src='/files/images/contextmenu/edit.png'/> Bearbeiten</li>
