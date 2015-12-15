@@ -133,6 +133,7 @@ try
 }
 catch (Exception $exception)
 {
+	ob_end_clean();
 	readfile(ROOT_PATH . "/error500.html");
 	error_log($exception);
 }
