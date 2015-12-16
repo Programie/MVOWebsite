@@ -1,5 +1,5 @@
 {
-	"date" : "01.10.2015",
+	"date" : "11.12.2015",
 	"rows" :
 	[
 		{
@@ -44,23 +44,10 @@
 							"students" :
 							[
 								"Lola Kern",
+								"Hannah Klumpp",
 								"Annika Knapp",
 								"Julia Knapp",
-								"Lisa Kozlevcar",
 								"Judith Merkel"
-							]
-						}
-					]
-				},
-				{
-					"name" : "Posaune",
-					"groups" :
-					[
-						{
-							"trainer" : "Thomas W\u00e4ldele",
-							"students" :
-							[
-								"Moritz Kast"
 							]
 						}
 					]
@@ -74,8 +61,7 @@
 							"students" :
 							[
 								"Leonie Knapp",
-								"Liana Knapp",
-								"Maria Merkel"
+								"Liana Knapp"
 							]
 						}
 					]
