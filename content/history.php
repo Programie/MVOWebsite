@@ -4,7 +4,7 @@
 Am 2. September 1891 unterzeichneten sechs M&#228nner im Rathaus unter den Augen des B&#252rgermeisters Philipp W&#246rner die Satzung der zuk&#252nftigen Reichentaler Musikkapelle.
 <br/><br/>
 <b>Die Gr&#252ndungsv&#228ter der Musikkapelle Reichental:</b><br/>
-<b>Anton Knapp, Remigius Merkel, Franz Xaver Schmitt, August Gerstner, Leo Klumpp, Elias Wieland, Robert Kottler</b>
+<b>Remigius Merkel, Franz Xaver Schmitt, August Gerstner, Leo Klumpp, Elias Wieland, Robert Kottler</b>
 <br/><br/>
 Der <b>&#034Vertrag&#034</b> erscheint auch heute noch lesenswert, deshalb hier einzelne Ausz&#252ge:
 <br/><br/>
