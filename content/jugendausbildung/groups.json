@@ -1,5 +1,5 @@
 {
-	"date" : "11.12.2015",
+	"date" : "01.11.2016",
 	"rows" :
 	[
 		{
@@ -10,21 +10,19 @@
 					"groups" :
 					[
 						{
-							"trainer" : "Paula Sieb",
-							"students" :
-							[
-								"Vitus Balensiefen",
-								"Tizian Gottschalk",
-								"Silas Magfelder",
-								"Jonas Melcher"
-							]
-						},
-						{
 							"trainer" : "Meike Klumpp",
 							"students" :
 							[
-								"Marie Merkel",
-								"Alena Knapp"
+								"Alena Knapp",
+								"Marie Merkel"
+							]
+						},
+						{
+							"trainer" : "Paula Sieb",
+							"students" :
+							[
+								"Lara Merkel",
+								"Giulia Viviani"
 							]
 						}
 					]
@@ -44,10 +42,22 @@
 							"students" :
 							[
 								"Lola Kern",
-								"Hannah Klumpp",
 								"Annika Knapp",
 								"Julia Knapp",
 								"Judith Merkel"
+							]
+						}
+					]
+				},
+				{
+					"name" : "Posaune",
+					"groups" :
+					[
+						{
+							"trainer" : "Andreas Wieland",
+							"students" :
+							[
+								"Vitus Balensiefen"
 							]
 						}
 					]
@@ -60,8 +70,22 @@
 							"trainer" : "Musikschule",
 							"students" :
 							[
+								"Hannah Klumpp",
 								"Leonie Knapp",
 								"Liana Knapp"
+							]
+						}
+					]
+				},
+				{
+					"name" : "Saxophon",
+					"groups" :
+					[
+						{
+							"trainer" : "Daniela Zapf",
+							"students" :
+							[
+								"Silas Magfelder"
 							]
 						}
 					]
@@ -74,7 +98,22 @@
 							"trainer" : "Jonathan Friedel",
 							"students" :
 							[
+								"Jonas Melcher",
 								"Maximilian Merkel"
+							]
+						}
+					]
+				},
+				{
+					"name" : "Tenorhorn",
+					"groups" :
+					[
+						{
+							"trainer" : "Birgit Gerweck",
+							"students" :
+							[
+								"Tizian Gottschalk",
+								"Dennis Zapf"
 							]
 						}
 					]
@@ -97,7 +136,6 @@
 							"students" :
 							[
 								"Julian Gottschalk",
-								"Mark Knapp",
 								"Jakob Sieb"
 							]
 						},
