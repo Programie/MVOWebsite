@@ -36,7 +36,7 @@
 	<br/>
 	Die Jugendlichen im Alter von 11 bis 17 Jahren treffen sich samstags vormittags im Abstand von ein bis zwei Wochen, um zusammen zu proben. Sie haben Auftritte bei Festen oder Konzerten unserer Vereine oder auch bei befreundeten Vereinen.<br/>
 	<br/>
-	Im Sommer 2015 gab Thomas Oefler das Dirigat an Stefan We&szlig;becher aus Hilpertsau. 2017 &uuml;bergab er das Dirigat an seinen Bruder Markus We&szlig;becher, der die gemeinsame Jugendkapelle nun weiterf&uuml;hrt.
+	Im Sommer 2015 gab Thomas Oefler das Dirigat an Stefan We&szlig;becher aus Hilpertsau. Dieser &uuml;bergab Anfang 2017 das Dirigat an seinen Bruder Markus We&szlig;becher, der die gemeinsame Jugendkapelle nun weiterf&uuml;hrt.
 </p>
 
 <p>
