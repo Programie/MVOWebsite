@@ -11,7 +11,7 @@ $contacts = array
 		"name" => "Musikervorstand",
 		"text" => "Katrin H&ouml;rth, Jasmin Melcher"
 	),
-	"kassier" => array
+	"kassenverwalter" => array
 	(
 		"name" => "Kassenverwalter",
 		"text" => "Florian Wieland"

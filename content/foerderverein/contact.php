@@ -21,7 +21,7 @@
 	<h3>Kassenverwalter</h3>
 	<div>
 		<p>Anna-Lisa Klumpp</p>
-		<p><a href="mailto:kassier-fv@musikverein-reichental.de">kassier-fv@musikverein-reichental.de</a></p>
+		<p><a href="mailto:kassenverwalter-fv@musikverein-reichental.de">kassenverwalter-fv@musikverein-reichental.de</a></p>
 	</div>
 
 	<h3>Schriftf&uuml;hrer</h3>
