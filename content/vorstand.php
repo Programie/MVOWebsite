@@ -15,17 +15,17 @@ $groups = array
 	),
 	array
 	(
-		"title" => "Kassenverwalterin",
+		"title" => "Kassenverwalter",
 		"subPermissions" => array("kassenverwalter")
 	),
 	array
 	(
-		"title" => "Schriftf&uuml;hrerin",
+		"title" => "Schriftf&uuml;hrer",
 		"subPermissions" => array("schriftfuehrer")
 	),
 	array
 	(
-		"title" => "Jugendleiterin",
+		"title" => "Jugendleiter",
 		"subPermissions" => array("jugendleiter")
 	),
 	array
