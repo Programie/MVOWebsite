@@ -4,26 +4,26 @@ $contacts = array
 	"vorstand" => array
 	(
 		"name" => "Vorstand (Gleichberechtigt)",
-		"text" => "Erhard Klumpp (07224 65 26 83)<br/>Birgit Gerweck (07224 99 69 822)"
+		"text" => "Birgit Gerweck (07224 99 69 822)<br/>Edith Wieland (07224 69 70 467)"
 	),
 	"musikervorstand" => array
 	(
 		"name" => "Musikervorstand",
-		"text" => "Karl Fortenbacher<br/>Daniela Zapf"
+		"text" => "Katrin H&ouml;rth, Jasmin Melcher"
 	),
 	"kassier" => array
 	(
-		"name" => "Kassenverwalterin",
-		"text" => "Katrin H&ouml;rth"
+		"name" => "Kassenverwalter",
+		"text" => "Florian Wieland"
 	),
 	"schriftfuehrer" => array
 	(
-		"name" => "Schriftf&uuml;hrerin",
+		"name" => "Schriftf&uuml;hrer",
 		"text" => "Heike Kast"
 	),
 	"jugendleiter" => array
 	(
-		"name" => "Jugendleiterin",
+		"name" => "Jugendleiter",
 		"text" => "Gisela Wieland"
 	),
 	"oeffentlichkeitsarbeit" => array

@@ -20,7 +20,7 @@
 
 	<h3>Kassenverwalter</h3>
 	<div>
-		<p>Florian Wieland</p>
+		<p>Anna-Lisa Klumpp</p>
 		<p><a href="mailto:kassier-fv@musikverein-reichental.de">kassier-fv@musikverein-reichental.de</a></p>
 	</div>
 
