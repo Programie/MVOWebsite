@@ -26,7 +26,7 @@
 
 	<h3>Schriftf&uuml;hrer</h3>
 	<div>
-		<p>Patrick Wieland</p>
+		<p>Philipp Wieland</p>
 		<p><a href="mailto:schriftfuehrer-fv@musikverein-reichental.de">schriftfuehrer-fv@musikverein-reichental.de</a></p>
 	</div>
 </div>
