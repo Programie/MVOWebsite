@@ -26,7 +26,11 @@
 		<td>Guido Wieland</td>
 	</tr>
 	<tr>
-		<td>2009 bis heute</td>
+		<td>2009 bis 2017</td>
 		<td>Erhard Klumpp, Birgit Gerweck</td>
+	</tr>
+	<tr>
+		<td>2017 bis heute</td>
+		<td>Birgit Gerweck, Edith Wieland</td>
 	</tr>
 </table>
