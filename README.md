@@ -1,1 +1,1 @@
-This repository contains the website files of http://musikverein-reichental.de.
+This repository contains the website files of https://musikverein-reichental.de.
