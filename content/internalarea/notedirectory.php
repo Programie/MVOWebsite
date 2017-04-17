@@ -44,7 +44,7 @@ echo "<h1>" . implode(" - ", $title) . "</h1>";
 					<ul>
 						<?php
 						$years = array();
-						$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id`, `year`, `title` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId`");
+						$query = Constants::$pdo->query("SELECT `notedirectory_programs`.`id`, `year`, `title` FROM `notedirectory_programs` LEFT JOIN `notedirectory_programtypes` ON `notedirectory_programtypes`.`id` = `notedirectory_programs`.`typeId` ORDER BY `year`, `title`");
 						while ($row = $query->fetch())
 						{
 							$years[$row->year][$row->id] = $row->title;
