@@ -9,7 +9,7 @@
 		76593 Gernsbach - Reichental
 	</p>
 
-	<h3>Vorstand (Gleichberechtigt)</h3>
+	<h3>Vorstandsteam</h3>
 	<div>
 		<p>
 			Ulrike Brasseur (07224 67274)<br/>

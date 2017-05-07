@@ -3,7 +3,7 @@ $contacts = array
 (
 	"vorstand" => array
 	(
-		"name" => "Vorstand (Gleichberechtigt)",
+		"name" => "Vorstandsteam",
 		"text" => "Birgit Gerweck (07224 99 69 822)<br/>Edith Wieland (07224 69 70 467)"
 	),
 	"musikervorstand" => array
