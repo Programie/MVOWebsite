@@ -26,6 +26,9 @@
 		<td>Guido Wieland</td>
 	</tr>
 	<tr>
+		<td colspan="2">ab 2009 Vorstandsteam (gleichberechtigt)</td>
+	</tr>
+	<tr>
 		<td>2009 bis 2017</td>
 		<td>Erhard Klumpp, Birgit Gerweck</td>
 	</tr>
