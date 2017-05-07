@@ -10,7 +10,7 @@ $groups = array
 (
 	array
 	(
-		"title" => "Vorstand (Gleichberechtigt)",
+		"title" => "Vorstandsteam",
 		"subPermissions" => array("vorstand")
 	),
 	array
