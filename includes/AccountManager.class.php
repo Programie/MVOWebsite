@@ -53,13 +53,14 @@ class AccountManager
 			}
 		}
 
-		$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password, `newPasswordHash` = :newPasswordHash, `resetPasswordDate` = NULL, `forcePasswordChange` = '0' WHERE `id` = :id");
+		$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password, `resetPasswordDate` = NULL, `forcePasswordChange` = '0' WHERE `id` = :id");
 		$query->execute(array
 		(
 			":id" => $this->userId,
-			":newPasswordHash" => password_hash($newPassword, PASSWORD_DEFAULT),
 			":password" => $this->encrypt($this->userId, $newPassword)
 		));
+
+		$this->setNewPasswordHash($this->userId, $newPassword);
 
 		$userData = $this->getUserData();
 
@@ -87,13 +88,6 @@ class AccountManager
 			return false;
 		}
 
-		$query = Constants::$pdo->prepare("UPDATE `users` SET `newPasswordHash` = :newPasswordHash WHERE `id` = :id");
-		$query->execute(array
-		(
-			":newPasswordHash" => password_hash($password, PASSWORD_DEFAULT),
-			":id" => $userId
-		));
-
 		$row = $query->fetch();
 		if (substr($row->password, 0, 4) == "md5:")
 		{
@@ -103,6 +97,8 @@ class AccountManager
 				$query = Constants::$pdo->prepare("UPDATE `users` SET `password` = :password WHERE `id` = :id");
 				$query->execute(array(":id" => $userId, ":password" => $this->encrypt($userId, $password)));
 
+				$this->setNewPasswordHash($userId, $password);
+
 				return true;
 			}
 		}
@@ -110,11 +106,22 @@ class AccountManager
 		{
 			if ($row->password == $this->encrypt($userId, $password))
 			{
+			    $this->setNewPasswordHash($userId, $password);
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	private function setNewPasswordHash($userId, $password)
+	{
+		$query = Constants::$pdo->prepare("UPDATE `users` SET `newPasswordHash` = :newPasswordHash WHERE `id` = :id");
+		$query->execute(array
+		(
+			":newPasswordHash" => password_hash($password, PASSWORD_DEFAULT),
+			":id" => $userId
+		));
 	}
 
 	public function changeUsername($newUsername)
