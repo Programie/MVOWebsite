@@ -8,6 +8,8 @@ try
 }
 catch (PDOException $exception)
 {
+	error_log($exception);
+
 	if (ENVIRONMENT == "dev")
 	{
 		die("Database connection failed: " . $exception);
