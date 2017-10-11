@@ -9,4 +9,7 @@
 ehthumbs.db
 Thumbs.db
 
+/files/*.jpg
+/files/*.png
+/files/videos
 /vendor/
