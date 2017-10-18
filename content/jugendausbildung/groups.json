@@ -1,5 +1,5 @@
 {
-	"date" : "01.01.2017",
+	"date" : "17.10.2017",
 	"rows" :
 	[
 		{
@@ -9,14 +9,6 @@
 				{
 					"groups" :
 					[
-						{
-							"trainer" : "Meike Klumpp",
-							"students" :
-							[
-								"Alena Knapp",
-								"Marie Merkel"
-							]
-						},
 						{
 							"trainer" : "Paula Sieb",
 							"students" :
@@ -43,8 +35,7 @@
 							[
 								"Lola Kern",
 								"Annika Knapp",
-								"Julia Knapp",
-								"Judith Merkel"
+								"Julia Knapp"
 							]
 						}
 					]
@@ -133,7 +124,6 @@
 							"trainer" : "Wolfgang St\u00f6rtzer",
 							"students" :
 							[
-								"Julian Gottschalk",
 								"Jakob Sieb"
 							]
 						},
