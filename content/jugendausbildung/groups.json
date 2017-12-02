@@ -10,20 +10,20 @@
 					"groups" :
 					[
 						{
-							"trainer" : "Paula Sieb",
-							"students" :
-							[
-								"Lara Merkel",
-								"Giulia Viviani"
-							]
-						},
-						{
 							"trainer" : "Lisa Kozlevcar",
 							"students" :
 							[
 								"Theo Sieb",
 								"Hanna Weber",
 								"Ida Wieland"
+							]
+						},
+						{
+							"trainer" : "Paula Sieb",
+							"students" :
+							[
+								"Lara Merkel",
+								"Giulia Viviani"
 							]
 						}
 					]
