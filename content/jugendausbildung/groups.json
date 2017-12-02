@@ -1,5 +1,5 @@
 {
-	"date" : "17.10.2017",
+	"date" : "01.12.2017",
 	"rows" :
 	[
 		{
@@ -15,6 +15,15 @@
 							[
 								"Lara Merkel",
 								"Giulia Viviani"
+							]
+						},
+						{
+							"trainer" : "Lisa Kozlevcar",
+							"students" :
+							[
+								"Theo Sieb",
+								"Hanna Weber",
+								"Ida Wieland"
 							]
 						}
 					]
